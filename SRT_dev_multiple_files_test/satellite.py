@@ -8,10 +8,17 @@ class Satellite:
         self.TLE = tle
 
     def get_name(self):
+        """
+        Extracts the first line of the TLE
+        """
         tle_split = self.TLE.splitlines()
         return tle_split[0]
 
+
 def get_sat_list():
+    """
+    Extracts the list of active satelites from the celestrak website
+    """
     with urlopen("https://celestrak.com/NORAD/elements/gp.php?GROUP=active&FORMAT=tle") as f:
         tle_read = f.read().decode()
 
@@ -27,7 +34,11 @@ def get_sat_list():
 
     return sat_list
 
+
 def get_name_list(sat_list):
+    """
+    Gets the names of the satelites out of the whole information in the list of active satelites
+    """
     names_list = []
     for sat in sat_list:
         names_list.append(sat.get_name())
