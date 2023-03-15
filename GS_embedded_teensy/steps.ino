@@ -31,12 +31,12 @@ void gohome(){
         if (AzCurrentDirection)
         {
             AzDIRon;
-            AzRef = max_encoders - 1;
+            AzRef = ENCODERS_MAX - 1;
             update_steps();
         } else
         {
             AzDIRoff;
-            AzRef = max_encoders - 1;
+            AzRef = ENCODERS_MAX - 1;
             update_steps();
         }
     }

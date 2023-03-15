@@ -1,9 +1,10 @@
 #include <TimeLib.h>
+#include <SPI.h>
 #include "define.h"
 
 int AltCurrentDirection = 0, AzCurrentDirection = 0;
 int AltDirectionToGo = 0, AzDirectionToGo = 0;
-float max_encoders = pow(2,20) - 1;
+//float max_encoders = pow(2,20) - 1;
 uint32_t AltRef = 0, AzRef = 0;
 uint32_t AltDiff = 0, AzDiff = 0;
 uint32_t AltSteps = 0, AzSteps = 0;
@@ -29,8 +30,12 @@ char TLE2[70];
 
 void setup(){
     init_pins();
-    Serial.begin(9600);
-    while (!Serial && millis() < 4000);
+    HWSerial.begin(115200);
+    // while (!HWSerial && millis() < 4000);
+
+    SPI.begin();
+    SPI.beginTransaction(SPISettings(100000, MSBFIRST, SPI_MODE1));
+    
     setSyncProvider(getTeensy3Time);
 
     AzNCSon;
@@ -51,7 +56,7 @@ void setup(){
     Timer_StepOn_Alt.begin(StepOn_Alt, STEP_SPEED_ALT);
     Timer_StepsOff_Alt.begin(StepOff_Alt);
     
-    Timer_Encoders.begin(Encoders, ENCODERS_SPEED);
+    //Timer_Encoders.begin(Encoders, ENCODERS_SPEED);
 }
 
 void loop(){
@@ -59,6 +64,8 @@ void loop(){
 //    sat_tracker();
 
 //    test1();
-    test2();
+    // test2();
+    encoder_read();
+    delay(500);
 
 }

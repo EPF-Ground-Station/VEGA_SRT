@@ -12,7 +12,7 @@ void init_pins (){
   pinMode(AzSCKPin,OUTPUT);
   pinMode(AzNCSPin,OUTPUT);
   pinMode(AzMISOPin,INPUT);
-  pinMode(AzMOSIPin,OUTPUT);
+  //pinMode(AzMOSIPin,OUTPUT);
   pinMode(AltSCKPin,OUTPUT);
   pinMode(AltNCSPin,OUTPUT);
   pinMode(AltMISOPin,INPUT_PULLUP);

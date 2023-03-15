@@ -1,4 +1,4 @@
-void Encoders(){
+void Encoders() {
     AltEncPosAbs = 0, AzEncPosAbs = 0;
     AzEncMultiTurnAbs = 0;
     AltEncCRC = 0, AzEncCRC = 0;
