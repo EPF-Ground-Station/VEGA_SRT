@@ -28,13 +28,16 @@ char sat_name[25];
 char TLE1[70];
 char TLE2[70];
 
+bool test_encoder_switch;
+
 void setup(){
     init_pins();
+    pinMode(12, INPUT_PULLDOWN);
     HWSerial.begin(115200);
     // while (!HWSerial && millis() < 4000);
 
     SPI.begin();
-    SPI.beginTransaction(SPISettings(100000, MSBFIRST, SPI_MODE1));
+    SPI.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE1));
     
     setSyncProvider(getTeensy3Time);
 
@@ -66,6 +69,6 @@ void loop(){
 //    test1();
     // test2();
     encoder_read();
-    delay(500);
+    delay(300);
 
 }

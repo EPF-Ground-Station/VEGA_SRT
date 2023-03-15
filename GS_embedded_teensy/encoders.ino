@@ -10,7 +10,7 @@ void encoder_read() {
 
   // select the azimut encoder
   AzNCSoff;
-  delayMicroseconds(5);
+  delayMicroseconds(10);
 
   // retrieve data from encoder
   uint32_t first_word = SPI.transfer16(ZERO);
@@ -20,7 +20,7 @@ void encoder_read() {
   AzNCSon;
 
   uint32_t pos_dec = (second_word << 4) + (third_word >> 12);
-  uint32_t pos_deg = (pos_dec * 360.0) / ENCODERS_MAX;
+  float pos_deg = (pos_dec * 360.0) / ENCODERS_MAX;
 
   HWSerial.print("pos_deg: ");
   HWSerial.println(pos_deg);
