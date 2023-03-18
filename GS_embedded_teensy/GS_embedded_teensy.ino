@@ -66,7 +66,7 @@ void loop(){
 
 //    sat_tracker();
 
-//    test1();
+ //   test1();
     // test2();
     encoder_read();
     delay(300);

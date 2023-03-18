@@ -1,0 +1,57 @@
+#define UPDATE_FREQ_HZ 2
+
+#define SERIAL_BAUDRATE 115200
+
+#define SAT_NAME_STRING_MAX_LENGTH 26
+#define TLE_LINE_STRING_MAX_LENGTH 71
+
+#define POS_LATITUDE 46.5500
+#define POS_LONGITUDE 6.6170
+#define POS_ALTITUDE 616
+
+#define HWSerial Serial2
+
+#define ENCODERS_SPI SPI
+
+#define ZERO 0x00
+
+#define ENCODERS_MAX pow(2,20) - 1
+#define HYSTERISIS 70
+/*
+
+#define ENCODERS_SPEED 10000
+
+#define MICROSTEPS 25600.0
+#define ALT_REDUCTION 40.0
+
+#define HOME_AZ 123456
+#define ZENITH 123456
+
+*/
+
+#define STEP_DURATION_AZ_MS 400
+#define STEP_DURATION_ALT_MS 100
+
+#define High(pin) digitalWriteFast(pin, HIGH)
+#define Low(pin) digitalWriteFast(pin, LOW)
+
+#define STEPPER_ALT_ENABLE_PIN 21
+#define STEPPER_ALT_DIR_PIN 22
+#define STEPPER_ALT_STEP_PIN 23
+#define STEPPER_ALT_BOOST_PIN 20
+#define STEPPER_ALT_FAULT_PIN 19
+
+#define ENCODER_ALT_NCS_PIN 15
+
+
+#define STEPPER_AZ_ENABLE_PIN 2
+#define STEPPER_AZ_DIR_PIN 3
+#define STEPPER_AZ_STEP_PIN 4
+#define STEPPER_AZ_BOOST_PIN 1
+#define STEPPER_AZ_FAULT_PIN 0
+
+#define ENCODER_AZ_NCS_PIN 10
+
+
+#define LED_On digitalWriteFast(LED_BUILTIN, HIGH);
+#define LED_Off digitalWriteFast(LED_BUILTIN, LOW);
