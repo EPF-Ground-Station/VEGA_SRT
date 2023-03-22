@@ -56,9 +56,9 @@ using namespace TeensyTimerTool;
 #define AzFAULTPin 0
 #define AzFAULT digitalReadFast(AzFAULTPin)
 
-// #define AzSCKPin 7
-// #define AzSCKon digitalWriteFast(AzSCKPin, HIGH)
-// #define AzSCKoff digitalWriteFast(AzSCKPin, LOW)
+#define AzSCKPin 7
+#define AzSCKon digitalWriteFast(AzSCKPin, HIGH)
+#define AzSCKoff digitalWriteFast(AzSCKPin, LOW)
 
 #define AzNCSPin 9 // 10 for SPI default
 #define AzNCSon digitalWriteFast(AzNCSPin, HIGH)
@@ -73,9 +73,9 @@ using namespace TeensyTimerTool;
 #define LEDon digitalWriteFast(LED_BUILTIN, HIGH);
 #define LEDoff digitalWriteFast(LED_BUILTIN, LOW);
 
-// #define AltSCKPin 14
-// #define AltSCKon digitalWriteFast(AltSCKPin, HIGH)
-// #define AltSCKoff digitalWriteFast(AltSCKPin, LOW)
+#define AltSCKPin 14
+#define AltSCKon digitalWriteFast(AltSCKPin, HIGH)
+#define AltSCKoff digitalWriteFast(AltSCKPin, LOW)
 
 #define AltNCSPin 6
 #define AltNCSon digitalWriteFast(AltNCSPin, HIGH)

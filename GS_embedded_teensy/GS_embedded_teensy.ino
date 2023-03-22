@@ -69,8 +69,8 @@ void loop(){
  //   test1();
     // test2();
     encoder_read(true); // read from az encoder
-    delay(300);
-    // encoder_read(false); // read from alt encoder
-    delay(300);
+    delay(1000);
+    // encoder_read(false); // read from alt encoder DOES NOT WORK ! WHERE IS THE DOC FOR THE ALT ENCODER ??
+    delay(1000);
 
 }

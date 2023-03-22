@@ -30,7 +30,7 @@
 
 void setup()
 {
-
+    HWSerial.begin(115200);
     // init az
 
     pinMode(STEPPER_AZ_ENABLE_PIN, OUTPUT);
@@ -40,6 +40,7 @@ void setup()
     pinMode(STEPPER_AZ_FAULT_PIN, INPUT_PULLUP);
 
     High(STEPPER_AZ_ENABLE_PIN);
+    High(STEPPER_AZ_DIR_PIN);
 
     pinMode(ENCODER_AZ_NCS_PIN, OUTPUT);
 
@@ -52,11 +53,13 @@ void setup()
     pinMode(STEPPER_ALT_FAULT_PIN, INPUT_PULLUP);
 
     High(STEPPER_ALT_ENABLE_PIN);
+    High(STEPPER_ALT_DIR_PIN);
 
     pinMode(ENCODER_ALT_NCS_PIN, OUTPUT);
 
     for (int i = 0; i < 200; i++)
     {
+        HWSerial.println("TODO delete");
         step_forward_az();
     }
 
@@ -121,20 +124,18 @@ void encoders_print()
 
 void step_forward_az()
 {
-    High(STEPPER_AZ_DIR_PIN);
 
     High(STEPPER_AZ_STEP_PIN);
-    delay(STEP_DURATION_AZ_MS / 2);
+    delayMicroseconds(STEP_DURATION_AZ_MS / 2);
     Low(STEPPER_AZ_STEP_PIN);
-    delay(STEP_DURATION_AZ_MS / 2);
+    delayMicroseconds(STEP_DURATION_AZ_MS / 2);
 }
 
 void step_forward_alt()
 {
-    High(STEPPER_ALT_DIR_PIN);
 
     High(STEPPER_ALT_STEP_PIN);
-    delay(STEP_DURATION_ALT_MS / 2);
+    delay(STEP_DURATION_ALT_MS * 1000 / 2);
     Low(STEPPER_ALT_STEP_PIN);
     delay(STEP_DURATION_ALT_MS / 2);
 }
