@@ -68,7 +68,9 @@ void loop(){
 
  //   test1();
     // test2();
-    encoder_read();
+    encoder_read(true); // read from az encoder
+    delay(300);
+    // encoder_read(false); // read from alt encoder
     delay(300);
 
 }
