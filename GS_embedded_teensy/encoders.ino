@@ -18,6 +18,7 @@ void encoder_read(bool az_encoder)
     uint32_t third_word = SPI.transfer16(ZERO);
     uint32_t pos_dec = (second_word << 4) + (third_word >> 12);
     float pos_deg = (pos_dec * 360.0) / ENCODERS_MAX;
+  HWSerial.println(pos_deg);
 
     // unselect the encoder
     AzNCSon;
@@ -43,5 +44,4 @@ void encoder_read(bool az_encoder)
   {
     HWSerial.print("\t\t\t\t\t\t\t\t\tALT encoder: ");
   }
-  HWSerial.println(pos_deg);
 }
