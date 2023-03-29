@@ -62,7 +62,6 @@ class Encoder {
         turn_count = first_word;
     }
 
-
 };
 
 #endif

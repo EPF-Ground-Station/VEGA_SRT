@@ -1,4 +1,5 @@
 #define SERIAL_BAUDRATE 115200
+
 #define SPI_SPEED 1000000
 
 //To change once mounted on the roof
@@ -20,24 +21,14 @@
 #define ZERO 0x00
 
 #define ENCODERS_MAX pow(2,20) - 1
+
+//unit ???
 #define HYSTERISIS 70
 
 #define REDUC_AZ = 200
 #define REDUC_ELEV = 140
 
 #define STEP_PER_TURN = 200
-
-/*
-
-#define ENCODERS_SPEED 10000
-
-#define MICROSTEPS 25600.0
-#define ALT_REDUCTION 40.0
-
-#define HOME_AZ 123456
-#define ZENITH 123456
-
-*/
 
 #define STEP_DURATION_AZ_MS 400
 #define STEP_DURATION_ELEV_MS 100

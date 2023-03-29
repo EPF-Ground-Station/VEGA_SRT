@@ -51,7 +51,7 @@ class Antenna {
             ENCODERS_SPI,
             ENCODER_ELEV_NCS_PIN);
 
-
+        //safety check assume the antenna won't do a full turn on az when disconnected
         init_az_turn_value = encoder_az->get_turn_count();
     }
 
@@ -82,7 +82,7 @@ class Antenna {
 
     void point_to(float az_deg, float elev_deg){
 
-        // point az
+        // ------ point az ------------
 
         int target_az_encoder_val = (az_deg / 360.0 * ENCODERS_MAX + NORTH_AZ_ENCODER_OFFSET_VAL) % ENCODERS_MAX;
 
@@ -116,10 +116,22 @@ class Antenna {
 
         stepper_az->step(step_to_turn);
 
-        // point elev
+        // TODO optional recheck encoder value
 
-        //TODO
+        //------ point elev --------------
 
+        if(elev > 90.0 - ZENITH_SAFETY_MARGIN_DEG){
+            elev = ZENITH_SAFETY_MARGIN_DEG
+        }
+        if(elev < 0.0){
+            elev = 0.0;
+        }
+
+        float current_pos_deg = ELEV_INIT_POSITION_DEG - stepper_elev->get_steps_count()/STEP_PER_TURN/REDUC_ELEV;
+
+        float pos_diff = elev - current_pos_deg;
+
+        stepper_elev->step(-pos_diff*STEP_PER_TURN*REDUC_ELEV);
     }
 
 };
