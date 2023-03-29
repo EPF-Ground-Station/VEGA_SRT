@@ -20,6 +20,8 @@ void setup() {
 void loop() {
 
     while (HWSerial.available() <= 0){delay(50)}
+    az = HWSerial.parseFloat();
+    elev = HWSerial.parseFloat();
 
     HWSerial.println("azimuth = " + String(az) + " elevation = " + String(elev));
 

@@ -18,7 +18,7 @@ class Antenna {
     Stepper *stepper_elev = nullptr;
     Encoder *encoder_elev = nullptr;
 
-    int init_az_turn_value;
+    int init_az_turn_count;
 
     public:
 
@@ -52,7 +52,7 @@ class Antenna {
             ENCODER_ELEV_NCS_PIN);
 
         //safety check assume the antenna won't do a full turn on az when disconnected
-        init_az_turn_value = encoder_az->get_turn_count();
+        init_az_turn_count = encoder_az->get_turn_count();
     }
 
     ~Antenna(){
@@ -67,7 +67,13 @@ class Antenna {
     void go_home(){
 
         //TODO define HOME
+
+        int current_az_turn_count = encoder_az->get_turn_count();
+
+        stepper_az->step((current_az_turn_count - init_az_turn_count)*STEP_PER_TURN*REDUC_AZ);
+
         point_to(0, 90.0 - ZENITH_SAFETY_MARGIN_DEG);
+
     }
 
     void empty_water(){
@@ -103,7 +109,7 @@ class Antenna {
 
         int current_az_turn_count = encoder_az->get_turn_count();
 
-        float pred_diff_deg_since_init = ((float)(current_az_turn_count - init_az_turn_value) + (current_az_encoder_val + az_encoder_val_diff)/ENCODERS_MAX ) * 360.0;
+        float pred_diff_deg_since_init = ((float)(current_az_turn_count - init_az_turn_count) + (current_az_encoder_val + az_encoder_val_diff)/ENCODERS_MAX ) * 360.0;
 
         if(pred_diff_deg_since_init > AZ_MAX_ROTATION_DEG){
             stepper_az->step_backward(STEP_PER_TURN*REDUC_AZ);
