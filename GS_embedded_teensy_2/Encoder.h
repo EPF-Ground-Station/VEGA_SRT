@@ -11,6 +11,9 @@ class Encoder {
 
     SPIClass *spi;
 
+    uint32_t turn_count = -1;
+    uint32_t  pos_dec = 0;
+
     public:
 
     Encoder(SPIClass &spi, int n_cs_pin):n_cs_pin(n_cs_pin){
@@ -24,9 +27,25 @@ class Encoder {
         
     }
 
-    float get_position_deg(){
+    // ADD ERROR HANDLING TO AVOID RETURNING WRONG VALUES
 
-        //TODO add init pos offset to result ?
+    uint32_t get_encoder_pos_value(){
+        
+        read_values();
+
+        return pos_dec;
+    }
+
+    uint32_t get_turn_count(){
+
+        read_values();
+
+        return turn_count;
+    }
+
+    private :
+
+    void read_values(){
 
         Low(n_cs_pin);
 
@@ -38,10 +57,9 @@ class Encoder {
 
         High(n_cs_pin);
 
-        uint32_t pos_dec = (second_word << 4) + (third_word >> 12);
-        float pos_deg = (pos_dec * 360.0) / ENCODERS_MAX;
+        pos_dec = (second_word << 4) + (third_word >> 12);
 
-        return(pos_deg);
+        turn_count = first_word;
     }
 
 

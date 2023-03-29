@@ -1,6 +1,6 @@
 #include <SPI.h>
 
-#define HWSerial Serial2
+#define HWSerial Serial
 
 #define ENCODERS_MAX pow(2, 20) - 1
 
@@ -9,8 +9,10 @@
 #define STEP_DURATION_AZ_MS 100
 #define STEP_DURATION_ALT_MS 100
 
-#define High(pin) digitalWriteFast(pin, HIGH)
-#define Low(pin) digitalWriteFast(pin, LOW)
+// #define High(pin) digitalWriteFast(pin, HIGH)
+// #define Low(pin) digitalWriteFast(pin, LOW)
+#define High(pin) digitalWrite(pin, HIGH)
+#define Low(pin) digitalWrite(pin, LOW)
 
 // #define STEPPER_ALT_ENABLE_PIN 21
 // #define STEPPER_ALT_DIR_PIN 22
@@ -35,6 +37,8 @@ void setup()
     SPI.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE1));
 
     HWSerial.begin(115200);
+
+    HWSerial.println("hello");
     // init az
 
     pinMode(STEPPER_AZ_ENABLE_PIN, OUTPUT);
@@ -80,6 +84,8 @@ void loop()
     //delay(500);
 
     step_forward_az();
+
+    HWSerial.println("eeeeeeeee");
 }
 
 // todo draft:

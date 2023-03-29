@@ -12,11 +12,13 @@ class Antenna {
 
     private:
 
-    Stepper *stepper_az;
-    Encoder *encoder_az;
+    Stepper *stepper_az = nullptr;
+    Encoder *encoder_az = nullptr;
 
-    Stepper *stepper_alt;
-    Encoder *encoder_alt;
+    Stepper *stepper_elev = nullptr;
+    Encoder *encoder_elev = nullptr;
+
+    int init_az_turn_value;
 
     public:
 
@@ -30,50 +32,93 @@ class Antenna {
             STEPPER_AZ_FAULT_PIN,
             STEP_DURATION_AZ_MS);
 
-        stepper_alt = new Stepper(
-            STEPPER_ALT_ENABLE_PIN,
-            STEPPER_ALT_DIR_PIN,
-            STEPPER_ALT_STEP_PIN,
-            STEPPER_ALT_BOOST_PIN,
-            STEPPER_ALT_FAULT_PIN,
-            STEP_DURATION_ALT_MS);
+        stepper_elev = new Stepper(
+            STEPPER_ELEV_ENABLE_PIN,
+            STEPPER_ELEV_DIR_PIN,
+            STEPPER_ELEV_STEP_PIN,
+            STEPPER_ELEV_BOOST_PIN,
+            STEPPER_ELEV_FAULT_PIN,
+            STEP_DURATION_ELEV_MS);
 
         ENCODERS_SPI.begin();
-        ENCODERS_SPI.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE1));
+        ENCODERS_SPI.beginTransaction(SPISettings(SPI_SPEED, MSBFIRST, SPI_MODE1));
 
         encoder_az = new Encoder(
             ENCODERS_SPI, 
             ENCODER_AZ_NCS_PIN);
 
-        encoder_alt = new Encoder(
+        encoder_elev = new Encoder(
             ENCODERS_SPI,
-            ENCODER_ALT_NCS_PIN);
+            ENCODER_ELEV_NCS_PIN);
 
+
+        init_az_turn_value = encoder_az->get_turn_count();
     }
 
     ~Antenna(){
 
         delete(stepper_az);
-        delete(stepper_alt);
+        delete(stepper_elev);
 
         delete(encoder_az);
-        delete(encoder_alt);
+        delete(encoder_elev);
     }
 
     void go_home(){
 
         //TODO define HOME
-        point_to(0,0);
+        point_to(0, 90.0 - ZENITH_SAFETY_MARGIN_DEG);
     }
 
     void empty_water(){
+
+        point_to(0, 60);
+
+        delay(5000);
+
+        go_home();
         
     }
 
-    void point_to(float az, float alt){
+    void point_to(float az_deg, float elev_deg){
 
-        AzRef = az * ENCODERS_MAX / 360.0;
-        AltRef = alt * ENCODERS_MAX / 360.0;
+        // point az
+
+        int target_az_encoder_val = (az_deg / 360.0 * ENCODERS_MAX + NORTH_AZ_ENCODER_OFFSET_VAL) % ENCODERS_MAX;
+
+        int current_az_encoder_val = encoder_az.get_encoder_pos_value();
+
+        int az_encoder_val_diff = target_az_encoder_val - current_az_encoder_val;
+
+        if( abs(az_encoder_val_diff) > ENCODERS_MAX/2){
+
+            if(az_encoder_val_diff < 0){
+                az_encoder_val_diff = az_encoder_val_diff + ENCODERS_MAX;
+
+            } else{
+                az_encoder_val_diff = az_encoder_val_diff - ENCODERS_MAX;
+            }
+            
+        }
+
+        int current_az_turn_count = encoder_az->get_turn_count();
+
+        float pred_diff_deg_since_init = ((float)(current_az_turn_count - init_az_turn_value) + (current_az_encoder_val + az_encoder_val_diff)/ENCODERS_MAX ) * 360.0;
+
+        if(pred_diff_deg_since_init > AZ_MAX_ROTATION_DEG){
+            stepper_az->step_backward(STEP_PER_TURN*REDUC_AZ);
+        }
+        if(pred_diff_deg_since_init < AZ_MAX_ROTATION_DEG){
+            stepper_az->step_forward(STEP_PER_TURN*REDUC_AZ);
+        }
+
+        int step_to_turn = az_encoder_val_diff / ENCODERS_MAX * REDUC_AZ * STEP_PER_TURN;
+
+        stepper_az->step(step_to_turn);
+
+        // point elev
+
+        //TODO
 
     }
 
