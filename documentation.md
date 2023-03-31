@@ -34,3 +34,4 @@ min STEP interval tested = 100ms
   az with pin dir high turn clockwise when looking from above
   
  for encoders use GPIO instead of builtin SPI CS (doesn't work for some reason else)
+ 

@@ -48,7 +48,7 @@ void setup()
     pinMode(STEPPER_AZ_FAULT_PIN, INPUT_PULLUP);
 
     High(STEPPER_AZ_ENABLE_PIN);
-    High(STEPPER_AZ_DIR_PIN);
+    Low(STEPPER_AZ_DIR_PIN);
 
     pinMode(ENCODER_AZ_NCS_PIN, OUTPUT);
     High(ENCODER_AZ_NCS_PIN);
@@ -67,23 +67,31 @@ void setup()
     pinMode(ENCODER_ALT_NCS_PIN, OUTPUT);
     High(ENCODER_ALT_NCS_PIN);
 
-    // for (int i = 0; i < 200; i++)
-    // {
-    //     HWSerial.println("TODO delete");
-    //     step_forward_az();
-    // }
+    HWSerial.println("begin turn forward az");
 
-    // for (int i = 0; i < 200; i++)
-    // {
-    //     step_forward_alt();
-    // }
+
+    for (int i = 0; i < 200; i++)
+    {
+        HWSerial.println("step az ");
+        step_forward_az();
+    }
+
+    HWSerial.println("finished turn forward alt");
+
+
+    for (int i = 0; i < 200; i++)
+    {
+        HWSerial.println("step alt ");
+        step_forward_alt();
+    }
+
+    HWSerial.println("finished turn forward alt");
 }
 
 void loop()
 {
     encoders_print();
-    
-    //delay(500);
+    delay(500);
 
     //step_forward_az();
 
@@ -142,16 +150,16 @@ void step_forward_az()
 {
 
     High(STEPPER_AZ_STEP_PIN);
-    delayMicroseconds(STEP_DURATION_AZ_MS / 2);
+    delay(STEP_DURATION_AZ_MS / 2);
     Low(STEPPER_AZ_STEP_PIN);
-    delayMicroseconds(STEP_DURATION_AZ_MS / 2);
+    delay(STEP_DURATION_AZ_MS / 2);
 }
 
-// void step_forward_alt()
-// {
+void step_forward_alt()
+{
 
-//     High(STEPPER_ALT_STEP_PIN);
-//     delay(STEP_DURATION_ALT_MS * 1000 / 2);
-//     Low(STEPPER_ALT_STEP_PIN);
-//     delay(STEP_DURATION_ALT_MS / 2);
-// }
+    High(STEPPER_ALT_STEP_PIN);
+    delay(STEP_DURATION_ALT_MS / 2);
+    Low(STEPPER_ALT_STEP_PIN);
+    delay(STEP_DURATION_ALT_MS / 2);
+}
