@@ -29,7 +29,7 @@ UART to USB converter
 	  
 min az driver step interval tested = 20us
 min alt driver step interval tested = 30us (20us too low)
-  
+
   az 12800 microstep / rev and 200 reduction
   alt 25600 microstep / rev and 140 reduction
   

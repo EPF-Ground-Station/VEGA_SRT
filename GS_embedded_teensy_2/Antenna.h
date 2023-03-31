@@ -7,13 +7,14 @@
 
 #include "Stepper.h"
 #include "Encoder.h"
+#include "EncoderMultiTurn.h"
 
 class Antenna {
 
     private:
 
     Stepper *stepper_az = nullptr;
-    Encoder *encoder_az = nullptr;
+    EncoderMultiTurn *encoder_az = nullptr;
 
     Stepper *stepper_elev = nullptr;
     Encoder *encoder_elev = nullptr;
@@ -30,7 +31,7 @@ class Antenna {
             STEPPER_AZ_STEP_PIN,
             STEPPER_AZ_BOOST_PIN,
             STEPPER_AZ_FAULT_PIN,
-            STEP_DURATION_AZ_MS);
+            STEP_PERIOD_AZ_uS);
 
         stepper_elev = new Stepper(
             STEPPER_ELEV_ENABLE_PIN,
@@ -38,12 +39,12 @@ class Antenna {
             STEPPER_ELEV_STEP_PIN,
             STEPPER_ELEV_BOOST_PIN,
             STEPPER_ELEV_FAULT_PIN,
-            STEP_DURATION_ELEV_MS);
+            STEP_PERIOD_ELEV_uS);
 
         ENCODERS_SPI.begin();
         ENCODERS_SPI.beginTransaction(SPISettings(SPI_SPEED, MSBFIRST, SPI_MODE1));
 
-        encoder_az = new Encoder(
+        encoder_az = new EncoderMultiTurn(
             ENCODERS_SPI, 
             ENCODER_AZ_NCS_PIN);
 
@@ -70,7 +71,7 @@ class Antenna {
 
         int current_az_turn_count = encoder_az->get_turn_count();
 
-        stepper_az->step((current_az_turn_count - init_az_turn_count)*STEP_PER_TURN*REDUC_AZ);
+        stepper_az->step((current_az_turn_count - init_az_turn_count)*AZ_MICRO_STEP_PER_TURN*REDUC_AZ);
 
         point_to(0, 90.0 - ZENITH_SAFETY_MARGIN_DEG);
 
@@ -92,7 +93,7 @@ class Antenna {
 
         int target_az_encoder_val = (az_deg / 360.0 * ENCODERS_MAX + NORTH_AZ_ENCODER_OFFSET_VAL) % ENCODERS_MAX;
 
-        int current_az_encoder_val = encoder_az.get_encoder_pos_value();
+        int current_az_encoder_val = encoder_az->get_encoder_pos_value();
 
         int az_encoder_val_diff = target_az_encoder_val - current_az_encoder_val;
 
@@ -112,13 +113,13 @@ class Antenna {
         float pred_diff_deg_since_init = ((float)(current_az_turn_count - init_az_turn_count) + (current_az_encoder_val + az_encoder_val_diff)/ENCODERS_MAX ) * 360.0;
 
         if(pred_diff_deg_since_init > AZ_MAX_ROTATION_DEG){
-            stepper_az->step_backward(STEP_PER_TURN*REDUC_AZ);
+            stepper_az->step_backward(AZ_MICRO_STEP_PER_TURN*REDUC_AZ);
         }
         if(pred_diff_deg_since_init < AZ_MAX_ROTATION_DEG){
-            stepper_az->step_forward(STEP_PER_TURN*REDUC_AZ);
+            stepper_az->step_forward(AZ_MICRO_STEP_PER_TURN*REDUC_AZ);
         }
 
-        int step_to_turn = az_encoder_val_diff / ENCODERS_MAX * REDUC_AZ * STEP_PER_TURN;
+        int step_to_turn = az_encoder_val_diff / ENCODERS_MAX * REDUC_AZ * AZ_MICRO_STEP_PER_TURN;
 
         stepper_az->step(step_to_turn);
 
@@ -133,11 +134,11 @@ class Antenna {
             elev = 0.0;
         }
 
-        float current_pos_deg = ELEV_INIT_POSITION_DEG - stepper_elev->get_steps_count()/STEP_PER_TURN/REDUC_ELEV;
+        float current_pos_deg = ELEV_INIT_POSITION_DEG - stepper_elev->get_steps_count()/ELEV_MICRO_STEP_PER_TURN/REDUC_ELEV;
 
         float pos_diff = elev - current_pos_deg;
 
-        stepper_elev->step(-pos_diff*STEP_PER_TURN*REDUC_ELEV);
+        stepper_elev->step(-pos_diff*ELEV_MICRO_STEP_PER_TURN*REDUC_ELEV);
     }
 
 };

@@ -13,17 +13,17 @@ class Stepper {
 
     int enable_pin, dir_pin, step_pin, boost_pin, fault_pin = -1;
 
-    int step_duration_ms = 0;
+    int step_duration_us = 0;
 
     public:
 
-    Stepper(int enable_pin, int dir_pin, int step_pin, int boost_pin, int fault_pin, int step_duration_ms):
+    Stepper(int enable_pin, int dir_pin, int step_pin, int boost_pin, int fault_pin, int step_duration_us):
         enable_pin(enable_pin),
         dir_pin(dir_pin),
         step_pin(step_pin),
         boost_pin(boost_pin),
         fault_pin(fault_pin),
-        step_duration_ms(step_duration_ms) {
+        step_duration_us(step_duration_us) {
 
         pinMode(enable_pin,OUTPUT);
         pinMode(dir_pin,OUTPUT);
@@ -66,9 +66,9 @@ class Stepper {
         High(dir_pin);
 
         High(step_pin);
-        delay(step_duration_ms/2);
+        delay(step_duration_us/2);
         Low(step_pin);
-        delay(step_duration_ms/2);
+        delay(step_duration_us/2);
 
         this->steps_count++;
     }
@@ -78,9 +78,9 @@ class Stepper {
         Low(dir_pin);
 
         High(step_pin);
-        delay(step_duration_ms/2);
+        delay(step_duration_us/2);
         Low(step_pin);
-        delay(step_duration_ms/2);
+        delay(step_duration_us/2);
 
         this->steps_count--;
     }

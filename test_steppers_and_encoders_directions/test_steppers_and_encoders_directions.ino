@@ -13,9 +13,12 @@
 //#define Low(pin) digitalWriteFast(pin, LOW)
 #define High(pin) digitalWrite(pin, HIGH)
 #define Low(pin) digitalWrite(pin, LOW)
-
 //#define High(pin) GPIO.out_w1ts = ((uint32_t)1 << pin);
 //#define Low(pin) GPIO.out_w1tc = ((uint32_t)1 << pin);
+
+#define LED_On digitalWrite(LED_BUILTIN, HIGH);
+#define LED_Off digitalWrite(LED_BUILTIN, LOW);
+
 
 #define STEPPER_ALT_STEP_PIN 25
 #define STEPPER_ALT_DIR_PIN 26
@@ -82,23 +85,27 @@ void setup()
 
     // HWSerial.println("finished turn forward az");
 
-    HWSerial.println("begin quarter turn forward alt");
+    // HWSerial.println("begin quarter turn forward alt");
 
-    for (int i = 0; i < 140*25600/4; i++)
-    {
-        step_forward_alt();
-    }
+    // for (int i = 0; i < 140*25600/4; i++)
+    // {
+    //     step_forward_alt();
+    // }
 
-    HWSerial.println("finished quarter turn forward alt");
+    // HWSerial.println("finished quarter turn forward alt");
 }
 
 int i = 0;
 
 void loop()
 {
-    // encoders_print();
-    // delay(500);
+    encoders_print();
+    delay(500);
 
+    // LED_On;
+    // delay(200);
+    // LED_Off
+    // delay(200);
 
     // step_forward_alt();
     // i++;
@@ -135,6 +142,8 @@ void encoders_print()
     HWSerial.print("az encoder turn counter (first word) ");
     HWSerial.println(first_word);
 
+    HWSerial.println();
+
     //-------------- ALT ------------
 
     Low(ENCODER_ALT_NCS_PIN);
@@ -147,10 +156,16 @@ void encoders_print()
     High(ENCODER_ALT_NCS_PIN);
 
     pos_dec = (second_word << 4) + (third_word >> 12);
+
     pos_deg = (pos_dec * 360.0) / ENCODERS_MAX;
 
     HWSerial.print("alt encoder deg ");
     HWSerial.println(pos_deg);
+    
+    HWSerial.print("alt encoder dec ");
+    HWSerial.println(pos_dec);
+
+    HWSerial.println();
 }
 
 void step_forward_az()
