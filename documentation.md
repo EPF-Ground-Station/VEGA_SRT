@@ -44,3 +44,5 @@ min alt driver step interval tested = 30us (20us too low)
  to program the esp32 (model https://www.elektronik-kaufen.ch/products/nodemcu32?variant=41643637047472&currency=CHF)
  	disconnect rx and tx of hardware serial cable
  	press boot mode button while programming
+ 	
+ don't use the GPIO0 as it create a permanent power on reset
