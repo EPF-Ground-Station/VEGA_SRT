@@ -52,7 +52,8 @@ class Antenna {
             ENCODERS_SPI,
             ELEV_ENCODER_NCS_PIN);
 
-        //safety check assume the antenna won't do a full turn on az when disconnected
+        // safety check assume the antenna won't do a full turn on az when disconnected
+        // also assume : 0 << init turn count << Max Turn Count, so the encoder turn counter won't under/overflow
         az_init_turn_count = az_encoder->get_turn_count();
     }
 
@@ -67,10 +68,9 @@ class Antenna {
 
     void go_home(){
 
-        //TODO define HOME
-
         int az_current_turn_count = az_encoder->get_turn_count();
 
+        // untangle the cables
         az_stepper->step((az_current_turn_count - az_init_turn_count)*AZ_MICRO_STEP_PER_TURN*AZ_REDUC);
 
         point_to(0, 90.0 - ELEV_ZENITH_SAFETY_MARGIN_DEG);
@@ -87,15 +87,23 @@ class Antenna {
         
     }
 
+    // az and elev are in degree
+    // az grow to the east (aimed at the north)
+    // elev is 0° at the horizon and grow toward zenith
     void point_to(float az_deg, float elev_deg){
 
         // ------ point az ------------
 
-        int az_target_encoder_val = (int)(az_deg / 360.0 * ENCODERS_MAX + AZ_NORTH_ENCODER_OFFSET_VAL) % ENCODERS_MAX;
+        // not sure how % behave with value < 0 so convert first
+        while (az_deg < 0.0){ az_deg + 360.0;}
+
+        int az_target_encoder_val = (int)(az_deg / 360.0 * ENCODERS_MAX + AZ_NORTH_ENCODER_VAL) % ENCODERS_MAX;
 
         int az_current_encoder_val = az_encoder->get_encoder_pos_value();
 
         int az_encoder_val_diff = az_target_encoder_val - az_current_encoder_val;
+
+        // take the shortest path
 
         if( abs(az_encoder_val_diff) > ENCODERS_MAX/2){
 
@@ -107,6 +115,8 @@ class Antenna {
             }
             
         }
+
+        // predicting if next move will be too much and untangle cables first if needed
 
         int az_current_turn_count = az_encoder->get_turn_count();
 
@@ -125,14 +135,18 @@ class Antenna {
 
         //------ point elev --------------
 
+        // safety check
+
         if(elev_deg > 90.0 - ELEV_ZENITH_SAFETY_MARGIN_DEG){
-            elev_deg = ELEV_ZENITH_SAFETY_MARGIN_DEG;
+            elev_deg = 90.0 - ELEV_ZENITH_SAFETY_MARGIN_DEG;
         }
         if(elev_deg < 0.0){
             elev_deg = 0.0;
         }
 
-        const int ELEV_HORIZON_ENCODER_OFFSET_VAL = (int)(ELEV_ZENITH_ENCODER_OFFSET_VAL - ENCODERS_MAX/4 + ENCODERS_MAX) % ENCODERS_MAX;
+        // ENCODERS_MAX is added in case ELEV_ZENITH_ENCODER_VAL is less than ENCODERS_MAX/4 and the result is negative
+        // when it's not the case "% ENCODERS_MAX" remove the excess turn
+        const int ELEV_HORIZON_ENCODER_OFFSET_VAL = (int)(ELEV_ZENITH_ENCODER_VAL - ENCODERS_MAX/4 + ENCODERS_MAX) % ENCODERS_MAX;
 
         int elev_target_encoder_val = (int)(elev_deg / 360.0 * ENCODERS_MAX + ELEV_HORIZON_ENCODER_OFFSET_VAL) % ENCODERS_MAX;
 

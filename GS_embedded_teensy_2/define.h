@@ -3,10 +3,10 @@
 #define SPI_SPEED 1000000
 
 //To change once mounted on the roof
-#define AZ_NORTH_ENCODER_OFFSET_VAL 0
+#define AZ_NORTH_ENCODER_VAL 0
 
 //To measure more precisely ?
-#define ELEV_ZENITH_ENCODER_OFFSET_VAL 727780
+#define ELEV_ZENITH_ENCODER_VAL 727780
 
 #define ELEV_ZENITH_SAFETY_MARGIN_DEG 3.0
 
