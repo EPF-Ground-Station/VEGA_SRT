@@ -12,13 +12,17 @@ void setup() {
 
     HWSerial.println("Emptying water");
 
+    LED_On;
     antenna.empty_water();
+    LED_Off;
 
     HWSerial.println("Setup Finished");
 
 }
 
 void loop() {
+
+
 
     // az and elev are in degree
     // az grow to the east (aimed at the north)
@@ -29,5 +33,7 @@ void loop() {
 
     HWSerial.println("azimuth = " + String(az) + " elevation = " + String(elev));
 
+    LED_On;
     antenna.point_to(az, elev);
+    LED_Off;
 }
