@@ -9,17 +9,18 @@ float az, elev = 0.0;
 void setup() {
 
     HWSerial.begin(SERIAL_BAUDRATE);
-    HWSerial.println("Starting setup");
+
+    HWSerial.println("Emptying water");
 
     antenna.empty_water();
 
-    HWSerial.println("Finished setup");
+    HWSerial.println("Setup Finished");
 
 }
 
 void loop() {
 
-    while (HWSerial.available() <= 0){delay(50)}
+    while (HWSerial.available() <= 0){delay(50);}
     az = HWSerial.parseFloat();
     elev = HWSerial.parseFloat();
 

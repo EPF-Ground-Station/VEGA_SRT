@@ -14,7 +14,7 @@ class EncoderMultiTurn : public EncoderBase {
 
     EncoderMultiTurn(SPIClass &spi, int n_cs_pin) : EncoderBase(spi, n_cs_pin) {}
 
-    // ADD ERROR HANDLING TO AVOID RETURNING WRONG VALUES
+    // TODO ADD ERROR HANDLING TO AVOID RETURNING WRONG VALUES
 
     uint32_t get_turn_count(){
 

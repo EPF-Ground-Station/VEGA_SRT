@@ -10,7 +10,7 @@ class Encoder : public EncoderBase {
 
     Encoder(SPIClass &spi, int n_cs_pin) : EncoderBase(spi, n_cs_pin) {}
 
-    // ADD ERROR HANDLING TO AVOID RETURNING WRONG VALUES
+    // TODO ADD ERROR HANDLING TO AVOID RETURNING WRONG VALUES
 
     private :
 
