@@ -2,38 +2,40 @@
 
 #include "Antenna.h"
 
-Antenna antenna;
+Antenna *antenna = nullptr;
 
 float az, elev = 0.0;
 
 void setup() {
-
+    
     HWSerial.begin(SERIAL_BAUDRATE);
 
-    HWSerial.println("Emptying water");
+    // constructor cannot be called before setup because it uses pins
+    antenna = new Antenna();
 
     LED_On;
-    antenna.empty_water();
+    antenna->empty_water();
     LED_Off;
-
-    HWSerial.println("Setup Finished");
 
 }
 
 void loop() {
 
-
-
     // az and elev are in degree
     // az grow to the east (aimed at the north)
     // elev is 0° at the horizon and grow toward zenith
-    while (HWSerial.available() <= 0){delay(50);}
+    while (HWSerial.available() <= 0){
+        delay(50);
+    }
     az = HWSerial.parseFloat();
     elev = HWSerial.parseFloat();
 
-    HWSerial.println("azimuth = " + String(az) + " elevation = " + String(elev));
+    //flush serial
+    while (HWSerial.available() > 0){
+        HWSerial.read();
+    }
 
     LED_On;
-    antenna.point_to(az, elev);
+    antenna->point_to(az, elev);
     LED_Off;
 }

@@ -2,6 +2,9 @@
 
 #define HWSerial Serial
 
+#define SERIAL_BAUDRATE 115200
+
+
 #define ENCODERS_MAX pow(2, 20) - 1
 
 #define ZERO 0x00
@@ -42,7 +45,7 @@ void setup()
     SPI.begin();
     SPI.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE1));
 
-    HWSerial.begin(115200);
+    HWSerial.begin(SERIAL_BAUDRATE);
 
     HWSerial.println("hello");
     // init az
@@ -68,7 +71,7 @@ void setup()
     pinMode(STEPPER_ALT_FAULT_PIN, INPUT_PULLUP);
 
     High(STEPPER_ALT_ENABLE_PIN);
-    Low(STEPPER_ALT_DIR_PIN);
+    High(STEPPER_ALT_DIR_PIN);
 
     pinMode(ENCODER_ALT_NCS_PIN, OUTPUT);
     High(ENCODER_ALT_NCS_PIN);
@@ -87,7 +90,7 @@ void setup()
 
     // HWSerial.println("begin quarter turn forward alt");
 
-    // for (int i = 0; i < 140*25600/4; i++)
+    // for (int i = 0; i < 140*12800/4; i++)
     // {
     //     step_forward_alt();
     // }
@@ -139,6 +142,8 @@ void encoders_print()
 
     HWSerial.print("az encoder deg ");
     HWSerial.println(pos_deg);
+    HWSerial.print("az encoder dec ");
+    HWSerial.println(pos_dec);
     HWSerial.print("az encoder turn counter (first word) ");
     HWSerial.println(first_word);
 
@@ -166,6 +171,8 @@ void encoders_print()
     HWSerial.println(pos_dec);
 
     HWSerial.println();
+
+    HWSerial.println("------------------------------------------");
 }
 
 void step_forward_az()

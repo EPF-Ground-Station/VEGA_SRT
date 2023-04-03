@@ -51,6 +51,6 @@ A NodeMCU ESP-WROOM-32 Development Board is used
 - Don't use GPIO0 as it create a permanent reset or something
 
 ### To program the esp32
-- Disconnect rx and tx of the hardware serial cable (The UART to USB converter connect them in a way that prevent programming somehow)
+- if it doesn't work try disconnecting rx and tx of the hardware serial cable (The UART to USB converter connect them in a way that prevent programming sometime ??)
 
 - Press the boot button while programming (else it will complain it's not in boot mode)

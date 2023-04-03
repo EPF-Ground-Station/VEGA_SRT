@@ -52,9 +52,18 @@ class Antenna {
             ENCODERS_SPI,
             ELEV_ENCODER_NCS_PIN);
 
+
+        // read some values to clean the SPI bus    
+        for(int i = 0; i < 10; i++){
+            az_encoder->get_encoder_pos_value();
+            delay(50);
+            elev_encoder->get_encoder_pos_value();
+            delay(50);
+        }
         // safety check assume the antenna won't do a full turn on az when disconnected
         // also assume : 0 << init turn count << Max Turn Count, so the encoder turn counter won't under/overflow
         az_init_turn_count = az_encoder->get_turn_count();
+
     }
 
     ~Antenna(){
@@ -81,7 +90,7 @@ class Antenna {
 
         point_to(0, 60);
 
-        delay(5000);
+        delay(3000);
 
         go_home();
         
@@ -95,7 +104,7 @@ class Antenna {
         // ------ point az ------------
 
         // not sure how % behave with value < 0 so convert first
-        while (az_deg < 0.0){ az_deg + 360.0;}
+        while (az_deg < 0.0){ az_deg += 360.0;}
 
         int az_target_encoder_val = (int)(az_deg / 360.0 * ENCODERS_MAX + AZ_NORTH_ENCODER_VAL) % ENCODERS_MAX;
 
@@ -125,11 +134,11 @@ class Antenna {
         if(az_pred_diff_deg_since_init > AZ_MAX_ROTATION_DEG){
             az_stepper->step(-AZ_MICRO_STEP_PER_TURN*AZ_REDUC);
         }
-        if(az_pred_diff_deg_since_init < AZ_MAX_ROTATION_DEG){
+        if(az_pred_diff_deg_since_init < -AZ_MAX_ROTATION_DEG){
             az_stepper->step(AZ_MICRO_STEP_PER_TURN*AZ_REDUC);
         }
 
-        int az_step_to_turn = az_encoder_val_diff / ENCODERS_MAX * AZ_REDUC * AZ_MICRO_STEP_PER_TURN;
+        int az_step_to_turn = (float)az_encoder_val_diff / ENCODERS_MAX * AZ_REDUC * AZ_MICRO_STEP_PER_TURN;
 
         az_stepper->step(az_step_to_turn);
 
@@ -154,9 +163,23 @@ class Antenna {
 
         int elev_encoder_val_diff = elev_target_encoder_val - elev_current_encoder_val;
 
-        int elev_step_to_turn = elev_encoder_val_diff / ENCODERS_MAX * ELEV_REDUC * ELEV_MICRO_STEP_PER_TURN;
+        // take the shortest path
 
-        elev_stepper->step(elev_step_to_turn);
+        if( abs(elev_encoder_val_diff) > ENCODERS_MAX/2){
+
+            if(elev_encoder_val_diff < 0){
+                elev_encoder_val_diff = elev_encoder_val_diff + ENCODERS_MAX;
+
+            } else{
+                elev_encoder_val_diff = elev_encoder_val_diff - ENCODERS_MAX;
+            }
+            
+        }
+
+        int elev_step_to_turn = (float)elev_encoder_val_diff / ENCODERS_MAX * ELEV_REDUC * ELEV_MICRO_STEP_PER_TURN;
+
+        elev_stepper->step(-elev_step_to_turn);
+
     }
 
 };

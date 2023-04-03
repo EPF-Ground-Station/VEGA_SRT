@@ -8,7 +8,8 @@
 //To measure more precisely ?
 #define ELEV_ZENITH_ENCODER_VAL 727780
 
-#define ELEV_ZENITH_SAFETY_MARGIN_DEG 3.0
+//TODO change to 3.0
+#define ELEV_ZENITH_SAFETY_MARGIN_DEG 10.0
 
 // plus-minus (nearly) 2 turns
 #define AZ_MAX_ROTATION_DEG (360 + 350)
