@@ -1,16 +1,27 @@
-#ifndef ENCODER_H
-#define ENCODER_H
+#ifndef ENCODER_MULTITURN_H
+#define ENCODER_MULTITURN_H
 
 #include "define.h"
 #include "EncoderBase.h"
 
-class Encoder : public EncoderBase {
+class EncoderMultiTurn : public EncoderBase {
+
+    private:
+
+    uint32_t turn_count = -1;
 
     public:
 
-    Encoder(SPIClass &spi, int n_cs_pin) : EncoderBase(spi, n_cs_pin) {}
+    EncoderMultiTurn(SPIClass &spi, int n_cs_pin) : EncoderBase(spi, n_cs_pin) {}
 
     // TODO ADD ERROR HANDLING TO AVOID RETURNING WRONG VALUES
+
+    uint32_t get_turn_count(){
+
+        read_values();
+
+        return turn_count;
+    }
 
     private :
 
@@ -20,12 +31,15 @@ class Encoder : public EncoderBase {
 
         delayMicroseconds(10);
 
+        uint32_t first_word = spi->transfer16(ZERO);
         uint32_t second_word = spi->transfer16(ZERO);
         uint32_t third_word = spi->transfer16(ZERO);
 
         High(n_cs_pin);
 
         pos_dec = (second_word << 4) + (third_word >> 12);
+
+        turn_count = first_word;
     }
 
 };
