@@ -52,9 +52,8 @@ def transform_skycoord_to_AltAz(ra, dec):
     object = SkyCoord.from_name('M33')
     obs_loc = EarthLocation(lat= 46.52457*u.deg , lon = 6.61650*u.deg, height = 500*u.m)
     time_now = Time.now() #+ 2*u.hour Don't need to add the time difference 
-    print(time_now)
     coords = SkyCoord(ra*u.deg, dec*u.deg)
-    altaz = object.transform_to(AltAz(obstime = time_now, location = obs_loc))
+    altaz = coords.transform_to(AltAz(obstime = time_now, location = obs_loc))
     print("Your Azimuth and Altitude coordinates are:")
     print(altaz.az)
     print(altaz.alt)
@@ -102,7 +101,24 @@ if __name__ == "__main__":
     #dec = 13.5
     print("Rightascencion as Decimal number = ", ra)
     print("Declination as Decimal number = ", dec)
-    az, alt = transform_skycoord_to_AltAz(ra, dec)
+    #az, alt = transform_skycoord_to_AltAz(ra, dec)
     # print(alt)
     # print(az)
+
+    import time
+
+    try:
+        serial.Serial.reset_input_buffer()
+        while True:
+            az,alt = transform_skycoord_to_AltAz(ra, dec)
+            s_az = str(az)
+            s_alt = str(alt)
+            coord =  s_az + " " + s_alt
+            send_coord(coord)
+            print(coord)
+            #time.sleep(1)
+            serial.Serial.read(timeout = None)
+            serial.Serial.reset_input_buffer()
+    except KeyboardInterrupt:
+        print("Loop stopped by user.") #loop is interrupted with the command Ctrl + C 
 
