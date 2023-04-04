@@ -5,6 +5,7 @@ from astropy.time import Time
 from astropy.coordinates import SkyCoord, EarthLocation, AltAz
 import re
 import argparse
+import time
 
 def name_input(name):
      object = SkyCoord.from_name(name)
@@ -48,28 +49,34 @@ def parse_star_coordinates():
 
 
 def transform_skycoord_to_AltAz(ra, dec):
+    """
+    Takes the star coordinates rightascension and declination as input and transforms them to altitude and azimuth coordinates. 
 
-    object = SkyCoord.from_name('M33')
+    :param obs_loc an instance of the class EarthLocation containing the informations about the location of the observator
+    :param coords an instance of the class SkyCoord with coordinates corresponing to the input coordinates of the function
+    :param altaz another instance of the class Skycoord but with the original coordinates transformed to the corresponing altitude and azimuth 
+    :param coords_altaz string containing the Azimuth in the first position and Altitude in the second position. Both as decimal numbers
+
+    """
+
+    #object = SkyCoord.from_name('M33')
     obs_loc = EarthLocation(lat= 46.52457*u.deg , lon = 6.61650*u.deg, height = 500*u.m)
     time_now = Time.now() #+ 2*u.hour Don't need to add the time difference 
     coords = SkyCoord(ra*u.deg, dec*u.deg)
     altaz = coords.transform_to(AltAz(obstime = time_now, location = obs_loc))
-    
+    coords_altaz = altaz.to_string('decimal')
     print("Your Azimuth and Altitude coordinates are:")
-    print(altaz.az)
-    print(altaz.alt)
+    print(coords_altaz)
+    #print(altaz.az)
+    #print(altaz.alt)
 
-    return (altaz.az, altaz.alt)
+    return (coords_altaz)
             
         
 def send_coord(coord, ser):
             """
-            Sends the TLE of the satelite selected to the Teensy which triggers the telescope to follow the specific satelite
-            This code will only function if exactly one teensy is connected to the computer and thus available_ports contains one element.
-            A serial port is characterized by the fact that one bit is sent at a time and the bits are sent in serie, which is how microprocessors work. 
-            list_ports.comports lists all available ports of the computer
+            Sends the Azimuth and Altitude coordinates calculated to the Teensy. 
         
-            :param available_ports : contains all the serial ports of the computer
             """
             
             DEBUG = True
@@ -83,50 +90,36 @@ def send_coord(coord, ser):
             # print(ser.readline().decode('utf-8'))
             # print("read line")
 
-        
-        
-if __name__ == "__main__":       
-    ra, dec = parse_star_coordinates()
-    #ra = 12.3
-    #dec = 13.5
-    print("Rightascencion as Decimal number = ", ra)
-    print("Declination as Decimal number = ", dec)
-    #az, alt = transform_skycoord_to_AltAz(ra, dec)
-    # print(alt)
-    # print(az)
-
-    import time
+     
+if __name__ == "__main__":
+    #ra, dec = parse_star_coordinates()
+    #print("Rightascencion as Decimal number = ", ra)
+    #print("Declination as Decimal number = ", dec)
+    #coords_altaz = transform_skycoord_to_AltAz(ra, dec)
 
     available_ports = []
-    
+
     for port, desc_port, id in list_ports.comports():
         print(port)
         print(desc_port)
         if desc_port.find("Serial") > 0:
             print("port available")
             available_ports.append(port)
-    
 
-        
     if True:
         print("available_ports true")
-        ser = serial.Serial("/dev/ttyUSB0", 115200, timeout = None)
-
+        ser = serial.Serial("/dev/ttyUSB0", 115200, timeout=None)
 
     try:
         ser.reset_input_buffer()
         while True:
-            az,alt = transform_skycoord_to_AltAz(ra, dec)
-            s_az = str(az)
-            s_alt = str(alt)
-            coord =  s_az + " " + s_alt
-            send_coord(coord, ser)
-            print(coord)
+            coords_altaz = transform_skycoord_to_AltAz(ra, dec)
+            send_coord(coords_altaz, ser)
+            print(coords_altaz)
             #time.sleep(1)
-
             print("wait for esp feedback")
             ser.read()
             ser.reset_input_buffer()
     except KeyboardInterrupt:
-        print("Loop stopped by user.") #loop is interrupted with the command Ctrl + C 
-
+        # loop is interrupted with the command Ctrl + C
+        print("Loop stopped by user.")
