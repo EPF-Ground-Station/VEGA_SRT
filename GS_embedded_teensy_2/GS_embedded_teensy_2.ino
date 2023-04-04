@@ -17,6 +17,11 @@ void setup() {
     antenna->empty_water();
     LED_Off;
 
+    //flush serial
+    while (HWSerial.available() > 0){
+        HWSerial.read();
+    }
+
 }
 
 void loop() {
@@ -38,4 +43,6 @@ void loop() {
     LED_On;
     antenna->point_to(az, elev);
     LED_Off;
+
+    HWSerial.println("Finished pointing");
 }
