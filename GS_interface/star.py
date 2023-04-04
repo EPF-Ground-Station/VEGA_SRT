@@ -54,6 +54,7 @@ def transform_skycoord_to_AltAz(ra, dec):
     time_now = Time.now() #+ 2*u.hour Don't need to add the time difference 
     coords = SkyCoord(ra*u.deg, dec*u.deg)
     altaz = coords.transform_to(AltAz(obstime = time_now, location = obs_loc))
+    
     print("Your Azimuth and Altitude coordinates are:")
     print(altaz.az)
     print(altaz.alt)
@@ -61,7 +62,7 @@ def transform_skycoord_to_AltAz(ra, dec):
     return (altaz.az, altaz.alt)
             
         
-def send_coord(coord):
+def send_coord(coord, ser):
             """
             Sends the TLE of the satelite selected to the Teensy which triggers the telescope to follow the specific satelite
             This code will only function if exactly one teensy is connected to the computer and thus available_ports contains one element.
@@ -70,28 +71,17 @@ def send_coord(coord):
         
             :param available_ports : contains all the serial ports of the computer
             """
-            available_ports = []
-
+            
             DEBUG = True
-
-            for port, desc_port, id in list_ports.comports():
-                print(port)
-                print(desc_port)
-                if desc_port.find("Serial") > 0:
-                    print("port available")
-                    available_ports.append(port)
 
             if DEBUG:
                 print(coord)
-        
-            if True:
-                print("available_ports true")
-                ser = serial.Serial("/dev/ttyACM0", 115200)
-                ser.write(coord.encode())
-                print("wrote")
 
-            print(ser.readline().decode('utf-8'))
-            print("read line")
+            ser.write(coord.encode())
+            print("wrote")
+
+            # print(ser.readline().decode('utf-8'))
+            # print("read line")
 
         
         
@@ -107,18 +97,36 @@ if __name__ == "__main__":
 
     import time
 
+    available_ports = []
+    
+    for port, desc_port, id in list_ports.comports():
+        print(port)
+        print(desc_port)
+        if desc_port.find("Serial") > 0:
+            print("port available")
+            available_ports.append(port)
+    
+
+        
+    if True:
+        print("available_ports true")
+        ser = serial.Serial("/dev/ttyUSB0", 115200, timeout = None)
+
+
     try:
-        serial.Serial.reset_input_buffer()
+        ser.reset_input_buffer()
         while True:
             az,alt = transform_skycoord_to_AltAz(ra, dec)
             s_az = str(az)
             s_alt = str(alt)
             coord =  s_az + " " + s_alt
-            send_coord(coord)
+            send_coord(coord, ser)
             print(coord)
             #time.sleep(1)
-            serial.Serial.read(timeout = None)
-            serial.Serial.reset_input_buffer()
+
+            print("wait for esp feedback")
+            ser.read()
+            ser.reset_input_buffer()
     except KeyboardInterrupt:
         print("Loop stopped by user.") #loop is interrupted with the command Ctrl + C 
 
