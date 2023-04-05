@@ -92,7 +92,7 @@ def send_coord(coord, ser):
 
      
 if __name__ == "__main__":
-    #ra, dec = parse_star_coordinates()
+    ra, dec = parse_star_coordinates()
     #print("Rightascencion as Decimal number = ", ra)
     #print("Declination as Decimal number = ", dec)
     #coords_altaz = transform_skycoord_to_AltAz(ra, dec)
@@ -116,7 +116,11 @@ if __name__ == "__main__":
             coords_altaz = transform_skycoord_to_AltAz(ra, dec)
             send_coord(coords_altaz, ser)
             print(coords_altaz)
-            #time.sleep(1)
+
+            print("wait for esp ack")
+            print(ser.readline().decode('utf-8'))
+            #ser.reset_input_buffer()
+
             print("wait for esp feedback")
             ser.read()
             ser.reset_input_buffer()

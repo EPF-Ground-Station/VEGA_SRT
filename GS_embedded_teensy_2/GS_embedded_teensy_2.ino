@@ -40,6 +40,8 @@ void loop() {
         HWSerial.read();
     }
 
+    HWSerial.println("Got az : " + String(az) + " elev : " + String(elev));
+
     LED_On;
     antenna->point_to(az, elev);
     LED_Off;
