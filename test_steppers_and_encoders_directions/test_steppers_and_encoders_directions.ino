@@ -9,7 +9,7 @@
 
 #define ZERO 0x00
 
-#define STEP_DURATION_AZ_MS 20
+#define STEP_DURATION_AZ_MS 50
 #define STEP_DURATION_ALT_MS 30
 
 //#define High(pin) digitalWriteFast(pin, HIGH)
@@ -57,7 +57,7 @@ void setup()
     pinMode(STEPPER_AZ_FAULT_PIN, INPUT_PULLUP);
 
     High(STEPPER_AZ_ENABLE_PIN);
-    High(STEPPER_AZ_DIR_PIN);
+    High(STEPPER_AZ_DIR_PIN); // DIR pin HIGH turns clockwise when looking from above
 
     pinMode(ENCODER_AZ_NCS_PIN, OUTPUT);
     High(ENCODER_AZ_NCS_PIN);
@@ -71,7 +71,7 @@ void setup()
     pinMode(STEPPER_ALT_FAULT_PIN, INPUT_PULLUP);
 
     High(STEPPER_ALT_ENABLE_PIN);
-    High(STEPPER_ALT_DIR_PIN);
+    High(STEPPER_ALT_DIR_PIN); // DIR pin HIGH lower the dish
 
     pinMode(ENCODER_ALT_NCS_PIN, OUTPUT);
     High(ENCODER_ALT_NCS_PIN);
@@ -81,7 +81,7 @@ void setup()
 
     // HWSerial.println("begin turn forward az");
 
-    // for (int i = 0; i < 200*200*40; i++)
+    // for (int i = 0; i < 200*25600; i++)
     // {
     //     step_forward_az();
     // }
@@ -96,21 +96,41 @@ void setup()
     // }
 
     // HWSerial.println("finished quarter turn forward alt");
+
+    int step_az_count = 200.0*12800.0*30.0/360.0;
+    High(STEPPER_AZ_DIR_PIN); 
+    encoders_print();
+    for(int j = 0; j < step_az_count; j++){
+        // if (j % 1000 == 0){
+        //     //encoders_print();
+        // }
+        step_az();
+    }
+    encoders_print();
+    Low(STEPPER_AZ_DIR_PIN); 
+    for(int j = 0; j < step_az_count; j++){
+        // if (j % 1000 == 0){
+        //     //encoders_print();
+        // }
+        step_az();
+    }
+    encoders_print();
 }
 
 int i = 0;
 
 void loop()
 {
-    encoders_print();
-    delay(500);
+
+    // encoders_print();
+    // delay(50);
 
     // LED_On;
     // delay(200);
     // LED_Off
     // delay(200);
 
-    // step_forward_alt();
+    // step_az();
     // i++;
 
     // if( (i % 100) == 0){
@@ -172,10 +192,12 @@ void encoders_print()
 
     HWSerial.println();
 
+
+
     HWSerial.println("------------------------------------------");
 }
 
-void step_forward_az()
+void step_az()
 {
 
     High(STEPPER_AZ_STEP_PIN);
@@ -184,7 +206,7 @@ void step_forward_az()
     delayMicroseconds(STEP_DURATION_AZ_MS / 2);
 }
 
-void step_forward_alt()
+void step_alt()
 {
 
     High(STEPPER_ALT_STEP_PIN);
