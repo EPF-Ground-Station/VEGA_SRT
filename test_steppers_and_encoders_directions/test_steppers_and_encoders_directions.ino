@@ -1,6 +1,6 @@
 #include <SPI.h>
 
-#define HWSerial Serial
+#define HWSerial Serial2
 
 #define SERIAL_BAUDRATE 115200
 
@@ -41,101 +41,123 @@
 
 void setup()
 {
+  
+  SPI.begin();
+  SPI.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE1));
+  
+  HWSerial.begin(SERIAL_BAUDRATE);
+  
+  HWSerial.println("hello");
+  // init az
+  
+  pinMode(STEPPER_AZ_ENABLE_PIN, OUTPUT);
+  pinMode(STEPPER_AZ_DIR_PIN, OUTPUT);
+  pinMode(STEPPER_AZ_STEP_PIN, OUTPUT);
+  pinMode(STEPPER_AZ_BOOST_PIN, OUTPUT);
+  pinMode(STEPPER_AZ_FAULT_PIN, INPUT_PULLUP);
+  
+  High(STEPPER_AZ_ENABLE_PIN);
+  High(STEPPER_AZ_DIR_PIN); // DIR pin HIGH turns clockwise when looking from above
+  
+  pinMode(ENCODER_AZ_NCS_PIN, OUTPUT);
+  High(ENCODER_AZ_NCS_PIN);
 
-    SPI.begin();
-    SPI.beginTransaction(SPISettings(1000000, MSBFIRST, SPI_MODE1));
+  // init alt
 
-    HWSerial.begin(SERIAL_BAUDRATE);
+  pinMode(STEPPER_ALT_ENABLE_PIN, OUTPUT);
+  pinMode(STEPPER_ALT_DIR_PIN, OUTPUT);
+  pinMode(STEPPER_ALT_STEP_PIN, OUTPUT);
+  pinMode(STEPPER_ALT_BOOST_PIN, OUTPUT);
+  pinMode(STEPPER_ALT_FAULT_PIN, INPUT_PULLUP);
 
-    HWSerial.println("hello");
-    // init az
+  High(STEPPER_ALT_ENABLE_PIN);
+  High(STEPPER_ALT_DIR_PIN); // DIR pin HIGH lower the dish
 
-    pinMode(STEPPER_AZ_ENABLE_PIN, OUTPUT);
-    pinMode(STEPPER_AZ_DIR_PIN, OUTPUT);
-    pinMode(STEPPER_AZ_STEP_PIN, OUTPUT);
-    pinMode(STEPPER_AZ_BOOST_PIN, OUTPUT);
-    pinMode(STEPPER_AZ_FAULT_PIN, INPUT_PULLUP);
-
-    High(STEPPER_AZ_ENABLE_PIN);
-    High(STEPPER_AZ_DIR_PIN); // DIR pin HIGH turns clockwise when looking from above
-
-    pinMode(ENCODER_AZ_NCS_PIN, OUTPUT);
-    High(ENCODER_AZ_NCS_PIN);
-
-    // init alt
-
-    pinMode(STEPPER_ALT_ENABLE_PIN, OUTPUT);
-    pinMode(STEPPER_ALT_DIR_PIN, OUTPUT);
-    pinMode(STEPPER_ALT_STEP_PIN, OUTPUT);
-    pinMode(STEPPER_ALT_BOOST_PIN, OUTPUT);
-    pinMode(STEPPER_ALT_FAULT_PIN, INPUT_PULLUP);
-
-    High(STEPPER_ALT_ENABLE_PIN);
-    High(STEPPER_ALT_DIR_PIN); // DIR pin HIGH lower the dish
-
-    pinMode(ENCODER_ALT_NCS_PIN, OUTPUT);
-    High(ENCODER_ALT_NCS_PIN);
+  pinMode(ENCODER_ALT_NCS_PIN, OUTPUT);
+  High(ENCODER_ALT_NCS_PIN);
 
 
-    
 
-    // HWSerial.println("begin turn forward az");
 
-    // for (int i = 0; i < 200*25600; i++)
-    // {
-    //     step_forward_az();
-    // }
+  // HWSerial.println("begin turn forward az");
 
-    // HWSerial.println("finished turn forward az");
+  // for (int i = 0; i < 200*25600; i++)
+  // {
+  //     step_forward_az();
+  // }
 
-    // HWSerial.println("begin quarter turn forward alt");
+  // HWSerial.println("finished turn forward az");
 
-    // for (int i = 0; i < 140*12800/4; i++)
-    // {
-    //     step_forward_alt();
-    // }
+  // HWSerial.println("begin quarter turn forward alt");
 
-    // HWSerial.println("finished quarter turn forward alt");
+  // for (int i = 0; i < 140*12800/4; i++)
+  // {
+  //     step_forward_alt();
+  // }
 
-    int step_az_count = 200.0*12800.0*30.0/360.0;
-    High(STEPPER_AZ_DIR_PIN); 
-    encoders_print();
-    for(int j = 0; j < step_az_count; j++){
-        // if (j % 1000 == 0){
-        //     //encoders_print();
-        // }
-        step_az();
-    }
-    encoders_print();
-    Low(STEPPER_AZ_DIR_PIN); 
-    for(int j = 0; j < step_az_count; j++){
-        // if (j % 1000 == 0){
-        //     //encoders_print();
-        // }
-        step_az();
-    }
-    encoders_print();
+  // HWSerial.println("finished quarter turn forward alt");
+
+  //flush serial
+  while (HWSerial.available() > 0) {
+    HWSerial.read();
+  }
+
 }
 
 int i = 0;
 
 void loop()
 {
+  HWSerial.println("Enter an angle to move in degrees");
 
-    // encoders_print();
-    // delay(50);
+  float angle = 0.0;
 
-    // LED_On;
-    // delay(200);
-    // LED_Off
-    // delay(200);
+  while (HWSerial.available() <= 0) {
+    delay(50);
+  }
 
-    // step_az();
-    // i++;
+  angle = HWSerial.parseFloat();
 
-    // if( (i % 100) == 0){
-    //     HWSerial.println(i);
-    // }
+  //flush serial
+  while (HWSerial.available() > 0) {
+    HWSerial.read();
+  }
+
+
+  int step_az_count = 200.0 * 12800.0 * abs(angle) / 360.0;
+
+  if (angle > 0.0) {
+    High(STEPPER_AZ_DIR_PIN);
+
+  } else {
+    Low(STEPPER_AZ_DIR_PIN);
+  }
+
+  HWSerial.println("Start moving");
+  encoders_print();
+  for (int j = 0; j < step_az_count; j++) {
+    step_az();
+  }
+  HWSerial.println("Finished moving");
+  encoders_print();
+
+  HWSerial.println("\n");
+
+
+  // encoders_print();
+  // delay(50);
+
+  // LED_On;
+  // delay(200);
+  // LED_Off
+  // delay(200);
+
+  // step_az();
+  // i++;
+
+  // if( (i % 100) == 0){
+  //     HWSerial.println(i);
+  // }
 }
 
 // todo draft:
@@ -145,72 +167,76 @@ void loop()
 void encoders_print()
 {
 
-    //-------- AZ -------------
+  //-------- AZ -------------
 
-    Low(ENCODER_AZ_NCS_PIN);
+  Low(ENCODER_AZ_NCS_PIN);
 
-    delayMicroseconds(10);
+  delayMicroseconds(10);
 
-    uint32_t first_word = SPI.transfer16(ZERO);
-    uint32_t second_word = SPI.transfer16(ZERO);
-    uint32_t third_word = SPI.transfer16(ZERO);
+  uint32_t first_word;
+  uint32_t second_word;
+  uint32_t third_word;
 
-    High(ENCODER_AZ_NCS_PIN);
-
-    uint32_t pos_dec = (second_word << 4) + (third_word >> 12);
-    float pos_deg = (pos_dec * 360.0) / ENCODERS_MAX;
-
-    HWSerial.print("az encoder deg ");
-    HWSerial.println(pos_deg);
-    HWSerial.print("az encoder dec ");
-    HWSerial.println(pos_dec);
-    HWSerial.print("az encoder turn counter (first word) ");
-    HWSerial.println(first_word);
-
-    HWSerial.println();
-
-    //-------------- ALT ------------
-
-    Low(ENCODER_ALT_NCS_PIN);
-
-    delayMicroseconds(10);
-
+  for (int i = 0; i < 10; i++) {
+    first_word = SPI.transfer16(ZERO);
     second_word = SPI.transfer16(ZERO);
     third_word = SPI.transfer16(ZERO);
+  }
 
-    High(ENCODER_ALT_NCS_PIN);
+  High(ENCODER_AZ_NCS_PIN);
 
-    pos_dec = (second_word << 4) + (third_word >> 12);
+  uint32_t pos_dec = (second_word << 4) + (third_word >> 12);
+  float pos_deg = (pos_dec * 360.0) / ENCODERS_MAX;
 
-    pos_deg = (pos_dec * 360.0) / ENCODERS_MAX;
+  HWSerial.print("az encoder deg ");
+  HWSerial.println(pos_deg);
+  HWSerial.print("az encoder dec ");
+  HWSerial.println(pos_dec);
+  HWSerial.print("az encoder turn counter (first word) ");
+  HWSerial.println(first_word);
 
-    HWSerial.print("alt encoder deg ");
-    HWSerial.println(pos_deg);
-    
-    HWSerial.print("alt encoder dec ");
-    HWSerial.println(pos_dec);
+  HWSerial.println();
 
-    HWSerial.println();
+  //-------------- ALT ------------
+  /*
+      Low(ENCODER_ALT_NCS_PIN);
+    ​
+      delayMicroseconds(10);
+    ​
+      second_word = SPI.transfer16(ZERO);
+      third_word = SPI.transfer16(ZERO);
+    ​
+      High(ENCODER_ALT_NCS_PIN);
+    ​
+      pos_dec = (second_word << 4) + (third_word >> 12);
+    ​
+      pos_deg = (pos_dec * 360.0) / ENCODERS_MAX;
+    ​
+      HWSerial.print("alt encoder deg ");
+      HWSerial.println(pos_deg);
 
+      HWSerial.print("alt encoder dec ");
+      HWSerial.println(pos_dec);
+    ​
+      HWSerial.println();
+    ​
+  */
 
-
-    HWSerial.println("------------------------------------------");
+  HWSerial.println("------------------------------------------");
 }
 
 void step_az()
 {
-
-    High(STEPPER_AZ_STEP_PIN);
-    delayMicroseconds(STEP_DURATION_AZ_MS / 2);
-    Low(STEPPER_AZ_STEP_PIN);
-    delayMicroseconds(STEP_DURATION_AZ_MS / 2);
+  High(STEPPER_AZ_STEP_PIN);
+  delayMicroseconds(STEP_DURATION_AZ_MS / 2);
+  Low(STEPPER_AZ_STEP_PIN);
+  delayMicroseconds(STEP_DURATION_AZ_MS / 2);
 }
 
 void step_alt()
 {
-
-    High(STEPPER_ALT_STEP_PIN);
-    delayMicroseconds(STEP_DURATION_ALT_MS / 2);
-    Low(STEPPER_ALT_STEP_PIN);
-    delayMicroseconds(STEP_DURATION_ALT_MS / 2);
+  High(STEPPER_ALT_STEP_PIN);
+  delayMicroseconds(STEP_DURATION_ALT_MS / 2);
+  Low(STEPPER_ALT_STEP_PIN);
+  delayMicroseconds(STEP_DURATION_ALT_MS / 2);
 }
