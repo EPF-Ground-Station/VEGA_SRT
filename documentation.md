@@ -20,7 +20,7 @@
 ## Steppers
 	red     STEP
 	yellow  DIR
-    black   ENABLE
+    	black   ENABLE
 	gray    GND
   
 ## Other infos on drivers, steppers and encoders
