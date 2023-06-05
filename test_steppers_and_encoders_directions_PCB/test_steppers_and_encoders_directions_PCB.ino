@@ -23,21 +23,21 @@
 #define LED_Off digitalWrite(LED_BUILTIN, LOW);
 
 
-#define STEPPER_ALT_STEP_PIN 25
-#define STEPPER_ALT_DIR_PIN 26
-#define STEPPER_ALT_ENABLE_PIN 27
-#define STEPPER_ALT_BOOST_PIN 14
-#define STEPPER_ALT_FAULT_PIN 12
+#define STEPPER_ALT_STEP_PIN 32
+#define STEPPER_ALT_DIR_PIN 33
+#define STEPPER_ALT_ENABLE_PIN 25
+#define STEPPER_ALT_BOOST_PIN 26
+#define STEPPER_ALT_FAULT_PIN 27
 
-#define ENCODER_ALT_NCS_PIN 21
+#define ENCODER_ALT_NCS_PIN 12
 
 #define STEPPER_AZ_STEP_PIN 17
 #define STEPPER_AZ_DIR_PIN 16
 #define STEPPER_AZ_ENABLE_PIN 4
-#define STEPPER_AZ_BOOST_PIN 2
-#define STEPPER_AZ_FAULT_PIN 15
+#define STEPPER_AZ_BOOST_PIN 15
+#define STEPPER_AZ_FAULT_PIN 14
 
-#define ENCODER_AZ_NCS_PIN 22
+#define ENCODER_AZ_NCS_PIN 13
 
 void setup()
 {
@@ -108,13 +108,19 @@ int i = 0;
 
 void loop()
 {
-  HWSerial.println("Enter an angle to move in degrees");
+  HWSerial.println("<[0 for az or 1 for elel]> <degrees>");
+  HWSerial.println("example");
+  HWSerial.println("1 -30.0");
 
   float angle = 0.0;
+  int axis = 0;
 
   while (HWSerial.available() <= 0) {
     delay(50);
   }
+  
+  axis = HWSerial.parseInt();
+  HWSerial.println(axis);
 
   angle = HWSerial.parseFloat();
 
@@ -123,25 +129,46 @@ void loop()
     HWSerial.read();
   }
 
-
-  int step_az_count = 200.0 * 12800.0 * abs(angle) / 360.0;
-
-  if (angle > 0.0) {
-    High(STEPPER_AZ_DIR_PIN);
-
-  } else {
-    Low(STEPPER_AZ_DIR_PIN);
-  }
-
   HWSerial.println("Start moving");
   encoders_print();
-  for (int j = 0; j < step_az_count; j++) {
-    step_az();
+
+  if(axis == 0){
+    int step_az_count = 200.0 * 12800.0 * abs(angle) / 360.0;
+
+    if (angle > 0.0) {
+      High(STEPPER_AZ_DIR_PIN);
+
+    } else {
+      Low(STEPPER_AZ_DIR_PIN);
+    }
+    
+    for (int j = 0; j < step_az_count; j++) {
+      step_az();
+    }
+    
   }
+  else {
+
+    int step_alt_count = 140.0 * 25600.0 * abs(angle) / 360.0;
+
+    if (angle > 0.0) {
+      High(STEPPER_ALT_DIR_PIN);
+
+    } else {
+      Low(STEPPER_ALT_DIR_PIN);
+    }
+    
+    for (int j = 0; j < step_alt_count; j++) {
+      step_alt();
+    }
+    
+  }
+
   HWSerial.println("Finished moving");
   encoders_print();
-
   HWSerial.println("\n");
+
+  
 
 
   // encoders_print();
@@ -198,29 +225,27 @@ void encoders_print()
   HWSerial.println();
 
   //-------------- ALT ------------
-  /*
+  
       Low(ENCODER_ALT_NCS_PIN);
-    ​
+
       delayMicroseconds(10);
-    ​
+
       second_word = SPI.transfer16(ZERO);
       third_word = SPI.transfer16(ZERO);
-    ​
+
       High(ENCODER_ALT_NCS_PIN);
-    ​
+
       pos_dec = (second_word << 4) + (third_word >> 12);
-    ​
+
       pos_deg = (pos_dec * 360.0) / ENCODERS_MAX;
-    ​
+
       HWSerial.print("alt encoder deg ");
       HWSerial.println(pos_deg);
 
       HWSerial.print("alt encoder dec ");
       HWSerial.println(pos_dec);
-    ​
+
       HWSerial.println();
-    ​
-  */
 
   HWSerial.println("------------------------------------------");
 }
