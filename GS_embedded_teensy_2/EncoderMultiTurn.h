@@ -16,16 +16,20 @@ class EncoderMultiTurn : public EncoderBase {
 
     // TODO ADD ERROR HANDLING TO AVOID RETURNING WRONG VALUES
 
-    uint32_t get_turn_count(){
+    ErrorStatus get_turn_count(uint32_t & value){
 
-        read_values();
+        ErrorStatus error = read_values();
 
-        return turn_count;
+        if(error.type == ErrorType::NONE){
+            value = turn_count;
+        }
+
+        return error;
     }
 
     private :
 
-    void read_values(){
+    ErrorStatus read_values(){
 
         Low(n_cs_pin);
 

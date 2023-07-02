@@ -1,3 +1,6 @@
+// TODO update with the PCB pins
+
+
 #define SERIAL_BAUDRATE 115200
 
 #define SPI_SPEED 1000000
@@ -53,6 +56,9 @@
 #define ELEV_STEPPER_FAULT_PIN 12
 
 #define ELEV_ENCODER_NCS_PIN 21
+
+#define STEPS_SLOWDOWN_THRESHOLD 500
+#define STEPS_SLOWDOWN_FACTOR 2
 
 
 #define LED_On digitalWrite(LED_BUILTIN, HIGH);

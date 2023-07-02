@@ -13,16 +13,23 @@ class Antenna {
 
     private:
 
-    Stepper *az_stepper = nullptr;
-    EncoderMultiTurn *az_encoder= nullptr;
+    //static to be accessed from timer ISR
+    static Stepper *az_stepper = nullptr;
+    static int az_twice_step_count = 0;
+    static hw_timer_t *az_stepper_timer = nullptr;
+    EncoderMultiTurn *az_encoder = nullptr;
 
-    Stepper *elev_stepper = nullptr;
+    //static to be accessed from timer ISR
+    static Stepper *elev_stepper = nullptr;
+    static int elev_twice_step_count = 0;
+    static hw_timer_t *elev_stepper_timer = nullptr;
     Encoder *elev_encoder = nullptr;
 
     int az_init_turn_count;
 
     public:
 
+    //TODO make singleton ?
     Antenna(){
 
         az_stepper = new Stepper(
@@ -31,7 +38,8 @@ class Antenna {
             AZ_STEPPER_ENABLE_PIN,
             AZ_STEPPER_BOOST_PIN,
             AZ_STEPPER_FAULT_PIN,
-            AZ_STEP_PERIOD_uS);
+            AZ_STEP_PERIOD_uS,
+            0);
 
         elev_stepper = new Stepper(
             ELEV_STEPPER_STEP_PIN,
@@ -39,7 +47,8 @@ class Antenna {
             ELEV_STEPPER_ENABLE_PIN,
             ELEV_STEPPER_BOOST_PIN,
             ELEV_STEPPER_FAULT_PIN,
-            ELEV_STEP_PERIOD_uS);
+            ELEV_STEP_PERIOD_uS,
+            1);
 
         ENCODERS_SPI.begin();
         ENCODERS_SPI.beginTransaction(SPISettings(SPI_SPEED, MSBFIRST, SPI_MODE1));
@@ -75,31 +84,23 @@ class Antenna {
         delete(elev_encoder);
     }
 
-    void go_home(){
+    //TODO implement error report
+    ErrorStatus untangle(){
 
         int az_current_turn_count = az_encoder->get_turn_count();
 
         // untangle the cables
-        az_stepper->step((az_current_turn_count - az_init_turn_count)*AZ_MICRO_STEP_PER_TURN*AZ_REDUC);
-
-        point_to(0, 90.0 - ELEV_ZENITH_SAFETY_MARGIN_DEG);
-
+        az_step((az_current_turn_count - az_init_turn_count)*AZ_MICRO_STEP_PER_TURN*AZ_REDUC);
     }
 
-    void empty_water(){
 
-        point_to(0, 60);
-
-        delay(3000);
-
-        go_home();
-        
-    }
+    //TODO implement error report
+    //TODO separate az and elev point_to into helper functions
 
     // az and elev are in degree
     // az grow to the east (aimed at the north)
     // elev is 0° at the horizon and grow toward zenith
-    void point_to(float az_deg, float elev_deg){
+    ErrorStatus point_to(float az_deg, float elev_deg){
 
         // ------ point az ------------
 
@@ -140,7 +141,7 @@ class Antenna {
 
         int az_step_to_turn = (float)az_encoder_val_diff / ENCODERS_MAX * AZ_REDUC * AZ_MICRO_STEP_PER_TURN;
 
-        az_stepper->step(az_step_to_turn);
+        az_step(az_step_to_turn);
 
         //------ point elev --------------
 
@@ -180,6 +181,81 @@ class Antenna {
 
         elev_stepper->step(-elev_step_to_turn);
 
+    }
+
+    private:
+
+
+    // az timer helper function and ISR
+
+
+    void az_step(int steps){
+        //TODO if step < threshold lower speed by factor
+
+        az_twice_step_count = 2*steps;
+        
+        //base clock is 80MHz with a 80 prescaler a timer tick is 1 uS
+        az_stepper_timer = timerBegin(az_stepper->getTimerNum(), 80, true);
+
+        timerAttachInterrupt(az_stepper_timer, az_step_ISR, true);
+
+        int half_step_duration_uS = az_stepper->getStepDuration()/2;
+
+        //true for autoreload, false for oneshot
+        timerAlarmWrite(az_stepper_timer, half_step_duration_uS, false);
+
+        timerAlarmEnable(az_stepper_timer);
+    }
+
+    static void az_step_ISR(){
+        if(az_twice_step_count > 0){
+
+            if(az_twice_step_count % 2 == 0){
+                az_stepper->stepRiseEdge();
+            } else {
+                az_stepper->stepLowerEdge();
+            }
+
+            az_twice_step_count -= 1;
+
+            timerAlarmEnable(az_stepper_timer);
+        }
+    }
+
+    // elev timer helper function and ISR
+
+
+    void elev_step(int steps){
+        //TODO if step < threshold lower speed by factor
+
+        elev_twice_step_count = 2*steps;
+        
+        //base clock is 80MHz with a 80 prescaler a timer tick is 1 uS
+        elev_stepper_timer = timerBegin(elev_stepper->getTimerNum(), 80, true);
+
+        timerAttachInterrupt(elev_stepper_timer, elev_step_ISR, true);
+
+        int half_step_duration_uS = elev_stepper->getStepDuration()/2;
+
+        //true for autoreload, false for oneshot
+        timerAlarmWrite(elev_stepper_timer, half_step_duration_uS, false);
+
+        timerAlarmEnable(elev_stepper_timer);
+    }
+
+    static void elev_step_ISR(){
+        if(elev_twice_step_count > 0){
+
+            if(elev_twice_step_count % 2 == 0){
+                elev_stepper->stepRiseEdge();
+            } else {
+                elev_stepper->stepLowerEdge();
+            }
+
+            elev_twice_step_count -= 1;
+
+            timerAlarmEnable(elev_stepper_timer);
+        }
     }
 
 };

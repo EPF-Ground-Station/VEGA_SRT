@@ -14,7 +14,7 @@ class Encoder : public EncoderBase {
 
     private :
 
-    void read_values(){
+    ErrorStatus read_values(){
 
         Low(n_cs_pin);
 
