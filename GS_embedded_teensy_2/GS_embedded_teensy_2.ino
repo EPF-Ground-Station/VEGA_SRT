@@ -1,8 +1,8 @@
 #include "define.h"
 
-#include "Antenna.h"
+#include "AntennaPointingMechanism.h"
 
-Antenna *antenna = nullptr;
+AntennaPointingMechanism *apm = nullptr;
 
 float az, elev = 0.0;
 
@@ -11,10 +11,10 @@ void setup() {
     HWSerial.begin(SERIAL_BAUDRATE);
 
     // constructor cannot be called before setup because it uses pins
-    antenna = new Antenna();
+    apm = new AntennaPointingMechanism();
 
     LED_On;
-    antenna->empty_water();
+    //antenna->empty_water();
     LED_Off;
 
     //flush serial
@@ -42,8 +42,9 @@ void loop() {
 
     HWSerial.println("Got az : " + String(az) + " elev : " + String(elev));
 
+    // TODO change led to be used with timers
     LED_On;
-    antenna->point_to(az, elev);
+    apm->point_to(az, elev);
     LED_Off;
 
     HWSerial.println("Finished pointing");

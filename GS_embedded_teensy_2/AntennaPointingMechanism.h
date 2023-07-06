@@ -1,5 +1,5 @@
-#ifndef ANTENNA_H
-#define ANTENNA_H
+#ifndef ANTENNA_POINTING_MECHANISM_H
+#define ANTENNA_POINTING_MECHANISM_H
 
 #include <SPI.h>
 
@@ -9,20 +9,20 @@
 #include "Encoder.h"
 #include "EncoderMultiTurn.h"
 
-class Antenna {
+class AntennaPointingMechanism {
 
     private:
 
     //static to be accessed from timer ISR
-    static Stepper *az_stepper = nullptr;
-    static int az_twice_step_count = 0;
-    static hw_timer_t *az_stepper_timer = nullptr;
+    static Stepper *az_stepper; // = nullptr;
+    static int az_twice_step_count;//= 0;
+    static hw_timer_t *az_stepper_timer; // = nullptr;
     EncoderMultiTurn *az_encoder = nullptr;
 
     //static to be accessed from timer ISR
-    static Stepper *elev_stepper = nullptr;
-    static int elev_twice_step_count = 0;
-    static hw_timer_t *elev_stepper_timer = nullptr;
+    static Stepper *elev_stepper;// = nullptr;
+    static int elev_twice_step_count;// = 0;
+    static hw_timer_t *elev_stepper_timer;// = nullptr;
     Encoder *elev_encoder = nullptr;
 
     int az_init_turn_count;
@@ -30,7 +30,7 @@ class Antenna {
     public:
 
     //TODO make singleton ?
-    Antenna(){
+    AntennaPointingMechanism(){
 
         az_stepper = new Stepper(
             AZ_STEPPER_STEP_PIN,
@@ -55,27 +55,32 @@ class Antenna {
 
         az_encoder = new EncoderMultiTurn(
             ENCODERS_SPI, 
-            AZ_ENCODER_NCS_PIN);
+            AZ_ENCODER_NCS_PIN,
+            "Az");
 
         elev_encoder = new Encoder(
             ENCODERS_SPI,
-            ELEV_ENCODER_NCS_PIN);
+            ELEV_ENCODER_NCS_PIN,
+            "Elev");
 
 
         // read some values to clean the SPI bus    
         for(int i = 0; i < 10; i++){
-            az_encoder->get_encoder_pos_value();
+            int value;
+            az_encoder->get_encoder_pos_value(value);
             delay(50);
-            elev_encoder->get_encoder_pos_value();
+            elev_encoder->get_encoder_pos_value(value);
             delay(50);
         }
         // safety check assume the antenna won't do a full turn on az when disconnected
         // also assume : 0 << init turn count << Max Turn Count, so the encoder turn counter won't under/overflow
-        az_init_turn_count = az_encoder->get_turn_count();
+
+        //TODO not sure how to handle errors here
+        ErrorStatus status = az_encoder->get_turn_count(az_init_turn_count);
 
     }
 
-    ~Antenna(){
+    ~AntennaPointingMechanism(){
 
         delete(az_stepper);
         delete(elev_stepper);
@@ -87,15 +92,23 @@ class Antenna {
     //TODO implement error report
     ErrorStatus untangle(){
 
-        int az_current_turn_count = az_encoder->get_turn_count();
+        int az_current_turn_count = 0;
+        
+        ErrorStatus status = az_encoder->get_turn_count(az_current_turn_count);
+        
+        if(status.type == ErrorType::ERROR){
+            return status;
+        }
 
         // untangle the cables
         az_step((az_current_turn_count - az_init_turn_count)*AZ_MICRO_STEP_PER_TURN*AZ_REDUC);
+
+        return status;
     }
 
 
     //TODO implement error report
-    //TODO separate az and elev point_to into helper functions
+    //TODO separate az and elev point_to (should be static fct ??) into helper functions for async iterative correction and separate errors
 
     // az and elev are in degree
     // az grow to the east (aimed at the north)
@@ -109,7 +122,13 @@ class Antenna {
 
         int az_target_encoder_val = (int)(az_deg / 360.0 * ENCODERS_MAX + AZ_NORTH_ENCODER_VAL) % ENCODERS_MAX;
 
-        int az_current_encoder_val = az_encoder->get_encoder_pos_value();
+        int az_current_encoder_val = 0;
+
+        ErrorStatus statusEncoderAz = az_encoder->get_encoder_pos_value(az_current_encoder_val);
+
+        if(statusEncoderAz.type == ErrorType::ERROR){
+            return statusEncoderAz;
+        }
 
         int az_encoder_val_diff = az_target_encoder_val - az_current_encoder_val;
 
@@ -128,20 +147,27 @@ class Antenna {
 
         // predicting if next move will be too much and untangle cables first if needed
 
-        int az_current_turn_count = az_encoder->get_turn_count();
+        int az_current_turn_count = 0;
+        
+        ErrorStatus statusAzTurnCount = az_encoder->get_turn_count(az_current_turn_count);
+        
+        if(statusAzTurnCount.type == ErrorType::ERROR){
+            return statusAzTurnCount;
+        }
 
         float az_pred_diff_deg_since_init = ((float)(az_current_turn_count - az_init_turn_count) + (az_current_encoder_val + az_encoder_val_diff)/ENCODERS_MAX ) * 360.0;
 
+        int step_to_untangle = 0;
         if(az_pred_diff_deg_since_init > AZ_MAX_ROTATION_DEG){
-            az_stepper->step(-AZ_MICRO_STEP_PER_TURN*AZ_REDUC);
+            step_to_untangle = (-AZ_MICRO_STEP_PER_TURN*AZ_REDUC);
         }
         if(az_pred_diff_deg_since_init < -AZ_MAX_ROTATION_DEG){
-            az_stepper->step(AZ_MICRO_STEP_PER_TURN*AZ_REDUC);
+            step_to_untangle = (AZ_MICRO_STEP_PER_TURN*AZ_REDUC);
         }
 
         int az_step_to_turn = (float)az_encoder_val_diff / ENCODERS_MAX * AZ_REDUC * AZ_MICRO_STEP_PER_TURN;
 
-        az_step(az_step_to_turn);
+        az_step(az_step_to_turn + step_to_untangle);
 
         //------ point elev --------------
 
@@ -160,7 +186,13 @@ class Antenna {
 
         int elev_target_encoder_val = (int)(elev_deg / 360.0 * ENCODERS_MAX + ELEV_HORIZON_ENCODER_OFFSET_VAL) % ENCODERS_MAX;
 
-        int elev_current_encoder_val = elev_encoder->get_encoder_pos_value();
+        int elev_current_encoder_val = 0;
+
+        ErrorStatus statusEncoderElev = elev_encoder->get_encoder_pos_value(elev_current_encoder_val);
+
+        if(statusEncoderElev.type == ErrorType::ERROR){
+            return statusEncoderElev;
+        }
 
         int elev_encoder_val_diff = elev_target_encoder_val - elev_current_encoder_val;
 
@@ -179,7 +211,7 @@ class Antenna {
 
         int elev_step_to_turn = (float)elev_encoder_val_diff / ENCODERS_MAX * ELEV_REDUC * ELEV_MICRO_STEP_PER_TURN;
 
-        elev_stepper->step(-elev_step_to_turn);
+        elev_step(-elev_step_to_turn);
 
     }
 
@@ -190,8 +222,10 @@ class Antenna {
 
 
     void az_step(int steps){
-        //TODO if step < threshold lower speed by factor
-
+        int step_duration_factor = 1;
+        if (steps < STEPS_SLOWDOWN_THRESHOLD){
+            step_duration_factor = STEPS_SLOWDOWN_FACTOR;
+        }
         az_twice_step_count = 2*steps;
         
         //base clock is 80MHz with a 80 prescaler a timer tick is 1 uS
@@ -199,7 +233,7 @@ class Antenna {
 
         timerAttachInterrupt(az_stepper_timer, az_step_ISR, true);
 
-        int half_step_duration_uS = az_stepper->getStepDuration()/2;
+        int half_step_duration_uS = az_stepper->getStepDuration()/2 * step_duration_factor;
 
         //true for autoreload, false for oneshot
         timerAlarmWrite(az_stepper_timer, half_step_duration_uS, false);
@@ -226,7 +260,11 @@ class Antenna {
 
 
     void elev_step(int steps){
-        //TODO if step < threshold lower speed by factor
+        int step_duration_factor = 1;
+        if (steps < STEPS_SLOWDOWN_THRESHOLD){
+            step_duration_factor = STEPS_SLOWDOWN_FACTOR;
+        }
+
 
         elev_twice_step_count = 2*steps;
         
@@ -235,7 +273,7 @@ class Antenna {
 
         timerAttachInterrupt(elev_stepper_timer, elev_step_ISR, true);
 
-        int half_step_duration_uS = elev_stepper->getStepDuration()/2;
+        int half_step_duration_uS = elev_stepper->getStepDuration()/2 * step_duration_factor;
 
         //true for autoreload, false for oneshot
         timerAlarmWrite(elev_stepper_timer, half_step_duration_uS, false);
@@ -259,5 +297,14 @@ class Antenna {
     }
 
 };
+
+//static to be accessed from timer ISR
+Stepper *AntennaPointingMechanism::az_stepper = nullptr;
+int AntennaPointingMechanism::az_twice_step_count = 0;
+hw_timer_t *AntennaPointingMechanism::az_stepper_timer = nullptr; 
+
+Stepper *AntennaPointingMechanism::elev_stepper = nullptr;
+int AntennaPointingMechanism::elev_twice_step_count = 0;
+hw_timer_t *AntennaPointingMechanism::elev_stepper_timer = nullptr;
 
 #endif
