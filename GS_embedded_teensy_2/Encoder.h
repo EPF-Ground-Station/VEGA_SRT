@@ -16,6 +16,8 @@ class Encoder : public EncoderBase {
 
     ErrorStatus read_values(){
 
+        //HWSerial.println("DEBUG enter read_values");
+
         Low(n_cs_pin);
 
         delayMicroseconds(10);
@@ -25,10 +27,14 @@ class Encoder : public EncoderBase {
 
         High(n_cs_pin);
 
+        //WSerial.println("DEBUG got data from SPI");
+
         uint32_t mask = 1;
 
         uint32_t warning_bit = (third_word >> 8) & mask;
         uint32_t error_bit = (third_word >> 9) & mask;
+
+        //HWSerial.println("DEBUG computed errors bits");
 
         if(error_bit == 0){
 
@@ -47,6 +53,8 @@ class Encoder : public EncoderBase {
         }
 
         ErrorStatus status(ErrorType::NONE, "");
+        //HWSerial.println("DEBUG end of read values");
+        return status;
     }
 
 };

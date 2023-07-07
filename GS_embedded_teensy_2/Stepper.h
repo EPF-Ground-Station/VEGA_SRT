@@ -13,18 +13,15 @@ class Stepper {
 
     int step_duration_us = 0;
 
-    int timerNum = 0;
-
     public:
 
-    Stepper(int step_pin, int dir_pin, int enable_pin, int boost_pin, int fault_pin, int step_duration_us, int timerNum):
+    Stepper(int step_pin, int dir_pin, int enable_pin, int boost_pin, int fault_pin, int step_duration_us):
         step_pin(step_pin),
         dir_pin(dir_pin),
         enable_pin(enable_pin),
         boost_pin(boost_pin),
         fault_pin(fault_pin),
-        step_duration_us(step_duration_us),
-        timerNum(timerNum) {
+        step_duration_us(step_duration_us) {
 
         pinMode(step_pin, OUTPUT);
         pinMode(dir_pin, OUTPUT);
@@ -40,10 +37,6 @@ class Stepper {
     
     int getStepDuration(){
         return step_duration_us;
-    }
-
-    int getTimerNum(){
-        return timerNum;
     }
 
     void enable(){

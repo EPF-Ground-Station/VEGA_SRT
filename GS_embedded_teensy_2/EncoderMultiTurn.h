@@ -18,13 +18,21 @@ class EncoderMultiTurn : public EncoderBase {
 
     ErrorStatus get_turn_count(int & value){
 
-        ErrorStatus error = read_values();
+        int error_attempts_counter = 0;
 
-        if(error.type != ErrorType::ERROR){
-            value = turn_count;
+        while(error_attempts_counter < 10){
+            status = read_values();
+            if(status.type == ErrorType::ERROR){
+                error_attempts_counter += 1;
+            } else{
+                value = turn_count;
+                return status
+            }
+
+            delay(50);
         }
 
-        return error;
+        return status;
     }
 
     private :
@@ -65,6 +73,7 @@ class EncoderMultiTurn : public EncoderBase {
         }
 
         ErrorStatus status(ErrorType::NONE, "");
+        return status;
     }
 
 };

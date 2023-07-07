@@ -32,17 +32,29 @@ class EncoderBase {
         
     }
 
-    // TODO ADD ERROR HANDLING TO AVOID RETURNING WRONG VALUES
-
     ErrorStatus get_encoder_pos_value(int & value){
-        
-        ErrorStatus error = read_values();
 
-        if(error.type != ErrorType::ERROR){
-            value = pos_dec;
+        //HWSerial.println("DEBUG enter get_encoder_pos_value");
+        
+        ErrorStatus status;
+
+        //HWSerial.println("DEBUG read values");
+
+        int error_attempts_counter = 0;
+
+        while(error_attempts_counter < 10){
+            status = read_values();
+            if(status.type == ErrorType::ERROR){
+                error_attempts_counter += 1;
+            } else{
+                value = pos_dec;
+                return status
+            }
+
+            delay(50);
         }
 
-        return error;
+        return status;
     }
 
     protected :

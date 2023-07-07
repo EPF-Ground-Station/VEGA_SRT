@@ -7,6 +7,7 @@
 #define AZ_NORTH_ENCODER_VAL 0
 
 //To measure more precisely ?
+//TODO update after repair !!!!!!!
 #define ELEV_ZENITH_ENCODER_VAL 727780
 
 //TODO change to 3.0

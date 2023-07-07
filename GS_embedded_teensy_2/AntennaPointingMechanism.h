@@ -8,29 +8,32 @@
 #include "Stepper.h"
 #include "Encoder.h"
 #include "EncoderMultiTurn.h"
+    
 
 class AntennaPointingMechanism {
 
+    enum class Mode { ACTIVE, STANDBY };
+
     private:
 
-    //static to be accessed from timer ISR
-    static Stepper *az_stepper; // = nullptr;
-    static int az_twice_step_count;//= 0;
-    static hw_timer_t *az_stepper_timer; // = nullptr;
+    Mode currentMode = Mode::ACTIVE;
+
+    Stepper *az_stepper = nullptr;
     EncoderMultiTurn *az_encoder = nullptr;
 
-    //static to be accessed from timer ISR
-    static Stepper *elev_stepper;// = nullptr;
-    static int elev_twice_step_count;// = 0;
-    static hw_timer_t *elev_stepper_timer;// = nullptr;
+    Stepper *elev_stepper = nullptr;
     Encoder *elev_encoder = nullptr;
 
     int az_init_turn_count;
+
+    unsigned north_encoder_offset = 0;
 
     public:
 
     //TODO make singleton ?
     AntennaPointingMechanism(){
+
+        //HWSerial.println("DEBUG enter constructor");
 
         az_stepper = new Stepper(
             AZ_STEPPER_STEP_PIN,
@@ -38,8 +41,10 @@ class AntennaPointingMechanism {
             AZ_STEPPER_ENABLE_PIN,
             AZ_STEPPER_BOOST_PIN,
             AZ_STEPPER_FAULT_PIN,
-            AZ_STEP_PERIOD_uS,
-            0);
+            AZ_STEP_PERIOD_uS
+            );
+
+        //HWSerial.println("DEBUG enter init az stepper success");
 
         elev_stepper = new Stepper(
             ELEV_STEPPER_STEP_PIN,
@@ -47,8 +52,11 @@ class AntennaPointingMechanism {
             ELEV_STEPPER_ENABLE_PIN,
             ELEV_STEPPER_BOOST_PIN,
             ELEV_STEPPER_FAULT_PIN,
-            ELEV_STEP_PERIOD_uS,
-            1);
+            ELEV_STEP_PERIOD_uS
+            );
+        
+        //HWSerial.println("DEBUG enter init elev stepper success");
+
 
         ENCODERS_SPI.begin();
         ENCODERS_SPI.beginTransaction(SPISettings(SPI_SPEED, MSBFIRST, SPI_MODE1));
@@ -58,10 +66,15 @@ class AntennaPointingMechanism {
             AZ_ENCODER_NCS_PIN,
             "Az");
 
+        //HWSerial.println("DEBUG enter init az encoder success");
+
+
         elev_encoder = new Encoder(
             ENCODERS_SPI,
             ELEV_ENCODER_NCS_PIN,
             "Elev");
+            
+        //HWSerial.println("DEBUG enter init elev encoder success");
 
 
         // read some values to clean the SPI bus    
@@ -72,11 +85,20 @@ class AntennaPointingMechanism {
             elev_encoder->get_encoder_pos_value(value);
             delay(50);
         }
+        
+        //HWSerial.println("DEBUG flushed SPI");
+
         // safety check assume the antenna won't do a full turn on az when disconnected
         // also assume : 0 << init turn count << Max Turn Count, so the encoder turn counter won't under/overflow
 
         //TODO not sure how to handle errors here
         ErrorStatus status = az_encoder->get_turn_count(az_init_turn_count);
+        //tmp fix :(
+        if(status.type == ErrorType::ERROR){
+            HWSerial.println("Error initializing turn count");
+        }
+        //HWSerial.println("DEBUG got init turn count");
+
 
     }
 
@@ -89,8 +111,9 @@ class AntennaPointingMechanism {
         delete(elev_encoder);
     }
 
-    //TODO implement error report
-    ErrorStatus untangle(){
+    ErrorStatus untangle_north(){
+
+        standByDisable();
 
         int az_current_turn_count = 0;
         
@@ -100,27 +123,72 @@ class AntennaPointingMechanism {
             return status;
         }
 
-        // untangle the cables
-        az_step((az_current_turn_count - az_init_turn_count)*AZ_MICRO_STEP_PER_TURN*AZ_REDUC);
+        int az_current_pos = 0;
+        status = az_encoder->get_encoder_pos_value(az_current_pos);
 
+        if(status.type == ErrorType::ERROR){
+            return status;
+        }
+
+        // untangle the cables (compute diff from initial north position)
+        int az_steps = (( (float)az_init_turn_count + (float)north_encoder_offset/(float)ENCODERS_MAX - (float)az_current_turn_count - (float)az_current_pos/(float)ENCODERS_MAX)*AZ_MICRO_STEP_PER_TURN*AZ_REDUC);
+        if(az_steps > 0){
+            az_stepper->setDirection(Stepper::Direction::Forward);
+        }else{
+            az_stepper->setDirection(Stepper::Direction::Backward);
+        }
+        for(int i = 0, i < az_steps, i++){
+            az_stepper->stepRiseEdge();
+            delay(az_stepper->getStepDuration()/2);
+            az_stepper->stepLowerEdge();
+            delay(az_stepper->getStepDuration()/2);
+        }
+
+        //TODO only last status is reported (warning from get turn count won't show)
         return status;
     }
 
+    ErrorStatus point_zenith(){
 
-    //TODO implement error report
-    //TODO separate az and elev point_to (should be static fct ??) into helper functions for async iterative correction and separate errors
+        standByDisable();
+
+        int elev_current_pos = 0;
+        status = elev_encoder->get_encoder_pos_value(elev_current_pos);
+
+        if(status.type == ErrorType::ERROR){
+            return status;
+        }
+
+        int elev_steps = (( )*ELEV_MICRO_STEP_PER_TURN*ELEV_REDUC);
+        if(elev_steps > 0){
+            elev_stepper->setDirection(Stepper::Direction::Forward);
+        }else{
+            elev_stepper->setDirection(Stepper::Direction::Backward);
+        }
+        for(int i = 0, i < az_steps, i++){
+            elev_stepper->stepRiseEdge();
+            delay(elev_stepper->getStepDuration()/2);
+            elev_stepper->stepLowerEdge();
+            delay(elev_stepper->getStepDuration()/2);
+        }
+
+        return status;
+    }
 
     // az and elev are in degree
     // az grow to the east (aimed at the north)
     // elev is 0° at the horizon and grow toward zenith
     ErrorStatus point_to(float az_deg, float elev_deg){
 
-        // ------ point az ------------
+        standByDisable();
+
+        // ------ compute steps az ------------
 
         // not sure how % behave with value < 0 so convert first
         while (az_deg < 0.0){ az_deg += 360.0;}
 
-        int az_target_encoder_val = (int)(az_deg / 360.0 * ENCODERS_MAX + AZ_NORTH_ENCODER_VAL) % ENCODERS_MAX;
+        // TODO use configurable offset
+        int az_target_encoder_val = (int)(az_deg / 360.0 * ENCODERS_MAX + north_encoder_offset) % ENCODERS_MAX;
 
         int az_current_encoder_val = 0;
 
@@ -167,12 +235,13 @@ class AntennaPointingMechanism {
 
         int az_step_to_turn = (float)az_encoder_val_diff / ENCODERS_MAX * AZ_REDUC * AZ_MICRO_STEP_PER_TURN;
 
-        az_step(az_step_to_turn + step_to_untangle);
+        int az_step_to_turn_total = az_step_to_turn + step_to_untangle;
 
-        //------ point elev --------------
+        //------ compute steps elev --------------
 
         // safety check
 
+        //TODO add warning when unreachable
         if(elev_deg > 90.0 - ELEV_ZENITH_SAFETY_MARGIN_DEG){
             elev_deg = 90.0 - ELEV_ZENITH_SAFETY_MARGIN_DEG;
         }
@@ -211,100 +280,87 @@ class AntennaPointingMechanism {
 
         int elev_step_to_turn = (float)elev_encoder_val_diff / ENCODERS_MAX * ELEV_REDUC * ELEV_MICRO_STEP_PER_TURN;
 
-        elev_step(-elev_step_to_turn);
-
-    }
-
-    private:
+        int elev_step_to_turn_total = -elev_step_to_turn;
 
 
-    // az timer helper function and ISR
+        // --------------- turn the steppers ---------
 
-
-    void az_step(int steps){
-        int step_duration_factor = 1;
-        if (steps < STEPS_SLOWDOWN_THRESHOLD){
-            step_duration_factor = STEPS_SLOWDOWN_FACTOR;
+        if(az_step_to_turn_total > 0){
+            az_stepper->setDirection(Stepper::Direction::Forward);
+        }else{
+            az_stepper->setDirection(Stepper::Direction::Backward);
         }
-        az_twice_step_count = 2*steps;
-        
-        //base clock is 80MHz with a 80 prescaler a timer tick is 1 uS
-        az_stepper_timer = timerBegin(az_stepper->getTimerNum(), 80, true);
 
-        timerAttachInterrupt(az_stepper_timer, az_step_ISR, true);
+        if(elev_step_to_turn_total > 0){
+            elev_stepper->setDirection(Stepper::Direction::Forward);
+        }else{
+            elev_stepper->setDirection(Stepper::Direction::Backward);
+        }
 
-        int half_step_duration_uS = az_stepper->getStepDuration()/2 * step_duration_factor;
 
-        //true for autoreload, false for oneshot
-        timerAlarmWrite(az_stepper_timer, half_step_duration_uS, false);
+        int az_step_duration = az_stepper->getStepDuration();
+        if (abs(az_step_to_turn_total) < STEPS_SLOWDOWN_THRESHOLD && az_step_to_turn_total != 0){
+            az_step_duration *= STEPS_SLOWDOWN_FACTOR;
+        }
 
-        timerAlarmEnable(az_stepper_timer);
-    }
+        int elev_step_duration = elev_stepper->getStepDuration();
+        if (abs(elev_step_to_turn_total) < STEPS_SLOWDOWN_THRESHOLD && elev_step_to_turn_total != 0){
+            elev_step_duration *= STEPS_SLOWDOWN_FACTOR;
+        }
 
-    static void az_step_ISR(){
-        if(az_twice_step_count > 0){
+        int max_step_count = max (az_step_to_turn_total, elev_step_to_turn_total);
+        int max_step_duration = max (az_step_duration, elev_step_duration);
 
-            if(az_twice_step_count % 2 == 0){
-                az_stepper->stepRiseEdge();
-            } else {
-                az_stepper->stepLowerEdge();
+        //TODO speed up in second part if one stepper is doing way more than the other
+        for (int j = 0; j < max_step_count; j++) {
+
+            if(az_step_to_turn_total > 0){
+              az_stepper->stepRiseEdge();
+              az_step_to_turn_total--;
             }
-
-            az_twice_step_count -= 1;
-
-            timerAlarmEnable(az_stepper_timer);
-        }
-    }
-
-    // elev timer helper function and ISR
-
-
-    void elev_step(int steps){
-        int step_duration_factor = 1;
-        if (steps < STEPS_SLOWDOWN_THRESHOLD){
-            step_duration_factor = STEPS_SLOWDOWN_FACTOR;
-        }
-
-
-        elev_twice_step_count = 2*steps;
-        
-        //base clock is 80MHz with a 80 prescaler a timer tick is 1 uS
-        elev_stepper_timer = timerBegin(elev_stepper->getTimerNum(), 80, true);
-
-        timerAttachInterrupt(elev_stepper_timer, elev_step_ISR, true);
-
-        int half_step_duration_uS = elev_stepper->getStepDuration()/2 * step_duration_factor;
-
-        //true for autoreload, false for oneshot
-        timerAlarmWrite(elev_stepper_timer, half_step_duration_uS, false);
-
-        timerAlarmEnable(elev_stepper_timer);
-    }
-
-    static void elev_step_ISR(){
-        if(elev_twice_step_count > 0){
-
-            if(elev_twice_step_count % 2 == 0){
-                elev_stepper->stepRiseEdge();
-            } else {
-                elev_stepper->stepLowerEdge();
+            if(elev_step_to_turn_total > 0){
+              elev_stepper->stepRiseEdge();
+              elev_step_to_turn_total--;
             }
+            delayMicroseconds(max_step_duration / 2);
+            az_stepper->stepLowerEdge();
+            elev_stepper->stepLowerEdge();
+            delayMicroseconds(max_step_duration / 2);
+        }
 
-            elev_twice_step_count -= 1;
+        //TODO return status
 
-            timerAlarmEnable(elev_stepper_timer);
+    }
+
+    void standbyEnable(){
+        currentMode = Mode::STANDBY;
+        az_stepper->disable();
+        elev_stepper->disable();
+    }
+
+    void standByDisable(){
+        currentMode = Mode::ACTIVE;
+        az_stepper->enable();
+        elev_stepper->enable();
+    }
+
+    //TODO finish and error handling
+    ErrorStatus standByUpdate(){
+        ErrorStatus status = ErrorStatus(ErrorType::NONE, "");
+
+        if(currentMode == Mode::STANDBY){
+
+            //if elev diff > threshold point to zenith and north
+            ErrorStatus status_untangle = untangle();
+
+            standbyEnable(); //redisable steppers after update
         }
     }
 
+    void setNorthOffset(unsigned offset){
+        north_encoder_offset = offset;
+    }
+        
 };
-
-//static to be accessed from timer ISR
-Stepper *AntennaPointingMechanism::az_stepper = nullptr;
-int AntennaPointingMechanism::az_twice_step_count = 0;
-hw_timer_t *AntennaPointingMechanism::az_stepper_timer = nullptr; 
-
-Stepper *AntennaPointingMechanism::elev_stepper = nullptr;
-int AntennaPointingMechanism::elev_twice_step_count = 0;
-hw_timer_t *AntennaPointingMechanism::elev_stepper_timer = nullptr;
 
 #endif
