@@ -118,6 +118,8 @@ class AntennaPointingMechanism {
         int az_current_turn_count = 0;
         
         ErrorStatus status = az_encoder->get_turn_count(az_current_turn_count);
+
+        HWSerial.println("DEBUG az turn count " + String(az_current_turn_count));
         
         if(status.type == ErrorType::ERROR){
             return status;
@@ -126,12 +128,14 @@ class AntennaPointingMechanism {
         int az_current_pos = 0;
         status = az_encoder->get_encoder_pos_value(az_current_pos);
 
+        HWSerial.println("DEBUG az encoder pos " + String(az_current_pos));
+
         if(status.type == ErrorType::ERROR){
             return status;
         }
 
         // untangle the cables (compute diff from initial north position)
-        int az_steps = (( (float)(az_init_turn_count - az_current_turn_count) + (float)(north_encoder_offset - az_current_pos)/(float)ENCODERS_MAX )*AZ_MICRO_STEP_PER_TURN*AZ_REDUC);
+        int az_steps = (( (float)(az_init_turn_count - az_current_turn_count) + (float)((int)north_encoder_offset - az_current_pos)/(float)ENCODERS_MAX )*AZ_MICRO_STEP_PER_TURN*AZ_REDUC);
         if(az_steps > 0){
             az_stepper->setDirection(Stepper::Direction::Forward);
         }else{
@@ -208,11 +212,13 @@ class AntennaPointingMechanism {
         // not sure how % behave with value < 0 so convert first
         while (az_deg < 0.0){ az_deg += 360.0;}
 
-        int az_target_encoder_val = (int)(az_deg / 360.0 * ENCODERS_MAX + north_encoder_offset) % ENCODERS_MAX;
+        int az_target_encoder_val = (int)(az_deg / 360.0 * ENCODERS_MAX + (int)north_encoder_offset) % ENCODERS_MAX;
 
         int az_current_encoder_val = 0;
 
         status = az_encoder->get_encoder_pos_value(az_current_encoder_val);
+
+        HWSerial.println("DEBUG az encoder pos " + String(az_current_encoder_val));
 
         if(status.type == ErrorType::ERROR){
             return status;
@@ -238,12 +244,23 @@ class AntennaPointingMechanism {
         int az_current_turn_count = 0;
         
         status = az_encoder->get_turn_count(az_current_turn_count);
+
+        HWSerial.println("DEBUG az turn count " + String(az_current_turn_count));
         
         if(status.type == ErrorType::ERROR){
             return status;
         }
 
-        float az_pred_diff_deg_since_init = ((float)(az_current_turn_count - az_init_turn_count) + (float)(az_current_encoder_val + az_encoder_val_diff - north_encoder_offset)/ENCODERS_MAX ) * 360.0;
+        float az_pred_diff_deg_since_init = ((float)(az_current_turn_count - az_init_turn_count) + (float)(az_current_encoder_val + az_encoder_val_diff - (int)north_encoder_offset)/ENCODERS_MAX ) * 360.0;
+
+
+        float test_var = (float)(az_current_encoder_val + az_encoder_val_diff - (int)north_encoder_offset)/ENCODERS_MAX;
+        HWSerial.println("DEBUG az_current_encoder_val " + String(az_current_encoder_val));
+        HWSerial.println("DEBUG az_encoder_val_diff " + String(az_encoder_val_diff));
+        HWSerial.println("DEBUG test_var " + String(test_var));
+        HWSerial.println("DEBUG az_current_turn_count " + String(az_current_turn_count));
+        HWSerial.println("DEBUG az_init_turn_count " + String(az_init_turn_count));
+        HWSerial.println("DEBUG az_pred_diff_deg_since_init " + String(az_pred_diff_deg_since_init));
 
         int step_to_untangle = 0;
         if(az_pred_diff_deg_since_init > AZ_MAX_ROTATION_DEG){
@@ -254,6 +271,11 @@ class AntennaPointingMechanism {
         }
 
         int az_step_to_turn = (float)az_encoder_val_diff / ENCODERS_MAX * AZ_REDUC * AZ_MICRO_STEP_PER_TURN;
+
+
+        HWSerial.println("DEBUG az az_step_to_turn " + String(az_step_to_turn));
+        HWSerial.println("DEBUG az step_to_untangle pos " + String(step_to_untangle));
+
 
         int az_step_to_turn_total = az_step_to_turn + step_to_untangle;
 
@@ -278,6 +300,9 @@ class AntennaPointingMechanism {
         int elev_current_encoder_val = 0;
 
         status = elev_encoder->get_encoder_pos_value(elev_current_encoder_val);
+
+        HWSerial.println("DEBUG elev encoder val" + String(elev_current_encoder_val));
+
 
         if(status.type == ErrorType::ERROR){
             return status;
@@ -305,6 +330,10 @@ class AntennaPointingMechanism {
 
         // --------------- turn the steppers ---------
 
+        HWSerial.println("DEBUG elev steps" + String(elev_step_to_turn_total));
+        HWSerial.println("DEBUG az steps" + String(az_step_to_turn_total));
+
+
         if(az_step_to_turn_total > 0){
             az_stepper->setDirection(Stepper::Direction::Forward);
         }else{
@@ -317,6 +346,8 @@ class AntennaPointingMechanism {
             elev_stepper->setDirection(Stepper::Direction::Backward);
         }
 
+        az_step_to_turn_total = abs(az_step_to_turn_total);
+        elev_step_to_turn_total = abs(elev_step_to_turn_total);
 
         int az_step_duration = az_stepper->getStepDuration();
         if (abs(az_step_to_turn_total) < STEPS_SLOWDOWN_THRESHOLD && az_step_to_turn_total != 0){
@@ -337,6 +368,8 @@ class AntennaPointingMechanism {
             second_part_duration = az_step_duration;
         }
 
+        
+
         // first run the common steps then the other at the max speed (usefull when one has a lot of steps and not the other)
         for (int j = 0; j < min_step_count; j++) {
 
@@ -353,6 +386,7 @@ class AntennaPointingMechanism {
             elev_stepper->stepLowerEdge();
             delayMicroseconds(max_step_duration / 2);
         }
+        HWSerial.println("DEBUG start part 2 steps for loop");
         for (int j = 0; j < (max_step_count - min_step_count); j++) {
 
             if(az_step_to_turn_total > 0){
@@ -415,7 +449,7 @@ class AntennaPointingMechanism {
                 status_untangle = az_encoder->get_encoder_pos_value(az_current_pos);
 
                 if(status_untangle.type != ErrorType::ERROR){
-                    int az_deg_diff = (( (float)(az_init_turn_count - az_current_turn_count) + (float)(north_encoder_offset - az_current_pos)/(float)ENCODERS_MAX )*360.0);
+                    int az_deg_diff = (( (float)(az_init_turn_count - az_current_turn_count) + (float)((int)north_encoder_offset - az_current_pos)/(float)ENCODERS_MAX )*360.0);
                 
                     if(abs(az_deg_diff) > AZ_MAX_ROTATION_DEG){
                         status_untangle = untangle_north();

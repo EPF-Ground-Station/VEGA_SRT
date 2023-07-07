@@ -67,13 +67,13 @@ void loop() {
                     HWSerial.println("Error offset should be positive and not greated than " + String(ENCODERS_MAX));
                 }
             }
-            if(cmd_name.equals("stand_by"))
+            else if(cmd_name.equals("stand_by"))
             {
                 apm->standbyEnable();
                 HWSerial.println("Standby enabled");
             }
 
-            if(cmd_name.equals("untangle"))
+            else if(cmd_name.equals("untangle"))
             {
                 HWSerial.println("Untangling...");
                 apm->untangle_north();
@@ -107,9 +107,12 @@ void print_status(ErrorStatus status){
                         HWSerial.println("warning");
                         break;
                     case ErrorType::NONE:
-                        HWSerial.println("none");
+                        //HWSerial.println("none"); avoid spamming when everything is fine
                         break;
                 }
 
-                HWSerial.println(status.msg.c_str());
+                if(status.msg.length() > 0){
+                    HWSerial.println(status.msg.c_str());
+                }
+                    
 }

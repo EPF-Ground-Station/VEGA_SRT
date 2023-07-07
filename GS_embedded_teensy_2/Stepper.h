@@ -49,7 +49,7 @@ class Stepper {
     }
 
     void stepRiseEdge(){
-        High(dir_pin);
+        High(step_pin);
     }
 
     void stepLowerEdge(){
