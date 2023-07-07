@@ -48,7 +48,7 @@ class EncoderBase {
                 error_attempts_counter += 1;
             } else{
                 value = pos_dec;
-                return status
+                return status;
             }
 
             delay(50);

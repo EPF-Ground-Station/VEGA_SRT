@@ -18,6 +18,8 @@ class EncoderMultiTurn : public EncoderBase {
 
     ErrorStatus get_turn_count(int & value){
 
+        ErrorStatus status;
+
         int error_attempts_counter = 0;
 
         while(error_attempts_counter < 10){
@@ -26,7 +28,7 @@ class EncoderMultiTurn : public EncoderBase {
                 error_attempts_counter += 1;
             } else{
                 value = turn_count;
-                return status
+                return status;
             }
 
             delay(50);

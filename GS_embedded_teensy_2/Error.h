@@ -10,6 +10,12 @@ struct ErrorStatus {
     ErrorType type;
     std::string msg;
 
+    ErrorStatus()
+    {
+        type = ErrorType::NONE;
+        msg = "";
+    }
+
     ErrorStatus(ErrorType type, std::string msg) : 
         type(type),
         msg(msg)

@@ -7,6 +7,8 @@ AntennaPointingMechanism *apm = nullptr;
 
 float az, elev = 0.0;
 
+void print_status(ErrorStatus status);
+
 void setup() {
     
     HWSerial.begin(SERIAL_BAUDRATE);
@@ -37,16 +39,67 @@ void loop() {
     // elev is 0° at the horizon and grow toward zenith
     if (HWSerial.available() > 0){
 
-        String cmd_name = HWSerial.readStringUntil(" ");
+        String cmd_name = HWSerial.readStringUntil(' ');
         
-        switch (cmd_name) {
+        //TODO how detect invalid parameters when parse function time out
+        
 
-            case "point_to":
+            if(cmd_name.equals("point_to"))
+            {
                 az = HWSerial.parseFloat();
                 elev = HWSerial.parseFloat();
                 HWSerial.println("Got az : " + String(az) + " elev : " + String(elev));
-                ErrorStatus status = apm->point_to(az, elev);
-                switch (status.type) {
+                ErrorStatus status;
+                status = apm->point_to(az, elev);
+                print_status(status);
+                HWSerial.println("Finished pointing");
+            }
+
+            else if(cmd_name.equals("set_north_offset"))
+            {
+                int offset;
+                offset = HWSerial.parseInt();
+                HWSerial.println("Got " + String(offset));
+                if(offset >= 0 && offset <= ENCODERS_MAX){
+                    apm->setNorthOffset(offset);
+                    HWSerial.println("Set north offset");
+                }else{
+                    HWSerial.println("Error offset should be positive and not greated than " + String(ENCODERS_MAX));
+                }
+            }
+            if(cmd_name.equals("stand_by"))
+            {
+                apm->standbyEnable();
+                HWSerial.println("Standby enabled");
+            }
+
+            if(cmd_name.equals("untangle"))
+            {
+                HWSerial.println("Untangling...");
+                apm->untangle_north();
+                HWSerial.println("Untangled");
+            }
+            else
+            {
+                HWSerial.println("Unrecognized command name");
+            }
+        
+
+        //flush serial
+        while (HWSerial.available() > 0){
+            HWSerial.read();
+        }
+
+    }
+
+    ErrorStatus status = apm->standByUpdate();
+    print_status(status);
+
+    delay(50);
+}
+
+void print_status(ErrorStatus status){
+    switch (status.type) {
                     case ErrorType::ERROR:
                         HWSerial.println("error");
                         break;
@@ -59,39 +112,4 @@ void loop() {
                 }
 
                 HWSerial.println(status.msg.c_str());
-                HWSerial.println("Finished pointing");
-
-                break;
-
-            case "set_north_offset":
-                int offset = HWSerial.parseint();
-                if(offset >= 0 && offset <= ENCODERS_MAX){
-                    apm->setNorthOffset(offset);
-                    HWSerial.println("Set north offset");
-                }else{
-                    HWSerial.println("Error offset should be positive and not greated than " + String(ENCODERS_MAX));
-                }
-                break;
-
-            case "standby":
-                apm->standbyEnable();
-                HWSerial.println("Standby enabled");
-                break;
-
-            case "untangle":
-                HWSerial.println("Untangling...");
-                apm->untangle_north();
-                HWSerial.println("Untangled");
-                break;
-        
-        }
-
-        //flush serial
-        while (HWSerial.available() > 0){
-            HWSerial.read();
-        }
-
-    }
-    //call standby update
-    delay(50);
 }

@@ -5,6 +5,7 @@
 
 class Stepper {
 
+    public:
     enum class Direction { Forward, Backward };
 
     private:

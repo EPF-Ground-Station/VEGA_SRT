@@ -131,13 +131,13 @@ class AntennaPointingMechanism {
         }
 
         // untangle the cables (compute diff from initial north position)
-        int az_steps = (( (float)az_init_turn_count + (float)north_encoder_offset/(float)ENCODERS_MAX - (float)az_current_turn_count - (float)az_current_pos/(float)ENCODERS_MAX)*AZ_MICRO_STEP_PER_TURN*AZ_REDUC);
+        int az_steps = (( (float)(az_init_turn_count - az_current_turn_count) + (float)(north_encoder_offset - az_current_pos)/(float)ENCODERS_MAX )*AZ_MICRO_STEP_PER_TURN*AZ_REDUC);
         if(az_steps > 0){
             az_stepper->setDirection(Stepper::Direction::Forward);
         }else{
             az_stepper->setDirection(Stepper::Direction::Backward);
         }
-        for(int i = 0, i < az_steps, i++){
+        for(int i = 0; i < az_steps; i++){
             az_stepper->stepRiseEdge();
             delay(az_stepper->getStepDuration()/2);
             az_stepper->stepLowerEdge();
@@ -152,6 +152,8 @@ class AntennaPointingMechanism {
 
         standByDisable();
 
+        ErrorStatus status;
+
         int elev_current_pos = 0;
         status = elev_encoder->get_encoder_pos_value(elev_current_pos);
 
@@ -159,13 +161,30 @@ class AntennaPointingMechanism {
             return status;
         }
 
-        int elev_steps = (( )*ELEV_MICRO_STEP_PER_TURN*ELEV_REDUC);
+        int safe_zenith_encoder_val = (int)(ELEV_ZENITH_ENCODER_VAL - ELEV_ZENITH_SAFETY_MARGIN_DEG/360.0*ENCODERS_MAX + ENCODERS_MAX) % ENCODERS_MAX;
+        int elev_encoder_val_diff = safe_zenith_encoder_val - elev_current_pos;
+
+        // take the shortest path
+
+        if( abs(elev_encoder_val_diff) > ENCODERS_MAX/2){
+
+            if(elev_encoder_val_diff < 0){
+                elev_encoder_val_diff = elev_encoder_val_diff + ENCODERS_MAX;
+
+            } else{
+                elev_encoder_val_diff = elev_encoder_val_diff - ENCODERS_MAX;
+            }
+            
+        }
+
+        int elev_steps = (( (float)elev_encoder_val_diff/(float)ENCODERS_MAX )*ELEV_MICRO_STEP_PER_TURN*ELEV_REDUC);
+
         if(elev_steps > 0){
             elev_stepper->setDirection(Stepper::Direction::Forward);
         }else{
             elev_stepper->setDirection(Stepper::Direction::Backward);
         }
-        for(int i = 0, i < az_steps, i++){
+        for(int i = 0; i < elev_steps; i++){
             elev_stepper->stepRiseEdge();
             delay(elev_stepper->getStepDuration()/2);
             elev_stepper->stepLowerEdge();
@@ -182,20 +201,21 @@ class AntennaPointingMechanism {
 
         standByDisable();
 
+        ErrorStatus status;
+
         // ------ compute steps az ------------
 
         // not sure how % behave with value < 0 so convert first
         while (az_deg < 0.0){ az_deg += 360.0;}
 
-        // TODO use configurable offset
         int az_target_encoder_val = (int)(az_deg / 360.0 * ENCODERS_MAX + north_encoder_offset) % ENCODERS_MAX;
 
         int az_current_encoder_val = 0;
 
-        ErrorStatus statusEncoderAz = az_encoder->get_encoder_pos_value(az_current_encoder_val);
+        status = az_encoder->get_encoder_pos_value(az_current_encoder_val);
 
-        if(statusEncoderAz.type == ErrorType::ERROR){
-            return statusEncoderAz;
+        if(status.type == ErrorType::ERROR){
+            return status;
         }
 
         int az_encoder_val_diff = az_target_encoder_val - az_current_encoder_val;
@@ -217,13 +237,13 @@ class AntennaPointingMechanism {
 
         int az_current_turn_count = 0;
         
-        ErrorStatus statusAzTurnCount = az_encoder->get_turn_count(az_current_turn_count);
+        status = az_encoder->get_turn_count(az_current_turn_count);
         
-        if(statusAzTurnCount.type == ErrorType::ERROR){
-            return statusAzTurnCount;
+        if(status.type == ErrorType::ERROR){
+            return status;
         }
 
-        float az_pred_diff_deg_since_init = ((float)(az_current_turn_count - az_init_turn_count) + (az_current_encoder_val + az_encoder_val_diff)/ENCODERS_MAX ) * 360.0;
+        float az_pred_diff_deg_since_init = ((float)(az_current_turn_count - az_init_turn_count) + (float)(az_current_encoder_val + az_encoder_val_diff - north_encoder_offset)/ENCODERS_MAX ) * 360.0;
 
         int step_to_untangle = 0;
         if(az_pred_diff_deg_since_init > AZ_MAX_ROTATION_DEG){
@@ -257,10 +277,10 @@ class AntennaPointingMechanism {
 
         int elev_current_encoder_val = 0;
 
-        ErrorStatus statusEncoderElev = elev_encoder->get_encoder_pos_value(elev_current_encoder_val);
+        status = elev_encoder->get_encoder_pos_value(elev_current_encoder_val);
 
-        if(statusEncoderElev.type == ErrorType::ERROR){
-            return statusEncoderElev;
+        if(status.type == ErrorType::ERROR){
+            return status;
         }
 
         int elev_encoder_val_diff = elev_target_encoder_val - elev_current_encoder_val;
@@ -309,10 +329,16 @@ class AntennaPointingMechanism {
         }
 
         int max_step_count = max (az_step_to_turn_total, elev_step_to_turn_total);
+        int min_step_count = min (az_step_to_turn_total, elev_step_to_turn_total);
         int max_step_duration = max (az_step_duration, elev_step_duration);
 
-        //TODO speed up in second part if one stepper is doing way more than the other
-        for (int j = 0; j < max_step_count; j++) {
+        int second_part_duration = elev_step_duration;
+        if(az_step_to_turn_total > elev_step_to_turn_total){
+            second_part_duration = az_step_duration;
+        }
+
+        // first run the common steps then the other at the max speed (usefull when one has a lot of steps and not the other)
+        for (int j = 0; j < min_step_count; j++) {
 
             if(az_step_to_turn_total > 0){
               az_stepper->stepRiseEdge();
@@ -327,8 +353,24 @@ class AntennaPointingMechanism {
             elev_stepper->stepLowerEdge();
             delayMicroseconds(max_step_duration / 2);
         }
+        for (int j = 0; j < (max_step_count - min_step_count); j++) {
 
-        //TODO return status
+            if(az_step_to_turn_total > 0){
+              az_stepper->stepRiseEdge();
+              az_step_to_turn_total--;
+            }
+            if(elev_step_to_turn_total > 0){
+              elev_stepper->stepRiseEdge();
+              elev_step_to_turn_total--;
+            }
+            delayMicroseconds(second_part_duration / 2);
+            az_stepper->stepLowerEdge();
+            elev_stepper->stepLowerEdge();
+            delayMicroseconds(second_part_duration / 2);
+        }
+
+        //TODO any other warning than the last will be lost
+        return status;
 
     }
 
@@ -350,11 +392,49 @@ class AntennaPointingMechanism {
 
         if(currentMode == Mode::STANDBY){
 
-            //if elev diff > threshold point to zenith and north
-            ErrorStatus status_untangle = untangle();
+            //check elev and repoint to zenith if needed
+            int elev_current_pos = 0;
+            ErrorStatus elev_status = elev_encoder->get_encoder_pos_value(elev_current_pos);
+
+            if(elev_status.type != ErrorType::ERROR){
+                int elev_encoder_val_diff = ELEV_ZENITH_ENCODER_VAL - elev_current_pos;
+                if((float)abs(elev_encoder_val_diff)/(float)ENCODERS_MAX * 360.0 > STANDBY_ZENITH_THRESHOLD_CORRECTION_DEG){
+                    elev_status = point_zenith();
+                }
+            }
+
+                
+            //check az and untangle if needed
+            int az_current_turn_count = 0;
+        
+            ErrorStatus status_untangle = az_encoder->get_turn_count(az_current_turn_count);
+
+            if(status_untangle.type != ErrorType::ERROR){
+
+                int az_current_pos = 0;
+                status_untangle = az_encoder->get_encoder_pos_value(az_current_pos);
+
+                if(status_untangle.type != ErrorType::ERROR){
+                    int az_deg_diff = (( (float)(az_init_turn_count - az_current_turn_count) + (float)(north_encoder_offset - az_current_pos)/(float)ENCODERS_MAX )*360.0);
+                
+                    if(abs(az_deg_diff) > AZ_MAX_ROTATION_DEG){
+                        status_untangle = untangle_north();
+                    }
+                }
+            }
 
             standbyEnable(); //redisable steppers after update
+
+            if (status_untangle.type == ErrorType::ERROR && elev_status.type == ErrorType::ERROR){
+                return ErrorStatus(ErrorType::ERROR, status_untangle.msg + " " + elev_status.msg);
+            } else if(status_untangle.type == ErrorType::ERROR){
+                return status_untangle;
+            } else{
+                return elev_status;
+            }
         }
+
+        return status;
     }
 
     void setNorthOffset(unsigned offset){
