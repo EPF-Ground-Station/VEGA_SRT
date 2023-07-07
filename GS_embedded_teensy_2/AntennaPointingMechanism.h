@@ -141,6 +141,9 @@ class AntennaPointingMechanism {
         }else{
             az_stepper->setDirection(Stepper::Direction::Backward);
         }
+
+        az_steps = abs(az_steps);
+
         for(int i = 0; i < az_steps; i++){
             az_stepper->stepRiseEdge();
             delay(az_stepper->getStepDuration()/2);
@@ -358,6 +361,9 @@ class AntennaPointingMechanism {
         if (abs(elev_step_to_turn_total) < STEPS_SLOWDOWN_THRESHOLD && elev_step_to_turn_total != 0){
             elev_step_duration *= STEPS_SLOWDOWN_FACTOR;
         }
+
+        HWSerial.println("DEBUG  elev_step_duration " + String(elev_step_duration));
+        HWSerial.println("DEBUG  az_step_duration " + String(az_step_duration));
 
         int max_step_count = max (az_step_to_turn_total, elev_step_to_turn_total);
         int min_step_count = min (az_step_to_turn_total, elev_step_to_turn_total);
