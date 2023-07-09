@@ -103,11 +103,36 @@ class AntennaPointingMechanism {
 
         //TODO not sure how to handle errors here
         //TODO should point to north first (using shorted rotation) before getting init turn count ? (to avoid the case where north is on 40th turn 1° and antenna start on 39th turn 359° then think untangling to north is on 39th turn 1°)
-        ErrorStatus status = az_encoder->get_turn_count(az_init_turn_count);
-        //tmp fix :(
+        int current_turn_count;
+        int current_az_encoder_val;
+
+        ErrorStatus status = az_encoder->get_turn_count(current_turn_count);
+
+        //tmp fix :( requirement manual check on power on
         if(status.type == ErrorType::ERROR){
-            HWSerial.println("Error initializing turn count");
+            HWSerial.println("Error initializing turn count in constructor");
+            HWSerial.println(status.msg.c_str());
         }
+
+        status = az_encoder->get_encoder_pos_value(current_az_encoder_val);
+        //tmp fix :( requirement manual check on power on
+        if(status.type == ErrorType::ERROR){
+            HWSerial.println("Error initializing turn count in constructor");
+            HWSerial.println(status.msg.c_str());
+        }
+
+        HWSerial.println("DEBUG current_turn_count" + String(current_turn_count));
+        HWSerial.println("DEBUG current_az_encoder_val" + String(current_az_encoder_val));
+
+        az_init_turn_count = current_turn_count;
+        
+        if(current_az_encoder_val > ENCODERS_MAX/2){
+            az_init_turn_count += 1;
+        }
+
+        HWSerial.println("DEBUG az_init_turn_count" + String(az_init_turn_count));
+
+        
         //HWSerial.println("DEBUG got init turn count");
 
 
@@ -496,8 +521,17 @@ class AntennaPointingMechanism {
         return status;
     }
 
-    void setNorthOffset(unsigned offset){
-        north_encoder_offset = offset;
+    void setNorthOffset(unsigned new_offset){
+        if(north_encoder_offset <= ENCODERS_MAX/2 && new_offset > ENCODERS_MAX/2){
+            az_init_turn_count -= 1;
+            HWSerial.println("DEBUG init_turn_count - 1");
+        }
+        else if(north_encoder_offset > ENCODERS_MAX/2 && new_offset <= ENCODERS_MAX/2){
+            az_init_turn_count += 1;
+            HWSerial.println("DEBUG init_turn_count + 1");
+        }
+
+        north_encoder_offset = new_offset;
     }
         
 };
