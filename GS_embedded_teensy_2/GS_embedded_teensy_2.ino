@@ -13,12 +13,12 @@ void setup() {
     
     HWSerial.begin(SERIAL_BAUDRATE);
 
-    HWSerial.println("HELLO DEBUG");
+    //HWSerial.println("HELLO DEBUG");
 
     // constructor cannot be called before setup because it uses pins
     apm = new AntennaPointingMechanism();
 
-    HWSerial.println("HELLO DEBUG 2");
+    //HWSerial.println("HELLO DEBUG 2");
 
 
     //LED_On;

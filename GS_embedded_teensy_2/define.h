@@ -4,6 +4,7 @@
 #define SPI_SPEED 1000000
 
 //To change once mounted on the roof
+// not used, replaced by set_north_offset cmd
 #define AZ_NORTH_ENCODER_VAL 0
 
 //To measure more precisely ?

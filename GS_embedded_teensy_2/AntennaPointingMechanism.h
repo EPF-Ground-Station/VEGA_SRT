@@ -121,8 +121,8 @@ class AntennaPointingMechanism {
             HWSerial.println(status.msg.c_str());
         }
 
-        HWSerial.println("DEBUG current_turn_count" + String(current_turn_count));
-        HWSerial.println("DEBUG current_az_encoder_val" + String(current_az_encoder_val));
+        //HWSerial.println("DEBUG current_turn_count" + String(current_turn_count));
+        //HWSerial.println("DEBUG current_az_encoder_val" + String(current_az_encoder_val));
 
         az_init_turn_count = current_turn_count;
         
@@ -130,7 +130,7 @@ class AntennaPointingMechanism {
             az_init_turn_count += 1;
         }
 
-        HWSerial.println("DEBUG az_init_turn_count" + String(az_init_turn_count));
+        //HWSerial.println("DEBUG az_init_turn_count" + String(az_init_turn_count));
 
         
         //HWSerial.println("DEBUG got init turn count");
@@ -149,7 +149,7 @@ class AntennaPointingMechanism {
 
     ErrorStatus untangle_north(){
 
-        HWSerial.println("DEBUG called untangle_north ");
+        //HWSerial.println("DEBUG called untangle_north ");
 
         standByDisable();
 
@@ -157,7 +157,7 @@ class AntennaPointingMechanism {
         
         ErrorStatus status = az_encoder->get_turn_count(az_current_turn_count);
 
-        HWSerial.println("DEBUG az turn count " + String(az_current_turn_count));
+        //HWSerial.println("DEBUG az turn count " + String(az_current_turn_count));
         
         if(status.type == ErrorType::ERROR){
             return status;
@@ -166,7 +166,7 @@ class AntennaPointingMechanism {
         int az_current_pos = 0;
         status = az_encoder->get_encoder_pos_value(az_current_pos);
 
-        HWSerial.println("DEBUG az encoder pos " + String(az_current_pos));
+        //HWSerial.println("DEBUG az encoder pos " + String(az_current_pos));
 
         if(status.type == ErrorType::ERROR){
             return status;
@@ -182,8 +182,8 @@ class AntennaPointingMechanism {
 
         az_steps = abs(az_steps);
 
-        HWSerial.println("DEBUG az duration step " + String(az_stepper->getStepDuration()/2));
-        HWSerial.println("DEBUG az steps abs " + String(az_steps));
+        //HWSerial.println("DEBUG az duration step " + String(az_stepper->getStepDuration()/2));
+        //HWSerial.println("DEBUG az steps abs " + String(az_steps));
 
         for(int i = 0; i < az_steps; i++){
             az_stepper->stepRiseEdge();
@@ -265,7 +265,7 @@ class AntennaPointingMechanism {
 
         status = az_encoder->get_encoder_pos_value(az_current_encoder_val);
 
-        HWSerial.println("DEBUG az encoder pos " + String(az_current_encoder_val));
+        //HWSerial.println("DEBUG az encoder pos " + String(az_current_encoder_val));
 
         if(status.type == ErrorType::ERROR){
             return status;
@@ -292,7 +292,7 @@ class AntennaPointingMechanism {
         
         status = az_encoder->get_turn_count(az_current_turn_count);
 
-        HWSerial.println("DEBUG az turn count " + String(az_current_turn_count));
+        //HWSerial.println("DEBUG az turn count " + String(az_current_turn_count));
         
         if(status.type == ErrorType::ERROR){
             return status;
@@ -302,12 +302,12 @@ class AntennaPointingMechanism {
 
 
         float test_var = (float)(az_current_encoder_val + az_encoder_val_diff - (int)north_encoder_offset)/ENCODERS_MAX;
-        HWSerial.println("DEBUG az_current_encoder_val " + String(az_current_encoder_val));
-        HWSerial.println("DEBUG az_encoder_val_diff " + String(az_encoder_val_diff));
-        HWSerial.println("DEBUG test_var " + String(test_var));
-        HWSerial.println("DEBUG az_current_turn_count " + String(az_current_turn_count));
-        HWSerial.println("DEBUG az_init_turn_count " + String(az_init_turn_count));
-        HWSerial.println("DEBUG az_pred_diff_deg_since_init " + String(az_pred_diff_deg_since_init));
+        //HWSerial.println("DEBUG az_current_encoder_val " + String(az_current_encoder_val));
+        //HWSerial.println("DEBUG az_encoder_val_diff " + String(az_encoder_val_diff));
+        //HWSerial.println("DEBUG test_var " + String(test_var));
+        //HWSerial.println("DEBUG az_current_turn_count " + String(az_current_turn_count));
+        //HWSerial.println("DEBUG az_init_turn_count " + String(az_init_turn_count));
+        //HWSerial.println("DEBUG az_pred_diff_deg_since_init " + String(az_pred_diff_deg_since_init));
 
         int step_to_untangle = 0;
         if(az_pred_diff_deg_since_init > AZ_MAX_ROTATION_DEG){
@@ -320,8 +320,8 @@ class AntennaPointingMechanism {
         int az_step_to_turn = (float)az_encoder_val_diff / ENCODERS_MAX * AZ_REDUC * AZ_MICRO_STEP_PER_TURN;
 
 
-        HWSerial.println("DEBUG az az_step_to_turn " + String(az_step_to_turn));
-        HWSerial.println("DEBUG az step_to_untangle pos " + String(step_to_untangle));
+        //HWSerial.println("DEBUG az az_step_to_turn " + String(az_step_to_turn));
+        //HWSerial.println("DEBUG az step_to_untangle pos " + String(step_to_untangle));
 
 
         int az_step_to_turn_total = az_step_to_turn + step_to_untangle;
@@ -348,7 +348,7 @@ class AntennaPointingMechanism {
 
         status = elev_encoder->get_encoder_pos_value(elev_current_encoder_val);
 
-        HWSerial.println("DEBUG elev encoder val" + String(elev_current_encoder_val));
+        //HWSerial.println("DEBUG elev encoder val" + String(elev_current_encoder_val));
 
 
         if(status.type == ErrorType::ERROR){
@@ -377,8 +377,8 @@ class AntennaPointingMechanism {
 
         // --------------- turn the steppers ---------
 
-        HWSerial.println("DEBUG elev steps" + String(elev_step_to_turn_total));
-        HWSerial.println("DEBUG az steps" + String(az_step_to_turn_total));
+        //HWSerial.println("DEBUG elev steps" + String(elev_step_to_turn_total));
+        //HWSerial.println("DEBUG az steps" + String(az_step_to_turn_total));
 
 
         if(az_step_to_turn_total > 0){
@@ -406,8 +406,8 @@ class AntennaPointingMechanism {
             elev_step_duration *= STEPS_SLOWDOWN_FACTOR;
         }
 
-        HWSerial.println("DEBUG  elev_step_duration " + String(elev_step_duration));
-        HWSerial.println("DEBUG  az_step_duration " + String(az_step_duration));
+        //HWSerial.println("DEBUG  elev_step_duration " + String(elev_step_duration));
+        //HWSerial.println("DEBUG  az_step_duration " + String(az_step_duration));
 
         int max_step_count = max (az_step_to_turn_total, elev_step_to_turn_total);
         int min_step_count = min (az_step_to_turn_total, elev_step_to_turn_total);
@@ -436,7 +436,7 @@ class AntennaPointingMechanism {
             elev_stepper->stepLowerEdge();
             delayMicroseconds(max_step_duration / 2);
         }
-        HWSerial.println("DEBUG start part 2 steps for loop");
+        //HWSerial.println("DEBUG start part 2 steps for loop");
         for (int j = 0; j < (max_step_count - min_step_count); j++) {
 
             if(az_step_to_turn_total > 0){
@@ -524,11 +524,11 @@ class AntennaPointingMechanism {
     void setNorthOffset(unsigned new_offset){
         if(north_encoder_offset <= ENCODERS_MAX/2 && new_offset > ENCODERS_MAX/2){
             az_init_turn_count -= 1;
-            HWSerial.println("DEBUG init_turn_count - 1");
+            //HWSerial.println("DEBUG init_turn_count - 1");
         }
         else if(north_encoder_offset > ENCODERS_MAX/2 && new_offset <= ENCODERS_MAX/2){
             az_init_turn_count += 1;
-            HWSerial.println("DEBUG init_turn_count + 1");
+            //HWSerial.println("DEBUG init_turn_count + 1");
         }
 
         north_encoder_offset = new_offset;
