@@ -51,13 +51,13 @@ The current version flashed on the ESP still has all the debug prints uncommente
 
 For simplicity and because we are using arduino all classes are implemented in header files
 
-- GS_embedded_teensy_2.ino : command handling
-- define.h : all configurable constants
-- AntennaPointingMechanism.h : control logic
-- EncoderBase.h : virtual base class with common function(s) for single and multi turn encoders
-- Encoder.h and EncoderMultiTurn.h : classes inherinting from EncoderBase respectivelly represening single and multi turn encoder
-- Stepper.h : class representing a stepper, used a bit like a struct as all of the control is done in AntennaPointingMechanism
-- Error.h : define a simple struct to report errors
+- `GS_embedded_teensy_2.ino` : command handling
+- `define.h` : all configurable constants
+- `AntennaPointingMechanism.h` : control logic
+- `EncoderBase.h` : virtual base class with common function(s) for single and multi turn encoders
+- `Encoder.h` and EncoderMultiTurn.h : classes inherinting from EncoderBase respectivelly represening single and multi turn encoder
+- `Stepper.h` : class representing a stepper, used a bit like a struct as all of the control is done in AntennaPointingMechanism
+- `Error.h` : define a simple struct to report errors
 
 ### More documentation
 See documentation.md
