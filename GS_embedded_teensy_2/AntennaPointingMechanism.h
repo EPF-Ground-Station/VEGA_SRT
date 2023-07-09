@@ -482,6 +482,7 @@ class AntennaPointingMechanism {
 
             if(elev_status.type != ErrorType::ERROR){
                 int elev_encoder_val_diff = ELEV_ZENITH_ENCODER_VAL - elev_current_pos;
+                //I think it work with the current setup but it should compute the shortest path to take into account the case were 0 of the encoder is ~ at 45°
                 if((float)abs(elev_encoder_val_diff)/(float)ENCODERS_MAX * 360.0 > STANDBY_ZENITH_THRESHOLD_CORRECTION_DEG){
                     elev_status = point_zenith();
                 }
