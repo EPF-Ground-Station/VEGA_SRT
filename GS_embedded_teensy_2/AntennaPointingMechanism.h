@@ -10,6 +10,16 @@
 #include "EncoderMultiTurn.h"
     
 
+/*
+TODO helper functions
+
+move steppers
+deg from encoder
+
+shortest rotation given encoder val diff
+point north w/o untangle (so point north can be used in constructor before init turn count)
+*/
+
 class AntennaPointingMechanism {
 
     enum class Mode { ACTIVE, STANDBY };
@@ -92,6 +102,7 @@ class AntennaPointingMechanism {
         // also assume : 0 << init turn count << Max Turn Count, so the encoder turn counter won't under/overflow
 
         //TODO not sure how to handle errors here
+        //TODO should point to north first (using shorted rotation) before getting init turn count ? (to avoid the case where north is on 40th turn 1° and antenna start on 39th turn 359° then think untangling to north is on 39th turn 1°)
         ErrorStatus status = az_encoder->get_turn_count(az_init_turn_count);
         //tmp fix :(
         if(status.type == ErrorType::ERROR){
@@ -112,6 +123,8 @@ class AntennaPointingMechanism {
     }
 
     ErrorStatus untangle_north(){
+
+        HWSerial.println("DEBUG called untangle_north ");
 
         standByDisable();
 
@@ -144,11 +157,14 @@ class AntennaPointingMechanism {
 
         az_steps = abs(az_steps);
 
+        HWSerial.println("DEBUG az duration step " + String(az_stepper->getStepDuration()/2));
+        HWSerial.println("DEBUG az steps abs " + String(az_steps));
+
         for(int i = 0; i < az_steps; i++){
             az_stepper->stepRiseEdge();
-            delay(az_stepper->getStepDuration()/2);
+            delayMicroseconds(az_stepper->getStepDuration()/2);
             az_stepper->stepLowerEdge();
-            delay(az_stepper->getStepDuration()/2);
+            delayMicroseconds(az_stepper->getStepDuration()/2);
         }
 
         //TODO only last status is reported (warning from get turn count won't show)
@@ -184,18 +200,21 @@ class AntennaPointingMechanism {
             
         }
 
-        int elev_steps = (( (float)elev_encoder_val_diff/(float)ENCODERS_MAX )*ELEV_MICRO_STEP_PER_TURN*ELEV_REDUC);
+        int elev_steps = -(( (float)elev_encoder_val_diff/(float)ENCODERS_MAX )*ELEV_MICRO_STEP_PER_TURN*ELEV_REDUC);
 
         if(elev_steps > 0){
             elev_stepper->setDirection(Stepper::Direction::Forward);
         }else{
             elev_stepper->setDirection(Stepper::Direction::Backward);
         }
+
+        elev_steps = abs(elev_steps);
+
         for(int i = 0; i < elev_steps; i++){
             elev_stepper->stepRiseEdge();
-            delay(elev_stepper->getStepDuration()/2);
+            delayMicroseconds(elev_stepper->getStepDuration()/2);
             elev_stepper->stepLowerEdge();
-            delay(elev_stepper->getStepDuration()/2);
+            delayMicroseconds(elev_stepper->getStepDuration()/2);
         }
 
         return status;

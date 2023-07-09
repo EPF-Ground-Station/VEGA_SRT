@@ -7,7 +7,7 @@ AntennaPointingMechanism *apm = nullptr;
 
 float az, elev = 0.0;
 
-void print_status(ErrorStatus status);
+void print_status(ErrorStatus status, bool print_success);
 
 void setup() {
     
@@ -51,7 +51,7 @@ void loop() {
                 HWSerial.println("Got az : " + String(az) + " elev : " + String(elev));
                 ErrorStatus status;
                 status = apm->point_to(az, elev);
-                print_status(status);
+                print_status(status, true);
                 HWSerial.println("Finished pointing");
             }
 
@@ -93,12 +93,12 @@ void loop() {
     }
 
     ErrorStatus status = apm->standByUpdate();
-    print_status(status);
+    print_status(status, false);
 
     delay(50);
 }
 
-void print_status(ErrorStatus status){
+void print_status(ErrorStatus status, bool print_success){
     switch (status.type) {
                     case ErrorType::ERROR:
                         HWSerial.println("error");
@@ -107,7 +107,9 @@ void print_status(ErrorStatus status){
                         HWSerial.println("warning");
                         break;
                     case ErrorType::NONE:
-                        //HWSerial.println("none"); avoid spamming when everything is fine
+                        if(print_success){
+                            HWSerial.println("no error"); 
+                        }
                         break;
                 }
 
