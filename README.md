@@ -15,7 +15,7 @@ To enforce the security to avoid ripping the cables the code makes some assumpti
 
 ### Support 4 commands :
 
-- "point_to <degrees azimuth> <degrees elevation>"
+- `point_to <degrees azimuth> <degrees elevation>`
   - azimuth grow to the east when pointed to the north
   - elevation, horizon is 0°, zenith is 90° 
   - the mechanism can't go to 90° there is a safety margin
@@ -24,16 +24,16 @@ To enforce the security to avoid ripping the cables the code makes some assumpti
   - if repeated point_to cmds were to rotate the azimuth more than (360° + 350°) in one direction or another it will do a turn in the oposite direction to untangle the cables
   - if garbage is inputed instead of a floating point number I think it defaults to 0° but not sure.
 
-- "set_north_offset <offset>"
+- `set_north_offset <offset>`
     - offset is an encoder value, it must be between 0 and 2^20-1 (included), if not there is an error msg and the current offset is not modified
     - by default it is 0 (the microcontroller forget it when is it powered off)
     - if garbage is inputed instead of a floating point number I think it defaults to 0° but not sure.
 
-- "untangle "
+- `untangle `
   - the space after the cmd name is important else the cmd won't be recognized
   - rotate the azimuth to the north and untangle the cables
 
-- "stand_by "
+- `stand_by `
   - the space after the cmd name is important else the cmd won't be recognized
   - put the APM in stand_by mode
   - stand_by mode disable the steppers but periodically check that azimuth stays between ±(360° + 350°) if not it execute the "untangle " cmd
@@ -60,7 +60,7 @@ For simplicity and because we are using arduino all classes are implemented in h
 - Error.h : define a simple struct to report errors
 
 ### More documentation
-See <documentation.md>
+See documentation.md
 
 
 # ------- old stuff that was in the README -----------

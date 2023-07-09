@@ -12,8 +12,8 @@
     purple  not connected
     blue    N_CS
 
-    Encoders documentation <https://www.rls.si/eng/fileuploader/download/download/?d=1&file=custom%2Fupload%2FMBD01_10EN_datasheet_bookmark.pdf>
-    (<https://www.rls.si/eng/media-center?search=MBD01> if the link above doesn't work)
+Encoders documentation <https://www.rls.si/eng/fileuploader/download/download/?d=1&file=custom%2Fupload%2FMBD01_10EN_datasheet_bookmark.pdf>
+(<https://www.rls.si/eng/media-center?search=MBD01> if the link above doesn't work)
 
 ## UART to USB converter
     purple  GND
