@@ -84,7 +84,7 @@ def send_coord(coord, ser):
             if DEBUG:
                 print(coord)
 
-            ser.write(("point_to 0 40").encode())
+            ser.write(("point_to " + coord).encode())
             print("wrote")
 
             # print(ser.readline().decode('utf-8'))
