@@ -112,18 +112,18 @@ if __name__ == "__main__":
 
     try:
         ser.reset_input_buffer()
-        #while True:
-        coords_altaz = transform_skycoord_to_AltAz(ra, dec)
-        send_coord(coords_altaz, ser)
-        print(coords_altaz)
+        while True:
+            coords_altaz = transform_skycoord_to_AltAz(ra, dec)
+            send_coord(coords_altaz, ser)
+            print(coords_altaz)
 
-        print("wait for esp ack")
-        print(ser.readline().decode('utf-8'))
-        #ser.reset_input_buffer()
+            print("wait for esp ack")
+            print(ser.readline().decode('utf-8'))
+            #ser.reset_input_buffer()
 
-        print("wait for esp feedback")
-        ser.read()
-        ser.reset_input_buffer()
+            print("wait for esp feedback")
+            ser.read()
+            ser.reset_input_buffer()
     except KeyboardInterrupt:
         # loop is interrupted with the command Ctrl + C
         print("Loop stopped by user.")
