@@ -63,8 +63,7 @@ if __name__ == "__main__":
             print("wait for esp feedback")
         ser.read()
         ser.reset_input_buffer()
-    untangle(ser)
-    standby(ser)
+
     except KeyboardInterrupt:
         # loop is interrupted with the command Ctrl + C
         print("Loop stopped by user.")

@@ -21,13 +21,13 @@ def untangle(ser):
             # print(ser.readline().decode('utf-8'))
             # print("read line")
 
-def standby(ser):
+def calibrate_north(ser):
             """
             Go back to resting position
         
             """
 
-            ser.write(("set_north_offset " - 2000).encode())
+            ser.write(("set_north_offset 524288").encode())
             print("wrote")
 
             # print(ser.readline().decode('utf-8'))
@@ -54,8 +54,7 @@ if __name__ == "__main__":
     try:
         ser.reset_input_buffer()
         while True:
-            untangle(ser)
-            standby(ser)
+            calibrate_north(ser)
             print("wait for esp ack")
             print(ser.readline().decode('utf-8'))
             #ser.reset_input_buffer()
