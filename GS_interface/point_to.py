@@ -14,6 +14,20 @@ def name_input(name):
 def parse_azel_coordinates():
     # Regular expression to validate the input format
 
+    def valid_coordinate(coord_str):
+        if not re.match(coord_pattern, coord_str):
+            raise argparse.ArgumentTypeError(f"Invalid coordinate format: {coord_str}")
+        try:
+            return float(coord_str)
+        except ValueError:
+            raise argparse.ArgumentTypeError(f"Invalid float value: {coord_str}")
+        
+    def valid_float(coord_str):
+        try:
+            return float(coord_str)
+        except ValueError:
+            raise argparse.ArgumentTypeError(f"Invalid float value: {coord_str}")
+
     parser = argparse.ArgumentParser()
     parser.add_argument('-az', nargs=1, type=valid_float, metavar=('Deg'), help='Azimuth angle (degrees)')
     parser.add_argument('-el', nargs=1, type=valid_float, metavar=('Deg'), help='Elevation angle (degrees)')
