@@ -334,8 +334,8 @@ class AntennaPointingMechanism {
         if(elev_deg > 90.0 - ELEV_ZENITH_SAFETY_MARGIN_DEG){
             elev_deg = 90.0 - ELEV_ZENITH_SAFETY_MARGIN_DEG;
         }
-        if(elev_deg < 0.0){
-            elev_deg = 0.0;
+        if(elev_deg < 0.0 + (ELEV_HORIZON_SAFETY_MARGIN_DEG) ){
+            elev_deg = 0.0 + ELEV_HORIZON_SAFETY_MARGIN_DEG;
         }
 
         // ENCODERS_MAX is added in case ELEV_ZENITH_ENCODER_VAL is less than ENCODERS_MAX/4 and the result is negative
