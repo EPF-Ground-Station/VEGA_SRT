@@ -27,7 +27,7 @@ def calibrate_north(ser):
         
             """
 
-            ser.write(("set_north_offset 524288").encode())
+            ser.write(("set_north_offset 990000").encode())
             print("wrote")
 
             # print(ser.readline().decode('utf-8'))
