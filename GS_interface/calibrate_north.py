@@ -57,10 +57,9 @@ if __name__ == "__main__":
             calibrate_north(ser)
             print("wait for esp ack")
             print(ser.readline().decode('utf-8'))
-            #ser.reset_input_buffer()
+            print(ser.readline().decode('utf-8'))
+            ser.reset_input_buffer()
 
-            print("wait for esp feedback")
-        ser.read()
         ser.reset_input_buffer()
 
     except KeyboardInterrupt:
