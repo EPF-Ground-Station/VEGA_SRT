@@ -57,8 +57,8 @@ def send_coord(coord, ser):
             if DEBUG:
                 print(coord)
 
-            #ser.write(("point_to " + coord).encode())
-            ser.write(("point_to 10 10").encode())
+            ser.write(("point_to " + str(coord)).encode())
+            #ser.write(("point_to 10.0 10.0").encode())
             print("wrote")
 
             # print(ser.readline().decode('utf-8'))
@@ -69,7 +69,7 @@ if __name__ == "__main__":
     az_angle, el_angle = parse_azel_coordinates()
     az_angle_str = str(az_angle)
     el_angle_str = str(el_angle)
-    coords_str = [az_angle_str + el_angle_str]
+    coords_str = [az_angle_str, el_angle_str]
     #print("Rightascencion as Decimal number = ", ra)
     #print("Declination as Decimal number = ", dec)
     #coords_altaz = transform_skycoord_to_AltAz(ra, dec)
@@ -93,7 +93,7 @@ if __name__ == "__main__":
         while True:
 
             print(coords_str)
-
+            send_coord(coords_str,ser)
             print("wait for esp ack")
             print(ser.readline().decode('utf-8'))
             #ser.reset_input_buffer()
