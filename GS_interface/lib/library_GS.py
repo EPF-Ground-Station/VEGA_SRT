@@ -24,7 +24,7 @@ class Listening_daemon(Thread):
     def run(self):
         while not self.stop:
             self.msg = self.ser.readline().decode('utf-8')
-            if self.disp: print(self.msg)
+            if self.disp and self.msg.strip()!="" : print(self.msg)
 
 
 
