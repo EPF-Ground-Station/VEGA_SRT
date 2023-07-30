@@ -55,7 +55,7 @@ class Interface:
         self.listener = Listening_daemon(self.ser)
 
 
-ESP = Interface("/dev/ttyUSB0", 115200, timeout=1)
+ESP = Interface("/dev/ttyUSB0", 115200, 1)
 
 
 def send_ser(msg:str, verbose = False):
