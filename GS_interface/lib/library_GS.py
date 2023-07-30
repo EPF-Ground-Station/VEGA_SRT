@@ -84,12 +84,12 @@ def RaDec_to_AltAz(ra, dec, verbose=False):
 
     return alt, az
 
-def point_to_AltAz(alt, az, verbose = False):
+def point_to_AzAlt(az, alt, verbose = False):
     """
     Moves antenna to Azimuth and Altitude coordinates in degrees
                 
     """
-    coord = str(alt) + ' ' + str(az)
+    coord = str(az) + ' ' + str(alt)
     return send_ser("point_to " + coord, verbose)
 
 
@@ -100,7 +100,7 @@ def point_to_RaDec(ra, dec, verbose = False):
     """
             
     alt, az = RaDec_to_AltAz(ra, dec)
-    return point_to_AltAz(alt, az, verbose)
+    return point_to_AzAlt(az, alt, verbose)
 
 def empty_water():
     """
@@ -108,5 +108,5 @@ def empty_water():
 
     
     """
-    return point_to_AltAz(0, 180)
+    return point_to_AzAlt(180, 0)
     
