@@ -3,6 +3,7 @@
 Library aimed at scripting interface with SRT pointing mechanism
 """
 import serial
+from time import sleep
 from threading import Thread
 from astropy import units as u
 from astropy.time import Time
@@ -38,6 +39,7 @@ class Interface:
         self.ser.close()
         self.connected = False
         self.listener = Listening_daemon(self.ser)
+        self.timeout = timeo
     
     def connect(self):
         self.ser.open()
@@ -51,6 +53,7 @@ class Interface:
     def disconnect(self):
         self.listener.disp = False
         self.listener.stop = True
+        sleep(self.timeout)
         self.ser.close()
         del self.listener
         self.listener = Listening_daemon(self.ser)
