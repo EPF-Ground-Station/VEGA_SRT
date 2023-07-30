@@ -1,14 +1,10 @@
-import serial
-from serial.tools import list_ports
-from astropy import units as u
-from astropy.time import Time
-from astropy.coordinates import SkyCoord, EarthLocation, AltAz
+from lib.library_GS import point_to_RaDec
+from threading import Thread
 import re
 import argparse
-import time
 
-def name_input(name):
-     object = SkyCoord.from_name(name)
+# def name_input(name):
+#      object = SkyCoord.from_name(name)
 
 
 def parse_star_coordinates():
@@ -48,82 +44,41 @@ def parse_star_coordinates():
     return ra, dec
 
 
-def transform_skycoord_to_AltAz(ra, dec):
-    """
-    Takes the star coordinates rightascension and declination as input and transforms them to altitude and azimuth coordinates. 
-
-    :param obs_loc an instance of the class EarthLocation containing the informations about the location of the observator
-    :param coords an instance of the class SkyCoord with coordinates corresponing to the input coordinates of the function
-    :param altaz another instance of the class Skycoord but with the original coordinates transformed to the corresponing altitude and azimuth 
-    :param coords_altaz string containing the Azimuth in the first position and Altitude in the second position. Both as decimal numbers
-
-    """
-
-    #object = SkyCoord.from_name('M33')
-    obs_loc = EarthLocation(lat= 46.52457*u.deg , lon = 6.61650*u.deg, height = 500*u.m)
-    time_now = Time.now() #+ 2*u.hour Don't need to add the time difference 
-    coords = SkyCoord(ra*u.deg, dec*u.deg)
-    altaz = coords.transform_to(AltAz(obstime = time_now, location = obs_loc))
-    coords_altaz = altaz.to_string('decimal')
-    print("Your Azimuth and Altitude coordinates are:")
-    print(coords_altaz)
-    #print(altaz.az)
-    #print(altaz.alt)
-
-    return (coords_altaz)
-            
-        
-def send_coord(coord, ser):
-            """
-            Sends the Azimuth and Altitude coordinates calculated to the Teensy. 
-        
-            """
-            
-            DEBUG = True
-
-            if DEBUG:
-                print(coord)
-
-            ser.write(("point_to " + coord).encode())
-            print("wrote")
-
-            # print(ser.readline().decode('utf-8'))
-            # print("read line")
+def tracking_daemon(ra, dec, verbose):
+    
+    """Will be continuously executed while the program is running"""
+    
+    while True :
+        point_to_RaDec(ra, dec, verbose=True)
 
      
 if __name__ == "__main__":
     ra, dec = parse_star_coordinates()
-    #print("Rightascencion as Decimal number = ", ra)
-    #print("Declination as Decimal number = ", dec)
-    #coords_altaz = transform_skycoord_to_AltAz(ra, dec)
 
-    available_ports = []
+    # available_ports = []
 
-    for port, desc_port, id in list_ports.comports():
-        print(port)
-        print(desc_port)
-        if desc_port.find("Serial") > 0:
-            print("port available")
-            available_ports.append(port)
+    # for port, desc_port, id in list_ports.comports():
+    #     print(port)
+    #     print(desc_port)
+    #     if desc_port.find("Serial") > 0:
+    #         print("port available")
+    #         available_ports.append(port)
 
-    if True:
-        print("available_ports true")
-        ser = serial.Serial("/dev/ttyUSB0", 115200, timeout=None)
+    # if True:
+    #     print("available_ports true")
+    #     ser = serial.Serial("/dev/ttyUSB0", 115200, timeout=None)
+
 
     try:
-        ser.reset_input_buffer()
-        while True:
-            coords_altaz = transform_skycoord_to_AltAz(ra, dec)
-            send_coord(coords_altaz, ser)
-            print(coords_altaz)
+        daemon = Thread(target = tracking_daemon, daemon=True)
+        daemon.start()      # Launches infinite loop to track coordinates
 
-            print("wait for esp ack")
-            print(ser.readline().decode('utf-8'))
-            #ser.reset_input_buffer()
+        print("Press ENTER to stop tracking : ")
+        print(input())      # Daemon will stop as user press ENTER
 
-            print("wait for esp feedback")
-            ser.read()
-            ser.reset_input_buffer()
+        print("Tracking stopped")
+            
+
     except KeyboardInterrupt:
         # loop is interrupted with the command Ctrl + C
-        print("Loop stopped by user.")
+        print("Tracking force-stopped by user.")
