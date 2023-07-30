@@ -35,6 +35,7 @@ class Interface:
     def __init__(self, adress, baud, timeo=None):
         
         self.ser = serial.Serial(adress, baud, timeout=timeo) # Maybe optimize with available ports etc
+        self.ser.close()
         self.connected = False
         self.listener = Listening_daemon(self.ser)
     
