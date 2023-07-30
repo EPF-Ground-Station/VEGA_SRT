@@ -3,34 +3,79 @@
 Library aimed at scripting interface with SRT pointing mechanism
 """
 import serial
-from serial.tools import list_ports
+from threading import Thread
 from astropy import units as u
 from astropy.time import Time
 from astropy.coordinates import SkyCoord, EarthLocation, AltAz
 
+
+class Listening_daemon(Thread):
+    """ Thread that continuously listens on the serial port and prints messages
+    from ESP if disp flag is on """
+    
+    def __init__(self, ser):
+        self.disp = False
+        self.msg = ""
+        self.stop = False
+        Thread.__init__(self)
+        self.daemon = True
+        self.ser = ser
+        
+    def run(self):
+        while not self.stop:
+            self.msg = self.ser.readline().decode('utf-8')
+            if self.disp: print(self.msg)
+
+
+
+class Interface:
+    
+    """Class that supervizes interface between user and serial port"""
+    
+    def __init__(self, adress, baud, timeout=None):
+        
+        self.ser = serial.Serial(adress, baud, timeout) # Maybe optimize with available ports etc
+        self.connected = False
+        self.listener = Listening_daemon(self.ser)
+    
+    def connect(self):
+        self.ser.open()
+        self.connected = True
+        self.listener.disp = True
+        self.listener.start()
+        
+    def mute(self):
+        self.listener.disp = False
+    
+    def disconnect(self):
+        self.listener.disp = False
+        self.listener.stop = True
+        self.ser.close()
+        del self.listener
+        self.listener = Listening_daemon(self.ser)
+
+
+ESP = Interface("/dev/ttyUSB0", 115200, timeout=2)
+
+
 def send_ser(msg:str, verbose = False):
     """Utilitary function aimed at sending arbitrary message to the pointing
     mechanism via serial port.
-    
-    Returns : Serial ESP feedback    
+
     """
- 
     
-    ser = serial.Serial("/dev/ttyUSB0", 115200, timeout=None) # Maybe optimize with available ports etc
+    if ESP.ser.is_open:
+        ESP.ser.reset_input_buffer()    #Discards remaining data in buffer
+        ESP.ser.write((msg).encode())   #Sends message to serial 
+    else:
+        print("ESP disconnected. Aborted...")
     
-    ser.reset_input_buffer()    #Discards remaining data in buffer
-    ser.write((msg).encode())   #Sends message to serial 
+    if verbose : print(f"Message written : {msg}")
     
-    
-    if verbose : print(f"Message written : {msg}","Waiting for esp ack")
-    
-    ack = ser.readline().decode('utf-8')
-    if verbose : print(f"ESP ACK : {ack}", "Waiting for esp feedback")
-    
-    feedback = ser.read()
-    if verbose : print(f"ESP feedback : {feedback}")
-    
-    return feedback
+    # ack = ser.readline().decode('utf-8')
+    # if verbose : print(f"ESP ACK : {ack}", "Waiting for esp feedback")
+
+
 
 def untangle(verbose = False):
             """

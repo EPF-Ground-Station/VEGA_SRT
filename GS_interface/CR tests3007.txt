@@ -1,0 +1,3 @@
+-> Complete son mouvement avant d'entamer un deuxieme. En fait la commande ne fonctionne pas si envoyée avant fin d'execution
+-> standby() et untangle() ne prennent jamais fin (??)
+-> cable noir semble limite à une révolution alors que steppers prévoient 2 avant d'untangle

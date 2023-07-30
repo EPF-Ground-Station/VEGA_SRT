@@ -86,7 +86,7 @@ void loop() {
         
 
         //flush serial
-        while (HWSerial.available() > 0){
+        while (HWSerial.available() > 0){       // To remove? Seems to forbid multiple commands
             HWSerial.read();
         }
 
