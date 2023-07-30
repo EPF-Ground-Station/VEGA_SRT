@@ -32,9 +32,9 @@ class Interface:
     
     """Class that supervizes interface between user and serial port"""
     
-    def __init__(self, adress, baud, timeout=None):
+    def __init__(self, adress, baud, timeo=None):
         
-        self.ser = serial.Serial(adress, baud, timeout) # Maybe optimize with available ports etc
+        self.ser = serial.Serial(adress, baud, timeout=timeo) # Maybe optimize with available ports etc
         self.connected = False
         self.listener = Listening_daemon(self.ser)
     
