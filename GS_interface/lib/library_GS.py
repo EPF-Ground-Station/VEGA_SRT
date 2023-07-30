@@ -108,5 +108,6 @@ def empty_water():
 
     
     """
+    point_to_AzAlt(180, 90)
     return point_to_AzAlt(180, 0)
     
