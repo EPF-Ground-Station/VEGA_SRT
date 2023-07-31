@@ -40,7 +40,8 @@ void loop() {
     if (HWSerial.available() > 0){
 
         String cmd_name = HWSerial.readStringUntil(' ');
-        
+        ErrorStatus status;     // None type, empty error message
+        std::string feedback("");   // Message to return
         //TODO how detect invalid parameters when parse function time out
         
 
@@ -48,49 +49,54 @@ void loop() {
             {
                 az = HWSerial.parseFloat();
                 elev = HWSerial.parseFloat();
-                HWSerial.println("Got az : " + String(az) + " elev : " + String(elev));
-                ErrorStatus status;
+
                 status = apm->point_to(az, elev);
-                print_status(status, true);
-                HWSerial.println("Finished pointing");
+                feedback = "Finished pointing"
+
             }
 
             else if(cmd_name.equals("set_north_offset"))
             {
                 int offset;
                 offset = HWSerial.parseInt();
-                HWSerial.println("Got " + String(offset));
+
                 if(offset >= 0 && offset <= ENCODERS_MAX){
                     apm->setNorthOffset(offset);
-                    HWSerial.println("Set north offset");
+                    feedback = "Set north offset to ";
+                    feedback += String(offset);
                 }else{
-                    HWSerial.println("Error offset should be positive and not greated than " + String(ENCODERS_MAX));
+                    status.type = ErrorType::ERROR;
+                    status.msg = ("Error offset should be positive and not greater than " + String(ENCODERS_MAX));
+                    feedback = "Received value : ";
+                    feedback += String(offset);
                 }
             }
             else if(cmd_name.equals("stand_by"))
             {
+                status = apm->point_zenith()
                 apm->standbyEnable();
-                HWSerial.println("Standby enabled");
+                feedback = ("Standby enabled");
             }
 
             else if(cmd_name.equals("untangle"))
             {
-                HWSerial.println("Untangling...");
-                apm->untangle_north();
-                HWSerial.println("Untangled");
+                status = apm->untangle_north();
+                feedback = "Untangled";
             }
             else
             {
-                HWSerial.println("Unrecognized command name");
+                status.type = ErrorType::ERROR;
+                status.msg = ("Unrecognized command name");
             }
         
 
         //flush serial
-        while (HWSerial.available() > 0){       // To remove? Seems to forbid multiple commands
-            HWSerial.read();
+        while (HWSerial.available() > 0){       // To remove? Seems to forbid multiple commands. If we wait for feedback
+            HWSerial.read();                    // before sending more command, we can keep it
         }
 
     }
+    print_status(status, true, feedback);
 
     ErrorStatus status = apm->standByUpdate();
     print_status(status, false);
@@ -98,23 +104,29 @@ void loop() {
     delay(50);
 }
 
-void print_status(ErrorStatus status, bool print_success){
+void print_status(ErrorStatus status, bool print_success, std::string feedback = ""){
+
+    /// Format : {Type | msg} with Type in (Error, Warning, Success) and msg = Error msg (if any) + feedback
+
+    std::string response = "";
     switch (status.type) {
                     case ErrorType::ERROR:
-                        HWSerial.println("error");
+                        response = "Error | " + status.msg ;
+                        if (feedback != "") {response += ". APM returned " + feedback;}
                         break;
                     case ErrorType::WARNING:
-                        HWSerial.println("warning");
+                        response = "Warning | " + status.msg ;
+                        if (feedback != "") {response += ". APM returned " + feedback;}
                         break;
                     case ErrorType::NONE:
                         if(print_success){
-                            HWSerial.println("no error"); 
+                            response = "Success | " + feedback;
                         }
                         break;
                 }
 
-                if(status.msg.length() > 0){
-                    HWSerial.println(status.msg.c_str());
+                if(response.length() > 0){
+                    HWSerial.println(response); // .c_str() ?
                 }
                     
 }

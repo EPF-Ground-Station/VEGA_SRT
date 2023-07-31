@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Library aimed at scripting interface with SRT pointing mechanism
+Library aimed at scripting Srt with Antenna pointing mechanism
+
+@LL
 """
+
+
 import serial
+from enum import Enum
 from time import sleep
 from threading import Thread
 from astropy import units as u
@@ -10,153 +15,387 @@ from astropy.time import Time
 from astropy.coordinates import SkyCoord, EarthLocation, AltAz
 
 
-class Listening_daemon(Thread):
-    """ Thread that continuously listens on the serial port and prints messages
-    from ESP if disp flag is on """
-    
-    def __init__(self, ser):
-        self.disp = False
-        self.msg = ""
-        self.stop = False
-        Thread.__init__(self)
-        self.daemon = True
-        self.ser = ser
-        
-    def run(self):
-        while not self.stop:
-            self.msg = self.ser.readline().decode('utf-8')
-            if self.disp and self.msg.strip()!="" : print(self.msg)
+# class Listening_daemon(Thread):
+#     """OBSOLETE Thread that continuously listens on the serial port and prints messages
+#     from SRT if disp flag is on """
+
+#     def __init__(self, ser):
+#         self.disp = False
+#         self.msg = ""
+#         self.stop = False
+#         Thread.__init__(self)
+#         self.daemon = True
+#         self.ser = ser
+
+#     def run(self):
+#         while not self.stop:
+#             self.msg = self.ser.readline().decode('utf-8')
+#             if self.disp and self.msg.strip()!="" : print(self.msg)
 
 
+class SerialPort:
 
-class Interface:
-    
-    """Class that supervizes interface between user and serial port"""
-    
+    """Class aimed at representing the interaction with the APM serial port"""
+
     def __init__(self, adress, baud, timeo=None):
-        
-        self.ser = serial.Serial(adress, baud, timeout=timeo) # Maybe optimize with available ports etc
-        self.ser.close()
+        self.ser = serial.Serial(adress, baud, timeout=timeo)
         self.connected = False
-        self.listener = Listening_daemon(self.ser)
-        self.timeout = timeo
-    
+
     def connect(self):
         self.ser.open()
         self.connected = True
-        self.listener.disp = True
-        self.listener.start()
-        
-    def mute(self):
-        self.listener.disp = False
-    
+
     def disconnect(self):
-        self.listener.disp = False
-        self.listener.stop = True
-        sleep(self.timeout)
+        self.connected = False
         self.ser.close()
-        del self.listener
-        self.listener = Listening_daemon(self.ser)
+
+    def listen(self):
+        """Reads last message from SerialPort with appropriate processing"""
+
+        status, feedback = self.ser.readline().decode('utf-8').split(" | ")
+
+        if ("Err" in status) or ("Warn" in status):
+            print(status + " : " + feedback)
+            feedback = feedback.split("APM returned ")[-1]
+
+        return feedback.strip()
+
+    def send_Ser(self, msg: str):
+        """Sends message msg through the serial port.
+
+        Returns answer from SerialPort. 
+
+        """
+
+        if self.connected:
+
+            self.ser.reset_input_buffer()  # Discards remaining data in buffer
+            self.ser.write((msg).encode())  # Sends message to serial
+
+            answer = self.listen()
+
+            return answer
+
+        else:
+            return ""
 
 
-ESP = Interface("/dev/ttyUSB0", 115200, 1)
+class TrackMode(Enum):
+    """Tracking modes of SRT"""
+    RADEC = 1
+    TLE = 2     # To be implemented
 
 
-def send_ser(msg:str, verbose = False):
-    """Utilitary function aimed at sending arbitrary message to the pointing
-    mechanism via serial port.
+class Tracker(Thread):
+    """
+    Thread that tracks some given sky coordinates. Only supports RADES atm
+
+    Possible Improvements : Implement tracking satellites out of TLEs
 
     """
-    
-    if ESP.ser.is_open:
-        ESP.ser.reset_input_buffer()    #Discards remaining data in buffer
-        ESP.ser.write((msg).encode())   #Sends message to serial 
-    else:
-        print("ESP disconnected. Aborted...")
-    
-    if verbose : print(f"Message written : {msg}")
-    
-    # ack = ser.readline().decode('utf-8')
-    # if verbose : print(f"ESP ACK : {ack}", "Waiting for esp feedback")
+
+    def __init__(self, ser):
+        self.az = 0
+        self.alt = 0
+        self.ra = 0
+        self.dec = 0
+        self.mode = TrackMode.RADEC
+        self.on = False         # switches the thread but does not kill it
+        self.stop = False       # kills the thread
+        self.pending = False
+        self.ser = ser
+        Thread.__init__(self)
+        self.daemon = True
+
+    def refresh_azalt(self):
+        """Refreshes coords of target depending on tracking mode"""
+
+        if self.mode.value == 1:  # if RADEC
+            self.az, self.alt = RaDec_to_AltAz(self.ra, self.dec)
+
+    def setRADEC(self, ra, dec):
+        """Sets target's coordinates in RADEC mode"""
+
+        self.ra = ra
+        self.dec = dec
+
+    def run(self):
+
+        while not self.stop:
+
+            if self.on:
+                self.refresh_azalt()        # Refreshes coord
+                self.pending = True         # Indicates waiting for an answer
+                ans = self.ser.send_Ser("point to " + str(self.az) + " " +
+                                        str(self.alt))
+                self.pending = False        # Answer received
+
+                if "Err" in ans:
+                    print("Error while tracking. Tracking aborted...")
+                    self.stop = True
 
 
+class Srt:
 
-def untangle(verbose = False):
-            """
-            Go back to resting position
-        
-            """
+    """Class that supervizes interface btw user and Small Radio Telescope"""
 
-            return send_ser("untangle ", verbose)
+    def __init__(self, adress, baud, timeo=None):
 
-           
-def standby(verbose = False):
-            """
-            Go back to resting position
-        
-            """
-            return send_ser("stand_by ", verbose)
-        
-        
-def calibrate_north(value):
-            """
-            Defines offset for North position in azimuthal microsteps
-        
-            """
+        self.ser = SerialPort(adress, baud, timeo=None)
+        self.ser.disconnect()       # Keeps serial connection closed for safety
 
-            send_ser("set_north_offset "+str(value))
-            
+        self.timeout = timeo
+        self.apmMsg = ""        # Stores last message from APM
+
+        self.tracker = Tracker(self.ser)
+        self.tracking = False
+
+    def connect(self):
+        """Connects to serial port"""
+        self.ser.connect()
+        self.empty_water()
+
+    def disconnect(self):
+        """Disconnects from serial port"""
+
+        self.untangle(verbose=True)
+        self.standby(verbose=True)
+
+        self.ser.disconnect()
+
+    def send_APM(self, msg: str, verbose=False, save=True):
+        """
+        Utilitary function aimed at sending arbitrary messages to the pointing
+        mechanism via serial port.
+
+        Returns answer from APM. Saves it in apmMsg attr if save flag is on
+
+        """
+
+        if self.ser.connected:
+
+            if self.tracking:
+                self.tracker.on = False         # Pauses tracker
+
+                while self.tracker.pending:     # Waits for tracker to get its answer
+                    pass
+
+            answer = self.ser.send_Ser(msg)     # Sends message to serial port
+
+            if self.tracking:
+                self.tracker.on = True   # Unpauses tracker
+
+            if verbose:
+                print(f"Message sent : {msg}")
+            if save:
+                self.apmMsg = answer      # Saves last answer from APM
+
+            return answer
+
+        else:
+            print("APM disconnected. Aborted...")
+            return ""
+
+    def untangle(self, verbose=False):
+        """
+        Go back to resting position, untangling cables
+
+        """
+        if verbose:
+            print("Untangling...")
+        return self.send_APM("untangle ", verbose)
+
+    def standby(self, verbose=False):
+        """
+        Goes back to zenith and switches off motors
+
+        """
+        if verbose:
+            print("Going back to zenith and switching motors off...")
+        return self.send_APM("stand_by ", verbose)
+
+    def calibrate_north(self, value, verbose=False):
+        """
+        Defines offset for North position in azimuthal microsteps
+
+        """
+
+        return self.send_APM("set_north_offset "+str(value), verbose)
+
+    def point_to_AzAlt(self, az, alt, verbose=False):
+        """
+        Moves antenna to Azimuth and Altitude coordinates in degrees
+
+        """
+
+        if self.tracking:               # Stops tracking before pointing
+            self.stopTracking()
+
+        if verbose:
+            print(f"Moving to Az={az}, Alt = {alt}...")
+        coord = str(az) + ' ' + str(alt)
+        return self.send_APM("point_to " + coord, verbose)
+
+    def point_to_RaDec(self, ra, dec, verbose=False):
+        """
+        Moves antenna to Right Ascension and Declination coordinates in degrees
+
+        """
+
+        if verbose:
+            print(f"Moving to RA={ra}, Dec = {dec}...")
+        alt, az = RaDec_to_AltAz(ra, dec)
+        return self.point_to_AzAlt(az, alt, verbose)
+
+    def trackRADEC(self, ra, dec):
+        """
+        Starts tracking given sky coordinates in RaDec mode 
+
+        """
+
+        self.tracking = True                # Updates flag
+
+        if not self.tracker.is_alive():     # Launches tracker thread
+            # At this point, APM not yet tracking : tracker's flag 'on' is still off
+            self.tracker.start()
+
+        self.tracker.setRADEC(ra, dec)
+        self.tracker.on = True              # Now tracking
+
+    def stopTracking(self):
+        """
+        Stops tracking motion
+
+        """
+
+        self.tracking = False               # Updates flag
+
+        if self.tracker.is_alive():
+
+            self.tracker.stop = True        # Kills tracker
+            while self.tracker.pending:    # Waits for last answer from APM
+                pass
+
+        del self.tracker                    # Deletes tracker
+        self.tracker = Tracker(self.ser)    # Prepares new tracker
+
+    def empty_water(self):
+        """
+        Moves antenna to a position where water can flow out then goes back to 
+        rest position after a while
+
+        """
+        print("Emptying water procedure launched...")
+        print(self.point_to_AzAlt(180, 90, verbose=True))
+        print(self.point_to_AzAlt(180, 0))
+        sleep(15)
+        print(self.untangle(verbose=True))
+        print(self.standby(verbose=True))
+        print("Water evacuated. SRT is now ready for use.")
+        return
+
+
 def RaDec_to_AltAz(ra, dec, verbose=False):
     """
     Takes the star coordinates rightascension and declination as input and transforms them to altitude and azimuth coordinates. 
 
     :param obs_loc an instance of the class EarthLocation containing the informations about the location of the observator
-    :param coords an instance of the class SkyCoord with coordinates corresponing to the input coordinates of the function
-    :param altaz another instance of the class Skycoord but with the original coordinates transformed to the corresponing altitude and azimuth 
+    :param coords an instance of the class SkyCoord with coordinates corrSRToning to the input coordinates of the function
+    :param altaz another instance of the class Skycoord but with the original coordinates transformed to the corrSRToning altitude and azimuth 
     :param coords_altaz string containing the Azimuth in the first position and Altitude in the second position. Both as decimal numbers
 
     """
 
     #object = SkyCoord.from_name('M33')
-    obs_loc = EarthLocation(lat= 46.52457*u.deg , lon = 6.61650*u.deg, height = 500*u.m)
-    time_now = Time.now() #+ 2*u.hour Don't need to add the time difference 
+    obs_loc = EarthLocation(
+        lat=46.52457*u.deg, lon=6.61650*u.deg, height=500*u.m)
+    time_now = Time.now()  # + 2*u.hour Don't need to add the time difference
     coords = SkyCoord(ra*u.deg, dec*u.deg)
-    altaz = coords.transform_to(AltAz(obstime = time_now, location = obs_loc))
-    
-    alt, az =[float(x) for x in  altaz.to_string('decimal').split(' ')]
-    
-    if verbose :
+    altaz = coords.transform_to(AltAz(obstime=time_now, location=obs_loc))
+
+    alt, az = [float(x) for x in altaz.to_string('decimal').split(' ')]
+
+    if verbose:
         print("Your Azimuth and Altitude coordinates are:")
         print(f"{alt} {az}")
-    #print(altaz.az)
-    #print(altaz.alt)
 
     return alt, az
-
-def point_to_AzAlt(az, alt, verbose = False):
-    """
-    Moves antenna to Azimuth and Altitude coordinates in degrees
-                
-    """
-    coord = str(az) + ' ' + str(alt)
-    return send_ser("point_to " + coord, verbose)
+# SRT = Srt("/dev/ttyUSB0", 115200, 1)      # TODO handle error on adress/baud
+#                                                 # Maybe optimize with available ports etc
 
 
-def point_to_RaDec(ra, dec, verbose = False):
-    """
-    Moves antenna to Right Ascension and Declination coordinates in degrees
-    
-    """
-            
-    alt, az = RaDec_to_AltAz(ra, dec)
-    return point_to_AzAlt(az, alt, verbose)
+# def send_APM(msg:str, verbose = False):
+#     """Utilitary function aimed at sending arbitrary message to the pointing
+#     mechanism via serial port.
 
-def empty_water():
-    """
-    Moves antenna to a position where water can flow out
+#     """
 
-    
-    """
-    point_to_AzAlt(180, 90)
-    return point_to_AzAlt(180, 0)
-    
+
+#     if SRT.ser.is_open:
+#         SRT.send_APM(msg)
+#         if verbose : print(f"Message sent : {msg}")
+
+
+#     else:
+#         print("APM disconnected. Aborted...")
+
+
+#     # ack = ser.readline().decode('utf-8')
+#     # if verbose : print(f"SRT ACK : {ack}", "Waiting for SRT feedback")
+
+
+# def untangle(verbose = False):
+#             """
+#             Go back to resting position
+
+#             """
+#             print("Untangling...")
+#             return send_APM("untangle ", verbose)
+
+
+# def standby(verbose = False):
+#             """
+#             Go back to resting position
+
+#             """
+#             return send_APM("stand_by ", verbose)
+
+
+# def calibrate_north(value):
+#             """
+#             Defines offset for North position in azimuthal microsteps
+
+#             """
+
+#             send_APM("set_north_offset "+str(value))
+
+
+# def point_to_AzAlt(az, alt, verbose = False):
+#     """
+#     Moves antenna to Azimuth and Altitude coordinates in degrees
+
+#     """
+
+#     print(f"Pointing to Az={az}, Alt = {alt}")
+#     coord = str(az) + ' ' + str(alt)
+#     return send_APM("point_to " + coord, verbose)
+
+
+# def point_to_RaDec(ra, dec, verbose = False):
+#     """
+#     Moves antenna to Right Ascension and Declination coordinates in degrees
+
+#     """
+
+#     print(f"Pointing to RA={ra}, Dec = {dec}")
+#     alt, az = RaDec_to_AltAz(ra, dec)
+#     return point_to_AzAlt(az, alt, verbose)
+
+# def empty_water():
+#     """
+#     Moves antenna to a position where water can flow out
+
+
+#     """
+#     point_to_AzAlt(180, 90)
+#     return point_to_AzAlt(180, 0)
