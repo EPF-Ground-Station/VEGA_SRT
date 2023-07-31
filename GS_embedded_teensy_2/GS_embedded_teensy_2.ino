@@ -83,6 +83,23 @@ void loop() {
                 status = apm->untangle_north();
                 feedback = "Untangled";
             }
+
+            else if(cmd_name.equals("getAz"))
+            {
+                double az_current;
+                status = apm->getCurrentAz(az_current);
+                feedback = std::to_string(az_current)
+
+            }
+
+            else if(cmd_name.equals("getAlt"))
+            {
+                double alt_current;
+                status = apm->getCurrentAz(alt_current);
+                feedback = std::to_string(alt_current)
+
+            }
+
             else
             {
                 status.type = ErrorType::ERROR;

@@ -12,25 +12,7 @@ from time import sleep
 from threading import Thread
 from astropy import units as u
 from astropy.time import Time
-from astropy.coordinates import SkyCoord, EarthLocation, AltAz
-
-
-# class Listening_daemon(Thread):
-#     """OBSOLETE Thread that continuously listens on the serial port and prints messages
-#     from SRT if disp flag is on """
-
-#     def __init__(self, ser):
-#         self.disp = False
-#         self.msg = ""
-#         self.stop = False
-#         Thread.__init__(self)
-#         self.daemon = True
-#         self.ser = ser
-
-#     def run(self):
-#         while not self.stop:
-#             self.msg = self.ser.readline().decode('utf-8')
-#             if self.disp and self.msg.strip()!="" : print(self.msg)
+from astropy.coordinates import SkyCoord, EarthLocation, AltAz, ICRS
 
 
 class SerialPort:
@@ -63,7 +45,7 @@ class SerialPort:
     def send_Ser(self, msg: str):
         """Sends message msg through the serial port.
 
-        Returns answer from SerialPort. 
+        Returns answer from SerialPort.
 
         """
 
@@ -111,7 +93,7 @@ class Tracker(Thread):
         """Refreshes coords of target depending on tracking mode"""
 
         if self.mode.value == 1:  # if RADEC
-            self.az, self.alt = RaDec_to_AltAz(self.ra, self.dec)
+            self.az, self.alt = RaDec_to_AzAlt(self.ra, self.dec)
 
     def setRADEC(self, ra, dec):
         """Sets target's coordinates in RADEC mode"""
@@ -150,6 +132,12 @@ class Srt:
         self.tracker = Tracker(self.ser)
         self.tracking = False
 
+    def go_home(self, verbose=False):
+        """Takes SRT to its home position and shuts motors off"""
+
+        self.untangle(verbose)
+        self.standby(verbose)
+
     def connect(self):
         """Connects to serial port"""
         self.ser.connect()
@@ -158,8 +146,7 @@ class Srt:
     def disconnect(self):
         """Disconnects from serial port"""
 
-        self.untangle(verbose=True)
-        self.standby(verbose=True)
+        self.go_home(verbose=True)
 
         self.ser.disconnect()
 
@@ -196,6 +183,68 @@ class Srt:
             print("APM disconnected. Aborted...")
             return ""
 
+    def getAz(self):
+        """Getter on current Azimuthal angle in degrees. In case of error
+        returns -1 """
+
+        try:
+            az = float(self.send_APM("getAz "))
+            return az
+        except ValueError:
+            print("Error when trying to obtain current Azimuth")
+            return -1
+
+    def getAlt(self):
+        """Getter on current Altitude in degrees. In case of error
+        returns -1 """
+
+        try:
+            alt = float(self.send_APM("getAlt "))
+            return alt
+        except ValueError:
+            print("Error when trying to obtain current Altitude")
+            return -1
+
+    def getAzAlt(self):
+        """Getter on current pozition un AltAz coordinates"""
+
+        az = self.getAz()
+        alt = self.getAlt()
+
+        return az, alt
+
+    def getPos(self):
+        """Returns current RaDec in degrees"""
+
+        try:
+            alt = self.getAlt()
+        except ValueError:
+            print("Error when trying to obtain current Altitude")
+            return -1
+        try:
+            az = self.getAz()
+        except ValueError:
+            print("Error when trying to obtain current Azimuth")
+            return -1
+
+        ra, dec = AzAlt_to_RaDec(az, alt)
+
+        return ra, dec
+
+    def getRA(self):
+        """Returns current RA"""
+
+        ra, dec = self.getPos()
+
+        return ra
+
+    def getDec(self):
+        """Returns current Dec"""
+
+        ra, dec = self.getPos()
+
+        return dec
+
     def untangle(self, verbose=False):
         """
         Go back to resting position, untangling cables
@@ -217,6 +266,7 @@ class Srt:
     def calibrate_north(self, value, verbose=False):
         """
         Defines offset for North position in azimuthal microsteps
+        EPFL current estimation : 990000
 
         """
 
@@ -244,12 +294,12 @@ class Srt:
 
         if verbose:
             print(f"Moving to RA={ra}, Dec = {dec}...")
-        alt, az = RaDec_to_AltAz(ra, dec)
+        az, alt = RaDec_to_AzAlt(ra, dec)
         return self.point_to_AzAlt(az, alt, verbose)
 
     def trackRADEC(self, ra, dec):
         """
-        Starts tracking given sky coordinates in RaDec mode 
+        Starts tracking given sky coordinates in RaDec mode
 
         """
 
@@ -281,7 +331,7 @@ class Srt:
 
     def empty_water(self):
         """
-        Moves antenna to a position where water can flow out then goes back to 
+        Moves antenna to a position where water can flow out then goes back to
         rest position after a while
 
         """
@@ -295,31 +345,66 @@ class Srt:
         return
 
 
-def RaDec_to_AltAz(ra, dec, verbose=False):
+def RaDec_to_AzAlt(ra, dec, verbose=False):
     """
-    Takes the star coordinates rightascension and declination as input and transforms them to altitude and azimuth coordinates. 
+    Takes the star coordinates rightascension and declination as input and transforms them to altitude and azimuth coordinates.
 
     :param obs_loc an instance of the class EarthLocation containing the informations about the location of the observator
-    :param coords an instance of the class SkyCoord with coordinates corrSRToning to the input coordinates of the function
-    :param altaz another instance of the class Skycoord but with the original coordinates transformed to the corrSRToning altitude and azimuth 
+    :param coords an instance of the class SkyCoord with coordinates corresponding to the input coordinates of the function
+    :param altaz another instance of the class Skycoord but with the original coordinates transformed to the corresponding altitude and azimuth
     :param coords_altaz string containing the Azimuth in the first position and Altitude in the second position. Both as decimal numbers
 
     """
 
-    #object = SkyCoord.from_name('M33')
+    # object = SkyCoord.from_name('M33')
     obs_loc = EarthLocation(
         lat=46.52457*u.deg, lon=6.61650*u.deg, height=500*u.m)
     time_now = Time.now()  # + 2*u.hour Don't need to add the time difference
     coords = SkyCoord(ra*u.deg, dec*u.deg)
     altaz = coords.transform_to(AltAz(obstime=time_now, location=obs_loc))
 
-    alt, az = [float(x) for x in altaz.to_string('decimal').split(' ')]
+    az, alt = [float(x) for x in altaz.to_string(
+        'decimal', precision=4).split(' ')]
 
     if verbose:
         print("Your Azimuth and Altitude coordinates are:")
-        print(f"{alt} {az}")
+        print(f"{az} {alt}")
 
-    return alt, az
+    return az, alt
+
+
+def AzAlt_to_RaDec(az, alt, verbose=False):
+    """
+    Takes the star coordinates azimuth and altitude as input and transforms them to altitude and azimuth coordinates.
+
+    :param obs_loc an instance of the class EarthLocation containing the informations about the location of the observator
+    :param coords an instance of the class SkyCoord with coordinates corresponding to the input coordinates of the function
+    :param altaz another instance of the class Skycoord but with the original coordinates transformed to the corresponding altitude and azimuth
+    :param coords_altaz string containing the Azimuth in the first position and Altitude in the second position. Both as decimal numbers
+
+    """
+
+    # object = SkyCoord.from_name('M33')
+    obs_loc = EarthLocation(
+        lat=46.52457*u.deg, lon=6.61650*u.deg, height=500*u.m)
+    time_now = Time.now()  # + 2*u.hour Don't need to add the time difference
+    altaz = AltAz(az=az*u.deg, alt=alt*u.deg,
+                  obstime=time_now, location=obs_loc)
+    coords = SkyCoord(altaz.transform_to(ICRS()))
+
+    ra, dec = [float(x) for x in coords.to_string(
+        decimal=True, precision=4).split(' ')]
+
+    print(coords)
+    print(ra, dec)
+
+    if verbose:
+        print("Your Right Ascension and Declination coordinates are:")
+        print(f"{ra} {dec}")
+
+    return ra, dec
+
+
 # SRT = Srt("/dev/ttyUSB0", 115200, 1)      # TODO handle error on adress/baud
 #                                                 # Maybe optimize with available ports etc
 
@@ -388,7 +473,7 @@ def RaDec_to_AltAz(ra, dec, verbose=False):
 #     """
 
 #     print(f"Pointing to RA={ra}, Dec = {dec}")
-#     alt, az = RaDec_to_AltAz(ra, dec)
+#     az, alt = RaDec_to_AzAlt(ra, dec)
 #     return point_to_AzAlt(az, alt, verbose)
 
 # def empty_water():
