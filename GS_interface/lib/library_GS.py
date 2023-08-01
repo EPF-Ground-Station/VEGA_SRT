@@ -14,6 +14,8 @@ from astropy import units as u
 from astropy.time import Time
 from astropy.coordinates import SkyCoord, EarthLocation, AltAz, ICRS
 
+NORTH = 990000
+
 
 class SerialPort:
 
@@ -141,6 +143,7 @@ class Srt:
     def connect(self):
         """Connects to serial port"""
         self.ser.connect()
+        self.calibrate_north()
         self.empty_water()
 
     def disconnect(self):
@@ -263,7 +266,7 @@ class Srt:
             print("Going back to zenith and switching motors off...")
         return self.send_APM("stand_by ", verbose)
 
-    def calibrate_north(self, value, verbose=False):
+    def calibrate_north(self, value=NORTH, verbose=False):
         """
         Defines offset for North position in azimuthal microsteps
         EPFL current estimation : 990000
