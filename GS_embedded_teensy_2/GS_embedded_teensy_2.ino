@@ -2,12 +2,15 @@
 
 #include "AntennaPointingMechanism.h"
 #include "Error.h"
+#include <string>
 
 AntennaPointingMechanism *apm = nullptr;
 
 float az, elev = 0.0;
+float az_current;
+float alt_current;
 
-void print_status(ErrorStatus status, bool print_success);
+void print_status(ErrorStatus status, bool print_success, std::string feedback = "");
 
 void setup() {
     
@@ -51,7 +54,7 @@ void loop() {
                 elev = HWSerial.parseFloat();
 
                 status = apm->point_to(az, elev);
-                feedback = "Finished pointing"
+                feedback = "Finished pointing";
 
             }
 
@@ -63,17 +66,17 @@ void loop() {
                 if(offset >= 0 && offset <= ENCODERS_MAX){
                     apm->setNorthOffset(offset);
                     feedback = "Set north offset to ";
-                    feedback += String(offset);
+                    feedback = feedback + std::to_string(offset);
                 }else{
                     status.type = ErrorType::ERROR;
-                    status.msg = ("Error offset should be positive and not greater than " + String(ENCODERS_MAX));
+                    status.msg = ("Error offset should be positive and not greater than " + std::to_string(ENCODERS_MAX));
                     feedback = "Received value : ";
-                    feedback += String(offset);
+                    feedback = feedback + std::to_string(offset);
                 }
             }
             else if(cmd_name.equals("stand_by"))
             {
-                status = apm->point_zenith()
+                status = apm->point_zenith();
                 apm->standbyEnable();
                 feedback = ("Standby enabled");
             }
@@ -86,17 +89,15 @@ void loop() {
 
             else if(cmd_name.equals("getAz"))
             {
-                double az_current;
                 status = apm->getCurrentAz(az_current);
-                feedback = std::to_string(az_current)
+                feedback = std::to_string(az_current);
 
             }
 
             else if(cmd_name.equals("getAlt"))
             {
-                double alt_current;
                 status = apm->getCurrentAz(alt_current);
-                feedback = std::to_string(alt_current)
+                feedback = std::to_string(alt_current);
 
             }
 
@@ -111,9 +112,9 @@ void loop() {
         while (HWSerial.available() > 0){       // To remove? Seems to forbid multiple commands. If we wait for feedback
             HWSerial.read();                    // before sending more command, we can keep it
         }
-
+      print_status(status, true, feedback);
     }
-    print_status(status, true, feedback);
+    
 
     ErrorStatus status = apm->standByUpdate();
     print_status(status, false);
@@ -121,7 +122,7 @@ void loop() {
     delay(50);
 }
 
-void print_status(ErrorStatus status, bool print_success, std::string feedback = ""){
+void print_status(ErrorStatus status, bool print_success, std::string feedback){
 
     /// Format : {Type | msg} with Type in (Error, Warning, Success) and msg = Error msg (if any) + feedback
 
@@ -143,7 +144,7 @@ void print_status(ErrorStatus status, bool print_success, std::string feedback =
                 }
 
                 if(response.length() > 0){
-                    HWSerial.println(response); // .c_str() ?
+                    HWSerial.println(response.c_str()); // .c_str() ?
                 }
                     
 }

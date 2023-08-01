@@ -147,17 +147,20 @@ class AntennaPointingMechanism {
         delete(elev_encoder);
     }
 
-    ErrorStatus getCurrentAz(double& az_deg){
+    ErrorStatus getCurrentAz(float& az_deg){
 
         int az_current;
         ErrorStatus status = az_encoder->get_encoder_pos_value(az_current);
 
         az_deg = (az_current - north_encoder_offset) * 360/ENCODERS_MAX;
-        az_deg %= 360;
-        return status
+        
+        while (az_deg > 360){az_deg -= 360;}
+        
+        //az_deg %= 360;
+        return status;
     }
 
-    ErrorStatus getCurrentAlt(double& alt_deg){
+    ErrorStatus getCurrentAlt(float& alt_deg){
 
         int alt_current;
         ErrorStatus status = elev_encoder->get_encoder_pos_value(alt_current);
@@ -165,9 +168,9 @@ class AntennaPointingMechanism {
         const int ELEV_HORIZON_ENCODER_OFFSET_VAL = (int)(ELEV_ZENITH_ENCODER_VAL - ENCODERS_MAX/4 + ENCODERS_MAX) % ENCODERS_MAX;
         // int elev_target_encoder_val = (int)(elev_deg / 360.0 * ENCODERS_MAX + ELEV_HORIZON_ENCODER_OFFSET_VAL) % ENCODERS_MAX;
         alt_deg = (alt_current - ELEV_HORIZON_ENCODER_OFFSET_VAL)*360/ENCODERS_MAX;
-        alt_deg %= 90;
+        while (alt_deg > 90){alt_deg -= 90;}
 
-        return status
+        return status;
     }
 
 
