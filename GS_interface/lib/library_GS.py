@@ -118,7 +118,7 @@ class Tracker(Thread):
 
                 # delay next
                 timeNow = time.time()
-                while time.time < timeNow + TRACKING_RATE:
+                while time.time() < timeNow + TRACKING_RATE:
                     pass
 
                 if "Err" in ans:
