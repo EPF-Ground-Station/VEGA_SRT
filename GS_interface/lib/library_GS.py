@@ -7,6 +7,7 @@ Library aimed at scripting Srt with Antenna pointing mechanism
 
 
 import serial
+import time
 from enum import Enum
 from time import sleep
 from threading import Thread
@@ -15,6 +16,7 @@ from astropy.time import Time
 from astropy.coordinates import SkyCoord, EarthLocation, AltAz, ICRS
 
 NORTH = 990000
+TRACKING_RATE = 0.1
 
 
 class SerialPort:
@@ -114,6 +116,11 @@ class Tracker(Thread):
                                         str(self.alt))
                 self.pending = False        # Answer received
 
+                # delay next
+                timeNow = time.time()
+                while time.time < timeNow + TRACKING_RATE:
+                    pass
+
                 if "Err" in ans:
                     print("Error while tracking. Tracking aborted...")
                     self.stop = True
@@ -140,11 +147,12 @@ class Srt:
         self.untangle(verbose)
         self.standby(verbose)
 
-    def connect(self):
+    def connect(self, water=True):
         """Connects to serial port"""
         self.ser.connect()
         self.calibrate_north()
-        self.empty_water()
+        if water:
+            self.empty_water()
 
     def disconnect(self):
         """Disconnects from serial port"""
