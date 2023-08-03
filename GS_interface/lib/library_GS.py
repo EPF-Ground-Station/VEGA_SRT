@@ -110,7 +110,7 @@ class Tracker(Thread):
             if self.on:
                 self.refresh_azalt()        # Refreshes coord
                 self.pending = True         # Indicates waiting for an answer
-                ans = self.ser.send_Ser("point to " + str(self.az) + " " +
+                ans = self.ser.send_Ser("point_to " + str(self.az) + " " +
                                         str(self.alt))
                 self.pending = False        # Answer received
 
