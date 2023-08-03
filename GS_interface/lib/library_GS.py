@@ -273,7 +273,8 @@ class Srt:
 
         """
 
-        return self.send_APM("set_north_offset "+str(value), verbose)
+        print(f"Calibrating North offset to value {value}")
+        return self.send_APM("set_north_offset "+str(value) + " ", verbose)
 
     def point_to_AzAlt(self, az, alt, verbose=False):
         """
@@ -339,11 +340,13 @@ class Srt:
 
         """
         print("Emptying water procedure launched...")
-        print(self.point_to_AzAlt(180, 90, verbose=True))
+        print("Rotating antenna towards South...")
+        print(self.point_to_AzAlt(180, 90))
+        print("Inclinating to evacuate water...")
         print(self.point_to_AzAlt(180, 0))
         sleep(15)
-        print(self.untangle(verbose=True))
-        print(self.standby(verbose=True))
+        print(self.untangle())
+        print(self.standby())
         print("Water evacuated. SRT is now ready for use.")
         return
 
