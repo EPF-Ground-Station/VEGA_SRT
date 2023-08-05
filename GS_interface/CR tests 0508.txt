@@ -13,3 +13,12 @@ Rk : -fait modulo 360 quand destination > 360 ; mount rugueux : les cables ont d
 rajoutant rapidment de la tension -> réduire max à 1 tour et quart?
 - Possible d'enchainer les commandes en mode inline, elles sont executées les unes apres les autres
 - 
+
+
+
+2EME ROUND APRES MIDI
+
+rien qui marche :
+- soit les cables, probleme hardware, faut tout ouvrir
+- soit l'APM, probleme hardware, truc cassé dans les composants électroniques?
+- soit software, le systeme de ping qui casse tout?

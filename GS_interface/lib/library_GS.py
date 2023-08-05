@@ -122,6 +122,7 @@ class Ping(BckgrndAPMTask):
                 self.pending = True         # Indicates waiting for an answer
                 ans = self.ser.send_Ser("ping ")
                 self.pending = False        # Answer received
+                print(ans)
 
                 timeNow = time.time()       # Waits before pinging again
                 while time.time() < timeNow + PING_RATE:

@@ -3,7 +3,7 @@
 #include "AntennaPointingMechanism.h"
 #include "Error.h"
 #include <string>
-//#include <chrono>
+#include <chrono>
 
 AntennaPointingMechanism *apm = nullptr;
 
@@ -11,7 +11,7 @@ float az, elev = 0.0;
 float az_current(0);
 float alt_current(0);
 
-//auto last_action_time = std::chrono::steady_clock::now();
+auto last_action_time = std::chrono::steady_clock::now();
 
 void print_status(ErrorStatus status, bool print_success, std::string feedback = "");
 
@@ -121,9 +121,9 @@ void loop() {
           HWSerial.read();                    // before sending more command, we can keep it
       }
     print_status(status, true, feedback);
-    //last_action_time = std::chrono::steady_clock::now();  // Update last action time in any case
+    last_action_time = std::chrono::steady_clock::now();  // Update last action time in any case
   }
-  /*  
+    
   else if(apm->getCurrentMode() == Mode::ACTIVE){ 
       // In case standby not enabled but inactivity detected, enable standby
 
@@ -139,7 +139,7 @@ void loop() {
         print_status(status, true, feedback); // For whoever may ever read this
       }
 
-  }*/
+  }
 
     ErrorStatus status = apm->standByUpdate();
     print_status(status, false);
