@@ -16,7 +16,8 @@ from astropy.time import Time
 from astropy.coordinates import SkyCoord, EarthLocation, AltAz, ICRS
 
 NORTH = 990000
-TRACKING_RATE = 0.1
+TRACKING_RATE = 0.1  # Necessary delay for sending point_to to APM while tracking
+PING_RATE = 60  # Ping every minute
 
 
 class SerialPort:
@@ -72,7 +73,62 @@ class TrackMode(Enum):
     TLE = 2     # To be implemented
 
 
-class Tracker(Thread):
+class BckgrndAPMTask(Thread):
+    """Virtual class aimed at making parallel tasks on APM easier 
+
+    Methods :
+        stop() : turns the stop flag on, allows to kill the thread when writing
+        the run() method in daughter classes
+
+        pause() : turns on flag off. allows to pause the thread in run()
+
+        unpause() : turns on flag on
+    """
+
+    def __init__(self, ser):
+        self.on = False         # May stop the thread but does not kill it
+        self.stop = False       # kills the thread
+        self.pending = False    # flag on while waiting for answer from ser
+        self.ser = ser          # serial port over which APM communicates
+        Thread.__init__(self)
+        self.daemon = True
+
+    def stop(self):             # Allows to kill the thread
+        self.stop = True
+        while self.pending:
+            pass
+
+    def pause(self):
+        self.on = False
+        while self.pending:
+            pass
+
+    def unpause(self):
+        self.on = True
+
+
+class Ping(BckgrndAPMTask):
+
+    def __init__(self, ser):
+
+        BckgrndAPMTask.__init__(self, ser)
+
+    def run(self):
+
+        while not self.stop:
+
+            if self.on:
+
+                self.pending = True         # Indicates waiting for an answer
+                ans = self.ser.send_Ser("ping ")
+                self.pending = False        # Answer received
+
+                timeNow = time.time()       # Waits before pinging again
+                while time.time() < timeNow + PING_RATE:
+                    pass
+
+
+class Tracker(BckgrndAPMTask):
     """
     Thread that tracks some given sky coordinates. Only supports RADES atm
 
@@ -86,12 +142,7 @@ class Tracker(Thread):
         self.ra = 0
         self.dec = 0
         self.mode = TrackMode.RADEC
-        self.on = False         # switches the thread but does not kill it
-        self.stop = False       # kills the thread
-        self.pending = False
-        self.ser = ser
-        Thread.__init__(self)
-        self.daemon = True
+        BckgrndAPMTask.__init__(self, ser)
 
     def refresh_azalt(self):
         """Refreshes coords of target depending on tracking mode"""
@@ -141,8 +192,13 @@ class Srt:
         self.tracker = Tracker(self.ser)
         self.tracking = False
 
+        self.ping = Ping(self.ser)
+        self.ping.start()   # Initializes pinger : still needs to be unpaused to begin pinging
+
     def go_home(self, verbose=False):
         """Takes SRT to its home position and shuts motors off"""
+        if self.tracking:               # Stops tracking before
+            self.stopTracking()
 
         self.untangle(verbose)
         self.standby(verbose)
@@ -150,16 +206,19 @@ class Srt:
     def connect(self, water=True):
         """Connects to serial port"""
         self.ser.connect()
-        self.calibrate_north()
-        if water:
+        self.ping.unpause()     # Starts pinging asa connected
+        self.calibrate_north()  # Sets north offset
+        if water:               # Evacuates water in default mode
             self.empty_water()
+        else:
+            self.untangle()
 
     def disconnect(self):
         """Disconnects from serial port"""
 
-        self.go_home(verbose=True)
-
-        self.ser.disconnect()
+        self.go_home(verbose=True)  # Gets SRT to home position
+        self.ping.pause()           # Stop pinging
+        self.ser.disconnect()       # Ciao
 
     def send_APM(self, msg: str, verbose=False, save=True):
         """
@@ -173,15 +232,18 @@ class Srt:
         if self.ser.connected:
 
             if self.tracking:
-                self.tracker.on = False         # Pauses tracker
+                self.tracker.pause()         # Pauses tracker
+            else:
+                self.ping.pause()            # Otherwise pauses ping
 
-                while self.tracker.pending:     # Waits for tracker to get its answer
-                    pass
-
-            answer = self.ser.send_Ser(msg)     # Sends message to serial port
+            answer = self.ser.send_Ser(msg)  # Sends message to serial port
 
             if self.tracking:
-                self.tracker.on = True   # Unpauses tracker
+                self.tracker.unpause()       # Unpauses tracker
+            else:
+                self.ping.unpause()          # Otherwise unpauses ping
+
+            print(answer)           # Display answer (useful atm in cmd line)
 
             if verbose:
                 print(f"Message sent : {msg}")
@@ -261,6 +323,9 @@ class Srt:
         Go back to resting position, untangling cables
 
         """
+        if self.tracking:               # Stops tracking before pointing
+            self.stopTracking()
+
         if verbose:
             print("Untangling...")
         return self.send_APM("untangle ", verbose)
@@ -270,6 +335,9 @@ class Srt:
         Goes back to zenith and switches off motors
 
         """
+        if self.tracking:               # Stops tracking before pointing
+            self.stopTracking()
+
         if verbose:
             print("Going back to zenith and switching motors off...")
         return self.send_APM("stand_by ", verbose)
@@ -309,12 +377,12 @@ class Srt:
         az, alt = RaDec_to_AzAlt(ra, dec)
         return self.point_to_AzAlt(az, alt, verbose)
 
-    def trackRADEC(self, ra, dec):
+    def trackRaDec(self, ra, dec):
         """
         Starts tracking given sky coordinates in RaDec mode
 
         """
-
+        self.ping.pause()                   # Ping useless in tracking mode
         self.tracking = True                # Updates flag
 
         if not self.tracker.is_alive():     # Launches tracker thread
@@ -331,6 +399,7 @@ class Srt:
         """
 
         self.tracking = False               # Updates flag
+        self.ping.unpause()                 # Keep sending activity
 
         if self.tracker.is_alive():
 

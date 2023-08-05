@@ -3,6 +3,8 @@
 
 #define SPI_SPEED 1000000
 
+#define INACTIVITY_MAX_DURATION 61 // 61 seconds after which standby mode is enabled
+
 //To change once mounted on the roof
 // not used, replaced by set_north_offset cmd
 #define AZ_NORTH_ENCODER_VAL 0
@@ -14,8 +16,8 @@
 #define ELEV_ZENITH_SAFETY_MARGIN_DEG 2.0
 #define ELEV_HORIZON_SAFETY_MARGIN_DEG 3.0
 
-// plus-minus (nearly) 2 turns
-#define AZ_MAX_ROTATION_DEG (360 + 350)
+// plus-minus (nearly) 1.25 turns
+#define AZ_MAX_ROTATION_DEG (360 + 100)
 
 #define HWSerial Serial
 

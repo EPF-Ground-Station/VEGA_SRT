@@ -20,9 +20,11 @@ shortest rotation given encoder val diff
 point north w/o untangle (so point north can be used in constructor before init turn count)
 */
 
+enum class Mode { ACTIVE, STANDBY };
+
 class AntennaPointingMechanism {
 
-    enum class Mode { ACTIVE, STANDBY };
+    
 
     private:
 
@@ -34,7 +36,7 @@ class AntennaPointingMechanism {
     Stepper *elev_stepper = nullptr;
     Encoder *elev_encoder = nullptr;
 
-    int az_init_turn_count;
+    int az_init_turn_count = 0;
 
     unsigned north_encoder_offset = 0;
 
@@ -147,16 +149,22 @@ class AntennaPointingMechanism {
         delete(elev_encoder);
     }
 
+    Mode getCurrentMode() const {
+        return currentMode;
+    }
+
+
     ErrorStatus getCurrentAz(float& az_deg){
 
         int az_current;
         ErrorStatus status = az_encoder->get_encoder_pos_value(az_current);
+        // (float)(az_current_encoder_val + az_encoder_val_diff - (int)north_encoder_offset)/ENCODERS_MAX ) * 360.0;
+        //int az_target_encoder_val = (int)(az_deg / 360.0 * ENCODERS_MAX + (int)north_encoder_offset) % ENCODERS_MAX;
+        az_deg = (float)(az_current - (int)north_encoder_offset) * 360.0/ENCODERS_MAX;
 
-        az_deg = (az_current - north_encoder_offset) * 360/ENCODERS_MAX;
-        
+        while (az_deg < 0){az_deg += 360;}      // Manual "% 360"
         while (az_deg > 360){az_deg -= 360;}
-        
-        //az_deg %= 360;
+
         return status;
     }
 
@@ -167,7 +175,9 @@ class AntennaPointingMechanism {
 
         const int ELEV_HORIZON_ENCODER_OFFSET_VAL = (int)(ELEV_ZENITH_ENCODER_VAL - ENCODERS_MAX/4 + ENCODERS_MAX) % ENCODERS_MAX;
         // int elev_target_encoder_val = (int)(elev_deg / 360.0 * ENCODERS_MAX + ELEV_HORIZON_ENCODER_OFFSET_VAL) % ENCODERS_MAX;
-        alt_deg = (alt_current - ELEV_HORIZON_ENCODER_OFFSET_VAL)*360/ENCODERS_MAX;
+        alt_deg = (float)(alt_current - (int)ELEV_HORIZON_ENCODER_OFFSET_VAL)*360.0/ENCODERS_MAX;
+
+        while (alt_deg < 0){alt_deg += 90;}    // Manual "%90"
         while (alt_deg > 90){alt_deg -= 90;}
 
         return status;
@@ -527,8 +537,8 @@ class AntennaPointingMechanism {
                 status_untangle = az_encoder->get_encoder_pos_value(az_current_pos);
 
                 if(status_untangle.type != ErrorType::ERROR){
-                    int az_deg_diff = (( (float)(az_init_turn_count - az_current_turn_count) + (float)((int)north_encoder_offset - az_current_pos)/(float)ENCODERS_MAX )*360.0);
-                
+                    //int az_deg_diff = (( (float)(az_init_turn_count - az_current_turn_count) + (float)((int)north_encoder_offset - az_current_pos)/(float)ENCODERS_MAX )*360.0);
+                    float az_deg_diff = (( (float)(az_current_turn_count - az_init_turn_count) + (float)(az_current_pos - (int)north_encoder_offset)/(float)ENCODERS_MAX )*360.0);
                     if(abs(az_deg_diff) > AZ_MAX_ROTATION_DEG){
                         status_untangle = untangle_north();
                     }
