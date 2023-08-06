@@ -209,15 +209,14 @@ class Srt:
         self.ser.connect()
         self.ping.unpause()     # Starts pinging asa connected
         self.calibrate_north()  # Sets north offset
+        self.untangle()
         if water:               # Evacuates water in default mode
             self.empty_water()
-        else:
-            self.untangle()
 
     def disconnect(self):
         """Disconnects from serial port"""
 
-        self.go_home(verbose=True)  # Gets SRT to home position
+        self.go_home()  # Gets SRT to home position
         self.ping.pause()           # Stop pinging
         self.ser.disconnect()       # Ciao
 
