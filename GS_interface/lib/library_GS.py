@@ -5,19 +5,28 @@ Library aimed at scripting Srt with Antenna pointing mechanism
 @LL
 """
 
-
+import os
+import json
 import serial
 import time
+from datetime import datetime
+from rtlsdr import *
 from enum import Enum
 from time import sleep
 from threading import Thread
 from astropy import units as u
+from astropy.io import fits
 from astropy.time import Time
 from astropy.coordinates import SkyCoord, EarthLocation, AltAz, ICRS
+import matplotlib.pyplot as plt
 
 NORTH = 990000
 TRACKING_RATE = 0.1  # Necessary delay for sending point_to to APM while tracking
 PING_RATE = 60  # Ping every minute
+DATA_PATH = os.path.expanduser("~") + "/RadioData/"  # Finds data dir of user
+OBS_LAT = 46.5194444
+OBS_LON = 6.565
+OBS_HEIGHT = 411
 
 
 class SerialPort:
@@ -70,7 +79,8 @@ class SerialPort:
 class TrackMode(Enum):
     """Tracking modes of SRT"""
     RADEC = 1
-    TLE = 2     # To be implemented
+    GAL = 2
+    TLE = 3     # To be implemented
 
 
 class BckgrndAPMTask(Thread):
@@ -86,7 +96,7 @@ class BckgrndAPMTask(Thread):
     """
 
     def __init__(self, ser):
-        self.on = False         # May stop the thread but does not kill it
+        self.on = False         # May pause the thread but does not kill it
         self.stop = False       # kills the thread
         self.pending = False    # flag on while waiting for answer from ser
         self.ser = ser          # serial port over which APM communicates
@@ -122,40 +132,48 @@ class Ping(BckgrndAPMTask):
                 self.pending = True         # Indicates waiting for an answer
                 ans = self.ser.send_Ser("ping ")
                 self.pending = False        # Answer received
-                print(ans)
 
                 timeNow = time.time()       # Waits before pinging again
                 while time.time() < timeNow + PING_RATE:
                     pass
 
 
-class Tracker(BckgrndAPMTask):
+class Tracker(BckgrndAPMTask, _mode=TrackMode.RADEC):
     """
-    Thread that tracks some given sky coordinates. Only supports RADES atm
+    Thread that tracks some given sky coordinates. Only supports RADEC atm
 
-    Possible Improvements : Implement tracking satellites out of TLEs
+    Possible Improvements : Implement tracking satellites out of TLEs,
+    galactic coordinates, objects of solar system
 
     """
 
     def __init__(self, ser):
         self.az = 0
         self.alt = 0
-        self.ra = 0
-        self.dec = 0
-        self.mode = TrackMode.RADEC
+        self.a = 0      # RA in radec, LONG in gal
+        self.b = 0      # DEC in radec, b in gal
+        self.mode = _mode
         BckgrndAPMTask.__init__(self, ser)
 
     def refresh_azalt(self):
         """Refreshes coords of target depending on tracking mode"""
 
         if self.mode.value == 1:  # if RADEC
-            self.az, self.alt = RaDec_to_AzAlt(self.ra, self.dec)
+            self.az, self.alt = RaDec2AzAlt(self.a, self.b)
 
-    def setRADEC(self, ra, dec):
+        elif self.mode.value == 2:
+            self.az, self.alt = Gal2AzAlt(self.a, self.b)
+
+    def setTarget(self, a, b):
         """Sets target's coordinates in RADEC mode"""
 
-        self.ra = ra
-        self.dec = dec
+        self.a = a
+        self.b = b
+
+    def setMode(mode):
+        """Sets tracking mode"""
+
+        self.mode = TrackMode(mode)
 
     def run(self):
 
@@ -195,6 +213,14 @@ class Srt:
 
         self.ping = Ping(self.ser)
         self.ping.start()   # Initializes pinger : still needs to be unpaused to begin pinging
+
+        # Connect SDR and set default parameters
+        self.sdr = RtlSdr()
+        self.sdr.sample_rate = 4.096e6
+        self.sdr.center_freq = 1420e06
+        self.sdr.gain = 'auto'
+        self.sdr.set_bias_tee(True)
+        self.sdr.close()
 
     def go_home(self, verbose=False):
         """Takes SRT to its home position and shuts motors off"""
@@ -279,7 +305,7 @@ class Srt:
             return -1
 
     def getAzAlt(self):
-        """Getter on current pozition un AltAz coordinates"""
+        """Getter on current pozition in AltAz coordinates"""
 
         az = self.getAz()
         alt = self.getAlt()
@@ -300,7 +326,7 @@ class Srt:
             print("Error when trying to obtain current Azimuth")
             return -1
 
-        ra, dec = AzAlt_to_RaDec(az, alt)
+        ra, dec = AzAlt2RaDec(az, alt)
 
         return ra, dec
 
@@ -352,7 +378,7 @@ class Srt:
         print(f"Calibrating North offset to value {value}")
         return self.send_APM("set_north_offset "+str(value) + " ", verbose)
 
-    def point_to_AzAlt(self, az, alt, verbose=False):
+    def pointAzAlt(self, az, alt, verbose=False):
         """
         Moves antenna to Azimuth and Altitude coordinates in degrees
 
@@ -366,7 +392,7 @@ class Srt:
         coord = str(az) + ' ' + str(alt)
         return self.send_APM("point_to " + coord, verbose)
 
-    def point_to_RaDec(self, ra, dec, verbose=False):
+    def pointRaDec(self, ra, dec, verbose=False):
         """
         Moves antenna to Right Ascension and Declination coordinates in degrees
 
@@ -374,8 +400,8 @@ class Srt:
 
         if verbose:
             print(f"Moving to RA={ra}, Dec = {dec}...")
-        az, alt = RaDec_to_AzAlt(ra, dec)
-        return self.point_to_AzAlt(az, alt, verbose)
+        az, alt = RaDec2AzAlt(ra, dec)
+        return self.pointAzAlt(az, alt, verbose)
 
     def trackRaDec(self, ra, dec):
         """
@@ -389,7 +415,24 @@ class Srt:
             # At this point, APM not yet tracking : tracker's flag 'on' is still off
             self.tracker.start()
 
+        self.tracker.setMode(1)
         self.tracker.setRADEC(ra, dec)
+        self.tracker.on = True              # Now tracking
+
+    def trackGal(self, long, b):
+        """
+        Starts tracking given sky coordinates in Galactic mode
+
+        """
+        self.ping.pause()                   # Ping useless in tracking mode
+        self.tracking = True                # Updates flag
+
+        if not self.tracker.is_alive():     # Launches tracker thread
+            # At this point, APM not yet tracking : tracker's flag 'on' is still off
+            self.tracker.start()
+
+        self.tracker.setMode(2)
+        self.tracker.setRADEC(long, b)
         self.tracker.on = True              # Now tracking
 
     def stopTracking(self):
@@ -418,17 +461,75 @@ class Srt:
         """
         print("Emptying water procedure launched...")
         print("Rotating antenna towards South...")
-        print(self.point_to_AzAlt(180, 90))
+        print(self.pointAzAlt(180, 90))
         print("Inclinating to evacuate water...")
-        print(self.point_to_AzAlt(180, 0))
+        print(self.pointAzAlt(180, 0))
         sleep(15)
         print(self.untangle())
         print(self.standby())
         print("Water evacuated. SRT is now ready for use.")
         return
 
+    def obsPower(self, duration, intTime, bandwidth=None, fc=None, repo=None, obs=None):
+        """ Observes PSD at center frequency fc for a duration in seconds with
+        integration time of intTime. Bandwidth and center frequency fc are
+        indicated in MHz"""
 
-def RaDec_to_AzAlt(ra, dec, verbose=False):
+        print(f"Observing for {duration} seconds...")
+
+        # If no indicated repository to save data
+        if repo == None:
+            # Make repo the default today's timestamp
+            repo = datetime.today().strftime('%Y-%m-%d')
+
+        # Check if there exists a repo at this name
+        if not os.path.isDir(DATA_PATH + repo):
+            os.mkdir(DATA_PATH + repo)     # if not, create it
+
+        repo = DATA_PATH + today + '/'
+
+        # If no indicated observation name
+        if obs == None:
+            # Make the name to current timestamp
+            obs = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+        # Check if there exists a repo at this name
+        if not os.path.isDir(DATA_PATH + repo + obs):
+            os.mkdir(DATA_PATH + repo + obs)     # if not, create it
+
+        obs = obs + '/'
+
+        if fc != None:
+            self.sdr.center_freq = fc * 1e6
+
+        if bandwidth != None:
+            self.sdr.sample_rate = bandwidth * 2e6
+
+        # Save parameters of observation for later analysis
+        with open(repo+obs+"params.json", "w") as jsFile:
+            d = {"fc": fc, "rate": self.sdr.sample_rate, "channels": 1024}
+            json.dump(d, jsFile)
+
+        nbSamples = self.sdr.sample_rate * intTime
+        m = np.floor(nbSamples/1024)    # Prefer a multiple of 1024 (channels)
+        nbObs = np.ceil(duration/intTime)
+
+        for i in range(nbObs):
+            # Collect data
+            self.sdr.open()
+            samples = self.sdr.read_samples(1024 * m)
+            self.sdr.close()
+
+            # Save data
+            real = fits.Column(name='real', array=samples.real, format='1E')
+            im = fits.Column(name='im', array=samples.imag, format='1E')
+            table = fits.BinTableHDU.from_columns([real, im])
+            table.writeto(repo + obs + "sample#" +
+                          str(i) + '.fits', overwrite=False)
+
+        print(f"Observation complete. Data stored in {repo+obs}")
+
+
+def RaDec2AzAlt(ra, dec):
     """
     Takes the star coordinates rightascension and declination as input and transforms them to altitude and azimuth coordinates.
 
@@ -439,9 +540,9 @@ def RaDec_to_AzAlt(ra, dec, verbose=False):
 
     """
 
-    # object = SkyCoord.from_name('M33')
     obs_loc = EarthLocation(
-        lat=46.52457*u.deg, lon=6.61650*u.deg, height=500*u.m)
+        # lat=46.52457*u.deg, lon=6.61650*u.deg, height=500*u.m)
+        lat=OBS_LAT*u.deg, lon=OBS_LON * u.deg, height=OBS_HEIGHT*u.m)
     time_now = Time.now()  # + 2*u.hour Don't need to add the time difference
     coords = SkyCoord(ra*u.deg, dec*u.deg)
     altaz = coords.transform_to(AltAz(obstime=time_now, location=obs_loc))
@@ -449,16 +550,12 @@ def RaDec_to_AzAlt(ra, dec, verbose=False):
     az, alt = [float(x) for x in altaz.to_string(
         'decimal', precision=4).split(' ')]
 
-    if verbose:
-        print("Your Azimuth and Altitude coordinates are:")
-        print(f"{az} {alt}")
-
     return az, alt
 
 
-def AzAlt_to_RaDec(az, alt, verbose=False):
+def AzAlt2RaDec(az, alt):
     """
-    Takes the star coordinates azimuth and altitude as input and transforms them to altitude and azimuth coordinates.
+    Takes the star coordinates azimuth and altitude as input and transforms them to Ra Dec coordinates.
 
     :param obs_loc an instance of the class EarthLocation containing the informations about the location of the observator
     :param coords an instance of the class SkyCoord with coordinates corresponding to the input coordinates of the function
@@ -467,9 +564,9 @@ def AzAlt_to_RaDec(az, alt, verbose=False):
 
     """
 
-    # object = SkyCoord.from_name('M33')
     obs_loc = EarthLocation(
-        lat=46.52457*u.deg, lon=6.61650*u.deg, height=500*u.m)
+        # lat=46.52457*u.deg, lon=6.61650*u.deg, height=500*u.m)
+        lat=OBS_LAT*u.deg, lon=OBS_LON * u.deg, height=OBS_HEIGHT*u.m)
     time_now = Time.now()  # + 2*u.hour Don't need to add the time difference
     altaz = AltAz(az=az*u.deg, alt=alt*u.deg,
                   obstime=time_now, location=obs_loc)
@@ -478,92 +575,94 @@ def AzAlt_to_RaDec(az, alt, verbose=False):
     ra, dec = [float(x) for x in coords.to_string(
         decimal=True, precision=4).split(' ')]
 
-    print(coords)
-    print(ra, dec)
-
-    if verbose:
-        print("Your Right Ascension and Declination coordinates are:")
-        print(f"{ra} {dec}")
-
     return ra, dec
 
 
-# SRT = Srt("/dev/ttyUSB0", 115200, 1)      # TODO handle error on adress/baud
-#                                                 # Maybe optimize with available ports etc
+def Gal2AzAlt(long, b):
+    """Converts galactic coordinates to AzAlt"""
+
+    obs_loc = EarthLocation(
+        # lat=46.52457*u.deg, lon=6.61650*u.deg, height=500*u.m)
+        lat=OBS_LAT*u.deg, lon=OBS_LON * u.deg, height=OBS_HEIGHT*u.m)
+    time_now = Time.now()
+    altazFrame = coords.transform_to(AltAz(obstime=time_now, location=obs_loc))
+
+    galactic_coords = SkyCoord(
+        l=long*u.deg, b=lat*u.deg, frame='galactic')
+
+    azalt_coords = galactic_coords.transform_to(altazFrame)
+
+    az, alt = [float(x) for x in azalt_coords.to_string(
+        'decimal', precision=4).split(' ')]
+
+    return az, alt
 
 
-# def send_APM(msg:str, verbose = False):
-#     """Utilitary function aimed at sending arbitrary message to the pointing
-#     mechanism via serial port.
+def AzAlt2Gal(az, alt):
+    """Converts AzAlt coordinates to galactic"""
 
-#     """
+    obs_loc = EarthLocation(
+        # lat=46.52457*u.deg, lon=6.61650*u.deg, height=500*u.m)
+        lat=OBS_LAT*u.deg, lon=OBS_LON * u.deg, height=OBS_HEIGHT*u.m)
+    time_now = Time.now()
 
+    altaz = AltAz(az=az*u.deg, alt=alt*u.deg,
+                  obstime=time_now, location=obs_loc)
+    coords = SkyCoord(altaz.transform_to('galactic'))
 
-#     if SRT.ser.is_open:
-#         SRT.send_APM(msg)
-#         if verbose : print(f"Message sent : {msg}")
+    long, b = [float(x) for x in coords.to_string(
+        decimal=True, precision=4).split(' ')]
 
-
-#     else:
-#         print("APM disconnected. Aborted...")
-
-
-#     # ack = ser.readline().decode('utf-8')
-#     # if verbose : print(f"SRT ACK : {ack}", "Waiting for SRT feedback")
+    return long, b
 
 
-# def untangle(verbose = False):
-#             """
-#             Go back to resting position
+def plotAvPSD(path):
+    """Plots the averaged PSD of the observation located in path"""
 
-#             """
-#             print("Untangling...")
-#             return send_APM("untangle ", verbose)
+    path = path.strip("/")
+    obsName = path.split('/')[-1]   # Extract name of observation from path
+    path += "/"    # Formatting
 
+    # Allow for relative paths
+    if not os.path.isdir(path):
+        path = DATA_PATH + path
 
-# def standby(verbose = False):
-#             """
-#             Go back to resting position
+    if os.path.isfile(path+"params.json"):
 
-#             """
-#             return send_APM("stand_by ", verbose)
+        with open(path+"params.json", "r") as jsFile:
+            params = json.load(jsFile)
+    elif not os.path.isdir(path):
+        print("ERROR : path does not relate to any recorded observation")
+        return
+    else:
+        print(
+            f"ERROR : no parameter file found at {path}." +
+            "Try giving the full path to an exisiting observation.")
+        return
 
+    # Extract data
+    fc = params["fc"]
+    rate = params["rate"]
+    channels = params["channels"]
 
-# def calibrate_north(value):
-#             """
-#             Defines offset for North position in azimuthal microsteps
+    root, repo, files = os.walk(path)   # I did not find any other way...
+    fitsFiles = [file for file in root[2] if ".fits" in file]
 
-#             """
+    obsNb = len(fitsFiles)  # Number of files in observation
 
-#             send_APM("set_north_offset "+str(value))
+    firstFile = fitsFile.pop(0)  # Pops the first element of the list
+    real = fits.open(firstFile)[1].data.field('reel').flatten()
+    image = fits.open(firstFile)[1].data.field('image').flatten()
 
+    for file in fitsFile:
+        data = fits.open(path+file)[1].data
+        real += data.field('reel').flatten()
+        image += data.field('image').flatten()
 
-# def point_to_AzAlt(az, alt, verbose = False):
-#     """
-#     Moves antenna to Azimuth and Altitude coordinates in degrees
-
-#     """
-
-#     print(f"Pointing to Az={az}, Alt = {alt}")
-#     coord = str(az) + ' ' + str(alt)
-#     return send_APM("point_to " + coord, verbose)
-
-
-# def point_to_RaDec(ra, dec, verbose = False):
-#     """
-#     Moves antenna to Right Ascension and Declination coordinates in degrees
-
-#     """
-
-#     print(f"Pointing to RA={ra}, Dec = {dec}")
-#     az, alt = RaDec_to_AzAlt(ra, dec)
-#     return point_to_AzAlt(az, alt, verbose)
-
-# def empty_water():
-#     """
-#     Moves antenna to a position where water can flow out
-
-
-#     """
-#     point_to_AzAlt(180, 90)
-#     return point_to_AzAlt(180, 0)
+    average = (real + 1.0j*image)/obsNb
+    plt.psd(average, NFFT=channels, Fs=sample_rate/1e6, Fc=center_freq/1e6)
+    plt.xlabel('frequency (Mhz)')
+    plt.ylabel('Relative power (db)')
+    plt.savefig(path+"PSD.png", format="png")
+    plt.show()
+    print("Figure saved at " + path + "PSD.png")
