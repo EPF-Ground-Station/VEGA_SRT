@@ -484,7 +484,7 @@ class Srt:
             repo = datetime.today().strftime('%Y-%m-%d')
 
         # Check if there exists a repo at this name
-        if not os.path.isDir(DATA_PATH + repo):
+        if not os.path.isdir(DATA_PATH + repo):
             os.mkdir(DATA_PATH + repo)     # if not, create it
 
         repo = DATA_PATH + today + '/'
@@ -494,7 +494,7 @@ class Srt:
             # Make the name to current timestamp
             obs = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
         # Check if there exists a repo at this name
-        if not os.path.isDir(DATA_PATH + repo + obs):
+        if not os.path.isdir(DATA_PATH + repo + obs):
             os.mkdir(DATA_PATH + repo + obs)     # if not, create it
 
         obs = obs + '/'
