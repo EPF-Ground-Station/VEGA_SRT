@@ -216,7 +216,7 @@ class Srt:
 
         # Connect SDR and set default parameters
         self.sdr = RtlSdr()
-        self.sdr.sample_rate = 4.096e6
+        self.sdr.sample_rate = 2.048e6
         self.sdr.center_freq = 1420e06
         self.sdr.gain = 'auto'
         self.sdr.set_bias_tee(True)
