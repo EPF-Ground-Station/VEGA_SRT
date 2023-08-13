@@ -170,7 +170,7 @@ class Tracker(BckgrndAPMTask):
         self.a = a
         self.b = b
 
-    def setMode(mode):
+    def setMode(self, mode):
         """Sets tracking mode"""
 
         self.mode = TrackMode(mode)
