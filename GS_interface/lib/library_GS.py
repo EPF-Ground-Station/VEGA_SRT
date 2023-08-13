@@ -487,7 +487,7 @@ class Srt:
         if not os.path.isdir(DATA_PATH + repo):
             os.mkdir(DATA_PATH + repo)     # if not, create it
 
-        repo = DATA_PATH + today + '/'
+        repo = DATA_PATH + repo + '/'
 
         # If no indicated observation name
         if obs == None:
