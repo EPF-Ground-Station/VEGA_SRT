@@ -138,7 +138,7 @@ class Ping(BckgrndAPMTask):
                     pass
 
 
-class Tracker(BckgrndAPMTask, _mode=TrackMode.RADEC):
+class Tracker(BckgrndAPMTask):
     """
     Thread that tracks some given sky coordinates. Only supports RADEC atm
 
@@ -147,7 +147,7 @@ class Tracker(BckgrndAPMTask, _mode=TrackMode.RADEC):
 
     """
 
-    def __init__(self, ser):
+    def __init__(self, ser, _mode=TrackMode.RADEC):
         self.az = 0
         self.alt = 0
         self.a = 0      # RA in radec, LONG in gal
@@ -416,7 +416,7 @@ class Srt:
             self.tracker.start()
 
         self.tracker.setMode(1)
-        self.tracker.setRADEC(ra, dec)
+        self.tracker.setTarget(ra, dec)
         self.tracker.on = True              # Now tracking
 
     def trackGal(self, long, b):
@@ -432,7 +432,7 @@ class Srt:
             self.tracker.start()
 
         self.tracker.setMode(2)
-        self.tracker.setRADEC(long, b)
+        self.tracker.setTarget(long, b)
         self.tracker.on = True              # Now tracking
 
     def stopTracking(self):
