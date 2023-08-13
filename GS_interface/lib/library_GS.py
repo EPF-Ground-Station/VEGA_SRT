@@ -513,7 +513,7 @@ class Srt:
 
         nbSamples = self.sdr.sample_rate * intTime
         m = np.floor(nbSamples/1024)    # Prefer a multiple of 1024 (channels)
-        nbObs = np.ceil(duration/intTime)
+        nbObs = int(np.ceil(duration/intTime))
 
         for i in range(nbObs):
             # Collect data
