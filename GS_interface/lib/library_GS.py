@@ -655,8 +655,8 @@ def plotAvPSD(path):
     obsNb = len(fitsFiles)  # Number of files in observation
 
     firstFile = fitsFiles.pop(0)  # Pops the first element of the list
-    real = fits.open(firstFile)[1].data.field('reel').flatten()
-    image = fits.open(firstFile)[1].data.field('image').flatten()
+    real = fits.open(path+firstFile)[1].data.field('reel').flatten()
+    image = fits.open(path+firstFile)[1].data.field('image').flatten()
 
     for file in fitsFiles:
         data = fits.open(path+file)[1].data
