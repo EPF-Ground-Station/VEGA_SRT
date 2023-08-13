@@ -431,7 +431,8 @@ class Srt:
             # At this point, APM not yet tracking : tracker's flag 'on' is still off
             self.tracker.start()
 
-        self.tracker.setMode(2)
+        mode = 2
+        self.tracker.setMode(mode)
         self.tracker.setTarget(long, b)
         self.tracker.on = True              # Now tracking
 
