@@ -508,7 +508,8 @@ class Srt:
 
         # Save parameters of observation for later analysis
         with open(repo+obs+"params.json", "w") as jsFile:
-            d = {"fc": fc, "rate": self.sdr.sample_rate, "channels": 1024}
+            d = {"fc": self.sdr.center_freq,
+                 "rate": self.sdr.sample_rate, "channels": 1024}
             json.dump(d, jsFile)
 
         nbSamples = self.sdr.sample_rate * intTime
@@ -648,8 +649,8 @@ def plotAvPSD(path):
     rate = params["rate"]
     channels = params["channels"]
 
-    root, repo, files = os.walk(path)   # I did not find any other way...
-    fitsFiles = [file for file in root[2] if ".fits" in file]
+    for root, repo, files in os.walk(path):   # I did not find any other way...
+        fitsFiles = [file for file in files if ".fits" in file]
 
     obsNb = len(fitsFiles)  # Number of files in observation
 
