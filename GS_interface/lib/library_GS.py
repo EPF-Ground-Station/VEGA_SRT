@@ -586,6 +586,7 @@ def Gal2AzAlt(long, b):
         # lat=46.52457*u.deg, lon=6.61650*u.deg, height=500*u.m)
         lat=OBS_LAT*u.deg, lon=OBS_LON * u.deg, height=OBS_HEIGHT*u.m)
     time_now = Time.now()
+    coords = SkyCoord(long*u.deg, b*u.deg)
     altazFrame = coords.transform_to(AltAz(obstime=time_now, location=obs_loc))
 
     galactic_coords = SkyCoord(
