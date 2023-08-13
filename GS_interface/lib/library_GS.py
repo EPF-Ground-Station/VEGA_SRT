@@ -654,17 +654,17 @@ def plotAvPSD(path):
 
     obsNb = len(fitsFiles)  # Number of files in observation
 
-    firstFile = fitsFile.pop(0)  # Pops the first element of the list
+    firstFile = fitsFiles.pop(0)  # Pops the first element of the list
     real = fits.open(firstFile)[1].data.field('reel').flatten()
     image = fits.open(firstFile)[1].data.field('image').flatten()
 
-    for file in fitsFile:
+    for file in fitsFiles:
         data = fits.open(path+file)[1].data
         real += data.field('reel').flatten()
         image += data.field('image').flatten()
 
     average = (real + 1.0j*image)/obsNb
-    plt.psd(average, NFFT=channels, Fs=sample_rate/1e6, Fc=center_freq/1e6)
+    plt.psd(average, NFFT=channels, Fs=rate/1e6, Fc=fc/1e6)
     plt.xlabel('frequency (Mhz)')
     plt.ylabel('Relative power (db)')
     plt.savefig(path+"PSD.png", format="png")
