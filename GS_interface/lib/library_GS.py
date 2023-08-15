@@ -530,6 +530,8 @@ class Srt:
                           str(i) + '.fits', overwrite=False)
 
         print(f"Observation complete. Data stored in {repo+obs}")
+        print("Plotting averaged PSD")
+        plotAvPSD(repo+obs)     # Plot averaged PSD
 
 
 def RaDec2AzAlt(ra, dec):
