@@ -10,24 +10,3 @@ from lib.library_GS import *
 import time
 
 SRT = Srt("/dev/ttyUSB0", 115200, 1)
-SRT.connect(False)
-time1 = time.time_ns()
-SRT.getAlt()
-diff = (time.time_ns() - time1)/1e9
-print(f"Time elapsed for getAlt : {diff}")
-time1 = time.time_ns()
-SRT.getAlt()
-diff = (time.time_ns() - time1)/1e9
-print(f"Time elapsed for getAlt : {diff}")
-time1 = time.time_ns()
-SRT.getAlt()
-diff = (time.time_ns() - time1)/1e9
-print(f"Time elapsed for getAlt : {diff}")
-time1 = time.time_ns()
-SRT.getAlt()
-diff = (time.time_ns() - time1)/1e9
-print(f"Time elapsed for getAlt : {diff}")
-time1 = time.time_ns()
-SRT.getAlt()
-diff = (time.time_ns() - time1)/1e9
-print(f"Time elapsed for getAlt : {diff}")
