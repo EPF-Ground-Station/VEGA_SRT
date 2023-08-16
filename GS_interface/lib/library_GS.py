@@ -218,9 +218,13 @@ class Srt:
         # Connect SDR and set default parameters
         self.sdr = RtlSdr()
         self.sdr.sample_rate = 2.048e6
-        self.sdr.center_freq = 1420.2e06
-        self.sdr.gain = 'auto'
+        self.sdr.center_freq = 1420e06
+        self.sdr.gain = 480
         self.sdr.set_bias_tee(True)
+        self.sdr.close()
+        self.sdr.open()
+        print(
+            f"Current center_freq value : {self.sdr.center_freq}, current gain : {self.sdr.gain}")
         self.sdr.close()
 
     def go_home(self, verbose=False):
@@ -545,7 +549,7 @@ class Srt:
             im = fits.Column(name='im', array=samples.imag, format='1E')
             table = fits.BinTableHDU.from_columns([real, im])
             table.writeto(repo + obs + "sample#" +
-                          str(i) + '.fits', overwrite=False)
+                          str(i) + '.fits', overwrite=True)
             self.sdr.close()
 
         print(f"Observation complete. Data stored in {repo+obs}")
