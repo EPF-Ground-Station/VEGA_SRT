@@ -516,11 +516,10 @@ class Srt:
         m = np.floor(nbSamples/1024)    # Prefer a multiple of 1024 (channels)
         nbObs = int(np.ceil(duration/intTime))
 
+        self.sdr.open()
         for i in range(nbObs):
             # Collect data
-            self.sdr.open()
             samples = self.sdr.read_samples(1024 * m)
-            self.sdr.close()
 
             # Save data
             real = fits.Column(name='real', array=samples.real, format='1E')
@@ -528,6 +527,7 @@ class Srt:
             table = fits.BinTableHDU.from_columns([real, im])
             table.writeto(repo + obs + "sample#" +
                           str(i) + '.fits', overwrite=False)
+        self.sdr.close()
 
         print(f"Observation complete. Data stored in {repo+obs}")
         print("Plotting averaged PSD")
@@ -627,7 +627,7 @@ def plotAvPSD(path):
 
     path = path.strip("/")
     obsName = path.split('/')[-1]   # Extract name of observation from path
-    path += "/"    # Formatting
+    path = "/" + path + '/'    # Formatting
 
     # Allow for relative paths
     if not os.path.isdir(path):
