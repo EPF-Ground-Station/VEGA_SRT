@@ -444,7 +444,6 @@ class Srt:
         """
 
         self.tracking = False               # Updates flag
-        self.ping.unpause()                 # Keep sending activity
 
         if self.tracker.is_alive():
 
@@ -454,6 +453,8 @@ class Srt:
 
         del self.tracker                    # Deletes tracker
         self.tracker = Tracker(self.ser)    # Prepares new tracker
+
+        self.ping.unpause()                 # Keep sending activity
 
     def empty_water(self):
         """
