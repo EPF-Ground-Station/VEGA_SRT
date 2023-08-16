@@ -670,9 +670,9 @@ def plotAvPSD(path):
 
     average = (real + 1.0j*image)/obsNb
 
-    # plt.psd(average, NFFT=channels, Fs=rate/1e6, Fc=fc/1e6)
-    # plt.xlabel('frequency (Mhz)')
-    # plt.ylabel('Relative power (db)')
-    # plt.savefig(path+"PSD.png", format="png")
-    # plt.show()
-    # print("Figure saved at " + path + "PSD.png")
+    plt.psd(average, NFFT=channels, Fs=rate/1e6, Fc=fc/1e6)
+    plt.xlabel('frequency (Mhz)')
+    plt.ylabel('Relative power (db)')
+    plt.savefig(path+"PSD.png", format="png")
+    plt.show()
+    print("Figure saved at " + path + "PSD.png")
