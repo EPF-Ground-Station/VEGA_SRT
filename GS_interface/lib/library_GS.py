@@ -484,7 +484,7 @@ class Srt:
         print("Water evacuated. SRT is now ready for use.")
         return
 
-    def obsPower(self, duration, intTime, bandwidth=1.024, fc=1420e6, repo=None, obs=None, gain=480):
+    def obsPower(self, duration, intTime, bandwidth=1.024, fc=1420, repo=None, obs=None, gain=480):
         """ Observes PSD at center frequency fc for a duration in seconds with
         integration time of intTime. Bandwidth and center frequency fc are
         indicated in MHz"""
