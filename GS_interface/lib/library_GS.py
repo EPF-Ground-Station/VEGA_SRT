@@ -404,6 +404,17 @@ class Srt:
         az, alt = RaDec2AzAlt(ra, dec)
         return self.pointAzAlt(az, alt, verbose)
 
+    def pointGal(self, long, lat, verbose=False):
+        """
+        Moves antenna to galactic coordinates in degrees
+
+        """
+
+        if verbose:
+            print(f"Moving to long={long}, lat = {lat}...")
+        az, alt = Gal2AzAlt(long, lat)
+        return self.pointAzAlt(az, alt, verbose)
+
     def trackRaDec(self, ra, dec):
         """
         Starts tracking given sky coordinates in RaDec mode
@@ -520,9 +531,9 @@ class Srt:
         m = np.floor(nbSamples/1024)    # Prefer a multiple of 1024 (channels)
         nbObs = int(np.ceil(duration/intTime))
 
-        self.sdr.open()
         for i in range(nbObs):
             # Collect data
+            self.sdr.open()
             samples = self.sdr.read_samples(1024 * m)
 
             # Save data
@@ -531,7 +542,7 @@ class Srt:
             table = fits.BinTableHDU.from_columns([real, im])
             table.writeto(repo + obs + "sample#" +
                           str(i) + '.fits', overwrite=False)
-        self.sdr.close()
+            self.sdr.close()
 
         print(f"Observation complete. Data stored in {repo+obs}")
         print("Plotting averaged PSD")
