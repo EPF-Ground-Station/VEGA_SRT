@@ -218,7 +218,7 @@ class Srt:
         # Connect SDR and set default parameters
         self.sdr = RtlSdr()
         self.sdr.sample_rate = 2.048e6
-        self.sdr.center_freq = 1420e06
+        self.sdr.center_freq = 1420.2e06
         self.sdr.gain = 'auto'
         self.sdr.set_bias_tee(True)
         self.sdr.close()
@@ -472,7 +472,7 @@ class Srt:
         print("Water evacuated. SRT is now ready for use.")
         return
 
-    def obsPower(self, duration, intTime, bandwidth=None, fc=None, repo=None, obs=None):
+    def obsPower(self, duration, intTime, bandwidth=None, fc=None, repo=None, obs=None, gain=None):
         """ Observes PSD at center frequency fc for a duration in seconds with
         integration time of intTime. Bandwidth and center frequency fc are
         indicated in MHz"""
@@ -505,6 +505,9 @@ class Srt:
 
         if bandwidth != None:
             self.sdr.sample_rate = bandwidth * 2e6
+
+        if gain != None:
+            self.sdr.gain = gain
 
         # Save parameters of observation for later analysis
         with open(repo+obs+"params.json", "w") as jsFile:
@@ -666,9 +669,10 @@ def plotAvPSD(path):
         image += data.field('im').flatten()
 
     average = (real + 1.0j*image)/obsNb
-    plt.psd(average, NFFT=channels, Fs=rate/1e6, Fc=fc/1e6)
-    plt.xlabel('frequency (Mhz)')
-    plt.ylabel('Relative power (db)')
-    plt.savefig(path+"PSD.png", format="png")
-    plt.show()
-    print("Figure saved at " + path + "PSD.png")
+
+    # plt.psd(average, NFFT=channels, Fs=rate/1e6, Fc=fc/1e6)
+    # plt.xlabel('frequency (Mhz)')
+    # plt.ylabel('Relative power (db)')
+    # plt.savefig(path+"PSD.png", format="png")
+    # plt.show()
+    # print("Figure saved at " + path + "PSD.png")
