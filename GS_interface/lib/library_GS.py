@@ -222,10 +222,6 @@ class Srt:
         self.sdr.gain = 480
         self.sdr.set_bias_tee(True)
         self.sdr.close()
-        self.sdr.open()
-        print(
-            f"Current center_freq value : {self.sdr.center_freq}, current gain : {self.sdr.gain}")
-        self.sdr.close()
 
     def go_home(self, verbose=False):
         """Takes SRT to its home position and shuts motors off"""
@@ -488,7 +484,7 @@ class Srt:
         print("Water evacuated. SRT is now ready for use.")
         return
 
-    def obsPower(self, duration, intTime, bandwidth=None, fc=None, repo=None, obs=None, gain=None):
+    def obsPower(self, duration, intTime, bandwidth=1.024, fc=1420e6, repo=None, obs=None, gain=480):
         """ Observes PSD at center frequency fc for a duration in seconds with
         integration time of intTime. Bandwidth and center frequency fc are
         indicated in MHz"""
@@ -516,32 +512,27 @@ class Srt:
 
         obs = obs + '/'
 
-        self.sdr.open()
+        fc *= 1e6  # MHz to Hz
 
-        if fc != None:
-            self.sdr.center_freq = fc * 1e6
-
-        if bandwidth != None:
-            self.sdr.sample_rate = bandwidth * 2e6
-
-        if gain != None:
-            self.sdr.gain = gain
-
-        self.sdr.close()
+        rate = bandwidth * 2e6
 
         # Save parameters of observation for later analysis
         with open(repo+obs+"params.json", "w") as jsFile:
-            d = {"fc": self.sdr.center_freq,
-                 "rate": self.sdr.sample_rate, "channels": 1024}
+            d = {"fc": fc,
+                 "rate": rate, "channels": 1024}
             json.dump(d, jsFile)
 
-        nbSamples = self.sdr.sample_rate * intTime
+        nbSamples = rate * intTime
         m = np.floor(nbSamples/1024)    # Prefer a multiple of 1024 (channels)
         nbObs = int(np.ceil(duration/intTime))
 
         for i in range(nbObs):
             # Collect data
             self.sdr.open()
+            self.sdr.center_freq = fc
+            self.sdr.sample_rate = rate
+            self.gain = gain
+
             samples = self.sdr.read_samples(1024 * m)
 
             # Save data
