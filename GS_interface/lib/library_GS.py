@@ -512,6 +512,8 @@ class Srt:
 
         obs = obs + '/'
 
+        self.sdr.open()
+
         if fc != None:
             self.sdr.center_freq = fc * 1e6
 
@@ -520,6 +522,8 @@ class Srt:
 
         if gain != None:
             self.sdr.gain = gain
+
+        self.sdr.close()
 
         # Save parameters of observation for later analysis
         with open(repo+obs+"params.json", "w") as jsFile:
