@@ -24,7 +24,7 @@ if not os.path.isdir(DATA_PATH+repo+obs):
 
 pathObs = DATA_PATH + repo + obs
 
-pathCalib = DATA_PATH + repo+obs + "calibData"
+pathCalib = DATA_PATH + repo + "calibData"
 
 if not os.path.isdir(pathCalib):
     os.mkdir(pathCalib)
@@ -72,9 +72,9 @@ def obsPSD(fc, rate, intTime, gain, dur, path):
 
 
 SRT.trackGal(100.7075, 65.32)  # Moves to calibration target
-obsPSD(fc, rate, intTime, gain, durCalib, pathCalib)
+SRT.obsPower(durCalib, intTime=intTime, fc=fc, gain=gain, bandwidth=rate/2)
 SRT.trackGal(84.29, 2)  # Moves to Deneb
-obsPSD(fc, rate, intTime, gain, 180, pathObs)
+SRT.obsPower(durObs, intTime=intTime, fc=fc, gain=gain, bandwidth=rate/2)
 SRT.disconnect()
 
 
