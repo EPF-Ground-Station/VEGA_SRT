@@ -27,6 +27,7 @@ pathObs = DATA_PATH + repo + obs
 pathCalib = DATA_PATH + repo + "calibData"
 
 if not os.path.isdir(pathCalib):
+    print(f"making Dir at {pathCalib})")
     os.mkdir(pathCalib)
 pathCalib += '/'
 
