@@ -8,7 +8,7 @@ Created on Thu Aug 17 19:29:56 2023
 from SRT_inline import *
 from scipy.signal import welch
 
-SRT.connect()
+SRT.connect(False)
 
 # 100.7075 , 65.32
 
