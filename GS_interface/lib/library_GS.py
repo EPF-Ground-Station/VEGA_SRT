@@ -701,3 +701,43 @@ def plotAvPSD(path):
     plt.savefig(path+"PSD.png", format="png")
     plt.show()
     print("Figure saved at " + path + "PSD.png")
+
+
+def getFreqP(path):
+    """Returns frequencies and power of PSD obtained with welch"""
+
+    with open(path+"params.json", "r") as jsFile:
+        params = json.load(jsFile)
+
+    # Extract data
+    fc = params["fc"]
+    rate = params["rate"]
+    channels = params["channels"]
+
+    # I did not find any other way...
+    for root, repo, files in os.walk(path):
+        fitsFiles = [file for file in files if ".fits" in file]
+
+    obsNb = len(fitsFiles)  # Number of files in observation
+
+    firstFile = fitsFiles.pop(0)  # Pops the first element of the list
+    real = fits.open(firstFile)[1].data.field('real').flatten()
+    image = fits.open(firstFile)[1].data.field('im').flatten()
+
+    for file in fitsFiles:
+        data = fits.open(file)[1].data
+        real += data.field('real').flatten()
+        image += data.field('im').flatten()
+
+    average = np.array((real + 1.0j*image)/obsNb)
+    intTime = 1
+    nperseg = int(intTime*rate)
+
+    # average = np.delete(average, round(np.floor(len(average)/2))
+    #                     )
+    # average = np.delete(average, round(np.ceil(len(average)/2)))
+
+    spectrum = np.fft.fft(average)
+    freq, psd = welch(average, rate, detrend=False)
+    freq += fc
+    return freq, psd
