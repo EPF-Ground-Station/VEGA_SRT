@@ -544,6 +544,7 @@ class Srt:
             print("DEBUG read")
             samples = self.sdr.read_samples(1024 * m)
 
+            print("DEBUG save")
             # Save data
             real = fits.Column(name='real', array=samples.real, format='1E')
             im = fits.Column(name='im', array=samples.imag, format='1E')
