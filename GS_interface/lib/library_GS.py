@@ -542,8 +542,9 @@ class Srt:
             print("DEBUG gain")
             self.gain = gain
             print("DEBUG read")
+            self.sdr.set_bias_tee(True)
             print(m)
-            samples = self.sdr.read_samples(1024 * m)
+            samples = self.sdr.read_samples(1024 * 256)
 
             print("DEBUG save")
             # Save data
