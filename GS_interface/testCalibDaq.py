@@ -78,11 +78,9 @@ def obsPSD(fc, rate, intTime, gain, dur, path):
 
 
 SRT.trackGal(100.7075, 65.32)  # Moves to calibration target
-SRT.obsPower(durCalib, intTime=intTime, fc=fc, gain=gain,
-             bandwidth=rate/2, repo=repo, obs=cal)
+SRT.obsPower(durCalib, repo=repo, obs=cal)
 SRT.trackGal(84.29, 2)  # Moves to Deneb
-SRT.obsPower(durObs, intTime=intTime, fc=fc, gain=gain,
-             bandwidth=rate/2, repo=repo, obs=obs)
+SRT.obsPower(durObs, repo=repo, obs=obs)
 SRT.disconnect()
 
 
