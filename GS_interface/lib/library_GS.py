@@ -724,11 +724,11 @@ def getFreqP(path):
     obsNb = len(fitsFiles)  # Number of files in observation
 
     firstFile = fitsFiles.pop(0)  # Pops the first element of the list
-    real = fits.open(firstFile)[1].data.field('real').flatten()
-    image = fits.open(firstFile)[1].data.field('im').flatten()
+    real = fits.open(path+firstFile)[1].data.field('real').flatten()
+    image = fits.open(path+firstFile)[1].data.field('im').flatten()
 
     for file in fitsFiles:
-        data = fits.open(file)[1].data
+        data = fits.open(path+file)[1].data
         real += data.field('real').flatten()
         image += data.field('im').flatten()
 
