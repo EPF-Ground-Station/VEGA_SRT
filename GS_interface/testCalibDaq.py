@@ -52,12 +52,12 @@ def obsPSD(fc, rate, intTime, gain, dur, path):
 
     for i in range(nbObs):
         # Collect data
-        self.sdr.open()
-        self.sdr.center_freq = fc
-        self.sdr.sample_rate = rate
-        self.gain = gain
+        SRT.sdr.open()
+        SRT.sdr.center_freq = fc
+        SRT.sdr.sample_rate = rate
+        SRT.gain = gain
 
-        samples = self.sdr.read_samples(1024 * m)
+        samples = SRT.sdr.read_samples(1024 * m)
 
         # Save data
         real = fits.Column(name='real', array=samples.real, format='1E')
@@ -65,7 +65,7 @@ def obsPSD(fc, rate, intTime, gain, dur, path):
         table = fits.BinTableHDU.from_columns([real, im])
         table.writeto(path + "sample#" +
                       str(i) + '.fits', overwrite=True)
-        self.sdr.close()
+        SRT.sdr.close()
 
 
 SRT.trackGal(100.7075, 65.32)  # Moves to calibration target
