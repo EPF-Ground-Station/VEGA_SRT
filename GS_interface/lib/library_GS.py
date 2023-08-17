@@ -420,6 +420,8 @@ class Srt:
         Starts tracking given sky coordinates in RaDec mode
 
         """
+        self.pointRaDec(
+            ra, dec)            # Goes to destination before allowing other command
         self.ping.pause()                   # Ping useless in tracking mode
         self.tracking = True                # Updates flag
 
@@ -436,6 +438,8 @@ class Srt:
         Starts tracking given sky coordinates in Galactic mode
 
         """
+        self.pointGal(
+            long, b)  # Goes to destination before allowing other command
         self.ping.pause()                   # Ping useless in tracking mode
         self.tracking = True                # Updates flag
 
@@ -484,7 +488,7 @@ class Srt:
         print("Water evacuated. SRT is now ready for use.")
         return
 
-    def obsPower(self, duration, intTime, bandwidth=1.024, fc=1420, repo=None, obs=None, gain=480):
+    def obsPower(self, duration, intTime=1, bandwidth=1.024, fc=1420, repo=None, obs=None, gain=480):
         """ Observes PSD at center frequency fc for a duration in seconds with
         integration time of intTime. Bandwidth and center frequency fc are
         indicated in MHz"""
@@ -519,7 +523,8 @@ class Srt:
         # Save parameters of observation for later analysis
         with open(repo+obs+"params.json", "w") as jsFile:
             d = {"fc": fc,
-                 "rate": rate, "channels": 1024}
+                 "rate": rate, "channels": 1024,
+                 "gain": gain, "intTime": intTime}
             json.dump(d, jsFile)
 
         nbSamples = rate * intTime
