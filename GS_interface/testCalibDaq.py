@@ -27,13 +27,13 @@ pathObs = DATA_PATH + repo + obs
 pathCalib = DATA_PATH + repo + "calibData"
 
 if not os.path.isdir(pathCalib):
-    print(f"making Dir at {pathCalib})")
+    print(f"making Dir at {pathCalib}")
     os.mkdir(pathCalib)
 pathCalib += '/'
 
-fc = 1420e6  # MHz to Hz
+fc = 1420
 
-rate = 2.048e6
+rate = 2.048
 intTime = 1
 gain = 480
 durCalib = 60  # 1min of calib
