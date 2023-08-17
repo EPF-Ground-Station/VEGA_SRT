@@ -706,6 +706,9 @@ def plotAvPSD(path):
 def getFreqP(path):
     """Returns frequencies and power of PSD obtained with welch"""
 
+    path = path.strip("/")
+    path = '/' + path + '/'
+
     with open(path+"params.json", "r") as jsFile:
         params = json.load(jsFile)
 
