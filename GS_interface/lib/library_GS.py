@@ -533,11 +533,15 @@ class Srt:
 
         for i in range(nbObs):
             # Collect data
+            print("DEBUG open")
             self.sdr.open()
+            print("DEBUG fc")
             self.sdr.center_freq = fc
+            print("DEBUG rate")
             self.sdr.sample_rate = rate
+            print("DEBUG gain")
             self.gain = gain
-
+            print("DEBUG read")
             samples = self.sdr.read_samples(1024 * m)
 
             # Save data
