@@ -517,8 +517,10 @@ class Srt:
         obs = obs + '/'
 
         fc *= 1e6  # MHz to Hz
+        print(f"fc={fc})
 
         rate = bandwidth * 2e6
+        print(f"rate = {rate}")
 
         # Save parameters of observation for later analysis
         with open(repo+obs+"params.json", "w") as jsFile:
@@ -544,7 +546,7 @@ class Srt:
             print("DEBUG read")
             self.sdr.set_bias_tee(True)
             print(m)
-            samples = self.sdr.read_samples(1024 * 256)
+            samples = self.sdr.read_samples(1024 * m)
 
             print("DEBUG save")
             # Save data
