@@ -48,7 +48,7 @@ def obsPSD(fc, rate, intTime, gain, dur, path):
 
     nbSamples = rate * intTime
     m = np.floor(nbSamples/1024)    # Prefer a multiple of 1024 (channels)
-    nbObs = int(np.ceil(duration/intTime))
+    nbObs = int(np.ceil(dur/intTime))
 
     for i in range(nbObs):
         # Collect data
