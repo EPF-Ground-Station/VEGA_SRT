@@ -20,6 +20,7 @@ from astropy.time import Time
 from astropy.coordinates import SkyCoord, EarthLocation, AltAz, ICRS
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.signal import welch
 
 NORTH = 990000
 TRACKING_RATE = 0.1  # Necessary delay for sending point_to to APM while tracking
