@@ -517,7 +517,7 @@ class Srt:
         obs = obs + '/'
 
         fc *= 1e6  # MHz to Hz
-        print(f"fc={fc})
+        print(f"fc={fc}")
 
         rate = bandwidth * 2e6
         print(f"rate = {rate}")
