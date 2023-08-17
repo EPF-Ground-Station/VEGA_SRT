@@ -16,14 +16,18 @@ SRT.connect(False)
 repo = "Tests/"
 obs = "TestCalib/"
 
-os.mkdir(DATA_PATH+repo)
-os.mkdir(DATA_PATH+repo+obs)
+if not os.path.isdir(DATA_PATH+repo):
+    os.mkdir(DATA_PATH+repo)
+
+if not os.path.isdir(DATA_PATH+repo+obs):
+    os.mkdir(DATA_PATH+repo+obs)
 
 pathObs = DATA_PATH + repo + obs
 
 pathCalib = DATA_PATH + repo+obs + "calibData"
 
-os.mkdir(DATA_PATH + repo+obs + "calibData")
+if not os.path.isdir(pathCalib):
+    os.mkdir(pathCalib)
 pathCalib += '/'
 
 fc = 1420e6  # MHz to Hz
