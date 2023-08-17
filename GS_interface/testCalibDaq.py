@@ -54,9 +54,13 @@ def obsPSD(fc, rate, intTime, gain, dur, path):
 
     for i in range(nbObs):
         # Collect data
+        print("open")
         SRT.sdr.open()
+        print("freq")
         SRT.sdr.center_freq = fc
+        print("rate")
         SRT.sdr.sample_rate = rate
+        print("gain")
         SRT.gain = gain
 
         print("here it begins")
