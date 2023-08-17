@@ -49,6 +49,7 @@ def obsPSD(fc, rate, intTime, gain, dur, path):
     nbSamples = rate * intTime
     m = np.floor(nbSamples/1024)    # Prefer a multiple of 1024 (channels)
     nbObs = int(np.ceil(dur/intTime))
+    print(f"nbObs : {nbObs}")
 
     for i in range(nbObs):
         # Collect data
@@ -57,7 +58,9 @@ def obsPSD(fc, rate, intTime, gain, dur, path):
         SRT.sdr.sample_rate = rate
         SRT.gain = gain
 
+        print("here it begins")
         samples = SRT.sdr.read_samples(1024 * m)
+        print("here it stops")
 
         # Save data
         real = fits.Column(name='real', array=samples.real, format='1E')
