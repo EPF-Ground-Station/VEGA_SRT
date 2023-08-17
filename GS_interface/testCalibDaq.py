@@ -16,6 +16,9 @@ SRT.connect()
 repo = "Tests/"
 obs = "TestCalib/"
 
+os.mkdir(DATA_PATH+repo)
+os.mkdir(DATA_PATH+repo+obs)
+
 pathObs = DATA_PATH + repo + obs
 
 pathCalib = DATA_PATH + repo+obs + "calibData"
