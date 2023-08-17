@@ -542,6 +542,7 @@ class Srt:
             print("DEBUG gain")
             self.gain = gain
             print("DEBUG read")
+            print(m)
             samples = self.sdr.read_samples(1024 * m)
 
             print("DEBUG save")
