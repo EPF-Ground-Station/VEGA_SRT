@@ -13,19 +13,19 @@ SRT.connect(False)
 # 100.7075 , 65.32
 
 # calibration
-repo = "Tests/"
-obs = "TestCalib/"
-cal = "calibData/"
+repo = "Tests"
+obs = "TestCalib"
+cal = "calibData"
 
 if not os.path.isdir(DATA_PATH+repo):
     os.mkdir(DATA_PATH+repo)
 
-if not os.path.isdir(DATA_PATH+repo+obs):
-    os.mkdir(DATA_PATH+repo+obs)
+if not os.path.isdir(DATA_PATH+repo+'/'+obs):
+    os.mkdir(DATA_PATH+repo+'/'+obs)
 
-pathObs = DATA_PATH + repo + obs
+pathObs = DATA_PATH + repo + '/' + obs
 
-pathCalib = DATA_PATH + repo + "calibData"
+pathCalib = DATA_PATH + repo + "/calibData"
 
 if not os.path.isdir(pathCalib):
     print(f"making Dir at {pathCalib}")
@@ -38,6 +38,7 @@ rate = 2.048
 intTime = 1
 gain = 480
 durCalib = 60  # 1min of calib
+durObs = 300
 
 
 def obsPSD(fc, rate, intTime, gain, dur, path):
@@ -94,7 +95,7 @@ def getFreqP(path):
     channels = params["channels"]
 
     # I did not find any other way...
-    for root, repo, files in os.walk(os.getcwd()):
+    for root, repo, files in os.walk(path):
         fitsFiles = [file for file in files if ".fits" in file]
 
     obsNb = len(fitsFiles)  # Number of files in observation
@@ -109,22 +110,22 @@ def getFreqP(path):
         image += data.field('im').flatten()
 
     average = np.array((real + 1.0j*image)/obsNb)
-    intTime = 1
-    nperseg = int(intTime*rate)
 
     # average = np.delete(average, round(np.floor(len(average)/2))
     #                     )
     # average = np.delete(average, round(np.ceil(len(average)/2)))
 
-    spectrum = np.fft.fft(average)
     freq, psd = welch(average, rate, detrend=False)
     return freq, psd
 
 
 fCal, psdCal = getFreqP(pathCalib)
-fObs, psdObs = getFreqObs(pathObs)
+fObs, psdObs = getFreqP(pathObs)
 
-psdNew = psdObs - psdCal
+psdCal = psdCal / np.mean(psdCal)
+psdObs = psdObs / np.mean(psdObs)
+
+psdNew = psdObs - psdCal + 1000
 
 plt.semilogy(freq+fc, psd)
 plt.xlabel('frequency [Hz]')
