@@ -7,6 +7,5 @@ for EPFL SRT
 """
 
 from lib.library_GS import *
-import time
 
 SRT = Srt("/dev/ttyUSB0", 115200, 1)
