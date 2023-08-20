@@ -9,6 +9,7 @@ import os
 from SRT_inline import *
 
 loc = str(OBS_LAT) + ' ' + str(OBS_LON) + ' ' + str(OBS_HEIGHT)
+print(loc)
 
 repo = "Tests"
 obs = "TestVirgo"

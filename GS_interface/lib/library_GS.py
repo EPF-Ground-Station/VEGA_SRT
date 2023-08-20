@@ -28,7 +28,7 @@ PING_RATE = 60  # Ping every minute
 DATA_PATH = os.path.expanduser("~") + "/RadioData/"  # Finds data dir of user
 OBS_LAT = 46.5194444
 OBS_LON = 6.565
-OBS_HEIGHT = 411
+OBS_HEIGHT = 411.0
 
 
 class SerialPort:
