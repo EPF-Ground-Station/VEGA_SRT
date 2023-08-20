@@ -59,7 +59,7 @@ SRT.trackGal(84.29, 2)  # Moves to Deneb
 virgo.observe(obs_parameters=obs, obs_file=path+'observation.dat')
 
 virgo.plot(obs_parameters=obs, n=20, m=35, f_rest=1420.4057517667e6,
-           vlsr=False, dB=True, meta=True,
+           vlsr=False, dB=True, meta=False,
            obs_file=path+'observation.dat', cal_file=path+'calibration.dat',
            spectra_csv=path+'spectrum.csv', plot_file=path+'plot.png')
 
