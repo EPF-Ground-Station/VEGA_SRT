@@ -33,7 +33,7 @@ if not os.path.isdir(repo + obs):
 obs = obs + '/'
 path = repo+obs
 
-SRT.connect()
+SRT.connect(False)
 SRT.trackGal(100.7075, 65.32)  # Moves to calibration target
 obs = {
     'dev_args': '',
