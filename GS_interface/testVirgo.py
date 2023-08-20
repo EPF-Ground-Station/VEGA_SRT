@@ -27,6 +27,7 @@ if not os.path.isdir(repo + obs):
     os.mkdir(repo + obs)     # if not, create it
 
 obs = obs + '/'
+path = repo+obs
 
 SRT.connect()
 SRT.trackGal(100.7075, 65.32)  # Moves to calibration target
@@ -47,10 +48,15 @@ obs = {
 
 # avg_ylim=(-5,15), cal_ylim=(-20,260), rfi=[(1419.2e6, 1419.3e6), (1420.8e6, 1420.9e6)]
 
-virgo.observe(obs_parameters=obs, obs_file='observation.dat')
+virgo.observe(obs_parameters=obs, obs_file=path+'calibration.dat')
+
+SRT.trackGal(84.29, 2)  # Moves to Deneb
+
+virgo.observe(obs_parameters=obs, obs_file=path+'observation.dat')
+
 virgo.plot(obs_parameters=obs, n=20, m=35, f_rest=1420.4057517667e6,
            vlsr=False, dB=True, meta=True,
-           obs_file='observation.dat',
-           dB=True, spectra_csv='spectrum.csv', plot_file='plot.png')
+           obs_file=path+'observation.dat', cal_file=path+'calibration.dat',
+           spectra_csv=path+'spectrum.csv', plot_file=path+'plot.png')
 
 SRT.disconnect()
