@@ -34,8 +34,8 @@ SRT.trackGal(100.7075, 65.32)  # Moves to calibration target
 obs = {
     'dev_args': '',
     'rf_gain': 48,
-    'if_gain': '',
-    'bb_gain': '',
+    'if_gain': 0,
+    'bb_gain': 0,
     'frequency': 1420e6,
     'bandwidth': 2.4e6,
     'channels': 2048,
