@@ -8,8 +8,11 @@ import virgo
 import os
 from SRT_inline import *
 
-loc = str(OBS_LAT) + ' ' + str(OBS_LON) + ' ' + str(OBS_HEIGHT)
-print(loc)
+OBS_LAT = 46.5194
+OBS_LON = 6.565
+OBS_HEIGHT = 411.0
+
+loc = (OBS_LAT, OBS_LON, OBS_HEIGHT)
 
 repo = "Tests"
 obs = "TestVirgo"
