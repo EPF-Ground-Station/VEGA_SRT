@@ -37,9 +37,9 @@ SRT.connect(False)
 SRT.trackGal(100.7075, 65.32)  # Moves to calibration target
 obs = {
     'dev_args': '',
-    'rf_gain': 480,
-    'if_gain': 250,
-    'bb_gain': 180,
+    'rf_gain': 48,
+    'if_gain': 25,
+    'bb_gain': 18,
     'frequency': 1420e6,
     'bandwidth': 2.4e6,
     'channels': 2048,
@@ -58,7 +58,7 @@ SRT.trackGal(84.29, 2)  # Moves to Deneb
 
 virgo.observe(obs_parameters=obs, obs_file=path+'observation.dat')
 
-virgo.plot(obs_parameters=obs, n=20, m=35, f_rest=1420.4057517667e6,
+virgo.plot(obs_parameters=obs, n=1, m=1, f_rest=1420.4057517667e6,
            vlsr=False, dB=True, meta=False,
            obs_file=path+'observation.dat', cal_file=path+'calibration.dat',
            spectra_csv=path+'spectrum.csv', plot_file=path+'plot.png')
