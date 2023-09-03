@@ -36,16 +36,21 @@ from SRT_inline import *
 SRT.connect()
 SRT.trackGal(100.7075, 65.32)  # Moves to calibration target
 
+print("Collecting calibration data")
+
 SRT.observe(repo="Tests", name="calib", overwrite=True)
+SRT.waitObs()
 SRT.trackGal(189.726, 4.17)  # Moves to Deneb
 # SRT.trackGal(84.29, 2)  # Moves to Deneb
 
+print("Collecting observation data")
 SRT.observe(repo="Tests", name="obs", overwrite=True)
+SRT.waitObs()
 SRT.stopTracking()
 
 SRT.plotAll("Tests", "obs", "calib")
 
-
+print("Testing observation killing")
 SRT.observe(repo="Tests", name="TestKill", duration=30)
 SRT.stopObs()
 

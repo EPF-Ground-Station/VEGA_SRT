@@ -495,6 +495,18 @@ class Srt:
         print("Water evacuated. SRT is now ready for use.")
         return
 
+    def waitObs(self):
+        """
+        Waits for the observation to finish. 
+        Should only be used in command line; GUI must get
+        rid of this another way round I guess...
+        """
+
+        if not self.observing:
+            return
+
+        self.obsProcess.join()
+
     def stopObs(self):
         """
         Brute force kills the observation process
@@ -515,7 +527,6 @@ class Srt:
         Read SRT.__observe() docstring for more information.        
         """
 
-        self.observing = True
         self.obsProcess = Process(target=self.__observe, args=(
             repo, name, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channel, t_sample, duration, overwrite))
         self.obsProcess.start()
@@ -583,6 +594,8 @@ class Srt:
 
         virgo.observe(obs_parameters=obs_params, obs_file=pathObs+'.dat')
         print(f"Observation complete. Data stored in {pathObs+'.dat'}")
+
+        self.observing = False
 
     def plotAll(self, repo, name, calib, n=20, m=35, f_rest=1420.4057517667e6,
                 vlsr=False, dB=True, meta=False):
