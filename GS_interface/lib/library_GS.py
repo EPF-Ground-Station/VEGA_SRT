@@ -573,12 +573,12 @@ class Srt:
         repo = repo + '/'
 
         # If no indicated observation name
-        if obs == None:
+        if name == None:
             # Make the name to current timestamp
-            obs = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+            name = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
 
-        obs = obs.strip('/')
-        pathObs = repo+obs
+        name = name.strip('/')
+        pathObs = repo+name
 
         # If overwrite flag turned off, create nth copy
         if (os.path.isfile(pathObs)) and (not overwrite):
