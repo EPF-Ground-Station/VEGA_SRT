@@ -226,6 +226,7 @@ class Srt:
         # self.sdr.set_bias_tee(True)
         # self.sdr.close()
 
+        print("DEBUG: new SRT object")
         # Declares process that runs observations
         self.obsProcess = None
         self.observing = False
@@ -506,6 +507,7 @@ class Srt:
             return
 
         self.obsProcess.join()
+        self.observing = False
 
     def stopObs(self):
         """
@@ -526,7 +528,7 @@ class Srt:
 
         Read SRT.__observe() docstring for more information.        
         """
-
+        self.observing = True
         self.obsProcess = Process(target=self.__observe, args=(
             repo, name, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample, duration, overwrite))
         self.obsProcess.start()
@@ -537,10 +539,9 @@ class Srt:
             Private method that uses virgo library to observe with given parameters. 
 
             Recorded data is saved either under absolute path repo/name.dat, or
-            relative path repo/name.dat under DATA_PATH directory.
+            relative path repo/name.dat under DATA_PATH directory. Parameters 
+            are saved in a json file
         """
-
-        self.observing = True
 
         obs_params = {
             'dev_args': dev_args,
@@ -597,6 +598,8 @@ class Srt:
         virgo.observe(obs_parameters=obs_params, obs_file=pathObs+'.dat')
         print(f"Observation complete. Data stored in {pathObs+'.dat'}")
 
+        # /!\ SINCE multiprocessing CREATES A COPY OF THE SRT OBJECT, THE FOLLOWING
+        # HAS NO EFFECT : TO BE IMPROVED
         self.observing = False
 
     def plotAll(self, repo, name, calib, n=20, m=35, f_rest=1420.4057517667e6,

@@ -40,8 +40,8 @@ print("Collecting calibration data")
 
 SRT.observe(repo="Tests", name="calib", overwrite=True)
 SRT.waitObs()
-SRT.trackGal(189.726, 4.17)  # Moves to Deneb
-# SRT.trackGal(84.29, 2)  # Moves to Deneb
+# SRT.trackGal(189.726, 4.17)  # Moves to Tejat
+SRT.trackGal(84.29, 2)  # Moves to Deneb
 
 print("Collecting observation data")
 SRT.observe(repo="Tests", name="obs", overwrite=True)
