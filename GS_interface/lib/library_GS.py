@@ -528,7 +528,7 @@ class Srt:
         """
 
         self.obsProcess = Process(target=self.__observe, args=(
-            repo, name, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channel, t_sample, duration, overwrite))
+            repo, name, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample, duration, overwrite))
         self.obsProcess.start()
 
     def __observe(self, repo, name, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample, duration, overwrite):

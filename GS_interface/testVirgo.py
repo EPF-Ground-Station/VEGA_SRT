@@ -33,7 +33,7 @@ from SRT_inline import *
 # obs = obs + '/'
 # path = repo+obs
 
-SRT.connect()
+SRT.connect(False)
 SRT.trackGal(100.7075, 65.32)  # Moves to calibration target
 
 print("Collecting calibration data")
