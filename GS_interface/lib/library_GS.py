@@ -566,9 +566,10 @@ class Srt:
         # Check absolute path
         if not os.path.isdir(repo):
             # Check relative path
-            if not os.path.isdir(DATA_PATH + repo):
-                repo = DATA_PATH + repo
+            repo = DATA_PATH+repo
+            if not os.path.isdir(repo):
                 os.mkdir(repo)     # if not, create it
+                print(f"Creating repository {repo}")
 
         repo = repo + '/'
 
