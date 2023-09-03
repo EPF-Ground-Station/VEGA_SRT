@@ -530,6 +530,7 @@ class Srt:
         self.obsProcess = Process(target=self.__observe, args=(
             repo, name, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample, duration, overwrite))
         self.obsProcess.start()
+        print(f"observing status : {self.observing}")
 
     def __observe(self, repo, name, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample, duration, overwrite):
         """
@@ -615,7 +616,7 @@ class Srt:
         # Load observation parameters
         if os.path.isfile(repo+f"/{name}_params.json"):
 
-            with open(repo+"/{name}_params.json", "r") as jsFile:
+            with open(repo+f"/{name}_params.json", "r") as jsFile:
                 obs_params = json.load(jsFile)
 
         elif not os.path.isdir(repo):
