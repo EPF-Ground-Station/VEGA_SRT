@@ -662,7 +662,7 @@ class Srt:
         virgo.plot(obs_parameters=obs_params, n=n, m=m, f_rest=f_rest,
                    vlsr=vlsr, dB=dB, meta=meta,
                    obs_file=obsPath, cal_file=calibPath,
-                   spectra_csv=csv_path, plot_file=plot_path, avplot_fie=av_path,
+                   spectra_csv=csv_path, plot_file=plot_path, avplot_file=av_path,
                    calplot_file=cal_path, waterplot_file=water_path, powplot_file=pow_path)
 
         print(f"Plot saved under {plot_path}. CSV saved under {csv_path}.")
