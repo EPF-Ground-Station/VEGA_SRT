@@ -10,6 +10,7 @@ import json
 import serial
 import time
 from datetime import datetime
+from . import virgo
 from rtlsdr import *
 from enum import Enum
 from time import sleep
@@ -20,7 +21,6 @@ from astropy.time import Time
 from astropy.coordinates import SkyCoord, EarthLocation, AltAz, ICRS
 import matplotlib.pyplot as plt
 import numpy as np
-import virgo
 from multiprocessing import Process
 
 NORTH = 990000
