@@ -2385,7 +2385,7 @@ def plot(obs_parameters='', n=0, m=0, f_rest=0, slope_correction=False, dB=False
     ax1.plot(frequency, avg_spectrum)
     figAv, axAv = plt.subplots()
 
-    for (figure, ax) in [(figAv, axAv), (fig, ax1)]:
+    for ax in (ax1, axAv):
         if xlim == [0, 0]:
             ax.set_xlim(np.min(frequency), np.max(frequency))
         else:
@@ -2427,11 +2427,11 @@ def plot(obs_parameters='', n=0, m=0, f_rest=0, slope_correction=False, dB=False
     # Plot Calibrated Spectrum
     if cal_file != '':
         ax2 = fig.add_subplot(gs[0, 1])
-        ax2.plot(frequency, spectrum, label='Raw Spectrum')
         figCal, axCal = plt.subplots()
 
-        for (figure, ax) in [(figCal, axCal), (fig, ax1)]:
+        for ax in (ax2, axCal):
 
+            ax.plot(frequency, spectrum, label='Raw Spectrum')
             if n != 0:
                 ax.plot(frequency, spectrum_clean, color='orangered',
                         label='Median (n = '+str(n)+')')
