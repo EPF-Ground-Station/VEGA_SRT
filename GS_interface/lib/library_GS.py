@@ -652,12 +652,18 @@ class Srt:
             return
 
         plot_path = repo+f'plot_{name}.png'
-        csv_path = repo+'spectrum_{name}.csv'
+        av_path = repo+f'average_{name}.png'
+        cal_path = repo+f'calibrated_{name}.png'
+        water_path = repo+f'waterfall_{name}.png'
+        pow_path = repo+f'power_{name}.png'
+
+        csv_path = repo+f'spectrum_{name}.csv'
 
         virgo.plot(obs_parameters=obs_params, n=n, m=m, f_rest=f_rest,
                    vlsr=vlsr, dB=dB, meta=meta,
                    obs_file=obsPath, cal_file=calibPath,
-                   spectra_csv=csv_path, plot_file=plot_path)
+                   spectra_csv=csv_path, plot_file=plot_path, avplot_fie=av_path,
+                   calplot_file=cal_path, waterplot_file=water_path, powplot_file=pow_path)
 
         print(f"Plot saved under {plot_path}. CSV saved under {csv_path}.")
 
