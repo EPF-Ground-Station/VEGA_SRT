@@ -2382,10 +2382,11 @@ def plot(obs_parameters='', n=0, m=0, f_rest=0, slope_correction=False, dB=False
     # Plot Average Spectrum
 
     ax1 = fig.add_subplot(gs[0, 0])
-    ax1.plot(frequency, avg_spectrum)
     figAv, axAv = plt.subplots()
 
     for ax in (ax1, axAv):
+
+        ax.plot(frequency, avg_spectrum)
         if xlim == [0, 0]:
             ax.set_xlim(np.min(frequency), np.max(frequency))
         else:
@@ -2421,6 +2422,7 @@ def plot(obs_parameters='', n=0, m=0, f_rest=0, slope_correction=False, dB=False
             ax_secondary.set_xlim(left_velocity_edge, right_velocity_edge)
             ax_secondary.tick_params(axis='x', direction='in', pad=-22)
 
+    axAv.set_aspect('auto')
     figAv.tight_layout()
     figAv.savefig(avplot_file)
 
@@ -2476,6 +2478,7 @@ def plot(obs_parameters='', n=0, m=0, f_rest=0, slope_correction=False, dB=False
                 ax_secondary.tick_params(axis='x', direction='in', pad=-22)
             ax.grid()
 
+        axCal.set_aspect('auto')
         figCal.tight_layout()
         figCal.savefig(calplot_file)
 
