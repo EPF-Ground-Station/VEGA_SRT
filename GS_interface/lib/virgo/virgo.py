@@ -1021,7 +1021,7 @@ def plot(obs_parameters='', n=0, m=0, f_rest=0, slope_correction=False, dB=False
         ax2 = fig.add_subplot(gs[0, 1])
         figCal, axCal = plt.subplots()
 
-        for (figure, ax) in [(figAv, axAv), (fig, ax2)]:
+        for (figure, ax) in [(figCal, axCal), (fig, ax2)]:
 
             ax.plot(frequency, spectrum, label='Raw Spectrum')
 
