@@ -2430,7 +2430,7 @@ def plot(obs_parameters='', n=0, m=0, f_rest=0, slope_correction=False, dB=False
         ax2.plot(frequency, spectrum, label='Raw Spectrum')
         figCal, axCal = plt.subplots()
 
-        for (figure, ax) in [(figAv, axAv), (fig, ax1)]:
+        for (figure, ax) in [(figCal, axCal), (fig, ax1)]:
 
             if n != 0:
                 ax.plot(frequency, spectrum_clean, color='orangered',
