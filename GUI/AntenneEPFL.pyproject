@@ -1,6 +1,7 @@
 {
     "files": [
         "widget.py",
-        "form.ui"
+        "formMainClient.ui",
+        "formLauncher.ui"
     ]
 }

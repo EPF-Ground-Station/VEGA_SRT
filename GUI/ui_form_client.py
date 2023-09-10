@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'form.ui'
+## Form generated from reading UI file 'formMainClient.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.3.1
 ##
@@ -388,10 +388,29 @@ class Ui_Widget(object):
 
         self.verticalLayout_4.addLayout(self.gridLayout_2)
 
+        self.horizontalLayout_9 = QHBoxLayout()
+        self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
+        self.horizontalLayout_9.setContentsMargins(-1, 0, -1, -1)
+        self.horizontalSpacer_8 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_9.addItem(self.horizontalSpacer_8)
+
         self.pushButton_LaunchMeasurement = QPushButton(self.tab_measure)
         self.pushButton_LaunchMeasurement.setObjectName(u"pushButton_LaunchMeasurement")
 
-        self.verticalLayout_4.addWidget(self.pushButton_LaunchMeasurement, 0, Qt.AlignHCenter)
+        self.horizontalLayout_9.addWidget(self.pushButton_LaunchMeasurement)
+
+        self.pushButton_StopMeasurement = QPushButton(self.tab_measure)
+        self.pushButton_StopMeasurement.setObjectName(u"pushButton_StopMeasurement")
+
+        self.horizontalLayout_9.addWidget(self.pushButton_StopMeasurement)
+
+        self.horizontalSpacer_9 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_9.addItem(self.horizontalSpacer_9)
+
+
+        self.verticalLayout_4.addLayout(self.horizontalLayout_9)
 
         self.label_17 = QLabel(self.tab_measure)
         self.label_17.setObjectName(u"label_17")
@@ -406,7 +425,7 @@ class Ui_Widget(object):
 
         self.horizontalLayout_8 = QHBoxLayout()
         self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
-        self.horizontalLayout_8.setContentsMargins(-1, 10, -1, -1)
+        self.horizontalLayout_8.setContentsMargins(-1, 0, -1, -1)
         self.label_18 = QLabel(self.tab_measure)
         self.label_18.setObjectName(u"label_18")
         sizePolicy3 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Preferred)
@@ -570,7 +589,7 @@ class Ui_Widget(object):
 
         self.retranslateUi(Widget)
 
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(Widget)
@@ -609,6 +628,7 @@ class Ui_Widget(object):
         self.label_10.setText(QCoreApplication.translate("Widget", u"Channels", None))
         self.label_9.setText(QCoreApplication.translate("Widget", u"Gain", None))
         self.pushButton_LaunchMeasurement.setText(QCoreApplication.translate("Widget", u"Launch Measurement", None))
+        self.pushButton_StopMeasurement.setText(QCoreApplication.translate("Widget", u"Stop measurement", None))
         self.label_17.setText(QCoreApplication.translate("Widget", u"Progress", None))
         self.label_18.setText(QCoreApplication.translate("Widget", u"Status:", None))
         self.label_MeasureStatus.setText("")

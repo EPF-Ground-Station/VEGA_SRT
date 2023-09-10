@@ -1,15 +1,16 @@
 # This Python file uses the following encoding: utf-8
 import sys
 from os.path import expanduser
-from time import localtime, strftime
+from time import time, localtime, strftime
 
 from PySide6.QtWidgets import QApplication, QWidget, QFileDialog
-from PySide6.QtCore import Slot, QFileInfo, QTimer
+from PySide6.QtCore import Slot, QFileInfo, QTimer, Signal
 # Important:
 # You need to run the following command to generate the ui_form.py file
 #     pyside6-uic form.ui -o ui_form.py, or
 #     pyside2-uic form.ui -o ui_form.py
-from ui_form import Ui_Widget
+import ui_form_client
+import ui_form_launcher
 
 
 @Slot()
@@ -17,11 +18,42 @@ def say_hello():
     print("Button clicked, Hello!")
 
 
-class Widget(QWidget):
+class Launcher(QWidget):
+    signalConnected = Signal()
+    def __init__(self, parent=None):
+
+
+        super().__init__(parent)
+        self.ui = ui_form_launcher.Ui_Form()
+        self.ui.setupUi(self)
+        self.ui.label_Status.setText("")
+
+        self.ui.pushButton_Connect.clicked.connect(self.ConnectClicked)
+
+    def ConnectClicked(self):
+        print("Connect")
+        if (self.ui.spinBox_port.value() == 1):
+            self.connected = 1
+            self.signalConnected.emit()
+            self.close()
+        else:
+            self.ui.label_Status.setText("Error of type blabla")
+            self.connected = 0
+
+class MainClient(QWidget):
 
     def __init__(self, parent=None):
-        super().__init__(parent)
-        self.ui = Ui_Widget()
+
+        self.parent = parent
+
+        self.Launcher = Launcher()
+        self.Launcher.show()
+        self.Launcher.raise_()
+        self.Launcher.signalConnected.connect(self.initGUI)
+
+    def initGUI(self):
+        super().__init__(self.parent)
+        self.ui = ui_form_client.Ui_Widget()
         self.ui.setupUi(self)
 
         self.CalibFilePath = ''
@@ -54,6 +86,8 @@ class Widget(QWidget):
         self.ui.comboBoxTracking.currentIndexChanged.connect(self.TrackingComboBoxChanged)
 
         self.ui.tabWidget.setCurrentIndex(0)
+
+        self.show()
 
     def GoHomeClicked(self):
         print("Go Home")
@@ -183,10 +217,15 @@ class Widget(QWidget):
             self.MeasurementDone()  # %TODO Temporary! link to thread end
 
 
+
+
+
+
 if __name__ == "__main__":
     sys.argv[0] = 'Astro Antenna'
     app = QApplication(sys.argv)
     app.setApplicationDisplayName("Astro Antenna")
-    widget = Widget()
-    widget.show()
+
+    widgetMainClient = MainClient()
+    #widgetMainClient.show()
     sys.exit(app.exec())
