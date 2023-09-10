@@ -51,6 +51,7 @@ class MainClient(QWidget):
         self.Launcher.raise_()
         self.Launcher.signalConnected.connect(self.initGUI)
 
+    @Slot()
     def initGUI(self):
         super().__init__(self.parent)
         self.ui = ui_form_client.Ui_Widget()
