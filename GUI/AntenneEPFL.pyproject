@@ -2,6 +2,7 @@
     "files": [
         "widget.py",
         "formMainClient.ui",
-        "formLauncher.ui"
+        "formLauncher.ui",
+        "formServerGUI.ui"
     ]
 }

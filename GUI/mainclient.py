@@ -4,7 +4,7 @@ from os.path import expanduser
 from time import time, localtime, strftime
 
 from PySide6.QtWidgets import QApplication, QWidget, QFileDialog
-from PySide6.QtCore import Slot, QFileInfo, QTimer, Signal
+from PySide6.QtCore import Slot, QFileInfo, QTimer, Signal, QThread
 # Important:
 # You need to run the following command to generate the ui_form.py file
 #     pyside6-uic form.ui -o ui_form.py, or
@@ -13,9 +13,9 @@ import ui_form_client
 import ui_form_launcher
 
 
-@Slot()
 def say_hello():
     print("Button clicked, Hello!")
+
 
 
 class Launcher(QWidget):
@@ -120,13 +120,18 @@ class MainClient(QWidget):
         self.ui.progressBar_measurement.setValue(0)
         self.ui.label_MeasureStatus.setText("Done.")
 
+
     def PlotClicked(self):
         print("Plot Measurement")
+
 
     def addToLog(self, strInput):
         self.ui.textBrowser_log.append(f"{strftime('%Y-%m-%d %H:%M:%S', localtime())}: " + strInput)
 
+
     def GoToClicked(self):
+        # valeurs:
+
         if self.ui.checkBox_Tracking.isChecked():
             self.tracking = 1
             self.ui.pushButton_StopTracking.setEnabled(1)
@@ -134,6 +139,8 @@ class MainClient(QWidget):
             self.ui.doubleSpinBox_TrackSecondCoord.setEnabled(0)
             self.ui.pushButton_GoTo.setEnabled(0)
             self.ui.checkBox_Tracking.setEnabled(0)
+
+            #valeurs
         else:
             self.tracking = 0
             self.ui.pushButton_StopTracking.setEnabled(0)
@@ -147,6 +154,7 @@ class MainClient(QWidget):
             self.ui.doubleSpinBox_TrackSecondCoord.setEnabled(1)
 
         print("Go To")
+
 
     def StopTrackingClicked(self):
         self.tracking = 0
