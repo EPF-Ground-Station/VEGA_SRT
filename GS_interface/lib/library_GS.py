@@ -11,7 +11,6 @@ import serial
 import time
 from datetime import datetime
 from . import virgo
-from rtlsdr import *
 from enum import Enum
 from time import sleep
 from threading import Thread
@@ -244,16 +243,20 @@ class Srt:
         self.ser.connect()
         self.ping.unpause()     # Starts pinging asa connected
         self.calibrate_north()  # Sets north offset
-        self.untangle()
+        msg = self.untangle()
         if water:               # Evacuates water in default mode
-            self.empty_water()
+            msg = self.empty_water()
+
+        return msg
 
     def disconnect(self):
         """Disconnects from serial port"""
 
-        self.go_home()  # Gets SRT to home position
+        msg = self.go_home()  # Gets SRT to home position
         self.ping.pause()           # Stop pinging
         self.ser.disconnect()       # Ciao
+
+        return msg
 
     def send_APM(self, msg: str, verbose=False, save=True):
         """
@@ -494,7 +497,7 @@ class Srt:
         print(self.untangle())
         print(self.standby())
         print("Water evacuated. SRT is now ready for use.")
-        return
+        return "IDLE"
 
     def waitObs(self):
         """

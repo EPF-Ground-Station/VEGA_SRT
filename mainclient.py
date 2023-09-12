@@ -10,8 +10,8 @@ from PySide6.QtNetwork import QTcpSocket
 # You need to run the following command to generate the ui_form.py file
 #     pyside6-uic form.ui -o ui_form.py, or
 #     pyside2-uic form.ui -o ui_form.py
-import ui_form_client
-import ui_form_launcher
+from GUI import ui_form_client
+from GUI import ui_form_launcher
 
 
 def say_hello():
@@ -43,7 +43,7 @@ class MainClient(QWidget):
         super().__init__(parent)
 
         self.parent = parent
-        self.connected = False
+        self.SRTconnected = False
 
         self.ui = ui_form_client.Ui_Widget()
         self.ui.setupUi(self)
@@ -76,7 +76,6 @@ class MainClient(QWidget):
     # @Slot()
     def initGUI(self):
 
-        self.connected = True
         self.Launcher.hide()
 
         self.CalibFilePath = ''
@@ -123,6 +122,10 @@ class MainClient(QWidget):
 
     def sendServ(self, message):
 
+        if (not self.SRTconnected) and message != "connect":
+            self.addToLog("No antenna connected. Aborting...")
+            return
+
         if message:
             self.client_socket.write(message.encode())
 
@@ -133,10 +136,27 @@ class MainClient(QWidget):
 
         if msg == "CONNECTED":
             self.initGUI()
-        if msg == "BUSY":
+        elif msg == "BUSY":
             self.client_socket.disconnectFromHost()
             self.Launcher.ui.label_Status.setText(
                 "Another client is already connected to the server. Try again later...")
+        elif msg.startswith('PRINT'):
+            msg = msg[6:]  # Gets rid of the "PRINT " statement
+            self.addToLog(msg)
+
+        elif '|' in msg:
+
+            status, answer = msg.split('|')
+            if status in ('WARNING', 'ERROR'):
+                self.addToLog(status + ' ' + answer)
+
+            if answer == 'connected':
+                self.ui.pushButton_Disconnect.setEnabled(1)
+                self.SRTconnected = True
+
+            if answer == 'disconnected':
+                self.ui.pushButton_Connect.setEnabled(1)
+                self.SRTconnected = False
 
     def GoHomeClicked(self):
         self.sendServ("goHome")
@@ -213,7 +233,8 @@ class MainClient(QWidget):
         print("Stop Tracking")
 
     def ConnectClicked(self):
-        print("Connect")
+        self.sendServ("connect")
+        self.ui.pushButton_Connect.setEnabled(0)
 
     def DisconnectClicked(self):
         print("Disconnect")

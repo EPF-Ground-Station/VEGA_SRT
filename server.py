@@ -1,13 +1,29 @@
+from GS_interface.SRT_inline import *
 import sys
 from os.path import expanduser
 from time import time, localtime, strftime
-from ...GS_interface.SRT_inline import *
-
-from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QMainWindow
-from PySide6.QtCore import Slot, QFileInfo, QTimer, Signal, QThread
+import io
+from GUI.ui_form_server import Ui_MainWindow
 from PySide6.QtNetwork import QTcpServer, QTcpSocket, QHostAddress
+from PySide6.QtCore import Slot, QFileInfo, QTimer, Signal, QThread
+from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QMainWindow
+import os
 
-from ui_form_server import Ui_MainWindow
+sys.path.append("../")
+
+
+class StdoutRedirector(io.StringIO):
+    def __init__(self, target, callback):
+        super().__init__()
+        self.target = target
+        self.callback = callback
+
+    def write(self, message):
+
+        message = "PRINT|" + message
+        self.target.write(message)
+        self.target.flush()
+        self.callback(message)
 
 
 class ServerGUI(QMainWindow):
@@ -28,6 +44,7 @@ class ServerGUI(QMainWindow):
         self.server = QTcpServer(self)
         self.server.listen(self.IPAddress, self.port)
         self.client_socket = None
+        self.original_stdout = sys.stdout
 
         self.server.newConnection.connect(self.handleConnection)
 
@@ -38,6 +55,8 @@ class ServerGUI(QMainWindow):
             self.client_socket.disconnected.connect(self.disconnectClient)
             self.addToLog("Client connected.")
             self.sendClient("CONNECTED", True)
+            # Redirect sys.stdout to send print statements to the client
+            self.redirect_stdout()
 
         else:
             other_client = self.server.nextPendingConnection()
@@ -47,7 +66,7 @@ class ServerGUI(QMainWindow):
             other_client.disconnectFromHost()
             other_client.deleteLater()
 
-    def sendClient(self, msg, verbose=False):
+    def sendClient(self, msg):
 
         if self.client_socket:
             self.client_socket.write(msg.encode())
@@ -56,18 +75,65 @@ class ServerGUI(QMainWindow):
         else:
             self.addToLog(f"No connected client to send msg : {msg}")
 
+    def sendOK(self, msg):
+
+        msg = "OK|" + msg
+        self.sendClient(msg)
+
+    def sendWarning(self, msg):
+
+        msg = "WARNING|" + msg
+        self.sendClient(msg)
+
+    def sendError(self, msg):
+
+        msg = "ERROR|"+msg
+        self.sendClient(msg)
+
+    def redirect_stdout(self):
+
+        sys.stdout = StdoutRedirector(sys.stdout, self.send_to_client)
+
+    def restore_stdout(self):
+        sys.stdout = self.original_stdout
+
     def receiveMessage(self):
         if self.client_socket:
             msg = self.client_socket.readAll().data().decode()
             self.addToLog("Received: " + msg)
 
             # You can add your processing logic here
-            # if msg == "connect":
+            if msg == "connect":
+                if not SRT.ser.connected:
+                    msg = SRT.connect()
+                else:
+                    self.sendWarning("SRT already connected")
+
+                self.sendOK("connected")
+
+            elif msg == 'disconnect':
+                if SRT.ser.connected:
+                    msg = SER.disconnect()
+                else:
+                    self.sendWarning("SRT already disconnected")
+
+                self.sendOK("disconnected")
+
+            elif msg == 'goHome':
+                msg = SRT.goHome()
+                # Post processing
+
+            if "Err" in msg:
+                self.sendError(msg)
+            else:
+                self.sendOK(msg)
 
     def disconnectClient(self):
         if self.client_socket:
             self.addToLog("Client disconnected.")
             self.client_socket = None
+            # Restore sys.stdout to its original state
+            self.restore_stdout()
 
     def closeEvent(self, event):
         if self.client_socket:
