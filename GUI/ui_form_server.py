@@ -108,7 +108,7 @@ class Ui_MainWindow(object):
         self.label_2.setText(QCoreApplication.translate(
             "MainWindow", u"Port", None))
         self.lineEdit_IP.setText(QCoreApplication.translate(
-            "MainWindow", u"192.26.46.249", None))
+            "MainWindow", u"10.179.67.23", None))
         self.label.setText(QCoreApplication.translate(
             "MainWindow", u"IP Address", None))
     # retranslateUi
