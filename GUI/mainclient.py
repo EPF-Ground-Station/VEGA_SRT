@@ -5,6 +5,7 @@ from time import time, localtime, strftime
 
 from PySide6.QtWidgets import QApplication, QWidget, QFileDialog
 from PySide6.QtCore import Slot, QFileInfo, QTimer, Signal, QThread
+from PySide6.QtNetwork import QTcpSocket
 # Important:
 # You need to run the following command to generate the ui_form.py file
 #     pyside6-uic form.ui -o ui_form.py, or
@@ -17,11 +18,10 @@ def say_hello():
     print("Button clicked, Hello!")
 
 
-
 class Launcher(QWidget):
-    signalConnected = Signal()
-    def __init__(self, parent=None):
+    connectAttempt = Signal()
 
+    def __init__(self, parent=None):
 
         super().__init__(parent)
         self.ui = ui_form_launcher.Ui_Form()
@@ -31,31 +31,53 @@ class Launcher(QWidget):
         self.ui.pushButton_Connect.clicked.connect(self.ConnectClicked)
 
     def ConnectClicked(self):
-        print("Connect")
-        if (self.ui.spinBox_port.value() == 1):
-            self.connected = 1
-            self.signalConnected.emit()
-            self.close()
-        else:
-            self.ui.label_Status.setText("Error of type blabla")
-            self.connected = 0
+        print("Trying to connect...")
+
+        self.connectAttempt.emit()
+
 
 class MainClient(QWidget):
 
     def __init__(self, parent=None):
 
+        super().__init__(parent)
+
         self.parent = parent
+        self.connected = False
+
+        self.ui = ui_form_client.Ui_Widget()
+        self.ui.setupUi(self)
+        self.hide()
 
         self.Launcher = Launcher()
         self.Launcher.show()
         self.Launcher.raise_()
-        self.Launcher.signalConnected.connect(self.initGUI)
+        self.Launcher.connectAttempt.connect(self.connectServ)
+
+        self.client_socket = QTcpSocket(self)
+        self.client_socket.readyRead.connect(self.receiveMessage)
+        self.client_socket.errorOccurred.connect(self.connexionError)
+        self.client_socket.disconnected.connect(self.onDisconnected)
 
     @Slot()
+    def connectServ(self):
+        address = self.Launcher.ui.lineEdit_ipAddress.text()
+        port = self.Launcher.ui.spinBox_port.value()
+        print(f"Attempting to connect to {address} on port {port}")
+        self.client_socket.connectToHost(address, port)
+
+    @Slot()
+    def connexionError(self):
+        self.Launcher.ui.label_Status.setText("Connexion failed")
+
+    # @Slot()
+    # def onConnected(self):
+
+    # @Slot()
     def initGUI(self):
-        super().__init__(self.parent)
-        self.ui = ui_form_client.Ui_Widget()
-        self.ui.setupUi(self)
+
+        self.connected = True
+        self.Launcher.hide()
 
         self.CalibFilePath = ''
         self.MeasureFilePath = ''
@@ -72,26 +94,52 @@ class MainClient(QWidget):
         self.measuring = 0
 
         self.ui.pushButton_goHome.clicked.connect(self.GoHomeClicked)
-        self.ui.pushButton_LaunchMeasurement.clicked.connect(self.LaunchMeasurementClicked)
+        self.ui.pushButton_LaunchMeasurement.clicked.connect(
+            self.LaunchMeasurementClicked)
         self.ui.pushButton_Plot.clicked.connect(self.PlotClicked)
         self.ui.pushButton_GoTo.clicked.connect(self.GoToClicked)
-        self.ui.pushButton_StopTracking.clicked.connect(self.StopTrackingClicked)
+        self.ui.pushButton_StopTracking.clicked.connect(
+            self.StopTrackingClicked)
         self.ui.pushButton_Connect.clicked.connect(self.ConnectClicked)
         self.ui.pushButton_Disconnect.clicked.connect(self.DisconnectClicked)
 
         self.ui.pushButton_browseCalib.clicked.connect(self.BrowseCalibClicked)
-        self.ui.pushButton_browseMeasureFile.clicked.connect(self.BrowseMeasureClicked)
+        self.ui.pushButton_browseMeasureFile.clicked.connect(
+            self.BrowseMeasureClicked)
 
         self.ui.pushButton_Plot.clicked.connect(self.PlotClicked)
 
-        self.ui.comboBoxTracking.currentIndexChanged.connect(self.TrackingComboBoxChanged)
+        self.ui.comboBoxTracking.currentIndexChanged.connect(
+            self.TrackingComboBoxChanged)
 
         self.ui.tabWidget.setCurrentIndex(0)
 
         self.show()
 
+    def onDisconnected(self):
+        self.addToLog("Disconnected from the server.")
+        self.hide()
+        self.Launcher.show()
+
+    def sendServ(self, message):
+
+        if message:
+            self.client_socket.write(message.encode())
+
+    def receiveMessage(self, verbose=False):
+
+        msg = self.client_socket.readAll().data().decode()
+        print(msg)
+
+        if msg == "CONNECTED":
+            self.initGUI()
+        if msg == "BUSY":
+            self.client_socket.disconnectFromHost()
+            self.Launcher.ui.label_Status.setText(
+                "Another client is already connected to the server. Try again later...")
+
     def GoHomeClicked(self):
-        print("Go Home")
+        self.sendServ("goHome")
 
     def LaunchMeasurementClicked(self):
         if self.measuring:
@@ -107,7 +155,8 @@ class MainClient(QWidget):
 
         self.ui.progressBar_measurement.setValue(0)  # from 0 to 100
         self.timerIterations = 0
-        self.timerProgressBar.start(1000)  # Launch timer to update progress bar
+        # Launch timer to update progress bar
+        self.timerProgressBar.start(1000)
 
         self.ui.label_MeasureStatus.setText('')  # measuring, saving, etc...
         print("Launch Measurement")
@@ -120,14 +169,12 @@ class MainClient(QWidget):
         self.ui.progressBar_measurement.setValue(0)
         self.ui.label_MeasureStatus.setText("Done.")
 
-
     def PlotClicked(self):
         print("Plot Measurement")
 
-
     def addToLog(self, strInput):
-        self.ui.textBrowser_log.append(f"{strftime('%Y-%m-%d %H:%M:%S', localtime())}: " + strInput)
-
+        self.ui.textBrowser_log.append(
+            f"{strftime('%Y-%m-%d %H:%M:%S', localtime())}: " + strInput)
 
     def GoToClicked(self):
         # valeurs:
@@ -140,7 +187,7 @@ class MainClient(QWidget):
             self.ui.pushButton_GoTo.setEnabled(0)
             self.ui.checkBox_Tracking.setEnabled(0)
 
-            #valeurs
+            # valeurs
         else:
             self.tracking = 0
             self.ui.pushButton_StopTracking.setEnabled(0)
@@ -154,7 +201,6 @@ class MainClient(QWidget):
             self.ui.doubleSpinBox_TrackSecondCoord.setEnabled(1)
 
         print("Go To")
-
 
     def StopTrackingClicked(self):
         self.tracking = 0
@@ -190,7 +236,8 @@ class MainClient(QWidget):
                                                    "Open Data file", expanduser("~"), "Data Files (*.dat)")[0]
         print(fileName)
         print(QFileInfo(fileName).absoluteDir().absolutePath())
-        self.WorkingDirectoryCalib = QFileInfo(fileName).absoluteDir().absolutePath()
+        self.WorkingDirectoryCalib = QFileInfo(
+            fileName).absoluteDir().absolutePath()
         if fileName:
             self.CalibFilePath = fileName
             self.ui.lineEdit_CalibFile.setText(self.CalibFilePath)
@@ -206,7 +253,8 @@ class MainClient(QWidget):
                                                    "Open Data file", expanduser("~"), "Data Files (*.dat)")[0]
         print(fileName)
         print(QFileInfo(fileName).absoluteDir().absolutePath())
-        self.WorkingDirectoryMeasure = QFileInfo(fileName).absoluteDir().absolutePath()
+        self.WorkingDirectoryMeasure = QFileInfo(
+            fileName).absoluteDir().absolutePath()
         if fileName:
             self.MeasureFilePath = fileName
             self.ui.lineEdit_MeasureFile.setText(self.MeasureFilePath)
@@ -226,15 +274,11 @@ class MainClient(QWidget):
             self.MeasurementDone()  # %TODO Temporary! link to thread end
 
 
-
-
-
-
 if __name__ == "__main__":
     sys.argv[0] = 'Astro Antenna'
     app = QApplication(sys.argv)
     app.setApplicationDisplayName("Astro Antenna")
 
     widgetMainClient = MainClient()
-    #widgetMainClient.show()
+    # widgetMainClient.show()
     sys.exit(app.exec())

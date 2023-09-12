@@ -1,24 +1,25 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'formServerGUI.ui'
+# Form generated from reading UI file 'formServerGUI.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.3.1
+# Created by: Qt User Interface Compiler version 6.3.1
 ##
-## WARNING! All changes made in this file will be lost when recompiling UI file!
+# WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
+                            QMetaObject, QObject, QPoint, QRect,
+                            QSize, QTime, QUrl, Qt)
 from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
+                           QFont, QFontDatabase, QGradient, QIcon,
+                           QImage, QKeySequence, QLinearGradient, QPainter,
+                           QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QLineEdit,
-    QMainWindow, QMenuBar, QSizePolicy, QSpacerItem,
-    QSpinBox, QStatusBar, QTextBrowser, QVBoxLayout,
-    QWidget)
+                               QMainWindow, QMenuBar, QSizePolicy, QSpacerItem,
+                               QSpinBox, QStatusBar, QTextBrowser, QVBoxLayout,
+                               QWidget)
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -28,7 +29,8 @@ class Ui_MainWindow(object):
         sizePolicy = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            MainWindow.sizePolicy().hasHeightForWidth())
         MainWindow.setSizePolicy(sizePolicy)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
@@ -46,7 +48,8 @@ class Ui_MainWindow(object):
         sizePolicy1 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.lineEdit_IP.sizePolicy().hasHeightForWidth())
+        sizePolicy1.setHeightForWidth(
+            self.lineEdit_IP.sizePolicy().hasHeightForWidth())
         self.lineEdit_IP.setSizePolicy(sizePolicy1)
         self.lineEdit_IP.setMinimumSize(QSize(180, 0))
         self.lineEdit_IP.setReadOnly(True)
@@ -60,7 +63,8 @@ class Ui_MainWindow(object):
 
         self.spinBox_port = QSpinBox(self.centralwidget)
         self.spinBox_port.setObjectName(u"spinBox_port")
-        sizePolicy1.setHeightForWidth(self.spinBox_port.sizePolicy().hasHeightForWidth())
+        sizePolicy1.setHeightForWidth(
+            self.spinBox_port.sizePolicy().hasHeightForWidth())
         self.spinBox_port.setSizePolicy(sizePolicy1)
         self.spinBox_port.setMinimumSize(QSize(70, 0))
         self.spinBox_port.setMaximum(65536)
@@ -68,16 +72,17 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.spinBox_port, 1, 1, 1, 1)
 
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.gridLayout.addItem(self.horizontalSpacer, 0, 2, 1, 1)
-
 
         self.verticalLayout.addLayout(self.gridLayout)
 
         self.textBrowser_log = QTextBrowser(self.centralwidget)
         self.textBrowser_log.setObjectName(u"textBrowser_log")
-        sizePolicy.setHeightForWidth(self.textBrowser_log.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(
+            self.textBrowser_log.sizePolicy().hasHeightForWidth())
         self.textBrowser_log.setSizePolicy(sizePolicy)
         self.textBrowser_log.setMinimumSize(QSize(350, 200))
 
@@ -98,9 +103,12 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Port", None))
-        self.lineEdit_IP.setText(QCoreApplication.translate("MainWindow", u"0.0.0.0", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u"IP Address", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate(
+            "MainWindow", u"MainWindow", None))
+        self.label_2.setText(QCoreApplication.translate(
+            "MainWindow", u"Port", None))
+        self.lineEdit_IP.setText(QCoreApplication.translate(
+            "MainWindow", u"127.0.0.1", None))
+        self.label.setText(QCoreApplication.translate(
+            "MainWindow", u"IP Address", None))
     # retranslateUi
-
