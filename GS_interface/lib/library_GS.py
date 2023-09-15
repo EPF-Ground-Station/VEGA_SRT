@@ -164,11 +164,11 @@ class Tracker(BckgrndAPMTask):
         if self.mode.value == 1:  # if RADEC
             self.az, self.alt = RaDec2AzAlt(self.a, self.b)
 
-        elif self.mode.value == 2:
+        elif self.mode.value == 2:  # if GAL
             self.az, self.alt = Gal2AzAlt(self.a, self.b)
 
     def setTarget(self, a, b):
-        """Sets target's coordinates in RADEC mode"""
+        """Sets target's coordinates"""
 
         self.a = a
         self.b = b
