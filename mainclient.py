@@ -63,6 +63,7 @@ class MainClient(QWidget):
     def connectServ(self):
         address = self.Launcher.ui.lineEdit_ipAddress.text()
         port = self.Launcher.ui.spinBox_port.value()
+        self.Launcher.ui.label_Status.setText("Trying to connect...")
         print(f"Attempting to connect to {address} on port {port}")
         self.client_socket.connectToHost(address, port)
 
@@ -101,6 +102,8 @@ class MainClient(QWidget):
             self.StopTrackingClicked)
         self.ui.pushButton_Connect.clicked.connect(self.ConnectClicked)
         self.ui.pushButton_Disconnect.clicked.connect(self.DisconnectClicked)
+        self.ui.pushButton_Untangle.clicked.connect(self.untangleClicked)
+        self.ui.pushButton_Standby.clicked.connect(self.standbyClicked)
 
         self.ui.pushButton_browseCalib.clicked.connect(self.BrowseCalibClicked)
         self.ui.pushButton_browseMeasureFile.clicked.connect(
@@ -211,7 +214,7 @@ class MainClient(QWidget):
         else:
             self.tracking = 0
             self.ui.pushButton_StopTracking.setEnabled(0)
-
+            self.ui.pushButton_GoTo.setEnabled(0)
             self.ui.doubleSpinBox_TrackFirstCoord.setEnabled(0)
             self.ui.doubleSpinBox_TrackSecondCoord.setEnabled(0)
 
@@ -231,6 +234,9 @@ class MainClient(QWidget):
         self.ui.pushButton_GoTo.setEnabled(1)
         self.ui.checkBox_Tracking.setEnabled(1)
         print("Stop Tracking")
+
+    def GoToFinished(self):
+        self.ui.pushButton_GoTo.setEnabled(1)
 
     def ConnectClicked(self):
         self.sendServ("connect")
@@ -293,6 +299,12 @@ class MainClient(QWidget):
             self.timerIterations = 0
 
             self.MeasurementDone()  # %TODO Temporary! link to thread end
+
+    def untangleClicked(self):
+        pass
+
+    def standbyClicked(self):
+        pass
 
 
 if __name__ == "__main__":

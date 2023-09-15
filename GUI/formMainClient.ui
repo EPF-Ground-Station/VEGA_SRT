@@ -145,9 +145,16 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_Unknown">
+          <widget class="QPushButton" name="pushButton_Untangle">
            <property name="text">
-            <string>Qu'est-ce qu'on met ici?</string>
+            <string>Untangle</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_Standby">
+           <property name="text">
+            <string>Standby</string>
            </property>
           </widget>
          </item>

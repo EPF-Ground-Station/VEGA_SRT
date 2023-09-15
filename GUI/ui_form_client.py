@@ -119,10 +119,15 @@ class Ui_Widget(object):
 
         self.horizontalLayout_5.addWidget(self.pushButton_goHome)
 
-        self.pushButton_Unknown = QPushButton(self.tab_home)
-        self.pushButton_Unknown.setObjectName(u"pushButton_Unknown")
+        self.pushButton_Untangle = QPushButton(self.tab_home)
+        self.pushButton_Untangle.setObjectName(u"pushButton_Untangle")
 
-        self.horizontalLayout_5.addWidget(self.pushButton_Unknown)
+        self.horizontalLayout_5.addWidget(self.pushButton_Untangle)
+
+        self.pushButton_Standby = QPushButton(self.tab_home)
+        self.pushButton_Standby.setObjectName(u"pushButton_Standby")
+
+        self.horizontalLayout_5.addWidget(self.pushButton_Standby)
 
 
         self.verticalLayout_3.addLayout(self.horizontalLayout_5)
@@ -608,7 +613,8 @@ class Ui_Widget(object):
         self.label_GalL.setText(QCoreApplication.translate("Widget", u"TextLabel", None))
         self.AzLabel.setText(QCoreApplication.translate("Widget", u"TextLabel", None))
         self.pushButton_goHome.setText(QCoreApplication.translate("Widget", u"Go Home", None))
-        self.pushButton_Unknown.setText(QCoreApplication.translate("Widget", u"Qu'est-ce qu'on met ici?", None))
+        self.pushButton_Untangle.setText(QCoreApplication.translate("Widget", u"Untangle", None))
+        self.pushButton_Standby.setText(QCoreApplication.translate("Widget", u"Standby", None))
         self.comboBoxTracking.setItemText(0, QCoreApplication.translate("Widget", u"Ra/Dec", None))
         self.comboBoxTracking.setItemText(1, QCoreApplication.translate("Widget", u"Galactic", None))
 
