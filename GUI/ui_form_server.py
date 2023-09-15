@@ -69,7 +69,7 @@ class Ui_MainWindow(object):
         self.spinBox_port.setSizePolicy(sizePolicy1)
         self.spinBox_port.setMinimumSize(QSize(70, 0))
         self.spinBox_port.setMaximum(65536)
-        self.spinBox_port.setValue(50885)
+        self.spinBox_port.setValue(53)
 
         self.gridLayout.addWidget(self.spinBox_port, 1, 1, 1, 1)
 
