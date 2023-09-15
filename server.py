@@ -5,7 +5,7 @@ from time import time, localtime, strftime
 import io
 from GUI.ui_form_server import Ui_MainWindow
 import socket
-from PySide6.QtNetwork import QTcpServer, QTcpSocket, QHostAddress
+from PySide6.QtNetwork import QTcpServer, QTcpSocket, QHostAddress, QNetworkInterface, QAbstractSocket
 from PySide6.QtCore import Slot, QFileInfo, QTimer, Signal, QThread
 from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QMainWindow
 import os
@@ -39,8 +39,7 @@ class ServerGUI(QMainWindow):
 
         self.ui.spinBox_port.valueChanged.connect(self.portChanged)
 
-        h = socket.gethostname()
-        ipaddress = socket.gethostbyname(h)
+        ipaddress = self.get_ipv4_address()
         self.setIPAddress(ipaddress)
         self.IPAddress = QHostAddress(ipaddress)
         self.port = self.ui.spinBox_port.value()
@@ -52,6 +51,22 @@ class ServerGUI(QMainWindow):
         self.original_stdout = sys.stdout
 
         self.server.newConnection.connect(self.handleConnection)
+
+    def get_ipv4_address(self):
+        try:
+            # Get a list of all network interfaces
+            interfaces = QNetworkInterface.allInterfaces()
+            for interface in interfaces:
+                # Check if the interface is not loopback and is running
+                if not interface.flags() & QNetworkInterface.InterfaceFlag.IsLoopBack and \
+                   interface.flags() & QNetworkInterface.InterfaceFlag.IsRunning:
+                    addresses = interface.addressEntries()
+                    for address in addresses:
+                        if address.ip().protocol() == QAbstractSocket.NetworkLayerProtocol.Ipv4Protocol:
+                            return address.ip().toString()
+            return "Not Found"
+        except Exception as e:
+            return str(e)
 
     def handleConnection(self):
         if self.client_socket is None:
