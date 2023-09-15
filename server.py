@@ -1,4 +1,4 @@
-from GS_interface.SRT_inline import *
+# from GS_interface.SRT_inline import *
 import sys
 from os.path import expanduser
 from time import time, localtime, strftime
@@ -11,6 +11,7 @@ from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QMainWindow
 import os
 
 sys.path.append("../")
+SRT = ""
 
 
 class StdoutRedirector(io.StringIO):
@@ -62,7 +63,7 @@ class ServerGUI(QMainWindow):
                    interface.flags() & QNetworkInterface.InterfaceFlag.IsRunning:
                     addresses = interface.addressEntries()
                     for address in addresses:
-                        if address.ip().protocol() == QAbstractSocket.NetworkLayerProtocol.Ipv4Protocol:
+                        if address.ip().protocol() == QAbstractSocket.NetworkLayerProtocol.IPv4Protocol:
                             return address.ip().toString()
             return "Not Found"
         except Exception as e:
