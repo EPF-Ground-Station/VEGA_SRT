@@ -1,4 +1,4 @@
-# from GS_interface.SRT_inline import *
+from GS_interface.SRT_inline import *
 import sys
 from os.path import expanduser
 from time import time, localtime, strftime
@@ -11,7 +11,6 @@ from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QMainWindow
 import os
 
 sys.path.append("../")
-SRT = ""
 
 
 class StdoutRedirector(io.StringIO):
@@ -113,7 +112,7 @@ class ServerGUI(QMainWindow):
 
     def redirect_stdout(self):
 
-        sys.stdout = StdoutRedirector(sys.stdout, self.send_to_client)
+        sys.stdout = StdoutRedirector(sys.stdout, self.sendClient)
 
     def restore_stdout(self):
         sys.stdout = self.original_stdout
