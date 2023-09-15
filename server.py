@@ -4,6 +4,7 @@ from os.path import expanduser
 from time import time, localtime, strftime
 import io
 from GUI.ui_form_server import Ui_MainWindow
+import socket
 from PySide6.QtNetwork import QTcpServer, QTcpSocket, QHostAddress
 from PySide6.QtCore import Slot, QFileInfo, QTimer, Signal, QThread
 from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QMainWindow
@@ -31,13 +32,17 @@ class ServerGUI(QMainWindow):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.addToLog("Launched server.")
 
         self.ui.spinBox_port.valueChanged.connect(self.portChanged)
 
-        self.IPAddress = QHostAddress("127.0.0.1")
+        h = socket.gethostname()
+        ipaddress = socket.gethostbyname(h)
+        self.setIPAddress(ipaddress)
+        self.IPAddress = QHostAddress(ipaddress)
         self.port = self.ui.spinBox_port.value()
         print(type(self.port))
 
@@ -66,7 +71,7 @@ class ServerGUI(QMainWindow):
             other_client.disconnectFromHost()
             other_client.deleteLater()
 
-    def sendClient(self, msg):
+    def sendClient(self, msg, verbose=True):
 
         if self.client_socket:
             self.client_socket.write(msg.encode())
@@ -113,7 +118,7 @@ class ServerGUI(QMainWindow):
 
             elif msg == 'disconnect':
                 if SRT.ser.connected:
-                    msg = SER.disconnect()
+                    msg = SRT.disconnect()
                 else:
                     self.sendWarning("SRT already disconnected")
 
