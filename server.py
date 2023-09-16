@@ -40,7 +40,13 @@ class MotionThread(QThread):
 
     def run(self):
 
-        if cmd == "point":
+        if cmd == "pointRA":
+            self.a, self.b = RaDec2AzAlt(self.a, self.b)
+
+        if cmd == "pointGal":
+            self.a, self.b = Gal2AzAlt(self.a, self.b)
+
+        if "point" in cmd:
             feedback = SRT.pointAzAlt(self.a, self.b)
 
         elif cmd == "goHome":
@@ -178,7 +184,7 @@ class ServerGUI(QMainWindow):
             cmd = args[0]
 
             # Processing of command
-            if cmd in ("connect", "point", "trackRA", "trackGal", "goHome", "untangle", "standby", "disconnect"):
+            if cmd in ("connect", "pointRA", "pointGal ", "pointAzAlt", "trackRA", "trackGal", "goHome", "untangle", "standby", "disconnect"):
 
                 if not self.motionThread.isAlive():
 
