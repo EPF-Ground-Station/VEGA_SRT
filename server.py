@@ -27,6 +27,43 @@ class StdoutRedirector(io.StringIO):
         self.callback(message)
 
 
+class MotionThread(QThread):
+
+    endMotion = Signal()
+
+    def __init__(self,  str: cmd, a=None, b=None, parent=None):
+        super().__init__(parent)
+
+        self.cmd = cmd
+        self.a = a
+        self.b = b
+
+    def run(self):
+
+        if cmd == "point":
+            feedback = SRT.pointAzAlt(self.a, self.b)
+
+        elif cmd == "goHome":
+            feedback = SRT.goHome()
+
+        elif cmd == "trackRA":
+            feedback = SRT.trackRaDec(self.a, self.b)
+        elif cmd == "trackGal":
+            feedback = SRT.trackGal(self.a, self.b)
+
+        elif cmd == "connect":
+            feedback = SRT.connect()
+
+        elif cmd == "disconnect":
+            feedback = SRT.disconnect()
+
+        elif cmd == "wait":
+            pass
+
+        feedback = str(feedback)
+        endMotion.emit(cmd, feedback)
+
+
 class ServerGUI(QMainWindow):
     signalConnected = Signal()
 
@@ -51,6 +88,9 @@ class ServerGUI(QMainWindow):
         self.original_stdout = sys.stdout
 
         self.server.newConnection.connect(self.handleConnection)
+
+        self.motionThread = MotionThread("wait")
+        self.motionThread.endMotion.connect(self.sendEndMotion)
 
     def get_ipv4_address(self):
         try:
@@ -110,6 +150,18 @@ class ServerGUI(QMainWindow):
         msg = "ERROR|"+msg
         self.sendClient(msg)
 
+    def sendEndMotion(self, cmd, feedback):
+        """Sends message to client when motion is ended"""
+
+        self.sendClient("PRINT|" + feedback)
+
+        if cmd == "connect":
+            self.sendOK("connected")
+        elif cmd == "disconnect":
+            self.sendOK("disconnected")
+
+        self.sendOK("IDLE")
+
     def redirect_stdout(self):
 
         sys.stdout = StdoutRedirector(sys.stdout, self.sendClient)
@@ -122,31 +174,23 @@ class ServerGUI(QMainWindow):
             msg = self.client_socket.readAll().data().decode()
             self.addToLog("Received: " + msg)
 
-            # You can add your processing logic here
-            if msg == "connect":
-                if not SRT.ser.connected:
-                    msg = SRT.connect()
-                else:
-                    self.sendWarning("SRT already connected")
+            args = msg.split(" ")
+            cmd = args[0]
 
-                self.sendOK("connected")
+            # Processing of command
+            if cmd in ("connect", "point", "trackRA", "trackGal", "goHome", "untangle", "standby", "disconnect"):
 
-            elif msg == 'disconnect':
-                if SRT.ser.connected:
-                    msg = SRT.disconnect()
-                else:
-                    self.sendWarning("SRT already disconnected")
+                if not self.motionThread.isAlive():
 
-                self.sendOK("disconnected")
-
-            elif msg == 'goHome':
-                msg = SRT.goHome()
-                # Post processing
-
-            if "Err" in msg:
-                self.sendError(msg)
-            else:
-                self.sendOK(msg)
+                    if len(args) > 1:
+                        a, b = float(args[1]), float(args[2])
+                        self.motionThread = MotionThread(cmd, a, b)
+                    elif len(args) == 1:
+                        self.motionThread = MotionThread(cmd)
+                    else:
+                        raise ValueError(
+                            "ERROR : invalid command passed to server")
+                    self.motionThread.start()
 
     def disconnectClient(self):
         if self.client_socket:
@@ -154,6 +198,8 @@ class ServerGUI(QMainWindow):
             self.client_socket = None
             # Restore sys.stdout to its original state
             self.restore_stdout()
+            self.MotionThread("disconnect")
+            self.MotionThread.start()
 
     def closeEvent(self, event):
         if self.client_socket:
