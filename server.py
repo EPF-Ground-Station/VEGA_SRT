@@ -43,7 +43,7 @@ class ServerGUI(QMainWindow):
         self.setIPAddress(ipaddress)
         self.IPAddress = QHostAddress(ipaddress)
         self.port = self.ui.spinBox_port.value()
-        print(type(self.port))
+        print(self.port)
 
         self.server = QTcpServer(self)
         self.server.listen(self.IPAddress, self.port)
