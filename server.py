@@ -198,6 +198,9 @@ class ServerGUI(QMainWindow):
                             "ERROR : invalid command passed to server")
                     self.motionThread.start()
 
+                else:
+                    self.sendWarning("MOVING")
+
     def disconnectClient(self):
         if self.client_socket:
             self.addToLog("Client disconnected.")
