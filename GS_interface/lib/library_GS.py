@@ -35,7 +35,8 @@ OBS_LON = 6.565
 OBS_HEIGHT = 411.0
 LOC = (OBS_LAT, OBS_LON, OBS_HEIGHT)
 TOPOS_LOC = Topos(OBS_LAT, OBS_LON, OBS_HEIGHT)
-SAT_DELAY = 15          # Delay used to point to future location of sat before tracking
+# Delay used to point to future location of sat before tracking
+SAT_INITIAL_DELAY = 15
 TS = load.timescale()   # Loads skyfield timescale
 
 
@@ -172,14 +173,16 @@ class Tracker(BckgrndAPMTask):
     """
 
     def __init__(self, ser, _mode=TrackMode.RADEC, tle=None):
+
+        BckgrndAPMTask.__init__(self, ser)
+
         self.az = 0
         self.alt = 0
         self.a = 0      # RA in radec, LONG in gal
         self.b = 0      # DEC in radec, b in gal
         self.mode = _mode
         self.tle = tle
-
-        BckgrndAPMTask.__init__(self, ser)
+        self.satInRange = False  # Flag indicating whether sat is in fov
 
     def refresh_azalt(self):
         """Refreshes coords of target depending on tracking mode"""
@@ -192,30 +195,73 @@ class Tracker(BckgrndAPMTask):
 
         elif self.mode.value == 3:  # if SAT
 
-            self.az, self.alt = TLE2AzAlt(self.tle)
+            self.az, self.alt = TLE2AzAlt(
+                self.tle, delay=TRACKING_RATE/2)    # Anticipate tracking rate
 
         # Checks if target is observable
-        if self.alt < 5:
-            print("Tracker's target below 5° in elevation. Tracking aborted...")
-            self.stop = True
+        # if self.alt < 5:
+        #     print("Tracker's target below 5° in elevation. Tracking aborted...")
+        #     self.stop = True
 
-    def setTarget(self, a, b):
+    def setTarget(self, *args):
         """Sets target's coordinates"""
 
-        self.a = a
-        self.b = b
+        # If coords mode
+        if self.mode.value in (1, 2):
+            if len(args) != 2:
+                raise ValueError(
+                    f"Tracker.setTarget() takes 2 arguments in coords mode, {len(args)} provided")
+            else:
+                self.a, self.b = args
+
+        # if SAT mode
+        else:
+            if len(args) != 1:
+                raise ValueError(
+                    f"Tracker.setTarget() takes 1 arguments in SAT mode, {len(args)} provided")
+            self.tle = args[0]
 
     def setMode(self, mode):
         """Sets tracking mode"""
 
         self.mode = TrackMode(mode)
 
+    def waitForSat(self, azFuture, altFuture):
+        """Anticipates sat's future position to optimize tracking rate"""
+
+        time_start = time.time()
+        self.pending = True
+        ans = self.ser.send_Ser("point_to " + str(self.az) + " " +
+                                str(self.alt))
+        self.pending = False
+        time_end = time.time()
+        delay = SAT_INITIAL_DELAY - (time_end - time_start)
+        time.sleep(delay)
+        self.satInRange = True
+
     def run(self):
 
         while not self.stop:
 
             if self.on:
-                self.refresh_azalt()        # Refreshes coord
+
+                if self.mode.value != 3:    # If not sat
+
+                    self.refresh_azalt()        # Refreshes coord
+                    if self.alt < 5:  # If target not visible, wait for it
+                        continue
+
+                else:       # If sat
+                    if not self.satInRange:
+                        azFuture, altFuture = TLE2AzAlt(
+                            self.tle, SAT_INITIAL_DELAY)
+                        if altFuture < 5:
+                            continue
+                        else:
+                            self.waitForSat(azFuture, altFuture)
+                    else:
+                        self.refresh_azalt()  # If sat in range, refresh azalt
+
                 self.pending = True         # Indicates waiting for an answer
                 ans = self.ser.send_Ser("point_to " + str(self.az) + " " +
                                         str(self.alt))
@@ -520,13 +566,25 @@ class Srt:
                 "ERROR : STR.trackSat(tle) takes an EarthSatellite object as postional argument")
 
         # Position of sat in near future
-        azFuture, altFuture = TLE2AzAlt(tle, delay=SAT_DELAY)
+        # azFuture, altFuture = TLE2AzAlt(tle, delay=SAT_INITIAL_DELAY)
 
-        inRange = False
-        while not inRange:
+        # inRange = False
+        # while not inRange:
 
-            startTime = time.time()
-            self.pointAzAlt(TLE2AzAlt(tle, delay=SAT_DELAY))
+        #     startTime = time.time()
+        #     self.pointAzAlt(TLE2AzAlt(tle, delay=SAT_INITIAL_DELAY))
+
+        self.ping.pause()                   # Ping useless in tracking mode
+        self.tracking = True                # Updates flag
+
+        if not self.tracker.is_alive():     # Launches tracker thread
+            # At this point, APM not yet tracking : tracker's flag 'on' is still off
+            self.tracker.start()
+
+        mode = 3
+        self.tracker.setMode(mode)
+        self.tracker.setTarget(tle)
+        self.tracker.on = True              # Now tracking
 
     def stopTracking(self):
         """

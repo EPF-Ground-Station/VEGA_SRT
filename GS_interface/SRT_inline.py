@@ -6,6 +6,6 @@ Import this script to python interpreter to use all methods of SRT, configured
 for EPFL SRT
 """
 
-from .lib.library_GS import *
+from lib.library_GS import *
 
 SRT = Srt("/dev/ttyUSB0", 115200, 1)

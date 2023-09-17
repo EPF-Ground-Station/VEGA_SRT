@@ -1,4 +1,4 @@
-from GS_interface.SRT_inline import *
+from GS_interface.lib.library_GS import *
 import sys
 from os.path import expanduser
 from time import time, localtime, strftime
@@ -15,8 +15,9 @@ sys.path.append("../")
 """
 THIS SCRIPT RUNS THE SERVER IN CHARGE OF COMMUNICATING WITH THE APM
 
-On import, SRT_inline instanciates an SRT object and loads library_GS
 """
+
+SRT = Srt("/dev/ttyUSB0", 115200, 1)
 
 
 class StdoutRedirector(io.StringIO):
