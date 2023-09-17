@@ -229,11 +229,12 @@ class Tracker(BckgrndAPMTask):
     def waitForSat(self, azFuture, altFuture):
         """Anticipates sat's future position to optimize tracking rate"""
 
-        print("Moving to target satellite... ")
+        print(
+            f"Moving to target satellite at az {azFuture}, alt {altFuture}... ")
         time_start = time.time()
         self.pending = True
-        ans = self.ser.send_Ser("point_to " + str(self.az) + " " +
-                                str(self.alt))
+        ans = self.ser.send_Ser("point_to " + str(azFuture) + " " +
+                                str(altFuture))
         self.pending = False
         time_end = time.time()
         delay = SAT_INITIAL_DELAY - (time_end - time_start)
