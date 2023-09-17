@@ -237,8 +237,11 @@ class Tracker(BckgrndAPMTask):
         self.pending = False
         time_end = time.time()
         delay = SAT_INITIAL_DELAY - (time_end - time_start)
-        time.sleep(delay)
+        if delay > 0:
+            time.sleep(delay)
+
         self.satInRange = True
+        print("Sat in range. Tracking begins...")
 
     def run(self):
 
