@@ -233,8 +233,7 @@ class Tracker(BckgrndAPMTask):
             f"Moving to target satellite at az {azFuture}, alt {altFuture}... ")
         time_start = time.time()
         self.pending = True
-        ans = self.ser.send_Ser("point_to " + str(azFuture) + " " +
-                                str(altFuture))
+        ans = self.ser.send_Ser(f"point_to {azFuture:2f} {altFuture:2f}")
         self.pending = False
         time_end = time.time()
         delay = SAT_INITIAL_DELAY - (time_end - time_start)
