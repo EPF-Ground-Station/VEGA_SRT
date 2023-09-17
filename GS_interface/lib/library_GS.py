@@ -268,8 +268,7 @@ class Tracker(BckgrndAPMTask):
                             continue
 
                 self.pending = True         # Indicates waiting for an answer
-                ans = self.ser.send_Ser("point_to " + str(self.az) + " " +
-                                        str(self.alt))
+                ans = self.ser.send_Ser(f"point_to {self.az:2f} {self.alt:2f}")
                 self.pending = False        # Answer received
 
                 # delay next
