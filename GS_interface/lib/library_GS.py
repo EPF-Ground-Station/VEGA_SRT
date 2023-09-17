@@ -902,7 +902,7 @@ def TLE2AzAlt(tle, delay=0):
 
     pos = (tle - TOPOS_LOC).at(t).altaz()
 
-    return pos[0].degrees, pos[1].degrees
+    return pos[1].degrees, pos[0].degrees
 
 
 def loadTLE(name):
