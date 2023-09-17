@@ -31,7 +31,7 @@ class MotionThread(QThread):
 
     endMotion = Signal()
 
-    def __init__(self,  str: cmd, a=None, b=None, parent=None):
+    def __init__(self,  cmd: str, a=None, b=None, parent=None):
         super().__init__(parent)
 
         self.cmd = cmd
