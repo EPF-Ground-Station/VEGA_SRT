@@ -67,7 +67,7 @@ class MainClient(QWidget):
         self.client_socket.errorOccurred.connect(self.connexionError)
         self.client_socket.disconnected.connect(self.onDisconnected)
 
-        self.initGUI() # Uncomment for debugging GUI
+
 
     @Slot()
     def connectServ(self):
