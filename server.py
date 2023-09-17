@@ -49,7 +49,7 @@ class MotionThread(QThread):
 
     def run(self):
 
-        beginMotion.emit()
+        self.beginMotion.emit()
 
         if cmd == "pointRA":
             self.a, self.b = RaDec2AzAlt(self.a, self.b)
@@ -78,7 +78,7 @@ class MotionThread(QThread):
             pass
 
         feedback = str(feedback)
-        endMotion.emit(cmd, feedback)
+        self.endMotion.emit(cmd, feedback)
 
 
 class BckgrndServTask(BckgrndTask):
