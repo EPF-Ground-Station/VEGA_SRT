@@ -223,7 +223,6 @@ class ServerGUI(QMainWindow):
             # Redirect sys.stdout to send print statements to the client
             self.redirect_stdout()
             self.posThread.setClient(self.client_socket)
-            self.sendPos()
 
         else:
             other_client = self.server.nextPendingConnection()
@@ -303,7 +302,7 @@ class ServerGUI(QMainWindow):
             self.sendOK("disconnected")
 
         self.posThread.wait = False     # Unblocks the posThread
-        self.sendPos()
+        self.sendPos()      # Sends updated position
         self.sendOK("IDLE")
 
     def sendPos(self):
