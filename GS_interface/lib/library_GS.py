@@ -5,6 +5,7 @@ Library aimed at scripting Srt with Antenna pointing mechanism
 @LL
 """
 
+import requests
 import os
 import json
 import serial
@@ -18,6 +19,8 @@ from astropy import units as u
 from astropy.io import fits
 from astropy.time import Time
 from astropy.coordinates import SkyCoord, EarthLocation, AltAz, ICRS
+from skyfield.api import load, Topos
+import skyfield
 import matplotlib.pyplot as plt
 import numpy as np
 from multiprocessing import Process
@@ -26,10 +29,14 @@ NORTH = 990000
 TRACKING_RATE = 0.1  # Necessary delay for sending point_to to APM while tracking
 PING_RATE = 60  # Ping every minute
 DATA_PATH = os.path.expanduser("~") + "/RadioData/"  # Finds data dir of user
+TLE_PATH = os.path.expanduser("~") + "/TLEs/"
 OBS_LAT = 46.5194444
 OBS_LON = 6.565
 OBS_HEIGHT = 411.0
 LOC = (OBS_LAT, OBS_LON, OBS_HEIGHT)
+TOPOS_LOC = Topos(OBS_LAT, OBS_LON, OBS_HEIGHT)
+SAT_DELAY = 15          # Delay used to point to future location of sat before tracking
+TS = load.timescale()   # Loads skyfield timescale
 
 
 class SerialPort:
@@ -150,12 +157,14 @@ class Tracker(BckgrndAPMTask):
 
     """
 
-    def __init__(self, ser, _mode=TrackMode.RADEC):
+    def __init__(self, ser, _mode=TrackMode.RADEC, tle=None):
         self.az = 0
         self.alt = 0
         self.a = 0      # RA in radec, LONG in gal
         self.b = 0      # DEC in radec, b in gal
         self.mode = _mode
+        self.tle = tle
+
         BckgrndAPMTask.__init__(self, ser)
 
     def refresh_azalt(self):
@@ -166,6 +175,15 @@ class Tracker(BckgrndAPMTask):
 
         elif self.mode.value == 2:  # if GAL
             self.az, self.alt = Gal2AzAlt(self.a, self.b)
+
+        elif self.mode.value == 3:  # if SAT
+
+            self.az, self.alt = TLE2AzAlt(self.tle)
+
+        # Checks if target is observable
+        if self.alt < 5:
+            print("Tracker's target below 5° in elevation. Tracking aborted...")
+            self.stop = True
 
     def setTarget(self, a, b):
         """Sets target's coordinates"""
@@ -240,6 +258,10 @@ class Srt:
 
     def connect(self, water=True):
         """Connects to serial port"""
+
+        if self.ser.connected:
+            return "SRT already connected"
+
         self.ser.connect()
         self.ping.unpause()     # Starts pinging asa connected
         self.calibrate_north()  # Sets north offset
@@ -462,6 +484,24 @@ class Srt:
         self.tracker.setMode(mode)
         self.tracker.setTarget(long, b)
         self.tracker.on = True              # Now tracking
+
+    def trackSat(self, tle):
+        """ 
+        Starts tracking given a satellite TLE
+        """
+
+        if type(tle) != skyfield.sgp4lib.EarthSatellite:
+            raise TypeError(
+                "ERROR : STR.trackSat(tle) takes an EarthSatellite object as postional argument")
+
+        # Position of sat in near future
+        azFuture, altFuture = TLE2AzAlt(tle, delay=SAT_DELAY)
+
+        inRange = False
+        while not inRange:
+
+            startTime = time.time()
+            self.pointAzAlt(TLE2AzAlt(tle, delay=SAT_DELAY))
 
     def stopTracking(self):
         """
@@ -757,6 +797,36 @@ def AzAlt2Gal(az, alt):
         decimal=True, precision=4).split(' ')]
 
     return long, b
+
+
+def TLE2AzAlt(tle, delay=0):
+    """Returns az and alt position of sat at current time given TLE"""
+
+    t = TS.now()
+    if delay != 0:
+        t = t.utc
+        t = TS.utc(t.year, t.month, t.day, t.hour, t.minute, t.second+delay)
+
+    pos = (tle - TOPOS_LOC).at(t).altaz()
+
+    return pos[0].degrees, pos[1].degrees
+
+
+def loadTLE(name):
+    """Loads TLEs from TLE_PATH"""
+
+    url = f"https://www.celestrak.com/NORAD/elements/gp.php?NAME={name}&FORMAT=TLE"
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            tle_data = response.text
+        else:
+            print(
+                f"Failed to download TLE data from {url}. Status code: {response.status_code}")
+            return None
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        return None
 
 
 # def plotAvPSD(path):
