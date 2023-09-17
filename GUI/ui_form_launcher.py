@@ -57,7 +57,7 @@ class Ui_Form(object):
             self.lineEdit_ipAddress.sizePolicy().hasHeightForWidth())
         self.lineEdit_ipAddress.setSizePolicy(sizePolicy)
         self.lineEdit_ipAddress.setMinimumSize(QSize(140, 0))
-        self.lineEdit_ipAddress.setValue("10.179.67.23")
+        self.lineEdit_ipAddress.setText("10.179.67.23")
 
         self.horizontalLayout.addWidget(self.lineEdit_ipAddress)
 
