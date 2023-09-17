@@ -78,6 +78,7 @@ class Ui_Form(object):
         self.spinBox_port.setMinimumSize(QSize(70, 0))
         self.spinBox_port.setMinimum(1)
         self.spinBox_port.setMaximum(65536)
+        self.spinBox_port.setValue(50885)
 
         self.horizontalLayout.addWidget(self.spinBox_port)
 
@@ -125,6 +126,7 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.label.setText(QCoreApplication.translate("Form", u"IP Address", None))
+        self.lineEdit_ipAddress.setText(QCoreApplication.translate("Form", u"esciot2.epfl.ch", None))
         self.label_3.setText(QCoreApplication.translate("Form", u"Port", None))
         self.pushButton_Connect.setText(QCoreApplication.translate("Form", u"Connect", None))
         self.label_2.setText(QCoreApplication.translate("Form", u"Status:", None))
