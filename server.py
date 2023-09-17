@@ -48,7 +48,7 @@ class MotionThread(QThread):
         self.a = a
         self.b = b
 
-    def run(self): # TODO : Standby, Untangle, measurement
+    def run(self):  # TODO : Standby, Untangle, measurement
 
         self.beginMotion.emit()
 
@@ -328,7 +328,7 @@ class ServerGUI(QMainWindow):
             # Processing of command
             if cmd in ("connect", "pointRA", "pointGal ", "pointAzAlt", "trackRA", "trackGal", "goHome", "untangle", "standby", "disconnect"):
 
-                if not self.motionThread.isAlive():
+                if not self.motionThread.isRunning():
 
                     if len(args) > 1:
                         a, b = float(args[1]), float(args[2])
