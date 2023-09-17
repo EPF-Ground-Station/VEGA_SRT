@@ -117,13 +117,9 @@ class BckgrndTask(Thread):
 
     def stop(self):             # Allows to kill the thread
         self.stop = True
-        while self.pending:
-            pass
 
     def pause(self):
         self.on = False
-        while self.pending:
-            pass
 
     def unpause(self):
         self.on = True
@@ -365,8 +361,12 @@ class Srt:
 
             if self.tracking:
                 self.tracker.pause()         # Pauses tracker
+                while self.tracker.pending:
+                    continue
             else:
                 self.ping.pause()            # Otherwise pauses ping
+                while self.ping.pending:
+                    continue
 
             answer = self.ser.send_Ser(msg)  # Sends message to serial port
 
