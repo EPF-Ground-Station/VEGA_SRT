@@ -286,7 +286,9 @@ class ServerGUI(QMainWindow):
         self.posThread.wait = True  # Blocks the Pos Thread
 
     def sendEndMotion(self, cmd, feedback):
-        """Sends message to client when motion is ended"""
+        """Sends message to client when motion is ended
+
+        This is a slot connected to signal self.motionThread.endMotion"""
 
         self.sendClient("PRINT|" + feedback)
 

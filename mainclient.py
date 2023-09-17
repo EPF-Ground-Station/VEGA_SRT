@@ -161,6 +161,10 @@ class MainClient(QWidget):
                 self.ui.pushButton_Connect.setEnabled(1)
                 self.SRTconnected = False
 
+            if "COORDS" in answer:
+                az, alt, ra, dec, long, lat = answer.split(' ')[1:]
+                # TODO : update display of coords
+
     def GoHomeClicked(self):
         self.sendServ("goHome")
 
