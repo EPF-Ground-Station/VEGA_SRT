@@ -235,6 +235,7 @@ class ServerGUI(QMainWindow):
     def disconnectClient(self):
         if self.client_socket:
             self.addToLog("Client disconnected.")
+            del self.client_socket
             self.client_socket = None
             # Restore sys.stdout to its original state
             self.restore_stdout()
@@ -344,7 +345,6 @@ class ServerGUI(QMainWindow):
     def closeEvent(self, event):
         if self.client_socket:
             self.client_socket.disconnectFromHost()
-            self.client_socket.deleteLater()
         self.server.close()
         event.accept()
 
