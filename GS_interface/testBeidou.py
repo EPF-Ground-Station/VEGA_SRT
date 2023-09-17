@@ -10,10 +10,28 @@ from SRT_inline import *
 import time
 
 
+def timeStamp(message, file=None):
+    #
+    # This function provides a standard time-stamped output statement
+    #
+    timeStamp = time.strftime("[%H:%M:%S]")
+    print(timeStamp, message, file=file)
+
+
 SRT.connect()
 sats = load.tle_file('lib/Beidou.tle')
 iss = sats[6]
 
 SRT.trackSat(iss)
-time.sleep(120)
+
+f = open("logBeidou.txt", "w")
+
+for i in range(240):
+    time.sleep(1)
+    az, alt = SRT.getAzAlt()
+    timeStamp(f"{az}, {alt}", f)
+
+f.close()
+
+# time.sleep(120)
 SRT.disconnect()
