@@ -23,8 +23,8 @@ def download_tle_data(url):
 
 
 # Example URL from CelesTrak for the ISS
-url = "https://www.celestrak.com/NORAD/elements/stations.txt"
+url = "https://celestrak.org/NORAD/elements/gp.php?NAME=BEIDOU-3&FORMAT=TLE"
 tle_data = download_tle_data(url)
 
-with open("ISS.tle", "w") as file:
+with open("Beidou.tle", "w") as file:
     file.write(tle_data)

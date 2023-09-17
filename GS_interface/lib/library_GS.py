@@ -229,6 +229,7 @@ class Tracker(BckgrndAPMTask):
     def waitForSat(self, azFuture, altFuture):
         """Anticipates sat's future position to optimize tracking rate"""
 
+        print("Moving to target satellite... ")
         time_start = time.time()
         self.pending = True
         ans = self.ser.send_Ser("point_to " + str(self.az) + " " +
@@ -261,6 +262,11 @@ class Tracker(BckgrndAPMTask):
                             self.waitForSat(azFuture, altFuture)
                     else:
                         self.refresh_azalt()  # If sat in range, refresh azalt
+                        if self.alt < 5:  # If sat not anymore in range
+                            self.satInRange = False
+                            print(
+                                "Target satellite not anymore visible. Motion stopped...")
+                            continue
 
                 self.pending = True         # Indicates waiting for an answer
                 ans = self.ser.send_Ser("point_to " + str(self.az) + " " +
