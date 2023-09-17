@@ -196,7 +196,7 @@ class Tracker(BckgrndAPMTask):
         elif self.mode.value == 3:  # if SAT
 
             self.az, self.alt = TLE2AzAlt(
-                self.tle, delay=TRACKING_RATE/2)    # Anticipate tracking rate
+                self.tle)    # , delay=TRACKING_RATE/2 Anticipate tracking rate
 
         # Checks if target is observable
         # if self.alt < 5:
@@ -229,15 +229,20 @@ class Tracker(BckgrndAPMTask):
     def waitForSat(self, azFuture, altFuture):
         """Anticipates sat's future position to optimize tracking rate"""
 
+        print(
+            f"Moving to target satellite at az {azFuture}, alt {altFuture}... ")
         time_start = time.time()
         self.pending = True
-        ans = self.ser.send_Ser("point_to " + str(self.az) + " " +
-                                str(self.alt))
+        ans = self.ser.send_Ser("point_to " + str(azFuture) + " " +
+                                str(altFuture))
         self.pending = False
         time_end = time.time()
         delay = SAT_INITIAL_DELAY - (time_end - time_start)
-        time.sleep(delay)
+        if delay > 0:
+            time.sleep(delay)
+
         self.satInRange = True
+        print("Sat in range. Tracking begins...")
 
     def run(self):
 
@@ -261,6 +266,11 @@ class Tracker(BckgrndAPMTask):
                             self.waitForSat(azFuture, altFuture)
                     else:
                         self.refresh_azalt()  # If sat in range, refresh azalt
+                        if self.alt < 5:  # If sat not anymore in range
+                            self.satInRange = False
+                            print(
+                                "Target satellite not anymore visible. Motion stopped...")
+                            continue
 
                 self.pending = True         # Indicates waiting for an answer
                 ans = self.ser.send_Ser("point_to " + str(self.az) + " " +
@@ -892,7 +902,7 @@ def TLE2AzAlt(tle, delay=0):
 
     pos = (tle - TOPOS_LOC).at(t).altaz()
 
-    return pos[0].degrees, pos[1].degrees
+    return pos[1].degrees, pos[0].degrees
 
 
 def loadTLE(name):
