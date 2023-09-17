@@ -15,5 +15,14 @@ sats = load.tle_file('lib/ISS.tle')
 iss = sats[0]
 
 SRT.trackSat(iss)
-time.sleep(120)
+
+f = open("logISS.txt", "w")
+
+for i in range(240):
+    time.sleep(1)
+    az, alt = SRT.getAzAlt()
+
+    timeStamp(f"{az}, {alt}", f)
+
+f.close()
 SRT.disconnect()

@@ -30,6 +30,7 @@ f = open("logBeidou.txt", "w")
 for i in range(240):
     time.sleep(1)
     az, alt = SRT.getAzAlt()
+
     timeStamp(f"{az}, {alt}", f)
 
 f.close()
