@@ -182,7 +182,7 @@ class MainClient(QWidget):
 
             if "COORDS" in answer:
                 az, alt, ra, dec, long, lat = answer.split(' ')[1:]
-                # TODO : update display of coords
+                self.setCurrentCoords(ra, dec, long, lat, az, alt)
 
     def GoHomeClicked(self):
         self.MovementStarted()
