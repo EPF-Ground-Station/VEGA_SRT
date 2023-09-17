@@ -56,6 +56,7 @@ class MainClient(QWidget):
         self.ui.setupUi(self)
         self.hide()
 
+
         self.Launcher = Launcher()
         self.Launcher.show()
         self.Launcher.raise_()
@@ -65,6 +66,8 @@ class MainClient(QWidget):
         self.client_socket.readyRead.connect(self.receiveMessage)
         self.client_socket.errorOccurred.connect(self.connexionError)
         self.client_socket.disconnected.connect(self.onDisconnected)
+
+        self.initGUI() # Uncomment for debugging GUI
 
     @Slot()
     def connectServ(self):
@@ -85,6 +88,7 @@ class MainClient(QWidget):
 
     # @Slot()
     def initGUI(self):
+
 
         self.Launcher.hide()
 
@@ -133,6 +137,7 @@ class MainClient(QWidget):
         self.hide()
         self.Launcher.show()
         self.Launcher.ui.pushButton_Connect.setEnabled(1)
+        # TODO self.client_socket disconnect?
 
     def sendServ(self, message):
 
@@ -172,11 +177,15 @@ class MainClient(QWidget):
                 self.ui.pushButton_Connect.setEnabled(1)
                 self.SRTconnected = False
 
+            if answer == 'IDLE':
+                self.MovementFinished()
+
             if "COORDS" in answer:
                 az, alt, ra, dec, long, lat = answer.split(' ')[1:]
-                # TODO : update display of coords
+                self.setCurrentCoords(ra, dec, long, lat, az, alt)
 
     def GoHomeClicked(self):
+        self.MovementStarted()
         self.sendServ("goHome")
 
     def LaunchMeasurementClicked(self):
@@ -216,20 +225,19 @@ class MainClient(QWidget):
 
     def GoToClicked(self):
         # valeurs:
+        self.MovementStarted()
 
         if self.ui.checkBox_Tracking.isChecked():
             self.tracking = 1
             self.ui.pushButton_StopTracking.setEnabled(1)
             self.ui.doubleSpinBox_TrackFirstCoord.setEnabled(0)
             self.ui.doubleSpinBox_TrackSecondCoord.setEnabled(0)
-            self.ui.pushButton_GoTo.setEnabled(0)
             self.ui.checkBox_Tracking.setEnabled(0)
 
             # valeurs
         else:
             self.tracking = 0
             self.ui.pushButton_StopTracking.setEnabled(0)
-            self.ui.pushButton_GoTo.setEnabled(0)
             self.ui.doubleSpinBox_TrackFirstCoord.setEnabled(0)
             self.ui.doubleSpinBox_TrackSecondCoord.setEnabled(0)
 
@@ -237,8 +245,30 @@ class MainClient(QWidget):
 
             self.ui.doubleSpinBox_TrackFirstCoord.setEnabled(1)
             self.ui.doubleSpinBox_TrackSecondCoord.setEnabled(1)
+        message = ''
+        if self.ui.comboBoxTracking.currentIndex() == 2 and self.ui.checkBox_Tracking.isChecked(): # should not happen
+            message = 'point'
+        else:
+            if self.ui.checkBox_Tracking.isChecked():
+                message = 'track'
+            else:
+                message = 'point'
 
-        print("Go To")
+            if self.ui.comboBoxTracking.currentIndex() == 0: # Ra Dec
+                message += 'RA'
+
+
+            if self.ui.comboBoxTracking.currentIndex() == 1: # Galactic
+                message += 'Gal'
+
+            if self.ui.comboBoxTracking.currentIndex() == 2: # Az Alt
+                pass
+
+
+            message += f" {self.ui.doubleSpinBox_TrackFirstCoord.value()} {self.ui.doubleSpinBox_TrackSecondCoord.value()}"
+
+        self.sendServ(message)
+
 
     def StopTrackingClicked(self):
         self.tracking = 0
@@ -250,14 +280,30 @@ class MainClient(QWidget):
         self.ui.checkBox_Tracking.setEnabled(1)
         print("Stop Tracking")
 
-    def GoToFinished(self):
+    def MovementFinished(self):
+        self.ui.pushButton_Standby.setEnabled(1)
+        self.ui.pushButton_Untangle.setEnabled(1)
+        self.ui.pushButton_goHome.setEnabled(1)
         self.ui.pushButton_GoTo.setEnabled(1)
+        self.ui.checkBox_Tracking.setEnabled(1)
+
+    def MovementStarted(self):
+        self.ui.pushButton_Standby.setEnabled(0)
+        self.ui.pushButton_Untangle.setEnabled(0)
+        self.ui.pushButton_goHome.setEnabled(0)
+        self.ui.pushButton_GoTo.setEnabled(0)
+        self.ui.checkBox_Tracking.setEnabled(0)
+        pass
 
     def ConnectClicked(self):
         self.sendServ("connect")
         self.ui.pushButton_Connect.setEnabled(0)
+        self.ui.pushButton_Disconnect.setEnabled(1)
 
     def DisconnectClicked(self):
+        self.ui.pushButton_Connect.setEnabled(1)
+        self.ui.pushButton_Disconnect.setEnabled(0)
+        self.sendServ("disconnect")
         print("Disconnect")
 
     def TrackingComboBoxChanged(self, index):
@@ -267,6 +313,11 @@ class MainClient(QWidget):
         if index == 1:
             self.ui.LabelTrackingFirstCoord.setText("l")
             self.ui.LabelTrackingSecondCoord.setText("b")
+        if index == 2:
+            self.ui.LabelTrackingFirstCoord.setText("Az")
+            self.ui.LabelTrackingSecondCoord.setText("Alt")
+            self.ui.checkBox_Tracking.setChecked(0)
+            self.ui.checkBox_Tracking.setEnabled(0)
 
     def BrowseCalibClicked(self):
         if self.WorkingDirectoryCalib:
@@ -320,6 +371,15 @@ class MainClient(QWidget):
 
     def standbyClicked(self):
         pass
+
+    def setCurrentCoords(self, Ra, Dec, GalL, GalB, Az, Alt):
+        self.ui.RaLabel.setText(f"{Ra:.2f}")
+        self.ui.DecLabel.setText(f"{Dec:.2f}")
+        self.ui.label_GalL.setText(f"{GalL:.2f}")
+        self.ui.label_GalB.setText(f"{GalB:.2f}")
+        self.ui.AltLabel.setText(f"{Alt:.2f}")
+        self.ui.AzLabel.setText(f"{Az:.2f}")
+
 
 
 if __name__ == "__main__":
