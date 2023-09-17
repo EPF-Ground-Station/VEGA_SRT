@@ -71,12 +71,14 @@ class MainClient(QWidget):
         address = self.Launcher.ui.lineEdit_ipAddress.text()
         port = self.Launcher.ui.spinBox_port.value()
         self.Launcher.ui.label_Status.setText("Trying to connect...")
+        self.Launcher.ui.pushButton_Connect.setEnabled(0)
         print(f"Attempting to connect to {address} on port {port}")
         self.client_socket.connectToHost(address, port)
 
     @Slot()
     def connexionError(self):
-        self.Launcher.ui.label_Status.setText("Connexion failed")
+        self.Launcher.updateStatus("Connexion failed")
+        self.Launcher.ui.pushButton_Connect.setEnabled(1)
 
     # @Slot()
     # def onConnected(self):
@@ -130,6 +132,7 @@ class MainClient(QWidget):
         self.Launcher.updateStatus("Disconnected from the server.")
         self.hide()
         self.Launcher.show()
+        self.Launcher.ui.pushButton_Connect.setEnabled(1)
 
     def sendServ(self, message):
 
