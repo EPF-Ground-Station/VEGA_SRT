@@ -48,7 +48,7 @@ class MotionThread(QThread):
         self.a = a
         self.b = b
 
-    def run(self):
+    def run(self): # TODO : Standby, Untangle, measurement
 
         self.beginMotion.emit()
 

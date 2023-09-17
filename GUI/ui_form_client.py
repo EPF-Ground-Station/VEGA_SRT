@@ -63,11 +63,22 @@ class Ui_Widget(object):
 
         self.DecLabel = QLabel(self.tab_home)
         self.DecLabel.setObjectName(u"DecLabel")
+        sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.DecLabel.sizePolicy().hasHeightForWidth())
+        self.DecLabel.setSizePolicy(sizePolicy)
+        self.DecLabel.setMinimumSize(QSize(40, 0))
+        self.DecLabel.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
         self.gridLayout.addWidget(self.DecLabel, 1, 2, 1, 1)
 
         self.RaLabel = QLabel(self.tab_home)
         self.RaLabel.setObjectName(u"RaLabel")
+        sizePolicy.setHeightForWidth(self.RaLabel.sizePolicy().hasHeightForWidth())
+        self.RaLabel.setSizePolicy(sizePolicy)
+        self.RaLabel.setMinimumSize(QSize(40, 0))
+        self.RaLabel.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
         self.gridLayout.addWidget(self.RaLabel, 1, 1, 1, 1)
 
@@ -83,6 +94,10 @@ class Ui_Widget(object):
 
         self.AltLabel = QLabel(self.tab_home)
         self.AltLabel.setObjectName(u"AltLabel")
+        sizePolicy.setHeightForWidth(self.AltLabel.sizePolicy().hasHeightForWidth())
+        self.AltLabel.setSizePolicy(sizePolicy)
+        self.AltLabel.setMinimumSize(QSize(40, 0))
+        self.AltLabel.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
         self.gridLayout.addWidget(self.AltLabel, 0, 1, 1, 1)
 
@@ -92,16 +107,28 @@ class Ui_Widget(object):
 
         self.label_GalB = QLabel(self.tab_home)
         self.label_GalB.setObjectName(u"label_GalB")
+        sizePolicy.setHeightForWidth(self.label_GalB.sizePolicy().hasHeightForWidth())
+        self.label_GalB.setSizePolicy(sizePolicy)
+        self.label_GalB.setMinimumSize(QSize(40, 0))
+        self.label_GalB.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
         self.gridLayout.addWidget(self.label_GalB, 2, 2, 1, 1)
 
         self.label_GalL = QLabel(self.tab_home)
         self.label_GalL.setObjectName(u"label_GalL")
+        sizePolicy.setHeightForWidth(self.label_GalL.sizePolicy().hasHeightForWidth())
+        self.label_GalL.setSizePolicy(sizePolicy)
+        self.label_GalL.setMinimumSize(QSize(40, 0))
+        self.label_GalL.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
         self.gridLayout.addWidget(self.label_GalL, 2, 1, 1, 1)
 
         self.AzLabel = QLabel(self.tab_home)
         self.AzLabel.setObjectName(u"AzLabel")
+        sizePolicy.setHeightForWidth(self.AzLabel.sizePolicy().hasHeightForWidth())
+        self.AzLabel.setSizePolicy(sizePolicy)
+        self.AzLabel.setMinimumSize(QSize(40, 0))
+        self.AzLabel.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
         self.gridLayout.addWidget(self.AzLabel, 0, 2, 1, 1)
 
@@ -145,15 +172,13 @@ class Ui_Widget(object):
         self.comboBoxTracking = QComboBox(self.tab_home)
         self.comboBoxTracking.addItem("")
         self.comboBoxTracking.addItem("")
+        self.comboBoxTracking.addItem("")
         self.comboBoxTracking.setObjectName(u"comboBoxTracking")
 
         self.horizontalLayout_6.addWidget(self.comboBoxTracking)
 
         self.LabelTrackingFirstCoord = QLabel(self.tab_home)
         self.LabelTrackingFirstCoord.setObjectName(u"LabelTrackingFirstCoord")
-        sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.LabelTrackingFirstCoord.sizePolicy().hasHeightForWidth())
         self.LabelTrackingFirstCoord.setSizePolicy(sizePolicy)
         self.LabelTrackingFirstCoord.setMinimumSize(QSize(20, 0))
@@ -604,19 +629,20 @@ class Ui_Widget(object):
         Widget.setWindowTitle(QCoreApplication.translate("Widget", u"Widget", None))
         self.label.setText(QCoreApplication.translate("Widget", u"Radio Antenna Connection Software ", None))
         self.label_4.setText(QCoreApplication.translate("Widget", u"Ra/Dec", None))
-        self.DecLabel.setText(QCoreApplication.translate("Widget", u"TextLabel", None))
-        self.RaLabel.setText(QCoreApplication.translate("Widget", u"TextLabel", None))
+        self.DecLabel.setText(QCoreApplication.translate("Widget", u"-", None))
+        self.RaLabel.setText(QCoreApplication.translate("Widget", u"-", None))
         self.label_2.setText(QCoreApplication.translate("Widget", u"Alt/Az", None))
         self.label_6.setText(QCoreApplication.translate("Widget", u"Gal. Coords", None))
-        self.AltLabel.setText(QCoreApplication.translate("Widget", u"TextLabel", None))
-        self.label_GalB.setText(QCoreApplication.translate("Widget", u"TextLabel", None))
-        self.label_GalL.setText(QCoreApplication.translate("Widget", u"TextLabel", None))
-        self.AzLabel.setText(QCoreApplication.translate("Widget", u"TextLabel", None))
+        self.AltLabel.setText(QCoreApplication.translate("Widget", u"-", None))
+        self.label_GalB.setText(QCoreApplication.translate("Widget", u"-", None))
+        self.label_GalL.setText(QCoreApplication.translate("Widget", u"-", None))
+        self.AzLabel.setText(QCoreApplication.translate("Widget", u"-", None))
         self.pushButton_goHome.setText(QCoreApplication.translate("Widget", u"Go Home", None))
         self.pushButton_Untangle.setText(QCoreApplication.translate("Widget", u"Untangle", None))
         self.pushButton_Standby.setText(QCoreApplication.translate("Widget", u"Standby", None))
         self.comboBoxTracking.setItemText(0, QCoreApplication.translate("Widget", u"Ra/Dec", None))
         self.comboBoxTracking.setItemText(1, QCoreApplication.translate("Widget", u"Galactic", None))
+        self.comboBoxTracking.setItemText(2, QCoreApplication.translate("Widget", u"Az/Alt", None))
 
         self.LabelTrackingFirstCoord.setText(QCoreApplication.translate("Widget", u"Ra", None))
         self.LabelTrackingSecondCoord.setText(QCoreApplication.translate("Widget", u"Dec", None))
