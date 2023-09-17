@@ -10,7 +10,7 @@ from SRT_inline import *
 import time
 
 
-SRT.connect()
+SRT.connect(False)
 sats = load.tle_file('lib/ISS.tle')
 iss = sats[0]
 
