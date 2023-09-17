@@ -12,6 +12,12 @@ import os
 
 sys.path.append("../")
 
+"""
+THIS SCRIPT RUNS THE SERVER IN CHARGE OF COMMUNICATING WITH THE APM
+
+On import, SRT_inline instanciates an SRT object and loads library_GS
+"""
+
 
 class StdoutRedirector(io.StringIO):
     def __init__(self, target, callback):
@@ -354,6 +360,7 @@ class ServerGUI(QMainWindow):
     def portChanged(self):
         print("Port changed.")
         self.port = self.ui.spinBox_port.value()
+        self.server.close()
         self.server.listen(self.IPAddress, self.port)
 
 
