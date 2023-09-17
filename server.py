@@ -109,7 +109,7 @@ class PositionThread(BckgrndServTask):
 
         BckgrndServTask.__init__(self, client)
 
-    def run():
+    def run(self):
         while not self.stop:
 
             if self.on:
@@ -181,7 +181,6 @@ class ServerGUI(QMainWindow):
         self.setIPAddress(ipaddress)
         self.IPAddress = QHostAddress(ipaddress)
         self.port = self.ui.spinBox_port.value()
-        print(self.port)
 
         self.server = QTcpServer(self)
         self.server.listen(self.IPAddress, self.port)
