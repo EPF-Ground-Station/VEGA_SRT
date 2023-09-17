@@ -51,34 +51,34 @@ class MotionThread(QThread):
 
         self.beginMotion.emit()
 
-        if cmd == "pointRA":
+        if self.cmd == "pointRA":
             self.a, self.b = RaDec2AzAlt(self.a, self.b)
 
-        if cmd == "pointGal":
+        if self.cmd == "pointGal":
             self.a, self.b = Gal2AzAlt(self.a, self.b)
 
-        if "point" in cmd:
+        if "point" in self.cmd:
             feedback = SRT.pointAzAlt(self.a, self.b)
 
-        elif cmd == "goHome":
+        elif self.cmd == "goHome":
             feedback = SRT.goHome()
 
-        elif cmd == "trackRA":
+        elif self.cmd == "trackRA":
             feedback = SRT.trackRaDec(self.a, self.b)
-        elif cmd == "trackGal":
+        elif self.cmd == "trackGal":
             feedback = SRT.trackGal(self.a, self.b)
 
-        elif cmd == "connect":
+        elif self.cmd == "connect":
             feedback = SRT.connect()
 
-        elif cmd == "disconnect":
+        elif self.cmd == "disconnect":
             feedback = SRT.disconnect()
 
-        elif cmd == "wait":
+        elif self.cmd == "wait":
             pass
 
         feedback = str(feedback)
-        self.endMotion.emit(cmd, feedback)
+        self.endMotion.emit(self.cmd, feedback)
 
 
 class BckgrndServTask(BckgrndTask):
