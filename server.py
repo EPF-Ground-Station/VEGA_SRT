@@ -29,6 +29,9 @@ class StdoutRedirector(io.StringIO):
 
 class MotionThread(QThread):
 
+    """Thread that parallelizes the execution of long-durationed motion tasks"""
+
+    beginMotion = Signal()
     endMotion = Signal()
 
     def __init__(self,  cmd: str, a=None, b=None, parent=None):
@@ -39,6 +42,8 @@ class MotionThread(QThread):
         self.b = b
 
     def run(self):
+
+        beginMotion.emit()
 
         if cmd == "pointRA":
             self.a, self.b = RaDec2AzAlt(self.a, self.b)
@@ -70,6 +75,90 @@ class MotionThread(QThread):
         endMotion.emit(cmd, feedback)
 
 
+class BckgrndServTask(BckgrndTask):
+
+    """ Background thread able to send messages to the client. 
+
+    self.wait : Flag that indicates the message should be delayed until new order.
+    Avoids spamming SRT with multiple commands. Flag risen and lowered by the
+    main server thread only"""
+
+    def __init__(self, client):
+
+        BckgrndTask.__init__(self)
+        self.client_socket = client
+        self.wait = False
+
+    def setClient(self, client):
+        self.client_socket = client
+
+
+class PositionThread(BckgrndServTask):
+
+    """Thread that updates continuously the current coordinates of the antenna """
+
+    def __init__(self, client):
+        """No need to indicate a particular serial port for the thread will use 
+        the global variable SRT which handles waiting for tracker/ping"""
+
+        BckgrndServTask.__init__(self, client)
+
+    def run():
+        while not self.stop:
+
+            if self.on:
+                self.pending = True         # Indicates waiting for an answer
+                self.sendPos()
+                self.pending = False        # Answer received
+
+                # delay next
+                timeNow = time.time()
+                while time.time() < timeNow + TRACKING_RATE:
+                    pass
+
+    def sendClient(self, msg, verbose=True):
+
+        if self.client_socket:
+
+            while self.wait:
+                pass
+
+            self.client_socket.write(msg.encode())
+            if verbose:
+                self.addToLog(f"Message sent : {msg}")
+        else:
+            self.addToLog(f"No connected client to send msg : {msg}")
+
+    def sendOK(self, msg):
+
+        msg = "OK|" + msg
+        self.sendClient(msg)
+
+    def sendWarning(self, msg):
+
+        msg = "WARNING|" + msg
+        self.sendClient(msg)
+
+    def sendError(self, msg):
+
+        msg = "ERROR|"+msg
+        self.sendClient(msg)
+
+    def sendPos(self):
+        """Sends position in all coordinates to client"""
+
+        az, alt = SRT.getAzAlt()
+        ra, dec = SRT.getPos()
+        long, lat = SRT.getGal()
+
+        if (-1 in az) or (-1 in alt):
+            self.sendError(
+                "Error while trying to get current coordinates. Hardware may be damaged. Please report this event to the person in charge ASAP")
+
+        msg = f"COORDS {az} {alt} {ra} {dec} {long} {lat}"
+        self.sendOK(msg)
+
+
 class ServerGUI(QMainWindow):
     signalConnected = Signal()
 
@@ -97,6 +186,11 @@ class ServerGUI(QMainWindow):
 
         self.motionThread = MotionThread("wait")
         self.motionThread.endMotion.connect(self.sendEndMotion)
+        # When in motion, stop asking for position. Tracking not affected
+        self.motionThread.beginMotion.connect(self.pausePosThread)
+
+        self.posThread = PositionThread(self.client_socket)
+        self.posThread.start()
 
     def get_ipv4_address(self):
         try:
@@ -123,6 +217,8 @@ class ServerGUI(QMainWindow):
             self.sendClient("CONNECTED", True)
             # Redirect sys.stdout to send print statements to the client
             self.redirect_stdout()
+            self.posThread.setClient(self.client_socket)
+            self.sendPos()
 
         else:
             other_client = self.server.nextPendingConnection()
@@ -132,12 +228,39 @@ class ServerGUI(QMainWindow):
             other_client.disconnectFromHost()
             other_client.deleteLater()
 
+    def disconnectClient(self):
+        if self.client_socket:
+            self.addToLog("Client disconnected.")
+            self.client_socket = None
+            # Restore sys.stdout to its original state
+            self.restore_stdout()
+            self.motionThread = MotionThread("disconnect")
+            self.motionThread.start()
+            self.posThread.setClient(None)
+
     def sendClient(self, msg, verbose=True):
+        """Send message to client"""
 
         if self.client_socket:
+
+            # Pauses the thread spamming the position getter
+            if self.posThread.on:
+                self.posThread.pause()
+
+            # Waits for the previous request to have returned to avoid multiple
+            # requests on the APM
+            while self.posThread.pending:
+                pass
+
+            # Sends the message
             self.client_socket.write(msg.encode())
             if verbose:
                 self.addToLog(f"Message sent : {msg}")
+
+            # If tracking, the position spamming thread should be turned back on
+            if SRT.tracking:
+                self.posThread.unpause()
+
         else:
             self.addToLog(f"No connected client to send msg : {msg}")
 
@@ -156,6 +279,12 @@ class ServerGUI(QMainWindow):
         msg = "ERROR|"+msg
         self.sendClient(msg)
 
+    def pausePosThread(self):
+        """Blocks the posThread from sending messages to the client. Called
+        at beginning of motion to avoid spamming SRT with multiple commands"""
+
+        self.posThread.wait = True  # Blocks the Pos Thread
+
     def sendEndMotion(self, cmd, feedback):
         """Sends message to client when motion is ended"""
 
@@ -166,7 +295,12 @@ class ServerGUI(QMainWindow):
         elif cmd == "disconnect":
             self.sendOK("disconnected")
 
+        self.posThread.wait = False     # Unblocks the posThread
+        self.sendPos()
         self.sendOK("IDLE")
+
+    def sendPos(self):
+        self.posThread.sendPos()
 
     def redirect_stdout(self):
 
@@ -200,15 +334,6 @@ class ServerGUI(QMainWindow):
 
                 else:
                     self.sendWarning("MOVING")
-
-    def disconnectClient(self):
-        if self.client_socket:
-            self.addToLog("Client disconnected.")
-            self.client_socket = None
-            # Restore sys.stdout to its original state
-            self.restore_stdout()
-            self.MotionThread("disconnect")
-            self.MotionThread.start()
 
     def closeEvent(self, event):
         if self.client_socket:

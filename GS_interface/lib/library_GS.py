@@ -93,8 +93,8 @@ class TrackMode(Enum):
     TLE = 3     # To be implemented
 
 
-class BckgrndAPMTask(Thread):
-    """Virtual class aimed at making parallel tasks on APM easier 
+class BckgrndTask(Thread):
+    """
 
     Methods :
         stop() : turns the stop flag on, allows to kill the thread when writing
@@ -105,12 +105,13 @@ class BckgrndAPMTask(Thread):
         unpause() : turns on flag on
     """
 
-    def __init__(self, ser):
+    def __init__(self):
+
+        Thread.__init__(self)
         self.on = False         # May pause the thread but does not kill it
         self.stop = False       # kills the thread
         self.pending = False    # flag on while waiting for answer from ser
-        self.ser = ser          # serial port over which APM communicates
-        Thread.__init__(self)
+
         self.daemon = True
 
     def stop(self):             # Allows to kill the thread
@@ -125,6 +126,19 @@ class BckgrndAPMTask(Thread):
 
     def unpause(self):
         self.on = True
+
+
+class BckgrndAPMTask(BckgrndTask):
+
+    """Virtual class aimed at making parallel tasks on APM easier """
+
+    def __init__(self, ser):
+        BckgrndTask.__init__(self)  # serial port over which APM communicates
+        self.ser = ser
+
+    def setSer(self, ser):
+        """Sets the serial port over which to communicate"""
+        self.ser = ser
 
 
 class Ping(BckgrndAPMTask):
@@ -363,6 +377,14 @@ class Srt:
         ra, dec = AzAlt2RaDec(az, alt)
 
         return ra, dec
+
+    def getGal(self):
+        """Returns current long/lat in galactic coords"""
+
+        az, alt = self.getAzAlt()
+        long, lat = AzAlt2Gal(az, alt)
+
+        return long, lat
 
     def getRA(self):
         """Returns current RA"""
