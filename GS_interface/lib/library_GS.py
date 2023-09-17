@@ -196,7 +196,7 @@ class Tracker(BckgrndAPMTask):
         elif self.mode.value == 3:  # if SAT
 
             self.az, self.alt = TLE2AzAlt(
-                self.tle, delay=TRACKING_RATE/2)    # Anticipate tracking rate
+                self.tle)    # , delay=TRACKING_RATE/2 Anticipate tracking rate
 
         # Checks if target is observable
         # if self.alt < 5:
