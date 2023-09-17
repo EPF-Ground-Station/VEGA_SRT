@@ -35,6 +35,13 @@ class Launcher(QWidget):
 
         self.connectAttempt.emit()
 
+    def updateStatus(self, msg):
+        """Cahnges status displayed"""
+        if type(msg) != str:
+            raise TypeError(
+                "Error : can only display strings in launcher's status")
+        self.ui.label_Status.setText(msg)
+
 
 class MainClient(QWidget):
 
@@ -120,6 +127,7 @@ class MainClient(QWidget):
 
     def onDisconnected(self):
         self.addToLog("Disconnected from the server.")
+        self.Launcher.updateStatus("Disconnected from the server.")
         self.hide()
         self.Launcher.show()
 
