@@ -288,6 +288,9 @@ class Srt:
     def disconnect(self):
         """Disconnects from serial port"""
 
+        if not self.ser.connected:
+            return "SRT already disconnected"
+
         msg = self.go_home()  # Gets SRT to home position
         self.ping.pause()           # Stop pinging
         self.ser.disconnect()       # Ciao

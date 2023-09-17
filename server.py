@@ -38,7 +38,7 @@ class MotionThread(QThread):
     """Thread that parallelizes the execution of long-durationed motion tasks"""
 
     beginMotion = Signal()
-    endMotion = Signal()
+    endMotion = Signal(str, str)
 
     def __init__(self,  cmd: str, a=None, b=None, parent=None):
         super().__init__(parent)
