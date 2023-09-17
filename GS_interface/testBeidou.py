@@ -18,9 +18,10 @@ def timeStamp(message, file=None):
     print(timeStamp, message, file=file)
 
 
-SRT.connect()
+SRT.connect(False)
 sats = load.tle_file('lib/Beidou.tle')
 iss = sats[6]
+print(iss)
 
 SRT.trackSat(iss)
 
