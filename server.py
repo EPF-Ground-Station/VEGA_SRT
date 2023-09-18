@@ -13,25 +13,25 @@ import os
 sys.path.append("../")
 
 """
-THIS SCRIPT RUNS THE SERVER IN CHARGE OF COMMUNICATING WITH THE APM
+THIS SCRIPT RUNS THE SERVER IN CHARGE OF COMMUNICATING WITH THE APM  
 
 """
 
 SRT = Srt("/dev/ttyUSB0", 115200, 1)
 
 
-class StdoutRedirector(io.StringIO):
-    def __init__(self, target, callback):
-        super().__init__()
-        self.target = target
-        self.callback = callback
+# class StdoutRedirector(io.StringIO):
+#     def __init__(self, target, callback):
+#         super().__init__()
+#         self.target = target
+#         self.callback = callback
 
-    def write(self, message):
+#     def write(self, message):
 
-        message = "PRINT|" + str(message)
-        self.target.write(message)
-        self.target.flush()
-        self.callback(message)
+#         message = "PRINT|" + str(message)
+#         self.target.write(message)
+#         self.target.flush()
+#         self.callback(message)
 
 
 class MotionThread(QThread):
@@ -185,8 +185,8 @@ class ServerGUI(QMainWindow):
 
         self.server = QTcpServer(self)
         self.server.listen(self.IPAddress, self.port)
-        self.client_socket = None
-        self.original_stdout = sys.stdout
+        # self.client_socket = None
+        # self.original_stdout = sys.stdout
 
         self.server.newConnection.connect(self.handleConnection)
 
@@ -221,7 +221,7 @@ class ServerGUI(QMainWindow):
             self.addToLog("Client connected.")
             self.sendClient("CONNECTED", True)
             # Redirect sys.stdout to send print statements to the client
-            self.redirect_stdout()
+            # self.redirect_stdout()
             self.posThread.setClient(self.client_socket)
 
         else:
@@ -237,7 +237,7 @@ class ServerGUI(QMainWindow):
             self.addToLog("Client disconnected.")
             self.client_socket = None
             # Restore sys.stdout to its original state
-            self.restore_stdout()
+            # self.restore_stdout()
             self.motionThread = MotionThread("disconnect")
             self.motionThread.start()
             self.posThread.setClient(None)
@@ -310,12 +310,12 @@ class ServerGUI(QMainWindow):
     def sendPos(self):
         self.posThread.sendPos()
 
-    def redirect_stdout(self):
+    # def redirect_stdout(self):
 
-        sys.stdout = StdoutRedirector(sys.stdout, self.sendClient)
+    #     sys.stdout = StdoutRedirector(sys.stdout, self.sendClient)
 
-    def restore_stdout(self):
-        sys.stdout = self.original_stdout
+    # def restore_stdout(self):
+    #     sys.stdout = self.original_stdout
 
     def receiveMessage(self):
         if self.client_socket:
