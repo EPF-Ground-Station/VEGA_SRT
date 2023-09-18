@@ -626,7 +626,7 @@ class Srt:
         """
         print("Emptying water procedure launched...")
         print("Rotating antenna towards South...")
-        print(self.pointAzAlt(180, 90))
+        print(self.pointAzAlt(180, 89.9))
         print("Inclinating to evacuate water...")
         print(self.pointAzAlt(180, 0))
         sleep(15)

@@ -191,7 +191,7 @@ class ServerGUI(QMainWindow):
         self.server.newConnection.connect(self.handleConnection)
 
         self.motionThread = MotionThread("wait")
-        self.motionThread.endMotion.connect(self.sendEndMotion)
+
         # When in motion, stop asking for position. Tracking not affected
 
         self.posThread = PositionThread(self.client_socket)
@@ -340,6 +340,7 @@ class ServerGUI(QMainWindow):
 
                     elif len(args) == 1:
                         self.motionThread = MotionThread(cmd)
+                        self.motionThread.endMotion.connect(self.sendEndMotion)
 
                     else:
                         raise ValueError(
