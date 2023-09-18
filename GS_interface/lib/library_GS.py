@@ -887,7 +887,8 @@ def AzAlt2Gal(az, alt):
 
     altaz = AltAz(az=az*u.deg, alt=alt*u.deg,
                   obstime=time_now, location=obs_loc)
-    coords = SkyCoord(altaz.transform_to('galactic'))
+    g = SkyCoord(0, 0, unit='rad', frame='galactic')
+    coords = SkyCoord(altaz.transform_to(g))
 
     long, b = [float(x) for x in coords.to_string(
         decimal=True, precision=4).split(' ')]
