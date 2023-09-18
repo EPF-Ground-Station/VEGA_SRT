@@ -185,7 +185,7 @@ class ServerGUI(QMainWindow):
 
         self.server = QTcpServer(self)
         self.server.listen(self.IPAddress, self.port)
-        # self.client_socket = None
+        self.client_socket = None
         # self.original_stdout = sys.stdout
 
         self.server.newConnection.connect(self.handleConnection)
