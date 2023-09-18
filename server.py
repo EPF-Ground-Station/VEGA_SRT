@@ -28,7 +28,7 @@ class StdoutRedirector(io.StringIO):
 
     def write(self, message):
 
-        message = "PRINT|" + message
+        message = "PRINT|" + str(message)
         self.target.write(message)
         self.target.flush()
         self.callback(message)
@@ -38,7 +38,6 @@ class MotionThread(QThread):
 
     """Thread that parallelizes the execution of long-durationed motion tasks"""
 
-    beginMotion = Signal()
     endMotion = Signal(str, str)
 
     def __init__(self,  cmd: str, a=None, b=None, parent=None):
@@ -49,8 +48,6 @@ class MotionThread(QThread):
         self.b = b
 
     def run(self):  # TODO : Standby, Untangle, measurement
-
-        self.beginMotion.emit()
 
         if self.cmd == "pointRA":
             self.a, self.b = RaDec2AzAlt(self.a, self.b)
@@ -75,7 +72,14 @@ class MotionThread(QThread):
         elif self.cmd == "disconnect":
             feedback = SRT.disconnect()
 
+        elif self.cmd == "untangle":
+            feedback = SRT.untangle()
+
+        elif self.cmd == "standby":
+            feedback = SRT.standby()
+
         elif self.cmd == "wait":
+            feedback = ""
             pass
 
         feedback = str(feedback)
@@ -94,7 +98,6 @@ class BckgrndServTask(BckgrndTask):
 
         BckgrndTask.__init__(self)
         self.client_socket = client
-        self.wait = False
 
     def setClient(self, client):
         self.client_socket = client
@@ -126,9 +129,6 @@ class PositionThread(BckgrndServTask):
     def sendClient(self, msg, verbose=True):
 
         if self.client_socket:
-
-            while self.wait:
-                pass
 
             self.client_socket.write(msg.encode())
             if verbose:
@@ -193,7 +193,6 @@ class ServerGUI(QMainWindow):
         self.motionThread = MotionThread("wait")
         self.motionThread.endMotion.connect(self.sendEndMotion)
         # When in motion, stop asking for position. Tracking not affected
-        self.motionThread.beginMotion.connect(self.pausePosThread)
 
         self.posThread = PositionThread(self.client_socket)
         self.posThread.start()
@@ -236,7 +235,6 @@ class ServerGUI(QMainWindow):
     def disconnectClient(self):
         if self.client_socket:
             self.addToLog("Client disconnected.")
-            del self.client_socket
             self.client_socket = None
             # Restore sys.stdout to its original state
             self.restore_stdout()
@@ -254,7 +252,7 @@ class ServerGUI(QMainWindow):
                 self.posThread.pause()
 
             # Waits for the previous request to have returned to avoid multiple
-            # requests on the APM
+            # messages sent to client
             while self.posThread.pending:
                 pass
 
@@ -289,7 +287,7 @@ class ServerGUI(QMainWindow):
         """Blocks the posThread from sending messages to the client. Called
         at beginning of motion to avoid spamming SRT with multiple commands"""
 
-        self.posThread.wait = True  # Blocks the Pos Thread
+        self.posThread.pause()  # Blocks the Pos Thread
 
     def sendEndMotion(self, cmd, feedback):
         """Sends message to client when motion is ended
@@ -300,10 +298,12 @@ class ServerGUI(QMainWindow):
 
         if cmd == "connect":
             self.sendOK("connected")
+            self.posThread.unpause()
         elif cmd == "disconnect":
             self.sendOK("disconnected")
+        else:
+            self.posThread.unpause()
 
-        self.posThread.wait = False     # Unblocks the posThread
         self.sendPos()      # Sends updated position
         self.sendOK("IDLE")
 
@@ -329,15 +329,22 @@ class ServerGUI(QMainWindow):
             if cmd in ("connect", "pointRA", "pointGal ", "pointAzAlt", "trackRA", "trackGal", "goHome", "untangle", "standby", "disconnect"):
 
                 if not self.motionThread.isRunning():
+                    # Pauses thread spamming position
+                    self.pausePosThread()
+                    while self.posThread.pending:   # Waits for posThread return
+                        continue
 
-                    if len(args) > 1:
+                    if len(args) > 1:   # Parses arguments
                         a, b = float(args[1]), float(args[2])
                         self.motionThread = MotionThread(cmd, a, b)
+
                     elif len(args) == 1:
                         self.motionThread = MotionThread(cmd)
+
                     else:
                         raise ValueError(
                             "ERROR : invalid command passed to server")
+
                     self.motionThread.start()
 
                 else:

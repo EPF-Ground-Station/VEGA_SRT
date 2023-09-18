@@ -500,6 +500,11 @@ class Srt:
         if self.tracking:               # Stops tracking before pointing
             self.stopTracking()
 
+        alt %= 90
+        if alt < 5:
+            alt = 5
+            print("WARNING : elevation too low. Security lower bound is 5°")
+
         if verbose:
             print(f"Moving to Az={az}, Alt = {alt}...")
         coord = str(az) + ' ' + str(alt)
