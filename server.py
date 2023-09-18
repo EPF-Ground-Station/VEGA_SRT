@@ -293,7 +293,7 @@ class ServerGUI(QMainWindow):
         """Sends message to client when motion is ended
 
         This is a slot connected to signal self.motionThread.endMotion"""
-
+        print(f"DEBUG : sendEndMotion with cmd = {cmd}, fb = {feedback}")
         self.sendClient("PRINT|" + feedback)
 
         if cmd == "connect":
