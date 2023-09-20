@@ -303,9 +303,7 @@ class ServerGUI(QMainWindow):
             self.sendOK("disconnected")
         else:
             self.posThread.unpause()
-
-        self.sendPos()      # Sends updated position
-        self.sendOK("IDLE")
+            self.sendOK("IDLE")
 
     def sendPos(self):
         self.posThread.sendPos()

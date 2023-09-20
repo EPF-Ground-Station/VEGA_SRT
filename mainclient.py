@@ -56,7 +56,6 @@ class MainClient(QWidget):
         self.ui.setupUi(self)
         self.hide()
 
-
         self.Launcher = Launcher()
         self.Launcher.show()
         self.Launcher.raise_()
@@ -66,8 +65,6 @@ class MainClient(QWidget):
         self.client_socket.readyRead.connect(self.receiveMessage)
         self.client_socket.errorOccurred.connect(self.connexionError)
         self.client_socket.disconnected.connect(self.onDisconnected)
-
-
 
     @Slot()
     def connectServ(self):
@@ -88,7 +85,6 @@ class MainClient(QWidget):
 
     # @Slot()
     def initGUI(self):
-
 
         self.Launcher.hide()
 
@@ -166,6 +162,7 @@ class MainClient(QWidget):
         elif '|' in msg:
 
             status, answer = msg.split('|')
+            print(answer)
             if status in ('WARNING', 'ERROR'):
                 self.addToLog(status + ' ' + answer)
 
@@ -246,7 +243,7 @@ class MainClient(QWidget):
             self.ui.doubleSpinBox_TrackFirstCoord.setEnabled(1)
             self.ui.doubleSpinBox_TrackSecondCoord.setEnabled(1)
         message = ''
-        if self.ui.comboBoxTracking.currentIndex() == 2 and self.ui.checkBox_Tracking.isChecked(): # should not happen
+        if self.ui.comboBoxTracking.currentIndex() == 2 and self.ui.checkBox_Tracking.isChecked():  # should not happen
             message = 'point'
         else:
             if self.ui.checkBox_Tracking.isChecked():
@@ -254,21 +251,18 @@ class MainClient(QWidget):
             else:
                 message = 'point'
 
-            if self.ui.comboBoxTracking.currentIndex() == 0: # Ra Dec
+            if self.ui.comboBoxTracking.currentIndex() == 0:  # Ra Dec
                 message += 'RA'
 
-
-            if self.ui.comboBoxTracking.currentIndex() == 1: # Galactic
+            if self.ui.comboBoxTracking.currentIndex() == 1:  # Galactic
                 message += 'Gal'
 
-            if self.ui.comboBoxTracking.currentIndex() == 2: # Az Alt
+            if self.ui.comboBoxTracking.currentIndex() == 2:  # Az Alt
                 pass
-
 
             message += f" {self.ui.doubleSpinBox_TrackFirstCoord.value()} {self.ui.doubleSpinBox_TrackSecondCoord.value()}"
 
         self.sendServ(message)
-
 
     def StopTrackingClicked(self):
         self.tracking = 0
@@ -379,7 +373,6 @@ class MainClient(QWidget):
         self.ui.label_GalB.setText(f"{GalB:.2f}")
         self.ui.AltLabel.setText(f"{Alt:.2f}")
         self.ui.AzLabel.setText(f"{Az:.2f}")
-
 
 
 if __name__ == "__main__":
