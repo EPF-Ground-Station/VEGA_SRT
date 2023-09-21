@@ -367,7 +367,12 @@ class MainClient(QWidget):
     def standbyClicked(self):
         pass
 
-    def setCurrentCoords(self, Ra, Dec, GalL, GalB, Az, Alt):
+    def setCurrentCoords(self, *args):
+
+        args = [float(elt) for elt in args]
+
+        Ra, Dec, GalL, GalB, Az, Alt = args
+
         self.ui.RaLabel.setText(f"{Ra:.2f}")
         self.ui.DecLabel.setText(f"{Dec:.2f}")
         self.ui.label_GalL.setText(f"{GalL:.2f}")
