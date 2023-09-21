@@ -147,6 +147,7 @@ class MainClient(QWidget):
     def receiveMessage(self, verbose=False):
 
         msg = self.client_socket.readAll().data().decode()
+        msg = msg.strip()
         print(msg)
 
         if msg == "CONNECTED":

@@ -247,10 +247,11 @@ class ServerGUI(QMainWindow):
             # self.restore_stdout()
             self.motionThread = MotionThread("disconnect")
             self.motionThread.start()
-            self.posThread.setClient(None)
 
     def sendClient(self, msg, verbose=True):
         """Send message to client"""
+
+        msg += '\n'
 
         if self.client_socket:
 
