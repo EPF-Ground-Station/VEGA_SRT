@@ -178,6 +178,7 @@ class MainClient(QWidget):
                 self.MovementFinished()
 
             if "COORDS" in answer:
+                print(answer)
                 az, alt, ra, dec, long, lat = answer.split(' ')[1:]
                 self.setCurrentCoords(ra, dec, long, lat, az, alt)
 

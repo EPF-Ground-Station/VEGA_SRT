@@ -95,13 +95,11 @@ class BckgrndServTask(BckgrndTask):
     Avoids spamming SRT with multiple commands. Flag risen and lowered by the
     main server thread only"""
 
+    send2socket = Signal(str)
+
     def __init__(self, client):
 
         BckgrndTask.__init__(self)
-        self.client_socket = client
-
-    def setClient(self, client):
-        self.client_socket = client
 
 
 class PositionThread(BckgrndServTask):
@@ -112,7 +110,7 @@ class PositionThread(BckgrndServTask):
         """No need to indicate a particular serial port for the thread will use 
         the global variable SRT which handles waiting for tracker/ping"""
 
-        BckgrndServTask.__init__(self, client)
+        BckgrndServTask.__init__(self)
 
     def run(self):
         while not self.stop:
@@ -127,15 +125,9 @@ class PositionThread(BckgrndServTask):
                 while time.time() < timeNow + TRACKING_RATE:
                     pass
 
-    def sendClient(self, msg, verbose=True):
+    def sendClient(self, msg):
 
-        if self.client_socket:
-
-            self.client_socket.write(msg.encode())
-            if verbose:
-                print(f"Message sent : {msg}")
-        else:
-            print(f"No connected client to send msg : {msg}")
+        self.send2socket.emit(msg)
 
     def sendOK(self, msg):
 
@@ -195,7 +187,8 @@ class ServerGUI(QMainWindow):
 
         # When in motion, stop asking for position. Tracking not affected
 
-        self.posThread = PositionThread(self.client_socket)
+        self.posThread = PositionThread()
+        self.posThread.send2socket.connect(self.sendClient)
         self.posThread.start()
 
     def get_ipv4_address(self):
