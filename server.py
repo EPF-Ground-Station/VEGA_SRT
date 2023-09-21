@@ -158,7 +158,7 @@ class PositionThread(BckgrndServTask):
         ra, dec = SRT.getPos()
         long, lat = SRT.getGal()
 
-        if (-1 in az) or (-1 in alt):
+        if (az == -1) or (alt == -1):
             self.sendError(
                 "Error while trying to get current coordinates. Hardware may be damaged. Please report this event to the person in charge ASAP")
 
