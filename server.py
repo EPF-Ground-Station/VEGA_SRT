@@ -9,6 +9,7 @@ from PySide6.QtNetwork import QTcpServer, QTcpSocket, QHostAddress, QNetworkInte
 from PySide6.QtCore import Slot, QFileInfo, QTimer, Signal, QThread
 from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QMainWindow
 import os
+import time
 
 sys.path.append("../")
 
