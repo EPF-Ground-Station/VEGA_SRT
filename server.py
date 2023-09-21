@@ -110,7 +110,7 @@ class PositionThread(QThread):
         """No need to indicate a particular serial port for the thread will use 
         the global variable SRT which handles waiting for tracker/ping"""
 
-        super().__init__(self, parent)
+        super().__init__(parent)
         self.on = False         # May pause the thread but does not kill it
         self.stop = False       # kills the thread
         self.pending = False    # flag on while waiting for answer from ser
