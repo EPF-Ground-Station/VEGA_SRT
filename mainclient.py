@@ -158,6 +158,8 @@ class MainClient(QWidget):
                 for message in messages:
                     self.processMsg(message, verbose)
                     return
+            else:
+                msg = messages[0]
 
         else:
             self.addTolog(
