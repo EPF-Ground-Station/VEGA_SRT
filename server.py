@@ -230,7 +230,6 @@ class ServerGUI(QMainWindow):
             self.sendClient("CONNECTED", True)
             # Redirect sys.stdout to send print statements to the client
             # self.redirect_stdout()
-            self.posThread.setClient(self.client_socket)
 
         else:
             other_client = self.server.nextPendingConnection()
