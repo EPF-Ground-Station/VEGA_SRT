@@ -156,13 +156,13 @@ class MainClient(QWidget):
             messages = msg.split('&')[1:]
             if len(messages) > 1:
                 for message in messages:
-                    self.processMsg(message, verbose)
+                    self.processMsg('&' + message, verbose)
                     return
             else:
                 msg = messages[0]
 
         else:
-            self.addTolog(
+            self.addToLog(
                 f"Warning : incorrectly formated message received : {msg}")
             return      # Ignores incorrectly formatted messages
 
