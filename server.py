@@ -251,8 +251,6 @@ class ServerGUI(QMainWindow):
     def sendClient(self, msg, verbose=True):
         """Send message to client"""
 
-        msg += '\n'
-
         if self.client_socket:
 
             # Pauses the thread spamming the position getter
@@ -264,6 +262,7 @@ class ServerGUI(QMainWindow):
             while self.posThread.pending:
                 pass
 
+            msg += '&'  # Adds a "begin" character
             # Sends the message
             self.client_socket.write(msg.encode())
             if verbose:

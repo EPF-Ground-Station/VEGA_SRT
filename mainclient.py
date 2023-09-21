@@ -147,7 +147,23 @@ class MainClient(QWidget):
     def receiveMessage(self, verbose=False):
 
         msg = self.client_socket.readAll().data().decode()
-        msg = msg.strip()
+        self.processMsg(msg, verbose)
+
+    def processMsg(self, msg, verbose):
+
+        # Sort messages, sometimes several
+        if '&' in msg:
+            messages = msg.split('&')[1:]
+            if len(messages) > 1:
+                for message in messages:
+                    self.processMsg(message, verbose)
+                    return
+
+        else:
+            self.addTolog(
+                f"Warning : incorrectly formated message received : {msg}")
+            return      # Ignores incorrectly formatted messages
+
         print(msg)
 
         if msg == "CONNECTED":
