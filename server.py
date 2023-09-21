@@ -67,7 +67,7 @@ class MotionThread(QThread):
             feedback = SRT.trackGal(self.a, self.b)
 
         elif self.cmd == "connect":
-            feedback = SRT.connect()
+            feedback = SRT.connect(False)  # False for debug
 
         elif self.cmd == "disconnect":
             feedback = SRT.disconnect()
@@ -132,9 +132,9 @@ class PositionThread(BckgrndServTask):
 
             self.client_socket.write(msg.encode())
             if verbose:
-                self.addToLog(f"Message sent : {msg}")
+                print(f"Message sent : {msg}")
         else:
-            self.addToLog(f"No connected client to send msg : {msg}")
+            print(f"No connected client to send msg : {msg}")
 
     def sendOK(self, msg):
 
