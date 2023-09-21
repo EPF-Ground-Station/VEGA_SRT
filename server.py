@@ -97,7 +97,7 @@ class BckgrndServTask(BckgrndTask):
 
     send2socket = Signal(str)
 
-    def __init__(self, client):
+    def __init__(self):
 
         BckgrndTask.__init__(self)
 
