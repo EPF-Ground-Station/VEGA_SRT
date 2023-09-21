@@ -262,7 +262,7 @@ class ServerGUI(QMainWindow):
             while self.posThread.pending:
                 pass
 
-            msg += '&'  # Adds a "begin" character
+            msg = '&' + msg  # Adds a "begin" character
             # Sends the message
             self.client_socket.write(msg.encode())
             if verbose:
