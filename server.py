@@ -106,7 +106,7 @@ class PositionThread(BckgrndServTask):
 
     """Thread that updates continuously the current coordinates of the antenna """
 
-    def __init__(self, client):
+    def __init__(self):
         """No need to indicate a particular serial port for the thread will use 
         the global variable SRT which handles waiting for tracker/ping"""
 
