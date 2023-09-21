@@ -87,30 +87,44 @@ class MotionThread(QThread):
         self.endMotion.emit(self.cmd, feedback)
 
 
-class BckgrndServTask(BckgrndTask):
+# class BckgrndServTask(BckgrndTask):
 
-    """ Background thread able to send messages to the client. 
+#     """ Background thread able to send messages to the client.
 
-    self.wait : Flag that indicates the message should be delayed until new order.
-    Avoids spamming SRT with multiple commands. Flag risen and lowered by the
-    main server thread only"""
+#     self.wait : Flag that indicates the message should be delayed until new order.
+#     Avoids spamming SRT with multiple commands. Flag risen and lowered by the
+#     main server thread only"""
 
-    send2socket = Signal(str)
+#     def __init__(self, parent=None):
 
-    def __init__(self):
-
-        BckgrndTask.__init__(self)
+#         BckgrndTask.__init__(self)
 
 
-class PositionThread(BckgrndServTask):
+class PositionThread(QThread):
 
     """Thread that updates continuously the current coordinates of the antenna """
 
-    def __init__(self):
+    send2socket = Signal(str)
+
+    def __init__(self, parent=None):
         """No need to indicate a particular serial port for the thread will use 
         the global variable SRT which handles waiting for tracker/ping"""
 
-        BckgrndServTask.__init__(self)
+        super().__init__(self, parent)
+        self.on = False         # May pause the thread but does not kill it
+        self.stop = False       # kills the thread
+        self.pending = False    # flag on while waiting for answer from ser
+
+        self.daemon = True
+
+    def stop(self):             # Allows to kill the thread
+        self.stop = True
+
+    def pause(self):
+        self.on = False
+
+    def unpause(self):
+        self.on = True
 
     def run(self):
         while not self.stop:
