@@ -142,6 +142,7 @@ class MainClient(QWidget):
             return
 
         if message:
+            message = '&' + message  # Adds a "begin" character
             self.client_socket.write(message.encode())
 
     def receiveMessage(self, verbose=False):

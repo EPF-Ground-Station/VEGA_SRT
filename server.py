@@ -6,7 +6,7 @@ import io
 from GUI.ui_form_server import Ui_MainWindow
 import socket
 from PySide6.QtNetwork import QTcpServer, QTcpSocket, QHostAddress, QNetworkInterface, QAbstractSocket
-from PySide6.QtCore import Slot, QFileInfo, QTimer, Signal, QThread
+from PySide6.QtCore import Slot, QFileInfo, QTimer, Signal, QThread, QObject
 from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QMainWindow
 import os
 import time
@@ -23,7 +23,7 @@ SRT = Srt("/dev/ttyUSB0", 115200, 1)
 
 class StdoutRedirector(io.StringIO, QObject):
 
-    printMsg = Signal(str)
+    printMsg = Signal(str, bool)
 
     def __init__(self, target, parent=None):
 
@@ -36,7 +36,7 @@ class StdoutRedirector(io.StringIO, QObject):
         message = "PRINT|" + str(message)
         self.target.write(message)
         self.target.flush()
-        self.printMsg.emit(message)
+        self.printMsg.emit(message, False)  # Set verbose to False
 
 
 class MotionThread(QThread):
@@ -333,36 +333,60 @@ class ServerGUI(QMainWindow):
     def receiveMessage(self):
         if self.client_socket:
             msg = self.client_socket.readAll().data().decode()
-            self.addToLog("Received: " + msg)
 
-            args = msg.split(" ")
-            cmd = args[0]
+            self.processMsg(msg, verbose)
 
-            # Processing of command
-            if cmd in ("connect", "pointRA", "pointGal ", "pointAzAlt", "trackRA", "trackGal", "goHome", "untangle", "standby", "disconnect"):
+    def processMsg(self, msg, verbose):
 
-                if not self.motionThread.isRunning():
-                    # Pauses thread spamming position
-                    self.pausePosThread()
-                    while self.posThread.pending:   # Waits for posThread return
-                        continue
+        # Sort messages, sometimes several
+        if '&' in msg:
+            messages = msg.split('&')[1:]
+            if len(messages) > 1:
+                print(f"Received concatenated messages : {messages}")
+                for message in messages:
 
-                    if len(args) > 1:   # Parses arguments
-                        a, b = float(args[1]), float(args[2])
-                        self.motionThread = MotionThread(cmd, a, b)
+                    print(f"processing msg {message}")
+                    self.processMsg('&' + message, verbose)
 
-                    elif len(args) == 1:
-                        self.motionThread = MotionThread(cmd)
-                        self.motionThread.endMotion.connect(self.sendEndMotion)
+                return
 
-                    else:
-                        raise ValueError(
-                            "ERROR : invalid command passed to server")
+            else:
+                msg = messages[0]
 
-                    self.motionThread.start()
+        else:
+            self.addToLog(
+                f"Warning : incorrectly formated message received : {msg}")
+            return      # Ignores incorrectly formatted messages
+
+        self.addToLog("Received: " + msg)
+        args = msg.split(" ")
+        cmd = args[0]
+
+        # Processing of command
+        if cmd in ("connect", "pointRA", "pointGal ", "pointAzAlt", "trackRA", "trackGal", "goHome", "untangle", "standby", "disconnect"):
+
+            if not self.motionThread.isRunning():
+                # Pauses thread spamming position
+                self.pausePosThread()
+                while self.posThread.pending:   # Waits for posThread return
+                    continue
+
+                if len(args) > 1:   # Parses arguments
+                    a, b = float(args[1]), float(args[2])
+                    self.motionThread = MotionThread(cmd, a, b)
+
+                elif len(args) == 1:
+                    self.motionThread = MotionThread(cmd)
+                    self.motionThread.endMotion.connect(self.sendEndMotion)
 
                 else:
-                    self.sendWarning("MOVING")
+                    raise ValueError(
+                        "ERROR : invalid command passed to server")
+
+                self.motionThread.start()
+
+            else:
+                self.sendWarning("MOVING")
 
     def closeEvent(self, event):
         if self.client_socket:
