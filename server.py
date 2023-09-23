@@ -39,9 +39,12 @@ class StdoutRedirector(io.StringIO):
 
     def write(self, message):
 
-        message = "PRINT|" + str(message)
         self.target.write(message)
         self.target.flush()
+        if message == '\n':
+            return
+
+        message = "PRINT|" + str(message)
         self.emettor.printMsg.emit(message, False)  # Set verbose to False
 
 
