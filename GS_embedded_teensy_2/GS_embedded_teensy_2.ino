@@ -35,7 +35,7 @@ void setup() {
     while (HWSerial.available() > 0){
         HWSerial.read();
     }
-
+ 
 }
 
 void loop() {
@@ -59,6 +59,15 @@ void loop() {
 
       else if(cmd_name.equals("point_to"))
       {
+          
+          
+          //Motors seem not to switch on correctly when standby enabled and
+          //point_to is called. Untangling first seems to fix the problem
+          //  -> to be investigated. This is a safety fix
+          if(apm->getCurrentMode() == Mode::STANDBY){
+              status = apm->untangle_north();          
+          } 
+          
           az = HWSerial.parseFloat();
           elev = HWSerial.parseFloat();
 

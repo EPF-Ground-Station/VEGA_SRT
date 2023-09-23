@@ -80,11 +80,12 @@ class MotionThread(QThread):
 
         elif self.cmd == "trackRA":
             feedback = SRT.trackRaDec(self.a, self.b)
+
         elif self.cmd == "trackGal":
             feedback = SRT.trackGal(self.a, self.b)
 
         elif self.cmd == "connect":
-            feedback = SRT.connect(False)  # False for debug
+            feedback = SRT.connect()  # False for debug
 
         elif self.cmd == "disconnect":
             feedback = SRT.disconnect()

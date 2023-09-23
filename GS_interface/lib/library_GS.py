@@ -343,6 +343,8 @@ class Srt:
 
         msg = self.go_home()  # Gets SRT to home position
         self.ping.pause()           # Stop pinging
+        while self.ping.pending:
+            continue
         self.ser.disconnect()       # Ciao
 
         return msg
@@ -628,7 +630,7 @@ class Srt:
         print("Rotating antenna towards South...")
         print(self.pointAzAlt(180, 89.9))
         print("Inclinating to evacuate water...")
-        print(self.pointAzAlt(180, 0))
+        print(self.pointAzAlt(180, 5))
         sleep(15)
         print(self.untangle())
         print(self.standby())
