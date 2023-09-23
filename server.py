@@ -21,22 +21,28 @@ THIS SCRIPT RUNS THE SERVER IN CHARGE OF COMMUNICATING WITH THE APM
 SRT = Srt("/dev/ttyUSB0", 115200, 1)
 
 
-class StdoutRedirector(io.StringIO, QObject):
+class sigEmettor(QObject):
 
     printMsg = Signal(str, bool)
 
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+
+class StdoutRedirector(io.StringIO, QObject):
+
     def __init__(self, target, parent=None):
 
-        io.StringIO.__init__()
-        QObject.__init__(parent)
+        super().__init__()
         self.target = target
+        self.emettor = sigEmettor()
 
     def write(self, message):
 
         message = "PRINT|" + str(message)
         self.target.write(message)
         self.target.flush()
-        self.printMsg.emit(message, False)  # Set verbose to False
+        self.emettor.printMsg.emit(message, False)  # Set verbose to False
 
 
 class MotionThread(QThread):
@@ -324,7 +330,7 @@ class ServerGUI(QMainWindow):
 
     def redirect_stdout(self):
         redirector = StdoutRedirector(sys.stdout)
-        redirector.printMsg.connect(self.sendClient)
+        redirector.emettor.printMsg.connect(self.sendClient)
         sys.stdout = redirector
 
     def restore_stdout(self):
