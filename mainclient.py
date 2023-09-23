@@ -155,9 +155,14 @@ class MainClient(QWidget):
         if '&' in msg:
             messages = msg.split('&')[1:]
             if len(messages) > 1:
+                print(f"Received concatenated messages : {messages}")
                 for message in messages:
+
+                    print(f"processing msg {message}")
                     self.processMsg('&' + message, verbose)
-                    return
+
+                return
+
             else:
                 msg = messages[0]
 
@@ -278,7 +283,7 @@ class MainClient(QWidget):
                 message += 'Gal'
 
             if self.ui.comboBoxTracking.currentIndex() == 2:  # Az Alt
-                pass
+                message += "AzAlt"
 
             message += f" {self.ui.doubleSpinBox_TrackFirstCoord.value()} {self.ui.doubleSpinBox_TrackSecondCoord.value()}"
 
