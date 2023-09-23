@@ -29,7 +29,7 @@ class sigEmettor(QObject):
         super().__init__(parent)
 
 
-class StdoutRedirector(io.StringIO, QObject):
+class StdoutRedirector(io.StringIO):
 
     def __init__(self, target, parent=None):
 
