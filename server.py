@@ -336,7 +336,7 @@ class ServerGUI(QMainWindow):
     def restore_stdout(self):
         sys.stdout = self.original_stdout
 
-    def receiveMessage(self):
+    def receiveMessage(self, verbose=True):
         if self.client_socket:
             msg = self.client_socket.readAll().data().decode()
 
