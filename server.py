@@ -50,6 +50,9 @@ class MotionThread(QThread):
 
     def run(self):  # TODO : Standby, Untangle, measurement
 
+        feedback = ''
+        print(self.cmd)
+
         if self.cmd == "pointRA":
             self.a, self.b = RaDec2AzAlt(self.a, self.b)
 
@@ -60,7 +63,7 @@ class MotionThread(QThread):
             feedback = SRT.pointAzAlt(self.a, self.b)
 
         elif self.cmd == "goHome":
-            feedback = SRT.goHome()
+            feedback = SRT.go_home()
 
         elif self.cmd == "trackRA":
             feedback = SRT.trackRaDec(self.a, self.b)
