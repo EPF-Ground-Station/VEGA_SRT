@@ -387,11 +387,13 @@ class ServerGUI(QMainWindow):
 
                 elif len(args) == 1:
                     self.motionThread = MotionThread(cmd)
-                    self.motionThread.endMotion.connect(self.sendEndMotion)
+
 
                 else:
                     raise ValueError(
                         "ERROR : invalid command passed to server")
+
+                self.motionThread.endMotion.connect(self.sendEndMotion)
 
                 self.motionThread.start()
 
