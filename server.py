@@ -326,8 +326,8 @@ class ServerGUI(QMainWindow):
         elif cmd == "disconnect":
             self.sendOK("disconnected")
         else:
-            self.posThread.unpause()
             self.sendOK("IDLE")
+            self.posThread.unpause()
 
     def sendPos(self):
         self.posThread.sendPos()
