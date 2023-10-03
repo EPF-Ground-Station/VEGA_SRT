@@ -14,8 +14,15 @@ import time
 sys.path.append("../")
 
 """
-THIS SCRIPT RUNS THE SERVER IN CHARGE OF COMMUNICATING WITH THE APM  
+THIS SCRIPT RUNS THE SERVER IN CHARGE OF COMMUNICATING WITH THE APM
 
+Format of exchanged messages : 
+    Client -> Server : &{cmd} {*args, separated by spaces}
+    Server -> Client : &{Status}|{feedback}
+    
+    with Status in (PRINT, OK, WARNING, ERROR)     
+    
+    Notice hence forbidden characters & and | in the body of exchanged messages
 """
 
 SRT = Srt("/dev/ttyUSB0", 115200, 1)
@@ -23,13 +30,19 @@ SRT = Srt("/dev/ttyUSB0", 115200, 1)
 
 class sigEmettor(QObject):
 
-    printMsg = Signal(str, bool)
+    """QObject that handles sending a signal from a non-Q thread.
+    Used by StdoutRedirector to pass the Server a print statement
+    to send to the client"""
+
+    printMsg = Signal(str, bool)  # Signal emitted when sth is printed
 
     def __init__(self, parent=None):
         super().__init__(parent)
 
 
 class StdoutRedirector(io.StringIO):
+    """Handles the redirection of print statements to both the server-side
+    console and to the client via messages with PRINT status"""
 
     def __init__(self, target, parent=None):
 
@@ -121,6 +134,7 @@ class PositionThread(QThread):
 
     """Thread that updates continuously the current coordinates of the antenna """
 
+    # Signal emitted to pass the Serevr the msg to send to the client
     send2socket = Signal(str)
 
     def __init__(self, parent=None):
@@ -191,7 +205,10 @@ class PositionThread(QThread):
 
 
 class ServerGUI(QMainWindow):
-    signalConnected = Signal()
+    """Class that operates the server by handshaking clients, receiving and
+    sending messages and modifying the GUI display in consequence.
+
+    Owner of all threads operating the APM"""
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -200,17 +217,20 @@ class ServerGUI(QMainWindow):
         self.ui.setupUi(self)
         self.addToLog("Launched server.")
 
+        # Updates the port on which the sever listens
         self.ui.spinBox_port.valueChanged.connect(self.portChanged)
 
+        # Obtains the IP address of host on the network
         ipaddress = self.get_ipv4_address()
         self.setIPAddress(ipaddress)
         self.IPAddress = QHostAddress(ipaddress)
         self.port = self.ui.spinBox_port.value()
 
+        # Initializes server
         self.server = QTcpServer(self)
         self.server.listen(self.IPAddress, self.port)
         self.client_socket = None
-        self.original_stdout = sys.stdout
+        self.original_stdout = sys.stdout  # Backup of stdout
 
         self.server.newConnection.connect(self.handleConnection)
 
@@ -220,9 +240,11 @@ class ServerGUI(QMainWindow):
 
         self.posThread = PositionThread()
         self.posThread.send2socket.connect(self.sendClient)
-        self.posThread.start()
+        self.posThread.start()  # Start in pause mode
 
     def get_ipv4_address(self):
+        """Method that gets the ipv4 address of host to initialize the server """
+
         try:
             # Get a list of all network interfaces
             interfaces = QNetworkInterface.allInterfaces()
@@ -239,6 +261,10 @@ class ServerGUI(QMainWindow):
             return str(e)
 
     def handleConnection(self):
+        """Method triggered when a new client connects the server
+        If a client is already connected, rejects the connection
+        Otherwise, executes the handshake (sends CONNECTED to client)"""
+
         if self.client_socket is None:
             self.client_socket = self.server.nextPendingConnection()
             self.client_socket.readyRead.connect(self.receiveMessage)
@@ -257,6 +283,10 @@ class ServerGUI(QMainWindow):
             other_client.deleteLater()
 
     def disconnectClient(self):
+        """Method triggered when the client disconnects from the server
+        A safety SRT.disconnect() is called in order to set the antenna to
+        standby mode"""
+
         if self.client_socket:
             self.addToLog("Client disconnected.")
             self.client_socket = None
@@ -264,6 +294,22 @@ class ServerGUI(QMainWindow):
             self.restore_stdout()
             self.motionThread = MotionThread("disconnect")
             self.motionThread.start()
+
+    def redirect_stdout(self):
+        """Operates the redirection of stdout to both the server console and
+        to the client via a msg with PRINT status"""
+
+        redirector = StdoutRedirector(sys.stdout)
+        redirector.emettor.printMsg.connect(self.sendClient)
+        sys.stdout = redirector
+
+    def restore_stdout(self):
+        """Method triggered when the client disconnects. Print statements are 
+        no longer redirected to a client"""
+
+        sys.stdout = self.original_stdout
+
+    # ======= Send / Receive methods =======
 
     def sendClient(self, msg, verbose=True):
         """Send message to client"""
@@ -307,59 +353,38 @@ class ServerGUI(QMainWindow):
         msg = "ERROR|"+msg
         self.sendClient(msg)
 
-    def pausePosThread(self):
-        """Blocks the posThread from sending messages to the client. Called
-        at beginning of motion to avoid spamming SRT with multiple commands"""
-
-        self.posThread.pause()  # Blocks the Pos Thread
-
-    def sendEndMotion(self, cmd, feedback):
-        """Sends message to client when motion is ended
-
-        This is a slot connected to signal self.motionThread.endMotion"""
-        print(f"DEBUG : sendEndMotion with cmd = {cmd}, fb = {feedback}")
-        self.sendClient("PRINT|" + feedback)
-
-        if cmd == "connect":
-            self.sendOK("connected")
-            self.posThread.unpause()
-        elif cmd == "disconnect":
-            self.sendOK("disconnected")
-        else:
-            self.sendOK("IDLE")
-            self.posThread.unpause()
-
-    def sendPos(self):
-        self.posThread.sendPos()
-
-    def redirect_stdout(self):
-        redirector = StdoutRedirector(sys.stdout)
-        redirector.emettor.printMsg.connect(self.sendClient)
-        sys.stdout = redirector
-
-    def restore_stdout(self):
-        sys.stdout = self.original_stdout
-
     def receiveMessage(self, verbose=True):
+        """Method that handles receiving a message from the client"""
+
         if self.client_socket:
             msg = self.client_socket.readAll().data().decode()
 
             self.processMsg(msg, verbose)
 
     def processMsg(self, msg, verbose):
+        """Method that processes the command sent from client.
+        Note that several messages might be received simultaneously, hence
+        the recursive approach taking advantage of the format of messages :
+            &{command} {*args}
+        """
 
         # Sort messages, sometimes several
         if '&' in msg:
             messages = msg.split('&')[1:]
+
+            # If several messages
             if len(messages) > 1:
                 print(f"Received concatenated messages : {messages}")
                 for message in messages:
 
                     print(f"processing msg {message}")
+
+                    # Re-add the start character
                     self.processMsg('&' + message, verbose)
 
                 return
 
+            # If only one message
             else:
                 msg = messages[0]
 
@@ -388,7 +413,6 @@ class ServerGUI(QMainWindow):
                 elif len(args) == 1:
                     self.motionThread = MotionThread(cmd)
 
-
                 else:
                     raise ValueError(
                         "ERROR : invalid command passed to server")
@@ -400,20 +424,57 @@ class ServerGUI(QMainWindow):
             else:
                 self.sendWarning("MOVING")
 
+    def sendEndMotion(self, cmd, feedback):
+        """Sends message to client when motion is ended
+
+        This is a slot connected to signal self.motionThread.endMotion"""
+        print(f"DEBUG : sendEndMotion with cmd = {cmd}, fb = {feedback}")
+        self.sendClient("PRINT|" + feedback)
+
+        if cmd == "connect":
+            self.sendOK("connected")
+            self.posThread.unpause()
+        elif cmd == "disconnect":
+            self.sendOK("disconnected")
+        else:
+            self.sendOK("IDLE")
+            self.posThread.unpause()
+
+    def pausePosThread(self):
+        """Blocks the posThread from sending messages to the client. Called
+        at beginning of motion to avoid spamming SRT with multiple commands"""
+
+        self.posThread.pause()  # Blocks the Pos Thread
+
+    def sendPos(self):
+        """Sends current position in all coordinates to client """
+
+        self.posThread.sendPos()
+
+    # ======== GUI methods ========
+
     def closeEvent(self, event):
+        """Triggered when the server GUI is closed manually"""
+
         if self.client_socket:
             self.client_socket.disconnectFromHost()
         self.server.close()
         event.accept()
 
     def addToLog(self, strInput):
+        """Adds statement to the GUI log console """
+
         self.ui.textBrowser_log.append(
             f"{strftime('%Y-%m-%d %H:%M:%S', localtime())}: " + strInput)
 
     def setIPAddress(self, stringIn):
+        """Sets the IP address displayed in the GUI """
+
         self.ui.lineEdit_IP.setText(stringIn)
 
     def portChanged(self):
+        """Handles manual port changing"""
+
         print("Port changed.")
         self.port = self.ui.spinBox_port.value()
         self.server.close()
