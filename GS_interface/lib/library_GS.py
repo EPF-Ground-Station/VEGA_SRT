@@ -24,6 +24,7 @@ import skyfield
 import matplotlib.pyplot as plt
 import numpy as np
 from multiprocessing import Process
+from rtlsdr import *
 
 NORTH = 990000
 TRACKING_RATE = 0.1  # Necessary delay for sending point_to to APM while tracking
@@ -300,14 +301,13 @@ class Srt:
         self.ping.start()   # Initializes pinger : still needs to be unpaused to begin pinging
 
         # Connect SDR and set default parameters
-        # self.sdr = RtlSdr()
-        # self.sdr.sample_rate = 2.048e6
-        # self.sdr.center_freq = 1420e06
-        # self.sdr.gain = 480
-        # self.sdr.set_bias_tee(True)
-        # self.sdr.close()
+        self.sdr = RtlSdr()
+        self.sdr.sample_rate = 2.048e6
+        self.sdr.center_freq = 1420e06
+        self.sdr.gain = 480
+        self.sdr.set_bias_tee(True)
+        self.sdr.close()
 
-        print("DEBUG: new SRT object")
         # Declares process that runs observations
         self.obsProcess = None
         self.observing = False
@@ -808,6 +808,73 @@ class Srt:
 
         print(f"Plot saved under {plot_path}. CSV saved under {csv_path}.")
 
+    def obsPower(self, duration, intTime=1, bandwidth=1.024, fc=1420, repo=None, obs=None, gain=480):
+        """ Observes PSD at center frequency fc for a duration in seconds with
+        integration time of intTime. Bandwidth and center frequency fc are
+        indicated in MHz"""
+
+        print(f"Observing for {duration} seconds...")
+
+        # If no indicated repository to save data
+        if repo == None:
+            # Make repo the default today's timestamp
+            repo = datetime.today().strftime('%Y-%m-%d')
+
+        # Check if there exists a repo at this name
+        if not os.path.isdir(DATA_PATH + repo):
+            os.mkdir(DATA_PATH + repo)     # if not, create it
+
+        repo = DATA_PATH + repo + '/'
+
+        # If no indicated observation name
+        if obs == None:
+            # Make the name to current timestamp
+            obs = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+        # Check if there exists a repo at this name
+        if not os.path.isdir(repo + obs):
+            os.mkdir(repo + obs)     # if not, create it
+
+        obs = obs + '/'
+
+        fc *= 1e6  # MHz to Hz
+        print(f"fc={fc}")
+
+        rate = bandwidth * 2e6
+        print(f"rate = {rate}")
+
+        # Save parameters of observation for later analysis
+        with open(repo+obs+"params.json", "w") as jsFile:
+            d = {"fc": fc,
+                 "rate": rate, "channels": 1024,
+                 "gain": gain, "intTime": intTime}
+            json.dump(d, jsFile)
+
+        nbSamples = rate * intTime
+        m = np.floor(nbSamples/1024)    # Prefer a multiple of 1024 (channels)
+        nbObs = int(np.ceil(duration/intTime))
+
+        for i in range(nbObs):
+            # Collect data
+            self.sdr.open()
+            self.sdr.center_freq = fc
+            self.sdr.sample_rate = rate
+            self.gain = gain
+            self.sdr.set_bias_tee(True)
+            samples = self.sdr.read_samples(1024 * m)
+
+            print("DEBUG save")
+            # Save data
+            real = fits.Column(name='real', array=samples.real, format='1E')
+            im = fits.Column(name='im', array=samples.imag, format='1E')
+            table = fits.BinTableHDU.from_columns([real, im])
+            table.writeto(repo + obs + "sample#" +
+                          str(i) + '.fits', overwrite=True)
+            self.sdr.close()
+
+        print(f"Observation complete. Data stored in {repo+obs}")
+        print("Plotting averaged PSD")
+        plotAvPSD(repo+obs)     # Plot averaged PSD
+
 
 def RaDec2AzAlt(ra, dec):
     """
@@ -928,57 +995,57 @@ def loadTLE(name):
         return None
 
 
-# def plotAvPSD(path):
-#     """Plots the averaged PSD of the observation located in path"""
+def plotAvPSD(path):
+    """Plots the averaged PSD of the observation located in path"""
 
-#     path = path.strip("/")
-#     obsName = path.split('/')[-1]   # Extract name of observation from path
-#     path = "/" + path + '/'    # Formatting
+    path = path.strip("/")
+    obsName = path.split('/')[-1]   # Extract name of observation from path
+    path = "/" + path + '/'    # Formatting
 
-#     # Allow for relative paths
-#     if not os.path.isdir(path):
-#         path = DATA_PATH + path
+    # Allow for relative paths
+    if not os.path.isdir(path):
+        path = DATA_PATH + path
 
-#     if os.path.isfile(path+"params.json"):
+    if os.path.isfile(path+"params.json"):
 
-#         with open(path+"params.json", "r") as jsFile:
-#             params = json.load(jsFile)
-#     elif not os.path.isdir(path):
-#         print("ERROR : path does not relate to any recorded observation")
-#         return
-#     else:
-#         print(
-#             f"ERROR : no parameter file found at {path}." +
-#             "Try giving the full path to an exisiting observation.")
-#         return
+        with open(path+"params.json", "r") as jsFile:
+            params = json.load(jsFile)
+    elif not os.path.isdir(path):
+        print("ERROR : path does not relate to any recorded observation")
+        return
+    else:
+        print(
+            f"ERROR : no parameter file found at {path}." +
+            "Try giving the full path to an exisiting observation.")
+        return
 
-#     # Extract data
-#     fc = params["fc"]
-#     rate = params["rate"]
-#     channels = params["channels"]
+    # Extract data
+    fc = params["fc"]
+    rate = params["rate"]
+    channels = params["channels"]
 
-#     for root, repo, files in os.walk(path):   # I did not find any other way...
-#         fitsFiles = [file for file in files if ".fits" in file]
+    for root, repo, files in os.walk(path):   # I did not find any other way...
+        fitsFiles = [file for file in files if ".fits" in file]
 
-#     obsNb = len(fitsFiles)  # Number of files in observation
+    obsNb = len(fitsFiles)  # Number of files in observation
 
-#     firstFile = fitsFiles.pop(0)  # Pops the first element of the list
-#     real = fits.open(path+firstFile)[1].data.field('real').flatten()
-#     image = fits.open(path+firstFile)[1].data.field('im').flatten()
+    firstFile = fitsFiles.pop(0)  # Pops the first element of the list
+    real = fits.open(path+firstFile)[1].data.field('real').flatten()
+    image = fits.open(path+firstFile)[1].data.field('im').flatten()
 
-#     for file in fitsFiles:
-#         data = fits.open(path+file)[1].data
-#         real += data.field('real').flatten()
-#         image += data.field('im').flatten()
+    for file in fitsFiles:
+        data = fits.open(path+file)[1].data
+        real += data.field('real').flatten()
+        image += data.field('im').flatten()
 
-#     average = (real + 1.0j*image)/obsNb
+    average = (real + 1.0j*image)/obsNb
 
-#     plt.psd(average, NFFT=channels, Fs=rate/1e6, Fc=fc/1e6)
-#     plt.xlabel('frequency (Mhz)')
-#     plt.ylabel('Relative power (db)')
-#     plt.savefig(path+"PSD.png", format="png")
-#     plt.show()
-#     print("Figure saved at " + path + "PSD.png")
+    plt.psd(average, NFFT=channels, Fs=rate/1e6, Fc=fc/1e6)
+    plt.xlabel('frequency (Mhz)')
+    plt.ylabel('Relative power (db)')
+    plt.savefig(path+"PSD.png", format="png")
+    plt.show()
+    print("Figure saved at " + path + "PSD.png")
 
 
 # def getFreqP(path):
@@ -1022,76 +1089,3 @@ def loadTLE(name):
 #     freq, psd = welch(average, rate, detrend=False)
 #     freq += fc
 #     return freq, psd
-
-    # def obsPower(self, duration, intTime=1, bandwidth=1.024, fc=1420, repo=None, obs=None, gain=480):
-    #     """ Observes PSD at center frequency fc for a duration in seconds with
-    #     integration time of intTime. Bandwidth and center frequency fc are
-    #     indicated in MHz"""
-
-    #     print(f"Observing for {duration} seconds...")
-
-    #     # If no indicated repository to save data
-    #     if repo == None:
-    #         # Make repo the default today's timestamp
-    #         repo = datetime.today().strftime('%Y-%m-%d')
-
-    #     # Check if there exists a repo at this name
-    #     if not os.path.isdir(DATA_PATH + repo):
-    #         os.mkdir(DATA_PATH + repo)     # if not, create it
-
-    #     repo = DATA_PATH + repo + '/'
-
-    #     # If no indicated observation name
-    #     if obs == None:
-    #         # Make the name to current timestamp
-    #         obs = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-    #     # Check if there exists a repo at this name
-    #     if not os.path.isdir(repo + obs):
-    #         os.mkdir(repo + obs)     # if not, create it
-
-    #     obs = obs + '/'
-
-    #     fc *= 1e6  # MHz to Hz
-    #     print(f"fc={fc}")
-
-    #     rate = bandwidth * 2e6
-    #     print(f"rate = {rate}")
-
-    #     # Save parameters of observation for later analysis
-    #     with open(repo+obs+"params.json", "w") as jsFile:
-    #         d = {"fc": fc,
-    #              "rate": rate, "channels": 1024,
-    #              "gain": gain, "intTime": intTime}
-    #         json.dump(d, jsFile)
-
-    #     nbSamples = rate * intTime
-    #     m = np.floor(nbSamples/1024)    # Prefer a multiple of 1024 (channels)
-    #     nbObs = int(np.ceil(duration/intTime))
-
-    #     for i in range(nbObs):
-    #         # Collect data
-    #         print("DEBUG open")
-    #         self.sdr.open()
-    #         print("DEBUG fc")
-    #         self.sdr.center_freq = fc
-    #         print("DEBUG rate")
-    #         self.sdr.sample_rate = rate
-    #         print("DEBUG gain")
-    #         self.gain = gain
-    #         print("DEBUG read")
-    #         self.sdr.set_bias_tee(True)
-    #         print(m)
-    #         samples = self.sdr.read_samples(1024 * m)
-
-    #         print("DEBUG save")
-    #         # Save data
-    #         real = fits.Column(name='real', array=samples.real, format='1E')
-    #         im = fits.Column(name='im', array=samples.imag, format='1E')
-    #         table = fits.BinTableHDU.from_columns([real, im])
-    #         table.writeto(repo + obs + "sample#" +
-    #                       str(i) + '.fits', overwrite=True)
-    #         self.sdr.close()
-
-    #     print(f"Observation complete. Data stored in {repo+obs}")
-    #     print("Plotting averaged PSD")
-    #     plotAvPSD(repo+obs)     # Plot averaged PSD
