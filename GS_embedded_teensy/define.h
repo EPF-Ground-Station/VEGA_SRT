@@ -2,9 +2,13 @@
 using namespace TeensyTimerTool;
 #include <Sgp4.h>
 
+#define HWSerial Serial2
+
 #define STEP_SPEED_AZ 400
 #define STEP_SPEED_ALT 100
 #define ENCODERS_SPEED 10000
+#define ENCODERS_MAX  pow(2,20) - 1
+#define ZERO 0x00
 
 #define MICROSTEPS 25600.0
 #define ALT_REDUCTION 40.0
@@ -56,15 +60,15 @@ using namespace TeensyTimerTool;
 #define AzSCKon digitalWriteFast(AzSCKPin, HIGH)
 #define AzSCKoff digitalWriteFast(AzSCKPin, LOW)
 
-#define AzNCSPin 8
+#define AzNCSPin 9 // 10 for SPI default
 #define AzNCSon digitalWriteFast(AzNCSPin, HIGH)
 #define AzNCSoff digitalWriteFast(AzNCSPin, LOW)
 
-#define AzMISOPin 9
-#define getAzMISO digitalReadFast(AzMISOPin)
-#define AzMISOisHIGH digitalReadFast(AzMISOPin)
+// #define AzMISOPin 9
+// #define getAzMISO digitalReadFast(AzMISOPin)
+// #define AzMISOisHIGH digitalReadFast(AzMISOPin)
 
-#define AzMOSIPin 10
+//#define AzMOSIPin 10
 
 #define LEDon digitalWriteFast(LED_BUILTIN, HIGH);
 #define LEDoff digitalWriteFast(LED_BUILTIN, LOW);
@@ -73,15 +77,15 @@ using namespace TeensyTimerTool;
 #define AltSCKon digitalWriteFast(AltSCKPin, HIGH)
 #define AltSCKoff digitalWriteFast(AltSCKPin, LOW)
 
-#define AltNCSPin 15
+#define AltNCSPin 6
 #define AltNCSon digitalWriteFast(AltNCSPin, HIGH)
 #define AltNCSoff digitalWriteFast(AltNCSPin, LOW)
 
-#define AltMISOPin 16
-#define getAltMISO digitalReadFast(AltMISOPin)
-#define AltMISOisHIGH digitalReadFast(AltMISOPin)
+// #define AltMISOPin 16
+// #define getAltMISO digitalReadFast(AltMISOPin)
+// #define AltMISOisHIGH digitalReadFast(AltMISOPin)
 
-#define AltMOSIPin 17
+// #define AltMOSIPin 17
 
 PeriodicTimer Timer_StepOn_Az(TCK);
 OneShotTimer Timer_StepsOff_Az(TCK);

@@ -21,8 +21,8 @@ void update_reference_sat(){
 
     sat.findsat((unsigned long) now() - 7199);
 
-    AzRef = sat.satAz * max_encoders / 360.0;
-    AltRef = sat.satEl * max_encoders / 360.0;
+    AzRef = sat.satAz * ENCODERS_MAX / 360.0;
+    AltRef = sat.satEl * ENCODERS_MAX / 360.0;
 
     // Serial.println("-------------------------------");
     // Serial.print("AzRef : ");
@@ -62,8 +62,8 @@ void update_steps(){
         AzDiff = 0;
     }
 
-    if (((AltEncPos < AltRef + HYSTERISIS) && (AltEncPos > AltRef - HYSTERISIS)) || ((AltRef < HYSTERISIS) && (AltEncPos > (max_encoders - HYSTERISIS + AltRef)))) AltDiff = 0;
-    if (((AzEncPos < AzRef + HYSTERISIS) && (AzEncPos > AzRef - HYSTERISIS)) || ((AzRef < HYSTERISIS) && (AzEncPos > (max_encoders - HYSTERISIS + AzRef)))) AzDiff = 0;
+    if (((AltEncPos < AltRef + HYSTERISIS) && (AltEncPos > AltRef - HYSTERISIS)) || ((AltRef < HYSTERISIS) && (AltEncPos > (ENCODERS_MAX - HYSTERISIS + AltRef)))) AltDiff = 0;
+    if (((AzEncPos < AzRef + HYSTERISIS) && (AzEncPos > AzRef - HYSTERISIS)) || ((AzRef < HYSTERISIS) && (AzEncPos > (ENCODERS_MAX - HYSTERISIS + AzRef)))) AzDiff = 0;
 
     if (AltEncPosAbs < 180000) AltDiff = 0;
     //if ((AzEncMultiTurnAbs == 35 && AzEncPosAbs < 399485) || (AzEncMultiTurnAbs == 35 && AzEncPosAbs > 535884)) AzDiff = 0;
@@ -76,21 +76,21 @@ void update_steps(){
     if (AltDirectionToGo)
     {
         AltDIRon;
-        AltSteps = AltDiff * ALT_REDUCTION * MICROSTEPS / max_encoders;
+        AltSteps = AltDiff * ALT_REDUCTION * MICROSTEPS / ENCODERS_MAX;
     } else
     {
         AltDIRoff;
-        AltSteps = AltDiff * ALT_REDUCTION * MICROSTEPS / max_encoders;
+        AltSteps = AltDiff * ALT_REDUCTION * MICROSTEPS / ENCODERS_MAX;
     }
 
     if (AzDirectionToGo)
     {
         AzDIRon;
-        AzSteps = AzDiff * MICROSTEPS / max_encoders;
+        AzSteps = AzDiff * MICROSTEPS / ENCODERS_MAX;
     } else
     {
         AzDIRoff;
-        AzSteps = AzDiff * MICROSTEPS / max_encoders;
+        AzSteps = AzDiff * MICROSTEPS / ENCODERS_MAX;
     }
 }
 

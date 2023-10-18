@@ -1,0 +1,22 @@
+on encoder
+	black and purple not connected at all
+	
+	real order
+		brown
+		gray
+		white
+		green
+		red
+		blue
+		yellow
+		pink
+
+on steppers
+	red
+	yellow
+	black
+	blue (boost)
+	green (fault)
+	gray
+	
+everything is female header (need male on the PCB
