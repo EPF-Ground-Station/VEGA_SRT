@@ -1,0 +1,24 @@
+after standby, does not switch on motors on "point_to"
+getAz broken ; getAlt seems to work, +- 2 deg
+
+After manually spinning it 1.5 : APM answers, but no motion anymore. After restart (switching power off and on), works again
+on untangle + standby : untangles fine, then no motion + noise of motor off but order to move
+
+Untangling on point_to works!
+
+On connecting(False), motors of Alt are off!!! TODO
+
+
+Rk : -fait modulo 360 quand destination > 360 ; mount rugueux : les cables ont du mal à donner du mou lorsqu'ils s'enroulent, 
+rajoutant rapidment de la tension -> réduire max à 1 tour et quart?
+- Possible d'enchainer les commandes en mode inline, elles sont executées les unes apres les autres
+- 
+
+
+
+2EME ROUND APRES MIDI
+
+rien qui marche :
+- soit les cables, probleme hardware, faut tout ouvrir
+- soit l'APM, probleme hardware, truc cassé dans les composants électroniques?
+- soit software, le systeme de ping qui casse tout?
