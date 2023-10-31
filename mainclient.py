@@ -193,6 +193,7 @@ class MainClient(QWidget):
 
             if answer == 'connected':
                 self.ui.pushButton_Disconnect.setEnabled(1)
+                self.MovementFinished()
                 self.SRTconnected = True
 
             if answer == 'disconnected':
@@ -269,6 +270,7 @@ class MainClient(QWidget):
             self.ui.doubleSpinBox_TrackFirstCoord.setEnabled(1)
             self.ui.doubleSpinBox_TrackSecondCoord.setEnabled(1)
         message = ''
+        
         if self.ui.comboBoxTracking.currentIndex() == 2 and self.ui.checkBox_Tracking.isChecked():  # should not happen
             message = 'point'
         else:

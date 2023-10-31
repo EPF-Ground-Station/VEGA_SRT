@@ -143,16 +143,19 @@ class Ui_Widget(object):
         self.horizontalLayout_5.setContentsMargins(-1, 0, -1, -1)
         self.pushButton_goHome = QPushButton(self.tab_home)
         self.pushButton_goHome.setObjectName(u"pushButton_goHome")
+        self.pushButton_goHome.setEnabled(0)
 
         self.horizontalLayout_5.addWidget(self.pushButton_goHome)
 
         self.pushButton_Untangle = QPushButton(self.tab_home)
         self.pushButton_Untangle.setObjectName(u"pushButton_Untangle")
+        self.pushButton_Untangle.setEnabled(0)
 
         self.horizontalLayout_5.addWidget(self.pushButton_Untangle)
 
         self.pushButton_Standby = QPushButton(self.tab_home)
         self.pushButton_Standby.setObjectName(u"pushButton_Standby")
+        self.pushButton_Standby.setEnabled(0)
 
         self.horizontalLayout_5.addWidget(self.pushButton_Standby)
 
@@ -174,6 +177,8 @@ class Ui_Widget(object):
         self.comboBoxTracking.addItem("")
         self.comboBoxTracking.addItem("")
         self.comboBoxTracking.setObjectName(u"comboBoxTracking")
+        
+
 
         self.horizontalLayout_6.addWidget(self.comboBoxTracking)
 
@@ -215,11 +220,13 @@ class Ui_Widget(object):
 
         self.pushButton_GoTo = QPushButton(self.tab_home)
         self.pushButton_GoTo.setObjectName(u"pushButton_GoTo")
+        self.pushButton_GoTo.setEnabled(0)
 
         self.horizontalLayout_6.addWidget(self.pushButton_GoTo)
 
         self.checkBox_Tracking = QCheckBox(self.tab_home)
         self.checkBox_Tracking.setObjectName(u"checkBox_Tracking")
+        self.checkBox_Tracking.setEnabled(0)
 
         self.horizontalLayout_6.addWidget(self.checkBox_Tracking)
 
@@ -272,6 +279,7 @@ class Ui_Widget(object):
         self.pushButton_Disconnect.setObjectName(u"pushButton_Disconnect")
         sizePolicy1.setHeightForWidth(self.pushButton_Disconnect.sizePolicy().hasHeightForWidth())
         self.pushButton_Disconnect.setSizePolicy(sizePolicy1)
+        self.pushButton_Disconnect.setEnabled(False)
 
         self.horizontalLayout.addWidget(self.pushButton_Disconnect)
 

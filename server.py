@@ -396,16 +396,20 @@ class ServerGUI(QMainWindow):
         self.addToLog("Received: " + msg)
         args = msg.split(" ")
         cmd = args[0]
+        
+        print(f"DEBUG : cmd = {cmd}")
 
         # Processing of command
         if cmd in ("connect", "pointRA", "pointGal ", "pointAzAlt", "trackRA", "trackGal", "goHome", "untangle", "standby", "disconnect"):
 
             if not self.motionThread.isRunning():
+                print("DEBUG : Waiting for motionThread to end")
                 # Pauses thread spamming position
                 self.pausePosThread()
                 while self.posThread.pending:   # Waits for posThread return
                     continue
-
+                print("DEBUG : motionThread ended")
+                
                 if len(args) > 1:   # Parses arguments
                     a, b = float(args[1]), float(args[2])
                     self.motionThread = MotionThread(cmd, a, b)
