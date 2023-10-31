@@ -193,8 +193,8 @@ class PositionThread(QThread):
         """Sends position in all coordinates to client"""
 
         az, alt = SRT.getAzAlt()
-        ra, dec = SRT.getPos()
-        long, lat = SRT.getGal()
+        ra, dec = AzAlt2RaDec(az, alt)
+        long, lat = AzAlt2Gal(az, alt)
 
         if (az == -1) or (alt == -1):
             self.sendError(

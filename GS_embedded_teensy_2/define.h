@@ -13,7 +13,7 @@
 #define ELEV_ZENITH_ENCODER_VAL 715671
 
 //TODO change to 3.0
-#define ELEV_ZENITH_SAFETY_MARGIN_DEG 2.0
+#define ELEV_ZENITH_SAFETY_MARGIN_DEG 4.0
 #define ELEV_HORIZON_SAFETY_MARGIN_DEG 5.0
 
 // plus-minus (nearly) 1.25 turns
