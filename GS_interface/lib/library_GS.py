@@ -62,6 +62,7 @@ class SerialPort:
         
         
         ans = self.ser.readline().decode('utf-8')
+        print(f"DEBUG : ans = {ans}")
         status, feedback = ans.split(" | ")
 
         if ("Err" in status) or ("Warn" in status):
