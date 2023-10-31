@@ -400,7 +400,7 @@ class ServerGUI(QMainWindow):
         print(f"DEBUG : cmd = {cmd}")
 
         # Processing of command
-        if cmd in ("connect", "pointRA", "pointGal ", "pointAzAlt", "trackRA", "trackGal", "goHome", "untangle", "standby", "disconnect"):
+        if cmd in ("connect", "pointRA", "pointGal", "pointAzAlt", "trackRA", "trackGal", "goHome", "untangle", "standby", "disconnect"):
 
             if not self.motionThread.isRunning():
                 print("DEBUG : Waiting for motionThread to end")
