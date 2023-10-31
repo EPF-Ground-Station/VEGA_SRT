@@ -98,7 +98,7 @@ class MotionThread(QThread):
             feedback = SRT.trackGal(self.a, self.b)
 
         elif self.cmd == "connect":
-            feedback = SRT.connect()  # False for debug
+            feedback = SRT.connect(False)  # False for debug
 
         elif self.cmd == "disconnect":
             feedback = SRT.disconnect()
@@ -403,12 +403,10 @@ class ServerGUI(QMainWindow):
         if cmd in ("connect", "pointRA", "pointGal", "pointAzAlt", "trackRA", "trackGal", "goHome", "untangle", "standby", "disconnect"):
 
             if not self.motionThread.isRunning():
-                print("DEBUG : Waiting for motionThread to end")
                 # Pauses thread spamming position
                 self.pausePosThread()
                 while self.posThread.pending:   # Waits for posThread return
                     continue
-                print("DEBUG : motionThread ended")
                 
                 if len(args) > 1:   # Parses arguments
                     a, b = float(args[1]), float(args[2])

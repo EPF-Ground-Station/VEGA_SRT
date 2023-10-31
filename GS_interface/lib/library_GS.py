@@ -11,7 +11,7 @@ import json
 import serial
 import time
 from datetime import datetime
-from . import virgo
+# from . import virgo
 from enum import Enum
 from time import sleep
 from threading import Thread
@@ -59,8 +59,10 @@ class SerialPort:
 
     def listen(self):
         """Reads last message from SerialPort with appropriate processing"""
-
-        status, feedback = self.ser.readline().decode('utf-8').split(" | ")
+        
+        
+        ans = self.ser.readline().decode('utf-8')
+        status, feedback = ans.split(" | ")
 
         if ("Err" in status) or ("Warn" in status):
             print(status + " : " + feedback)
@@ -1089,3 +1091,6 @@ def plotAvPSD(path):
 #     freq, psd = welch(average, rate, detrend=False)
 #     freq += fc
 #     return freq, psd
+
+def hours2deg(h):
+    return 360*h/24
