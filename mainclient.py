@@ -1,9 +1,14 @@
 # This Python file uses the following encoding: utf-8
 import sys
+import math
+import cv2
+import numpy as np
 from os.path import expanduser
-from time import time, localtime, strftime
+import time
+from time import localtime, strftime
 
-from PySide6.QtWidgets import QApplication, QWidget, QFileDialog
+from PySide6.QtGui import QImage, QPixmap
+from PySide6.QtWidgets import QApplication, QWidget, QFileDialog, QVBoxLayout, QLabel
 from PySide6.QtCore import Slot, QFileInfo, QTimer, Signal, QThread
 from PySide6.QtNetwork import QTcpSocket
 # Important:
@@ -13,10 +18,26 @@ from PySide6.QtNetwork import QTcpSocket
 from GUI import ui_form_client
 from GUI import ui_form_launcher
 
+DEBUG = 1
+VIDEOSOURCE = ""
 
-def say_hello():
-    print("Button clicked, Hello!")
+def HMStoDeg(h,m,s):
+    return h*360/24+m*6/24+s/240
 
+def DegtoHMS(deg):
+    h = math.trunc(deg/(360/24))
+    m = math.trunc((deg-360/24*h)/(6/24))
+    s = math.trunc((deg-h*360.0/24-m*6/24)/(1/240)*100)/100
+    return (h,m,s)
+
+def DMStoDeg(d,m,s):
+    return d+m/60+s/3600
+
+def DegtoDMS(deg):
+    d = math.trunc(deg)
+    m = math.trunc((deg-d)*60)
+    s = math.trunc((deg-d-m/60)*3600*100)/100
+    return (d,m,s)
 
 class Launcher(QWidget):
     connectAttempt = Signal()
@@ -29,14 +50,13 @@ class Launcher(QWidget):
         self.ui.label_Status.setText("")
 
         self.ui.pushButton_Connect.clicked.connect(self.ConnectClicked)
-
     def ConnectClicked(self):
         print("Trying to connect...")
 
         self.connectAttempt.emit()
 
     def updateStatus(self, msg):
-        """Cahnges status displayed"""
+        """Changes status displayed"""
         if type(msg) != str:
             raise TypeError(
                 "Error : can only display strings in launcher's status")
@@ -66,6 +86,7 @@ class MainClient(QWidget):
         self.client_socket.errorOccurred.connect(self.connexionError)
         self.client_socket.disconnected.connect(self.onDisconnected)
 
+        if DEBUG: self.initGUI()
     @Slot()
     def connectServ(self):
         address = self.Launcher.ui.lineEdit_ipAddress.text()
@@ -122,8 +143,20 @@ class MainClient(QWidget):
 
         self.ui.comboBoxTracking.currentIndexChanged.connect(
             self.TrackingComboBoxChanged)
-
+        self.ui.doubleSpinBox_TrackFirstCoordDecimal.valueChanged.connect(self.TrackFirstCoordDegreeChanged)
+        self.ui.doubleSpinBox_TrackFirstCoord_h.valueChanged.connect(self.TrackFirstCoordHMSChanged)
+        self.ui.doubleSpinBox_TrackFirstCoord_m.valueChanged.connect(self.TrackFirstCoordHMSChanged)
+        self.ui.doubleSpinBox_TrackFirstCoord_s.valueChanged.connect(self.TrackFirstCoordHMSChanged)
+        self.ui.doubleSpinBox_TrackSecondCoordDecimal.valueChanged.connect(self.TrackSecondCoordDegreeChanged)
+        self.ui.doubleSpinBox_TrackSecondCoord_Deg.valueChanged.connect(self.TrackSecondCoordHMSChanged)
+        self.ui.doubleSpinBox_TrackSecondCoord_m.valueChanged.connect(self.TrackSecondCoordHMSChanged)
+        self.ui.doubleSpinBox_TrackSecondCoord_s.valueChanged.connect(self.TrackSecondCoordHMSChanged)
         self.ui.tabWidget.setCurrentIndex(0)
+
+        self.ui.pushButton_openCamera.clicked.connect(self.openCameraClicked)
+        self.cameraThread = QCameraThread()
+        self.cameraThread.closeSignalCameraThread.connect(self.cameraThreadFinished)
+
 
         self.show()
 
@@ -136,7 +169,7 @@ class MainClient(QWidget):
         # TODO self.client_socket disconnect?
 
     def sendServ(self, message):
-
+        if DEBUG: print(message)
         if (not self.SRTconnected) and message != "connect":
             self.addToLog("No antenna connected. Aborting...")
             return
@@ -193,8 +226,8 @@ class MainClient(QWidget):
 
             if answer == 'connected':
                 self.ui.pushButton_Disconnect.setEnabled(1)
-                self.MovementFinished()
                 self.SRTconnected = True
+                self.MovementFinished()
 
             if answer == 'disconnected':
                 self.ui.pushButton_Connect.setEnabled(1)
@@ -233,6 +266,9 @@ class MainClient(QWidget):
         print("Launch Measurement")
         self.addToLog(f"Started measurement | Center Freq.: {self.ui.doubleSpinBox_centerFreq.value()} MHz, "
                       f"Duration: {self.measureDuration} s, Gain: {self.ui.doubleSpinBox_gain.value()} dB.")
+        self.sendServ(f"measure {self.ui.doubleSpinBox_centerFreq.value()} {self.ui.doubleSpinBox_Bandwidth.value()}"
+                      f" {self.ui.doubleSpinBox_tsample.value()} {self.ui.doubleSpinBox_duration.value()}"
+                      f" {self.ui.doubleSpinBox_gain.value()} {self.ui.spinBox_channels.value()}")
 
     def MeasurementDone(self):  # link to end of measurement thread!!
         self.measuring = 0
@@ -254,23 +290,29 @@ class MainClient(QWidget):
         if self.ui.checkBox_Tracking.isChecked():
             self.tracking = 1
             self.ui.pushButton_StopTracking.setEnabled(1)
-            self.ui.doubleSpinBox_TrackFirstCoord.setEnabled(0)
-            self.ui.doubleSpinBox_TrackSecondCoord.setEnabled(0)
+            self.ui.doubleSpinBox_TrackFirstCoordDecimal.setEnabled(0)
+            self.ui.doubleSpinBox_TrackFirstCoord_h.setEnabled(0)
+            self.ui.doubleSpinBox_TrackFirstCoord_m.setEnabled(0)
+            self.ui.doubleSpinBox_TrackFirstCoord_s.setEnabled(0)
+            self.ui.doubleSpinBox_TrackSecondCoordDecimal.setEnabled(0)
+            self.ui.doubleSpinBox_TrackSecondCoord_Deg.setEnabled(0)
+            self.ui.doubleSpinBox_TrackSecondCoord_m.setEnabled(0)
+            self.ui.doubleSpinBox_TrackSecondCoord_s.setEnabled(0)
+            self.ui.comboBoxTracking.setEnabled(0)
             self.ui.checkBox_Tracking.setEnabled(0)
 
             # valeurs
         else:
             self.tracking = 0
             self.ui.pushButton_StopTracking.setEnabled(0)
-            self.ui.doubleSpinBox_TrackFirstCoord.setEnabled(0)
-            self.ui.doubleSpinBox_TrackSecondCoord.setEnabled(0)
+            #self.ui.doubleSpinBox_TrackFirstCoordDecimal.setEnabled(0)
+            #self.ui.doubleSpinBox_TrackSecondCoordDecimal.setEnabled(0)
 
             # Do movement
 
-            self.ui.doubleSpinBox_TrackFirstCoord.setEnabled(1)
-            self.ui.doubleSpinBox_TrackSecondCoord.setEnabled(1)
+            #self.ui.doubleSpinBox_TrackFirstCoord.setEnabled(1)
+            #self.ui.doubleSpinBox_TrackSecondCoord.setEnabled(1)
         message = ''
-        
         if self.ui.comboBoxTracking.currentIndex() == 2 and self.ui.checkBox_Tracking.isChecked():  # should not happen
             message = 'point'
         else:
@@ -288,15 +330,23 @@ class MainClient(QWidget):
             if self.ui.comboBoxTracking.currentIndex() == 2:  # Az Alt
                 message += "AzAlt"
 
-            message += f" {self.ui.doubleSpinBox_TrackFirstCoord.value()} {self.ui.doubleSpinBox_TrackSecondCoord.value()}"
+            message += f" {self.ui.doubleSpinBox_TrackFirstCoordDecimal.value()} {self.ui.doubleSpinBox_TrackSecondCoordDecimal.value()}"
 
         self.sendServ(message)
 
     def StopTrackingClicked(self):
         self.tracking = 0
         self.ui.pushButton_StopTracking.setEnabled(0)
-        self.ui.doubleSpinBox_TrackFirstCoord.setEnabled(1)
-        self.ui.doubleSpinBox_TrackSecondCoord.setEnabled(1)
+        self.ui.doubleSpinBox_TrackFirstCoordDecimal.setEnabled(1)
+        self.ui.doubleSpinBox_TrackFirstCoord_h.setEnabled(1)
+        self.ui.doubleSpinBox_TrackFirstCoord_m.setEnabled(1)
+        self.ui.doubleSpinBox_TrackFirstCoord_s.setEnabled(1)
+        self.ui.doubleSpinBox_TrackSecondCoordDecimal.setEnabled(1)
+        self.ui.doubleSpinBox_TrackSecondCoord_Deg.setEnabled(1)
+        self.ui.doubleSpinBox_TrackSecondCoord_m.setEnabled(1)
+        self.ui.doubleSpinBox_TrackSecondCoord_s.setEnabled(1)
+        self.ui.comboBoxTracking.setEnabled(1)
+        self.ui.checkBox_Tracking.setEnabled(1)
 
         self.ui.pushButton_GoTo.setEnabled(1)
         self.ui.checkBox_Tracking.setEnabled(1)
@@ -328,13 +378,54 @@ class MainClient(QWidget):
         self.sendServ("disconnect")
         print("Disconnect")
 
+    def TrackFirstCoordDegreeChanged(self,val):
+        (h,m,s) = DegtoHMS(val)
+        self.ui.doubleSpinBox_TrackFirstCoord_h.blockSignals(1)
+        self.ui.doubleSpinBox_TrackFirstCoord_m.blockSignals(1)
+        self.ui.doubleSpinBox_TrackFirstCoord_s.blockSignals(1)
+
+        self.ui.doubleSpinBox_TrackFirstCoord_h.setValue(h)
+        self.ui.doubleSpinBox_TrackFirstCoord_m.setValue(m)
+        self.ui.doubleSpinBox_TrackFirstCoord_s.setValue(s)
+
+        self.ui.doubleSpinBox_TrackFirstCoord_h.blockSignals(0)
+        self.ui.doubleSpinBox_TrackFirstCoord_m.blockSignals(0)
+        self.ui.doubleSpinBox_TrackFirstCoord_s.blockSignals(0)
+    def TrackFirstCoordHMSChanged(self, val):
+        self.ui.doubleSpinBox_TrackFirstCoordDecimal.blockSignals(1)
+        self.ui.doubleSpinBox_TrackFirstCoordDecimal.setValue(HMStoDeg(self.ui.doubleSpinBox_TrackFirstCoord_h.value(),
+                                                                       self.ui.doubleSpinBox_TrackFirstCoord_m.value(),
+                                                                       self.ui.doubleSpinBox_TrackFirstCoord_s.value()))
+        self.ui.doubleSpinBox_TrackFirstCoordDecimal.blockSignals(0)
+
+    def TrackSecondCoordDegreeChanged(self,val):
+        (h,m,s) = DegtoDMS(val)
+        self.ui.doubleSpinBox_TrackSecondCoord_Deg.blockSignals(1)
+        self.ui.doubleSpinBox_TrackSecondCoord_m.blockSignals(1)
+        self.ui.doubleSpinBox_TrackSecondCoord_s.blockSignals(1)
+
+        self.ui.doubleSpinBox_TrackSecondCoord_Deg.setValue(h)
+        self.ui.doubleSpinBox_TrackSecondCoord_m.setValue(m)
+        self.ui.doubleSpinBox_TrackSecondCoord_s.setValue(s)
+
+        self.ui.doubleSpinBox_TrackSecondCoord_Deg.blockSignals(0)
+        self.ui.doubleSpinBox_TrackSecondCoord_m.blockSignals(0)
+        self.ui.doubleSpinBox_TrackSecondCoord_s.blockSignals(0)
+    def TrackSecondCoordHMSChanged(self, val):
+        self.ui.doubleSpinBox_TrackSecondCoordDecimal.blockSignals(1)
+        self.ui.doubleSpinBox_TrackSecondCoordDecimal.setValue(DMStoDeg(self.ui.doubleSpinBox_TrackSecondCoord_Deg.value(),
+                                                                       self.ui.doubleSpinBox_TrackSecondCoord_m.value(),
+                                                                       self.ui.doubleSpinBox_TrackSecondCoord_s.value()))
+        self.ui.doubleSpinBox_TrackSecondCoordDecimal.blockSignals(0)
     def TrackingComboBoxChanged(self, index):
         if index == 0:
             self.ui.LabelTrackingFirstCoord.setText("Ra")
             self.ui.LabelTrackingSecondCoord.setText("Dec")
+            self.ui.checkBox_Tracking.setEnabled(1)
         if index == 1:
             self.ui.LabelTrackingFirstCoord.setText("l")
             self.ui.LabelTrackingSecondCoord.setText("b")
+            self.ui.checkBox_Tracking.setEnabled(1)
         if index == 2:
             self.ui.LabelTrackingFirstCoord.setText("Az")
             self.ui.LabelTrackingSecondCoord.setText("Alt")
@@ -407,6 +498,102 @@ class MainClient(QWidget):
         self.ui.AltLabel.setText(f"{Alt:.2f}")
         self.ui.AzLabel.setText(f"{Az:.2f}")
 
+    def openCameraClicked(self):
+        print(self.cameraThread.on)
+        if not self.cameraThread.on:
+            self.cameraThread = QCameraThread()
+            self.cameraThread.closeSignalCameraThread.connect(self.cameraThreadFinished)
+            self.cameraThread.turnOn()
+            self.cameraThread.start()
+            self.ui.pushButton_openCamera.setText("Close Camera")
+        else:
+            self.cameraThread.turnOff()
+            while self.cameraThread.isRunning():
+                pass
+            #self.cameraThread.exit()
+            self.cameraThread = QCameraThread()
+            self.ui.pushButton_openCamera.setText("Open Camera")
+
+    def cameraThreadFinished(self):
+        print("triggered")
+        self.ui.pushButton_openCamera.setText("Open Camera")
+        self.cameraThread = QCameraThread()
+
+class QCameraThread(QThread):
+
+    closeSignalCameraThread = Signal()
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.on = False
+
+        self.display_image_widget = DisplayImageWidget()
+        self.display_image_widget.closeSignal.connect(self.CustomClose)
+
+    def turnOff(self):
+        self.on = False
+        if VIDEOSOURCE == '':
+            return
+        cv2.destroyWindow("Camera")
+
+    def turnOn(self):
+        self.on = True
+        self.display_image_widget.show()
+
+    def CustomClose(self):
+        print("customclosed")
+        self.closeSignalCameraThread.emit()
+        self.exit()
+
+    def run(self):
+        if VIDEOSOURCE == '':
+            return
+
+        self.cap = cv2.VideoCapture(VIDEOSOURCE)
+        self.FRAME_WIDTH = int(self.cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        self.FRAME_HEIGHT = int(self.cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        print('Frame Size: ', self.FRAME_WIDTH, 'x', self.FRAME_HEIGHT)
+
+        self.ret = False
+        self.frame = None
+        if self.cap.isOpened():
+            self.ret, self.frame = self.cap.read()
+
+        while self.ret and self.on:
+            #print("loading")
+            self.ret, self.frame = self.cap.read()
+            if self.frame is not None: self.display_image_widget.show_image(self.frame)
+            time.sleep(0.05)
+            #cv2.imshow('Camera', self.frame)
+
+
+class DisplayImageWidget(QWidget):
+
+    closeSignal = Signal()
+    def __init__(self, parent=None):
+        super(DisplayImageWidget, self).__init__(parent)
+
+        self.image_frame = QLabel()
+
+        self.layout = QVBoxLayout()
+        self.layout.addWidget(self.image_frame)
+        self.setLayout(self.layout)
+
+    def closeEvent(self, event):
+        print("closed")
+        self.closeSignal.emit()
+
+    @Slot()
+    def show_image(self, cap):
+        scale_percent = 60  # percent of original size
+        width = int(cap.shape[1] * scale_percent / 100)
+        height = int(cap.shape[0] * scale_percent / 100)
+        dim = (width, height)
+
+        # resize image
+        resized = cv2.resize(cap, dim, interpolation=cv2.INTER_AREA)
+
+        self.image_frame.setPixmap(QPixmap.fromImage(QImage(resized.data, resized.shape[1],
+                                                            resized.shape[0], QImage.Format_RGB888).rgbSwapped()))
 
 if __name__ == "__main__":
     sys.argv[0] = 'Astro Antenna'
