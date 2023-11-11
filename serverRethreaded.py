@@ -73,6 +73,7 @@ class SRTThread(QThread):
         self.posLoggingOn = True
         self.pending = False
         self.connected = 0
+        self.trackingBool = False
         self.timeLastPosCheck = time.time()
 
         self.SRT = Srt("/dev/ttyUSB0", 115200, 1)
@@ -112,7 +113,7 @@ class SRTThread(QThread):
         self.posLoggingOn = True
 
     def sendPos(self):
-        if self.connected == 0:
+        if self.connected == 0 or self.trackingBool:
             return
 
         az, alt = self.SRT.getAzAlt()
@@ -147,7 +148,6 @@ class SRTThread(QThread):
                 if cmd in ("pointRA", "pointGal", "pointAzAlt", "trackRA", "trackGal"):
 
                     if len(args) == 3:  # Parses arguments (point/track)
-                        print("SRT Thread marker 1")
                         a, b = float(args[1]), float(args[2])
                         if cmd == "pointRA":
                             a, b = RaDec2AzAlt(a, b)
@@ -156,7 +156,7 @@ class SRTThread(QThread):
                         if "point" in self.msg:
                             feedback = self.SRT.pointAzAlt(a, b)
                         elif cmd == "trackRA":
-                            print("handling trackRA...")
+                            self.trackingBool = True
                             feedback = self.SRT.trackRaDec(a, b)
                         elif cmd == "trackGal":
                             feedback = self.SRT.trackGal(a, b)
