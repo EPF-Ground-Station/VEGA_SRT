@@ -25,7 +25,7 @@ Format of exchanged messages :
     Notice hence forbidden characters & and | in the body of exchanged messages
 """
 
-POS_LOGGING_RATE = 1
+POS_LOGGING_RATE = 5
 
 
 class sigEmettor(QObject):
@@ -174,6 +174,7 @@ class SRTThread(QThread):
                                 self.connected = 1
                         elif self.msg == "disconnect":
                             feedback = self.SRT.disconnect()
+                            self.connected = 0
                         elif self.msg == "untangle":
                             feedback = self.SRT.untangle()
                         elif self.msg == "standby":

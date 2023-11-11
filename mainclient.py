@@ -19,7 +19,7 @@ from GUI import ui_form_client
 from GUI import ui_form_launcher
 
 DEBUG = 0
-VIDEOSOURCE = "rtsp://GroundStationEPFL:VegaStar2023@128.178.39.239/stream1"
+VIDEOSOURCE = "rtsp://GroundStationEPFL:VegaStar2023@128.178.39.239/stream2"
 
 def HMStoDeg(h,m,s):
     return h*360/24+m*6/24+s/240
