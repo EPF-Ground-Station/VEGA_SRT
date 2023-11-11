@@ -25,7 +25,7 @@ Format of exchanged messages :
     Notice hence forbidden characters & and | in the body of exchanged messages
 """
 
-POS_LOGGING_RATE = 5
+POS_LOGGING_RATE = 3
 
 
 class sigEmettor(QObject):
