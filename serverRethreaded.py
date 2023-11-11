@@ -164,7 +164,7 @@ class SRTThread(QThread):
                         raise ValueError("ERROR : invalid command passed to server")
 
                 if cmd in ("connect", "goHome", "untangle",
-                           "standby", "disconnect"):
+                           "standby", "disconnect", "stopTracking"):
 
                     if len(args) == 1:
                         if cmd == "goHome":
@@ -183,6 +183,9 @@ class SRTThread(QThread):
                             feedback = self.SRT.standby()
                         elif cmd == "wait":
                             feedback = ""
+                        elif cmd == "stopTracking":
+                            feedback = self.SRT.stopTracking()
+                            self.trackingBool = False
 
                     else:
                         raise ValueError(

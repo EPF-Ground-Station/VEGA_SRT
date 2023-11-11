@@ -357,6 +357,7 @@ class MainClient(QWidget):
 
         self.ui.pushButton_GoTo.setEnabled(1)
         self.ui.checkBox_Tracking.setEnabled(1)
+        self.sendServ()
         print("Stop Tracking")
 
     def MovementFinished(self):
