@@ -592,7 +592,7 @@ class DisplayImageWidget(QWidget):
 
     @Slot()
     def show_image(self, cap):
-        scale_percent = 60  # percent of original size
+        scale_percent = 100  # percent of original size
         width = int(cap.shape[1] * scale_percent / 100)
         height = int(cap.shape[0] * scale_percent / 100)
         dim = (width, height)

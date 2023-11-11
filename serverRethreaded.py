@@ -155,6 +155,7 @@ class SRTThread(QThread):
                         if "point" in self.msg:
                             feedback = self.SRT.pointAzAlt(a, b)
                         elif self.msg == "trackRA":
+                            print("handling trackRA...")
                             feedback = self.SRT.trackRaDec(a, b)
                         elif self.msg == "trackGal":
                             feedback = self.SRT.trackGal(a, b)
