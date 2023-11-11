@@ -18,8 +18,8 @@ from PySide6.QtNetwork import QTcpSocket
 from GUI import ui_form_client
 from GUI import ui_form_launcher
 
-DEBUG = 1
-VIDEOSOURCE = ""
+DEBUG = 0
+VIDEOSOURCE = "rtsp://GroundStationEPFL:VegaStar2023@128.178.39.239/stream1"
 
 def HMStoDeg(h,m,s):
     return h*360/24+m*6/24+s/240
@@ -487,10 +487,10 @@ class MainClient(QWidget):
             self.MeasurementDone()  # %TODO Temporary! link to thread end
 
     def untangleClicked(self):
-        pass
+        self.sendServ("untangle")
 
     def standbyClicked(self):
-        pass
+        self.sendServ("standby")
 
     def setCurrentCoords(self, *args):
 
@@ -540,7 +540,7 @@ class QCameraThread(QThread):
         self.on = False
         if VIDEOSOURCE == '':
             return
-        cv2.destroyWindow("Camera")
+        self.display_image_widget.close()
 
     def turnOn(self):
         self.on = True
@@ -549,6 +549,7 @@ class QCameraThread(QThread):
     def CustomClose(self):
         print("customclosed")
         self.closeSignalCameraThread.emit()
+        self.display_image_widget.close()
         self.exit()
 
     def run(self):
@@ -598,9 +599,10 @@ class DisplayImageWidget(QWidget):
 
         # resize image
         resized = cv2.resize(cap, dim, interpolation=cv2.INTER_AREA)
-
-        self.image_frame.setPixmap(QPixmap.fromImage(QImage(resized.data, resized.shape[1],
-                                                            resized.shape[0], QImage.Format_RGB888).rgbSwapped()))
+        #cv2.imshow("1", cap)
+        #cv2.waitKey(0)
+        height, width, channel = resized.shape
+        self.image_frame.setPixmap(QPixmap.fromImage(QImage(resized.data, width, height, 3*width, QImage.Format_BGR888)))
 
 if __name__ == "__main__":
     sys.argv[0] = 'Astro Antenna'

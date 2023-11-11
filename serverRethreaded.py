@@ -233,6 +233,7 @@ class ServerGUI(QMainWindow):
         self.SRTThread.send2socket.connect(self.sendClient)
         self.SRTThread.endMotion.connect(self.sendEndMotion)
         self.sendToSRTSignal.connect(self.SRTThread.receiveCommand)
+        self.SRTThread.start()
         # When in motion, stop asking for position. Tracking not affected
 
         self.measuring = 0
