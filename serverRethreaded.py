@@ -142,7 +142,7 @@ class SRTThread(QThread):
 
                 args = self.msg.split(" ")
                 cmd = args[0]
-                print("SRT Thread handling command: " + cmd)
+                print("SRT Thread handling command: " + cmd+", with "+str(len(args))+" arguments")
                 # Processing of command
                 if cmd in ("pointRA", "pointGal", "pointAzAlt", "trackRA", "trackGal"):
 
@@ -312,8 +312,8 @@ class ServerGUI(QMainWindow):
             while self.SRTThread.pending:
                 pass
             time2 = time.time_ns()
-            self.addToLog(f"DEBUG: waited {round((time2 - time1) / 1e6)} ms for SRTThread to stop pending (in fn sendClient, "
-                  f"sending message "+msg+")")
+            #self.addToLog(f"DEBUG: waited {round((time2 - time1) / 1e6)} ms for SRTThread to stop pending (in fn sendClient, "
+            #      f"sending message "+msg+")")
 
             msg = '&' + msg  # Adds a "begin" character
             # Sends the message
