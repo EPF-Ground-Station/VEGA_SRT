@@ -151,6 +151,13 @@ class MainClient(QWidget):
         self.ui.doubleSpinBox_TrackSecondCoord_Deg.valueChanged.connect(self.TrackSecondCoordHMSChanged)
         self.ui.doubleSpinBox_TrackSecondCoord_m.valueChanged.connect(self.TrackSecondCoordHMSChanged)
         self.ui.doubleSpinBox_TrackSecondCoord_s.valueChanged.connect(self.TrackSecondCoordHMSChanged)
+
+        self.ui.pushButton_Standby.setEnabled(0)
+        self.ui.pushButton_Untangle.setEnabled(0)
+        self.ui.pushButton_goHome.setEnabled(0)
+        self.ui.pushButton_GoTo.setEnabled(0)
+        self.ui.checkBox_Tracking.setEnabled(0)
+
         self.ui.tabWidget.setCurrentIndex(0)
 
         self.ui.pushButton_openCamera.clicked.connect(self.openCameraClicked)
