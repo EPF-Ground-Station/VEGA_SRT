@@ -164,12 +164,13 @@ class MainClient(QWidget):
         self.cameraThread = QCameraThread()
         self.cameraThread.closeSignalCameraThread.connect(self.cameraThreadFinished)
 
-
         self.show()
 
     def onDisconnected(self):
         self.addToLog("Disconnected from the server.")
         self.Launcher.updateStatus("Disconnected from the server.")
+
+        self.initGUI()
         self.hide()
         self.Launcher.show()
         self.Launcher.ui.pushButton_Connect.setEnabled(1)
