@@ -400,7 +400,7 @@ class ServerGUI(QMainWindow):
             self.sendOK("connected")
         elif cmd == "disconnect":
             self.sendOK("disconnected")
-        elif cmd in ["trackRA", "trackGal"]:
+        elif cmd.split(" ")[0] in ["trackRA", "trackGal"]:
             self.sendOK("tracking")
         else:
             self.sendOK("IDLE")
