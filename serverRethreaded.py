@@ -149,16 +149,16 @@ class SRTThread(QThread):
                     if len(args) == 3:  # Parses arguments (point/track)
                         print("SRT Thread marker 1")
                         a, b = float(args[1]), float(args[2])
-                        if self.msg == "pointRA":
+                        if cmd == "pointRA":
                             a, b = RaDec2AzAlt(a, b)
-                        if self.msg == "pointGal":
+                        if cmd == "pointGal":
                             a, b = Gal2AzAlt(a, b)
                         if "point" in self.msg:
                             feedback = self.SRT.pointAzAlt(a, b)
-                        elif self.msg == "trackRA":
+                        elif cmd == "trackRA":
                             print("handling trackRA...")
                             feedback = self.SRT.trackRaDec(a, b)
-                        elif self.msg == "trackGal":
+                        elif cmd == "trackGal":
                             feedback = self.SRT.trackGal(a, b)
                     else:
                         raise ValueError("ERROR : invalid command passed to server")
@@ -167,21 +167,21 @@ class SRTThread(QThread):
                            "standby", "disconnect"):
 
                     if len(args) == 1:
-                        if self.msg == "goHome":
+                        if cmd == "goHome":
                             feedback = self.SRT.go_home()
-                        elif self.msg == "connect":
+                        elif cmd == "connect":
                             feedback = self.SRT.connect(False)  # False for debug TODO : remove False
                             if feedback == 'IDLE':
                                 print("SRT Thread connected")
                                 self.connected = 1
-                        elif self.msg == "disconnect":
+                        elif cmd == "disconnect":
                             feedback = self.SRT.disconnect()
                             self.connected = 0
-                        elif self.msg == "untangle":
+                        elif cmd == "untangle":
                             feedback = self.SRT.untangle()
-                        elif self.msg == "standby":
+                        elif cmd == "standby":
                             feedback = self.SRT.standby()
-                        elif self.msg == "wait":
+                        elif cmd == "wait":
                             feedback = ""
 
                     else:
