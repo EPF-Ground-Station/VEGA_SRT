@@ -100,7 +100,9 @@ class SRTThread(QThread):
         msg = "ERROR|" + msg
         self.sendClient(msg)
 
-    def receiveCommand(self, msg):
+    def receiveCommand(self, str):
+        print("received command:")
+        print(str)
         self.msg = str
 
     def pausePositionLogging(self):
