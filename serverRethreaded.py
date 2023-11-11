@@ -102,8 +102,6 @@ class SRTThread(QThread):
         self.sendClient(msg)
 
     def receiveCommand(self, str):
-        print("received command:")
-        print(str)
         self.msg = str
 
     def pausePositionLogging(self):
@@ -140,8 +138,8 @@ class SRTThread(QThread):
             if self.msg != '':
 
                 self.pending = True
-
-                args = self.msg.split(" ")
+                msg = self.msg
+                args = msg.split(" ")
                 cmd = args[0]
                 print("SRT Thread handling command: " + cmd+", with "+str(len(args))+" arguments")
                 # Processing of command
@@ -153,7 +151,7 @@ class SRTThread(QThread):
                             a, b = RaDec2AzAlt(a, b)
                         if cmd == "pointGal":
                             a, b = Gal2AzAlt(a, b)
-                        if "point" in self.msg:
+                        if "point" in msg:
                             feedback = self.SRT.pointAzAlt(a, b)
                         elif cmd == "trackRA":
                             self.trackingBool = True
@@ -208,8 +206,8 @@ class SRTThread(QThread):
 
                 feedback = str(feedback)
 
-                print("SRT Thread handled: " + self.msg + " with feedback: " + feedback)
-                self.endMotion.emit(self.msg, feedback)
+                print("SRT Thread handled: " + msg + " with feedback: " + feedback)
+                self.endMotion.emit(msg, feedback)
                 self.msg = ''
 
 

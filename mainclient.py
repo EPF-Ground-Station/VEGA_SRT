@@ -344,7 +344,7 @@ class MainClient(QWidget):
 
     def StopTrackingClicked(self):
         self.tracking = 0
-        """self.ui.pushButton_StopTracking.setEnabled(0)
+        self.ui.pushButton_StopTracking.setEnabled(0)
         self.ui.doubleSpinBox_TrackFirstCoordDecimal.setEnabled(1)
         self.ui.doubleSpinBox_TrackFirstCoord_h.setEnabled(1)
         self.ui.doubleSpinBox_TrackFirstCoord_m.setEnabled(1)
@@ -357,7 +357,7 @@ class MainClient(QWidget):
         self.ui.checkBox_Tracking.setEnabled(1)
 
         self.ui.pushButton_GoTo.setEnabled(1)
-        self.ui.checkBox_Tracking.setEnabled(1)"""
+        self.ui.checkBox_Tracking.setEnabled(1)
         self.sendServ("stopTracking")
         print("Stop Tracking")
 
