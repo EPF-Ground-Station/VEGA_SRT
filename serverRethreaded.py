@@ -72,6 +72,7 @@ class SRTThread(QThread):
         self.on = True
         self.posLoggingOn = True
         self.pending = False
+        self.connected = 0
         self.timeLastPosCheck = time.time()
 
         self.SRT = Srt("/dev/ttyUSB0", 115200, 1)
@@ -109,6 +110,9 @@ class SRTThread(QThread):
         self.posLoggingOn = True
 
     def sendPos(self):
+        if self.connected == 0:
+            return
+
         az, alt = self.SRT.getAzAlt()
         ra, dec = self.SRT.getPos()
         long, lat = self.SRT.getGal()
