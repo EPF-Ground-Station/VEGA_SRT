@@ -139,10 +139,10 @@ class SRTThread(QThread):
             if self.msg != '':
 
                 self.pending = True
-                print("SRT Thread handling: " + self.msg)
+
                 args = self.msg.split(" ")
                 cmd = args[0]
-
+                print("SRT Thread handling command: " + cmd)
                 # Processing of command
                 if cmd in ("pointRA", "pointGal", "pointAzAlt", "trackRA", "trackGal"):
 
