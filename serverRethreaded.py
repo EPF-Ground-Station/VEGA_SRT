@@ -147,6 +147,7 @@ class SRTThread(QThread):
                 if cmd in ("pointRA", "pointGal", "pointAzAlt", "trackRA", "trackGal"):
 
                     if len(args) == 3:  # Parses arguments (point/track)
+                        print("SRT Thread marker 1")
                         a, b = float(args[1]), float(args[2])
                         if self.msg == "pointRA":
                             a, b = RaDec2AzAlt(a, b)
@@ -169,7 +170,7 @@ class SRTThread(QThread):
                         if self.msg == "goHome":
                             feedback = self.SRT.go_home()
                         elif self.msg == "connect":
-                            feedback = self.SRT.connect(False)  # False for debug
+                            feedback = self.SRT.connect(False)  # False for debug TODO : remove False
                             if feedback == 'IDLE':
                                 print("SRT Thread connected")
                                 self.connected = 1
