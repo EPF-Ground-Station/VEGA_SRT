@@ -11,7 +11,7 @@ import json
 import serial
 import time
 from datetime import datetime
-# from . import virgo
+from . import virgo
 from enum import Enum
 from time import sleep
 from threading import Thread
@@ -25,6 +25,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from multiprocessing import Process
 from rtlsdr import *
+from PySide6.QtCore import Slot, QFileInfo, QTimer, Signal, QThread, QObject
 
 NORTH = 990000
 TRACKING_RATE = 0.1  # Necessary delay for sending point_to to APM while tracking
@@ -59,11 +60,8 @@ class SerialPort:
 
     def listen(self):
         """Reads last message from SerialPort with appropriate processing"""
-        
-        
-        ans = self.ser.readline().decode('utf-8')
-        print(f"DEBUG : ans = {ans}")
-        status, feedback = ans.split(" | ")
+
+        status, feedback = self.ser.readline().decode('utf-8').split(" | ")
 
         if ("Err" in status) or ("Warn" in status):
             print(status + " : " + feedback)
@@ -142,39 +140,61 @@ class BckgrndAPMTask(BckgrndTask):
         self.ser = ser
 
 
-class Ping(BckgrndAPMTask):
+# class Ping(BckgrndAPMTask):
 
-    def __init__(self, ser):
+#     def __init__(self, ser):
 
-        BckgrndAPMTask.__init__(self, ser)
+#         BckgrndAPMTask.__init__(self, ser)
+
+#     def run(self):
+
+#         while not self.stop:
+
+#             if self.on:
+
+#                 self.pending = True         # Indicates waiting for an answer
+#                 ans = self.ser.send_Ser("ping ")
+#                 self.pending = False        # Answer received
+
+#                 timeNow = time.time()       # Waits before pinging again
+#                 while time.time() < timeNow + PING_RATE:
+#                     pass
+
+
+class QPing(QThread):
+
+    sendPing = Signal()
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
 
     def run(self):
-
         while not self.stop:
+            sendPing.emit()
+            timeNow = time.time()       # Waits before pinging again
+            while time.time() < timeNow + PING_RATE:
+                pass
 
-            if self.on:
+    def stop(self):             # Allows to kill the thread
+        self.stop = True
 
-                self.pending = True         # Indicates waiting for an answer
-                ans = self.ser.send_Ser("ping ")
-                self.pending = False        # Answer received
+    def pause(self):
+        self.on = False
 
-                timeNow = time.time()       # Waits before pinging again
-                while time.time() < timeNow + PING_RATE:
-                    pass
+    def unpause(self):
+        self.on = True
 
 
-class Tracker(BckgrndAPMTask):
-    """
-    Thread that tracks some given sky coordinates. Only supports RADEC atm
+class QTracker(QThread):
 
-    Possible Improvements : Implement tracking satellites out of TLEs,
-    galactic coordinates, objects of solar system
+    sendPointTo = Signal(float, float)
 
-    """
+    def __init__(self, _mode=TrackMode.RADEC, tle=None):
 
-    def __init__(self, ser, _mode=TrackMode.RADEC, tle=None):
+        super().__init__(self)
 
-        BckgrndAPMTask.__init__(self, ser)
+        self.stop = False
+        self.on = False
 
         self.az = 0
         self.alt = 0
@@ -203,6 +223,14 @@ class Tracker(BckgrndAPMTask):
         #     print("Tracker's target below 5° in elevation. Tracking aborted...")
         #     self.stop = True
 
+    def turnOn(self):
+        self.on = True
+
+    def setMode(self, mode):
+        """Sets tracking mode"""
+
+        self.mode = TrackMode(mode)
+
     def setTarget(self, *args):
         """Sets target's coordinates"""
 
@@ -220,28 +248,6 @@ class Tracker(BckgrndAPMTask):
                 raise ValueError(
                     f"Tracker.setTarget() takes 1 arguments in SAT mode, {len(args)} provided")
             self.tle = args[0]
-
-    def setMode(self, mode):
-        """Sets tracking mode"""
-
-        self.mode = TrackMode(mode)
-
-    def waitForSat(self, azFuture, altFuture):
-        """Anticipates sat's future position to optimize tracking rate"""
-
-        print(
-            f"Moving to target satellite at az {azFuture}, alt {altFuture}... ")
-        time_start = time.time()
-        self.pending = True
-        ans = self.ser.send_Ser(f"point_to {azFuture:2f} {altFuture:2f}")
-        self.pending = False
-        time_end = time.time()
-        delay = SAT_INITIAL_DELAY - (time_end - time_start)
-        if delay > 0:
-            time.sleep(delay)
-
-        self.satInRange = True
-        print("Sat in range. Tracking begins...")
 
     def run(self):
 
@@ -271,25 +277,151 @@ class Tracker(BckgrndAPMTask):
                                 "Target satellite not anymore visible. Motion stopped...")
                             continue
 
-                self.pending = True         # Indicates waiting for an answer
-                ans = self.ser.send_Ser(f"point_to {self.az:2f} {self.alt:2f}")
-                self.pending = False        # Answer received
+                self.on = False  # Pauses the thread when pending
+                self.sendPointTo.emit(self.az, self.alt)
 
                 # delay next
                 timeNow = time.time()
                 while time.time() < timeNow + TRACKING_RATE:
                     pass
 
-                if "Err" in ans:
-                    print("Error while tracking. Tracking aborted...")
-                    self.stop = True
+    @Slot
+    def onIdle(self):
+        """Slot triggered when SRT is ready for next tracking motion"""
+
+        self.on = True
+
+# class Tracker(BckgrndAPMTask):
+#     """
+#     Thread that tracks some given sky coordinates. Only supports RADEC atm
+
+#     Possible Improvements : Implement tracking satellites out of TLEs,
+#     galactic coordinates, objects of solar system
+
+#     """
+
+#     def __init__(self, ser, _mode=TrackMode.RADEC, tle=None):
+
+#         BckgrndAPMTask.__init__(self, ser)
+
+#         self.az = 0
+#         self.alt = 0
+#         self.a = 0      # RA in radec, LONG in gal
+#         self.b = 0      # DEC in radec, b in gal
+#         self.mode = _mode
+#         self.tle = tle
+#         self.satInRange = False  # Flag indicating whether sat is in fov
+
+#     def refresh_azalt(self):
+#         """Refreshes coords of target depending on tracking mode"""
+
+#         if self.mode.value == 1:  # if RADEC
+#             self.az, self.alt = RaDec2AzAlt(self.a, self.b)
+
+#         elif self.mode.value == 2:  # if GAL
+#             self.az, self.alt = Gal2AzAlt(self.a, self.b)
+
+#         elif self.mode.value == 3:  # if SAT
+
+#             self.az, self.alt = TLE2AzAlt(
+#                 self.tle)    # , delay=TRACKING_RATE/2 Anticipate tracking rate
+
+#         # Checks if target is observable
+#         # if self.alt < 5:
+#         #     print("Tracker's target below 5° in elevation. Tracking aborted...")
+#         #     self.stop = True
+
+#     def setTarget(self, *args):
+#         """Sets target's coordinates"""
+
+#         # If coords mode
+#         if self.mode.value in (1, 2):
+#             if len(args) != 2:
+#                 raise ValueError(
+#                     f"Tracker.setTarget() takes 2 arguments in coords mode, {len(args)} provided")
+#             else:
+#                 self.a, self.b = args
+
+#         # if SAT mode
+#         else:
+#             if len(args) != 1:
+#                 raise ValueError(
+#                     f"Tracker.setTarget() takes 1 arguments in SAT mode, {len(args)} provided")
+#             self.tle = args[0]
+
+#     def setMode(self, mode):
+#         """Sets tracking mode"""
+
+#         self.mode = TrackMode(mode)
+
+#     def waitForSat(self, azFuture, altFuture):
+#         """Anticipates sat's future position to optimize tracking rate"""
+
+#         print(
+#             f"Moving to target satellite at az {azFuture}, alt {altFuture}... ")
+#         time_start = time.time()
+#         self.pending = True
+#         ans = self.ser.send_Ser(f"point_to {azFuture:2f} {altFuture:2f}")
+#         self.pending = False
+#         time_end = time.time()
+#         delay = SAT_INITIAL_DELAY - (time_end - time_start)
+#         if delay > 0:
+#             time.sleep(delay)
+
+#         self.satInRange = True
+#         print("Sat in range. Tracking begins...")
+
+#     def run(self):
+
+#         while not self.stop:
+
+#             if self.on:
+
+#                 if self.mode.value != 3:    # If not sat
+
+#                     self.refresh_azalt()        # Refreshes coord
+#                     if self.alt < 5:  # If target not visible, wait for it
+#                         continue
+
+#                 else:       # If sat
+#                     if not self.satInRange:
+#                         azFuture, altFuture = TLE2AzAlt(
+#                             self.tle, SAT_INITIAL_DELAY)
+#                         if altFuture < 5:
+#                             continue
+#                         else:
+#                             self.waitForSat(azFuture, altFuture)
+#                     else:
+#                         self.refresh_azalt()  # If sat in range, refresh azalt
+#                         if self.alt < 5:  # If sat not anymore in range
+#                             self.satInRange = False
+#                             print(
+#                                 "Target satellite not anymore visible. Motion stopped...")
+#                             continue
+
+#                 self.pending = True         # Indicates waiting for an answer
+#                 ans = self.ser.send_Ser(f"point_to {self.az:2f} {self.alt:2f}")
+#                 self.pending = False        # Answer received
+
+#                 # delay next
+#                 timeNow = time.time()
+#                 while time.time() < timeNow + TRACKING_RATE:
+#                     pass
+
+#                 if "Err" in ans:
+#                     print("Error while tracking. Tracking aborted...")
+#                     self.stop = True
 
 
-class Srt:
+class Srt(QObject):
 
     """Class that supervizes interface btw user and Small Radio Telescope"""
 
-    def __init__(self, adress, baud, timeo=None):
+    trackMotionEnd = Signal()
+
+    def __init__(self, adress, baud, timeo=None, parent=None):
+
+        super().__init__(parent)
 
         self.ser = SerialPort(adress, baud, timeo=None)
         self.ser.disconnect()       # Keeps serial connection closed for safety
@@ -297,11 +429,14 @@ class Srt:
         self.timeout = timeo
         self.apmMsg = ""        # Stores last message from APM
 
-        self.tracker = Tracker(self.ser)
+        self.tracker = QTracker()
         self.tracking = False
+        self.tracker.sendPointTo.connect(self.onTrackerSignal)
+        self.trackMotionEnd.connect(self.tracker.turnOn)
 
-        self.ping = Ping(self.ser)
+        self.ping = QPing()
         self.ping.start()   # Initializes pinger : still needs to be unpaused to begin pinging
+        self.ping.sendPing.connect(self.onPingSignal)
 
         # Connect SDR and set default parameters
         self.sdr = RtlSdr()
@@ -314,6 +449,8 @@ class Srt:
         # Declares process that runs observations
         self.obsProcess = None
         self.observing = False
+
+        self.pending = False
 
     def go_home(self, verbose=False):
         """Takes SRT to its home position and shuts motors off"""
@@ -361,25 +498,16 @@ class Srt:
 
         """
 
-        if self.ser.connected:
+        self.pending = True
 
-            if self.tracking:
-                self.tracker.pause()         # Pauses tracker
-                while self.tracker.pending:
-                    continue
-            else:
-                self.ping.pause()            # Otherwise pauses ping
-                while self.ping.pending:
-                    continue
+        if self.ser.connected:
 
             answer = self.ser.send_Ser(msg)  # Sends message to serial port
 
-            if self.tracking:
-                self.tracker.unpause()       # Unpauses tracker
-            else:
-                self.ping.unpause()          # Otherwise unpauses ping
+            self.pending = False
 
-            print(answer)           # Display answer (useful atm in cmd line)
+            # DEBUG Display answer (useful atm in cmd line)
+            print(answer)
 
             if verbose:
                 print(f"Message sent : {msg}")
@@ -536,6 +664,16 @@ class Srt:
             print(f"Moving to long={long}, lat = {lat}...")
         az, alt = Gal2AzAlt(long, lat)
         return self.pointAzAlt(az, alt, verbose)
+
+    def onTrackerSignal(self, az, alt):
+
+        if self.tracking:
+
+            self.pointAzAlt(az, alt)
+            self.trackMotionEnd.emit()
+
+    def onPingSignal(self):
+        self.send_APM("ping")
 
     def trackRaDec(self, ra, dec):
         """
@@ -1092,6 +1230,3 @@ def plotAvPSD(path):
 #     freq, psd = welch(average, rate, detrend=False)
 #     freq += fc
 #     return freq, psd
-
-def hours2deg(h):
-    return 360*h/24
