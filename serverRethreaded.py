@@ -168,7 +168,7 @@ class SRTThread(QThread):
                         if cmd == "goHome":
                             feedback = self.SRT.go_home()
                         elif cmd == "connect":
-                            feedback = self.SRT.connectAPM()  # False for debug
+                            feedback = self.SRT.connectAPM(False)  # TODO: remove False for debug
                             if feedback == 'IDLE' or feedback == 'Untangled':
                                 print("SRT Thread connected")
                                 self.connected = 1
