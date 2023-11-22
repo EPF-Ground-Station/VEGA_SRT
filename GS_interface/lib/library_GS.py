@@ -483,6 +483,7 @@ class Srt(QObject):
         if water:               # Evacuates water in default mode
             msg = self.empty_water()
 
+        self.getAllCoords()
         return msg
 
     def disconnectAPM(self):
