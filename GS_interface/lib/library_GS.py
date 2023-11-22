@@ -676,8 +676,10 @@ class Srt(QObject):
         if verbose:
             print(f"Moving to Az={az}, Alt = {alt}...")
         coord = str(az) + ' ' + str(alt)
+        time0 = time.now()
         self.getAllCoords()
-
+        time1 = time.now()
+        print(f"{(time1-time0)*1000} ms")
         return self.send_APM("point_to " + coord, verbose)
 
     def pointRaDec(self, ra, dec, verbose=False):
