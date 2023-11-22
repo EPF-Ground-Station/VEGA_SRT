@@ -205,6 +205,7 @@ class QTracker(QThread):
         self.mode = _mode
         self.tle = tle
         self.satInRange = False  # Flag indicating whether sat is in fov
+        self.pending = False
 
     def refresh_azalt(self):
         """Refreshes coords of target depending on tracking mode"""
@@ -228,6 +229,9 @@ class QTracker(QThread):
     def turnOn(self):
         self.on = True
 
+    def pause(self):
+        self.on = False
+        return
     def setMode(self, mode):
         """Sets tracking mode"""
 
@@ -254,9 +258,9 @@ class QTracker(QThread):
     def run(self):
 
         while not self.stop:
-
+            self.pending = False
             if self.on:
-
+                self.pending = True
                 if self.mode.value != 3:    # If not sat
 
                     self.refresh_azalt()        # Refreshes coord
@@ -420,6 +424,7 @@ class Srt(QObject):
     """Class that supervizes interface btw user and Small Radio Telescope"""
 
     trackMotionEnd = Signal()
+    pauseTracking = Signal()
 
     def __init__(self, adress, baud, timeo=None, parent=None):
 
@@ -438,6 +443,7 @@ class Srt(QObject):
         self.tracking = False
         self.tracker.sendPointTo.connect(self.onTrackerSignal)
         self.trackMotionEnd.connect(self.tracker.turnOn)
+        self.pauseTracking.connect(self.tracker.pause)
 
         self.ping = QPing()
         self.ping.start()   # Initializes pinger : still needs to be unpaused to begin pinging
@@ -491,6 +497,8 @@ class Srt(QObject):
 
         if not self.ser.connected:
             return "SRT already disconnected"
+
+        self.stopTracking()
 
         msg = self.go_home()  # Gets SRT to home position
         self.ping.pause()           # Stop pinging
@@ -623,6 +631,8 @@ class Srt(QObject):
         self.ra, self.dec = ra, dec
         self.long, self.lat = long, lat
 
+        return
+
     def returnStoredCoords(self):
         return (self.az, self.alt, self.ra, self.dec, self.long, self.lat)
     def untangle(self, verbose=False):
@@ -676,11 +686,14 @@ class Srt(QObject):
         if verbose:
             print(f"Moving to Az={az}, Alt = {alt}...")
         coord = str(az) + ' ' + str(alt)
+
+        answer = self.send_APM("point_to " + coord, verbose)
         time0 = time.now()
         self.getAllCoords()
         time1 = time.now()
+
         print(f"{(time1-time0)*1000} ms")
-        return self.send_APM("point_to " + coord, verbose)
+        return answer
 
     def pointRaDec(self, ra, dec, verbose=False):
         """
@@ -707,9 +720,9 @@ class Srt(QObject):
     def onTrackerSignal(self, az, alt):
 
         if self.tracking:
-
             self.pointAzAlt(az, alt)
-            self.trackMotionEnd.emit()
+            if self.tracking:
+                self.trackMotionEnd.emit()
 
     def onPingSignal(self):
         self.send_APM("ping")
@@ -794,9 +807,9 @@ class Srt(QObject):
 
         if self.tracker.isRunning():
 
-            self.tracker.on = False        # Kills tracker
-         #   while self.tracker.pending:    # Waits for last answer from APM
-         #       pass
+            self.pauseTracking.emit()        # Kills tracker
+            while self.tracker.pending:    # Waits for last answer from APM
+                pass
 
         #del self.tracker                    # Deletes tracker
         #self.tracker = Tracker(self.ser)    # Prepares new tracker
