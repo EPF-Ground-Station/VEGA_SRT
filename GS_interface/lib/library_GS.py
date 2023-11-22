@@ -287,7 +287,7 @@ class QTracker(QThread):
                 while time.time() < timeNow + TRACKING_RATE:
                     pass
 
-    @Slot
+    @Slot()
     def onIdle(self):
         """Slot triggered when SRT is ready for next tracking motion"""
 
