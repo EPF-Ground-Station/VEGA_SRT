@@ -25,7 +25,7 @@ Format of exchanged messages :
     Notice hence forbidden characters & and | in the body of exchanged messages
 """
 
-POS_LOGGING_RATE = 1
+POS_LOGGING_RATE = 3
 
 
 class sigEmettor(QObject):
@@ -72,6 +72,8 @@ class SRTThread(QThread):
         self.on = True
         self.posLoggingOn = True
         self.pending = False
+        self.connected = 0
+        self.trackingBool = False
         self.timeLastPosCheck = time.time()
 
         self.SRT = Srt("/dev/ttyUSB0", 115200, 1)
@@ -99,7 +101,7 @@ class SRTThread(QThread):
         msg = "ERROR|" + msg
         self.sendClient(msg)
 
-    def receiveCommand(self, msg):
+    def receiveCommand(self, str):
         self.msg = str
 
     def pausePositionLogging(self):
@@ -109,6 +111,9 @@ class SRTThread(QThread):
         self.posLoggingOn = True
 
     def sendPos(self):
+        if self.connected == 0 or self.trackingBool:
+            return
+
         az, alt = self.SRT.getAzAlt()
         ra, dec = self.SRT.getPos()
         long, lat = self.SRT.getGal()
@@ -133,44 +138,52 @@ class SRTThread(QThread):
             if self.msg != '':
 
                 self.pending = True
-                print("SRT Thread handling: " + self.msg)
-                args = self.msg.split(" ")
+                msg = self.msg
+                args = msg.split(" ")
                 cmd = args[0]
-
+                print("SRT Thread handling command: " + cmd+", with "+str(len(args))+" arguments")
                 # Processing of command
                 if cmd in ("pointRA", "pointGal", "pointAzAlt", "trackRA", "trackGal"):
 
                     if len(args) == 3:  # Parses arguments (point/track)
                         a, b = float(args[1]), float(args[2])
-                        if self.msg == "pointRA":
+                        if cmd == "pointRA":
                             a, b = RaDec2AzAlt(a, b)
-                        if self.msg == "pointGal":
+                        if cmd == "pointGal":
                             a, b = Gal2AzAlt(a, b)
-                        if "point" in self.msg:
+                        if "point" in msg:
                             feedback = self.SRT.pointAzAlt(a, b)
-                        elif self.msg == "trackRA":
+                        elif cmd == "trackRA":
+                            self.trackingBool = True
                             feedback = self.SRT.trackRaDec(a, b)
-                        elif self.msg == "trackGal":
+                        elif cmd == "trackGal":
                             feedback = self.SRT.trackGal(a, b)
                     else:
                         raise ValueError("ERROR : invalid command passed to server")
 
                 if cmd in ("connect", "goHome", "untangle",
-                           "standby", "disconnect"):
+                           "standby", "disconnect", "stopTracking"):
 
                     if len(args) == 1:
-                        if self.msg == "goHome":
+                        if cmd == "goHome":
                             feedback = self.SRT.go_home()
-                        elif self.msg == "connect":
+                        elif cmd == "connect":
                             feedback = self.SRT.connect()  # False for debug
-                        elif self.msg == "disconnect":
+                            if feedback == 'IDLE' or feedback == 'Untangled':
+                                print("SRT Thread connected")
+                                self.connected = 1
+                        elif cmd == "disconnect":
                             feedback = self.SRT.disconnect()
-                        elif self.msg == "untangle":
+                            self.connected = 0
+                        elif cmd == "untangle":
                             feedback = self.SRT.untangle()
-                        elif self.msg == "standby":
+                        elif cmd == "standby":
                             feedback = self.SRT.standby()
-                        elif self.msg == "wait":
+                        elif cmd == "wait":
                             feedback = ""
+                        elif cmd == "stopTracking":
+                            feedback = self.SRT.stopTracking()
+                            self.trackingBool = False
 
                     else:
                         raise ValueError(
@@ -193,8 +206,8 @@ class SRTThread(QThread):
 
                 feedback = str(feedback)
 
-                print("SRT Thread handled: " + self.msg + " with feedback: " + feedback)
-                self.endMotion.emit(self.msg, feedback)
+                print("SRT Thread handled: " + msg + " with feedback: " + feedback)
+                self.endMotion.emit(msg, feedback)
                 self.msg = ''
 
 
@@ -233,6 +246,7 @@ class ServerGUI(QMainWindow):
         self.SRTThread.send2socket.connect(self.sendClient)
         self.SRTThread.endMotion.connect(self.sendEndMotion)
         self.sendToSRTSignal.connect(self.SRTThread.receiveCommand)
+        self.SRTThread.start()
         # When in motion, stop asking for position. Tracking not affected
 
         self.measuring = 0
@@ -300,7 +314,8 @@ class ServerGUI(QMainWindow):
             while self.SRTThread.pending:
                 pass
             time2 = time.time_ns()
-            print(f"DEBUG: waited {round((time2 - time1) / 1e6)} ms for SRTThread to stop pending (in fn sendClient)")
+            #self.addToLog(f"DEBUG: waited {round((time2 - time1) / 1e6)} ms for SRTThread to stop pending (in fn sendClient, "
+            #      f"sending message "+msg+")")
 
             msg = '&' + msg  # Adds a "begin" character
             # Sends the message
@@ -383,6 +398,8 @@ class ServerGUI(QMainWindow):
             self.sendOK("connected")
         elif cmd == "disconnect":
             self.sendOK("disconnected")
+        elif cmd.split(" ")[0] in ["trackRA", "trackGal"]:
+            self.sendOK("tracking")
         else:
             self.sendOK("IDLE")
 
