@@ -688,9 +688,9 @@ class Srt(QObject):
         coord = str(az) + ' ' + str(alt)
 
         answer = self.send_APM("point_to " + coord, verbose)
-        time0 = time.now()
+        time0 = time.time()
         self.getAllCoords()
-        time1 = time.now()
+        time1 = time.time()
 
         print(f"{(time1-time0)*1000} ms")
         return answer
