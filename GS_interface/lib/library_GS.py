@@ -432,6 +432,9 @@ class Srt(QObject):
         self.apmMsg = ""        # Stores last message from APM
 
         self.tracker = QTracker()
+
+        self.tracker.start()
+
         self.tracking = False
         self.tracker.sendPointTo.connect(self.onTrackerSignal)
         self.trackMotionEnd.connect(self.tracker.turnOn)
@@ -631,7 +634,7 @@ class Srt(QObject):
 
         """
 
-        if self.tracking:               # Stops tracking before pointing
+        if not self.tracking:               # Stops tracking before pointing
             self.stopTracking()
 
         alt %= 90
@@ -681,13 +684,14 @@ class Srt(QObject):
         Starts tracking given sky coordinates in RaDec mode
 
         """
+        self.tracking = True    # Updates flag BEFORE pointing
         self.pointRaDec(
             ra, dec)            # Goes to destination before allowing other command
         self.ping.pause()                   # Ping useless in tracking mode
-        self.tracking = True                # Updates flag
+
 
         if not self.tracker.isRunning():     # Launches tracker thread
-            # At this point, APM not yet tracking : tracker's flag 'on' is still off
+            # OLD: At this point, APM not yet tracking : tracker's flag 'on' is still off
             self.tracker.start()
 
         self.tracker.setMode(1)
@@ -699,10 +703,12 @@ class Srt(QObject):
         Starts tracking given sky coordinates in Galactic mode
 
         """
+
+        self.tracking = True                # Updates flag
         self.pointGal(
             long, b)  # Goes to destination before allowing other command
         self.ping.pause()                   # Ping useless in tracking mode
-        self.tracking = True                # Updates flag
+
 
         if not self.tracker.isRunning():     # Launches tracker thread
             # At this point, APM not yet tracking : tracker's flag 'on' is still off
@@ -749,16 +755,16 @@ class Srt(QObject):
 
         """
 
-        self.tracking = False               # Updates flag
+        self.tracking = False             # Updates flag
 
         if self.tracker.isRunning():
 
-            self.tracker.stop = True        # Kills tracker
-            while self.tracker.pending:    # Waits for last answer from APM
-                pass
+            self.tracker.on = False        # Kills tracker
+         #   while self.tracker.pending:    # Waits for last answer from APM
+         #       pass
 
-        del self.tracker                    # Deletes tracker
-        self.tracker = Tracker(self.ser)    # Prepares new tracker
+        #del self.tracker                    # Deletes tracker
+        #self.tracker = Tracker(self.ser)    # Prepares new tracker
 
         self.ping.unpause()                 # Keep sending activity
 
