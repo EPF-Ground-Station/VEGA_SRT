@@ -114,9 +114,7 @@ class SRTThread(QThread):
         if self.connected == 0:
             return
 
-        az, alt = self.SRT.getAzAlt()
-        ra, dec = self.SRT.getPos()
-        long, lat = self.SRT.getGal()
+        az, alt, ra, dec, long, lat = self.SRT.returnStoredCoords()
 
         if (az == -1) or (alt == -1):
             self.sendError(

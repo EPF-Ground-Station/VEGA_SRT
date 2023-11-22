@@ -457,6 +457,11 @@ class Srt(QObject):
 
         self.pending = False
 
+
+        self.az, self.alt = 0,0
+        self.ra, self.dec = 0,0
+        self.long, self.lat = 0,0
+
     def go_home(self, verbose=False):
         """Takes SRT to its home position and shuts motors off"""
         if self.tracking:               # Stops tracking before
@@ -530,6 +535,7 @@ class Srt(QObject):
 
         try:
             az = float(self.send_APM("getAz "))
+            self.az = az
             return az
         except ValueError:
             print("Error when trying to obtain current Azimuth")
@@ -541,6 +547,7 @@ class Srt(QObject):
 
         try:
             alt = float(self.send_APM("getAlt "))
+            self.alt = alt
             return alt
         except ValueError:
             print("Error when trying to obtain current Altitude")
@@ -569,6 +576,8 @@ class Srt(QObject):
             return -1
 
         ra, dec = AzAlt2RaDec(az, alt)
+        self.ra = ra
+        self.dec = dec
 
         return ra, dec
 
@@ -594,6 +603,27 @@ class Srt(QObject):
 
         return dec
 
+    def getAllCoords(self):
+        try:
+            alt = self.getAlt()
+        except ValueError:
+            print("Error when trying to obtain current Altitude")
+            return -1
+        try:
+            az = self.getAz()
+        except ValueError:
+            print("Error when trying to obtain current Azimuth")
+            return -1
+
+        ra, dec = AzAlt2RaDec(az, alt)
+        long, lat = AzAlt2Gal(az, alt)
+
+        self.az, self.alt = az, alt
+        self.ra, self.dec = ra, dec
+        self.long, self.lat = long, lat
+
+    def returnStoredCoords(self):
+        return (self.az, self.alt, self.ra, self.dec, self.long, self.lat)
     def untangle(self, verbose=False):
         """
         Go back to resting position, untangling cables
@@ -645,6 +675,8 @@ class Srt(QObject):
         if verbose:
             print(f"Moving to Az={az}, Alt = {alt}...")
         coord = str(az) + ' ' + str(alt)
+        self.getAllCoords()
+
         return self.send_APM("point_to " + coord, verbose)
 
     def pointRaDec(self, ra, dec, verbose=False):
