@@ -111,7 +111,7 @@ class SRTThread(QThread):
         self.posLoggingOn = True
 
     def sendPos(self):
-        if self.connected == 0 or self.trackingBool:
+        if self.connected == 0:
             return
 
         az, alt = self.SRT.getAzAlt()
