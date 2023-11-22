@@ -687,7 +687,7 @@ class Srt(QObject):
         self.ping.pause()                   # Ping useless in tracking mode
         self.tracking = True                # Updates flag
 
-        if not self.tracker.is_alive():     # Launches tracker thread
+        if not self.tracker.isRunning():     # Launches tracker thread
             # At this point, APM not yet tracking : tracker's flag 'on' is still off
             self.tracker.start()
 
@@ -705,7 +705,7 @@ class Srt(QObject):
         self.ping.pause()                   # Ping useless in tracking mode
         self.tracking = True                # Updates flag
 
-        if not self.tracker.is_alive():     # Launches tracker thread
+        if not self.tracker.isRunning():     # Launches tracker thread
             # At this point, APM not yet tracking : tracker's flag 'on' is still off
             self.tracker.start()
 
@@ -735,7 +735,7 @@ class Srt(QObject):
         self.ping.pause()                   # Ping useless in tracking mode
         self.tracking = True                # Updates flag
 
-        if not self.tracker.is_alive():     # Launches tracker thread
+        if not self.tracker.isRunning():     # Launches tracker thread
             # At this point, APM not yet tracking : tracker's flag 'on' is still off
             self.tracker.start()
 
@@ -752,7 +752,7 @@ class Srt(QObject):
 
         self.tracking = False               # Updates flag
 
-        if self.tracker.is_alive():
+        if self.tracker.isRunning():
 
             self.tracker.stop = True        # Kills tracker
             while self.tracker.pending:    # Waits for last answer from APM
