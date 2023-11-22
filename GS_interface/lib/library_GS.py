@@ -485,8 +485,7 @@ class Srt(QObject):
 
         msg = self.go_home()  # Gets SRT to home position
         self.ping.pause()           # Stop pinging
-        while self.ping.pending:
-            continue
+
         self.ser.disconnect()       # Ciao
 
         return msg
