@@ -462,7 +462,7 @@ class Srt(QObject):
         self.untangle(verbose)
         self.standby(verbose)
 
-    def connect(self, water=True):
+    def connectAPM(self, water=True):
         """Connects to serial port"""
 
         if self.ser.connected:
@@ -477,7 +477,7 @@ class Srt(QObject):
 
         return msg
 
-    def disconnect(self):
+    def disconnectAPM(self):
         """Disconnects from serial port"""
 
         if not self.ser.connected:
