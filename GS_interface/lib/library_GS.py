@@ -191,9 +191,9 @@ class QTracker(QThread):
 
     sendPointTo = Signal(float, float)
 
-    def __init__(self, _mode=TrackMode.RADEC, tle=None):
+    def __init__(self, _mode=TrackMode.RADEC, tle=None, parent=None):
 
-        super().__init__(self)
+        super().__init__(parent)
 
         self.stop = False
         self.on = False
