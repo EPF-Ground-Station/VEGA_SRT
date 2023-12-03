@@ -3,6 +3,9 @@ from SoapySDR import SOAPY_SDR_RX, SOAPY_SDR_CF32
 from SoapySDR import *
 import numpy as np
 
+import matplotlib.pyplot as plt
+import matplotlib.mlab as mlab
+
 sampleRate = 4e6
 freq = 1420e6
 NSamples = 16384
