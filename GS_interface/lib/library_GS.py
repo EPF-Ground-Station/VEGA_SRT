@@ -450,12 +450,12 @@ class Srt(QObject):
         self.ping.sendPing.connect(self.onPingSignal)
 
         # Connect SDR and set default parameters
-        self.sdr = RtlSdr()
+        """self.sdr = RtlSdr()
         self.sdr.sample_rate = 2.048e6
         self.sdr.center_freq = 1420e06
         self.sdr.gain = 480
         self.sdr.set_bias_tee(True)
-        self.sdr.close()
+        self.sdr.close()"""
 
         # Declares process that runs observations
         self.obsProcess = None
