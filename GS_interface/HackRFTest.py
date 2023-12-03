@@ -22,5 +22,7 @@ freqs = sdr.getFrequencyRange(SOAPY_SDR_RX, 0)
 for freqRange in freqs: print(freqRange)
 
 sdr.setSampleRate(SOAPY_SDR_RX, 0, sampleRate)           # Set sample rate
-#sdr.setGain(SOAPY_SDR_RX, 0, '', 14)        # Set the gain mode
+sdr.setGain(SOAPY_SDR_RX, 0, 'LNA', 32)        # Set the gain mode
+sdr.setGain(SOAPY_SDR_RX, 0, 'AMP', 14)
+sdr.setGain(SOAPY_SDR_RX, 0, 'VGA', 20)
 sdr.setFrequency(SOAPY_SDR_RX, 0, freq)          # Tune the LO
