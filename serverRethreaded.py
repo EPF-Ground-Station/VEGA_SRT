@@ -26,7 +26,7 @@ Format of exchanged messages :
 """
 
 POS_LOGGING_RATE = 3
-WATER_RATE = 3600
+WATER_RATE = 300
 
 class sigEmettor(QObject):
     """QObject that handles sending a signal from a non-Q thread.
@@ -133,7 +133,7 @@ class SRTThread(QThread):
             if time.time() > self.timeLastPosCheck + POS_LOGGING_RATE:
                 self.timeLastPosCheck = time.time()
                 self.sendPos()
-            print("DEBUG Value of self.connected : ", self.connected)
+            #print("DEBUG Value of self.connected : ", self.connected)
             if (not self.connected) and (time.time() - self.timeLastWater > WATER_RATE):
                 self.SRT.connectAPM(water=True)
                 self.SRT.disconnectAPM()
