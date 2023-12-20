@@ -26,7 +26,7 @@ Format of exchanged messages :
 """
 
 POS_LOGGING_RATE = 3
-WATER_RATE = 300
+WATER_RATE = 3600
 
 class sigEmettor(QObject):
     """QObject that handles sending a signal from a non-Q thread.
