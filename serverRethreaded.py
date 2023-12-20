@@ -133,7 +133,7 @@ class SRTThread(QThread):
             if time.time() > self.timeLastPosCheck + POS_LOGGING_RATE:
                 self.timeLastPosCheck = time.time()
                 self.sendPos()
-
+            print("DEBUG Value of self.connected : ", self.connected)
             if (not self.connected) and (time.time() - self.timeLastWater > WATER_RATE):
                 self.SRT.connectAPM(water=True)
                 self.SRT.disconnectAPM()
