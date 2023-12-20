@@ -135,6 +135,7 @@ class SRTThread(QThread):
                 self.sendPos()
             #print("DEBUG Value of self.connected : ", self.connected)
             if (not self.connected) and (time.time() - self.timeLastWater > WATER_RATE):
+                print("Water evacuation process launched")
                 self.SRT.connectAPM(water=True)
                 self.SRT.disconnectAPM()
                 self.timeLastWater = time.time()
