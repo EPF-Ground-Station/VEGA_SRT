@@ -26,7 +26,7 @@ Format of exchanged messages :
 """
 
 POS_LOGGING_RATE = 3
-
+WATER_RATE = 3600
 
 class sigEmettor(QObject):
     """QObject that handles sending a signal from a non-Q thread.
@@ -75,6 +75,7 @@ class SRTThread(QThread):
         self.connected = 0
         self.trackingBool = False
         self.timeLastPosCheck = time.time()
+        self.timeLastWater = time.time()
 
         self.SRT = Srt("/dev/ttyUSB0", 115200, 1)
         self.msg = msg
@@ -133,6 +134,11 @@ class SRTThread(QThread):
                 self.timeLastPosCheck = time.time()
                 self.sendPos()
 
+            if (not connected) and (time.time() - self.timeLastWater > WATER_RATE):
+                self.SRT.connectAPM(water=True)
+                self.SRT.disconnectAPM()
+                self.timeLastWater = time.time()
+
             if self.msg != '':
 
                 self.pending = True
@@ -172,6 +178,7 @@ class SRTThread(QThread):
                                 self.connected = 1
                         elif cmd == "disconnect":
                             feedback = self.SRT.disconnectAPM()
+                            self.timeLastWater = time.time() # Reset timer for water evacuation after activity
                             self.connected = 0
                         elif cmd == "untangle":
                             feedback = self.SRT.untangle()
