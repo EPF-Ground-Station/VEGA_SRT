@@ -218,11 +218,11 @@ class SRTThread(QThread):
 
             # WATER CLOCK : temporary I hope
             if (not self.connected) and (time.time() - self.timeLastWater > WATER_RATE):
+                self.timeLastWater = time.time()
                 self.send2log.emit("Water evacuation process launched")
                 self.pending = True
                 self.SRT.connectAPM(water=True)
                 feedback = str(self.SRT.disconnectAPM())
-                self.timeLastWater = time.time()
                 self.send2log.emit("Water evacuation process over")
 
 
