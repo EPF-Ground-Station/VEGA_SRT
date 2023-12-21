@@ -28,6 +28,7 @@ Format of exchanged messages :
 POS_LOGGING_RATE = 3
 WATER_RATE = 3600
 
+
 class sigEmettor(QObject):
     """QObject that handles sending a signal from a non-Q thread.
     Used by StdoutRedirector to pass the Server a print statement
@@ -62,6 +63,7 @@ class SRTThread(QThread):
     """Thread that handles communication with SRT object, including tracking"""
 
     endMotion = Signal(str, str)
+    send2log = Signal(str)
 
     send2socket = Signal(str)
 
@@ -134,11 +136,6 @@ class SRTThread(QThread):
                 self.timeLastPosCheck = time.time()
                 self.sendPos()
             #print("DEBUG Value of self.connected : ", self.connected)
-            if (not self.connected) and (time.time() - self.timeLastWater > WATER_RATE):
-                print("Water evacuation process launched")
-                self.SRT.connectAPM(water=True)
-                self.SRT.disconnectAPM()
-                self.timeLastWater = time.time()
 
             if self.msg != '':
 
@@ -146,7 +143,8 @@ class SRTThread(QThread):
                 msg = self.msg
                 args = msg.split(" ")
                 cmd = args[0]
-                print("SRT Thread handling command: " + cmd+", with "+str(len(args))+" arguments")
+                print("SRT Thread handling command: " + cmd +
+                      ", with "+str(len(args))+" arguments")
                 # Processing of command
                 if cmd in ("pointRA", "pointGal", "pointAzAlt", "trackRA", "trackGal"):
 
@@ -164,7 +162,8 @@ class SRTThread(QThread):
                         elif cmd == "trackGal":
                             feedback = self.SRT.trackGal(a, b)
                     else:
-                        raise ValueError("ERROR : invalid command passed to server")
+                        raise ValueError(
+                            "ERROR : invalid command passed to server")
 
                 if cmd in ("connect", "goHome", "untangle",
                            "standby", "disconnect", "stopTracking"):
@@ -179,7 +178,7 @@ class SRTThread(QThread):
                                 self.connected = 1
                         elif cmd == "disconnect":
                             feedback = self.SRT.disconnectAPM()
-                            self.timeLastWater = time.time() # Reset timer for water evacuation after activity
+                            self.timeLastWater = time.time()  # Reset timer for water evacuation after activity
                             self.connected = 0
                         elif cmd == "untangle":
                             feedback = self.SRT.untangle()
@@ -212,9 +211,19 @@ class SRTThread(QThread):
 
                 feedback = str(feedback)
 
-                print("SRT Thread handled: " + msg + " with feedback: " + feedback)
+                print("SRT Thread handled: " + msg +
+                      " with feedback: " + feedback)
                 self.endMotion.emit(msg, feedback)
                 self.msg = ''
+
+            # WATER CLOCK : temporary I hope
+            if (not self.connected) and (time.time() - self.timeLastWater > WATER_RATE):
+                self.send2log.emit("Water evacuation process launched")
+                self.pending = True
+                self.SRT.connectAPM(water=True)
+                feedback = str(self.SRT.disconnectAPM())
+                self.timeLastWater = time.time()
+                self.send2log.emit("Water evacuation process over")
 
 
 class ServerGUI(QMainWindow):
@@ -251,6 +260,7 @@ class ServerGUI(QMainWindow):
         self.SRTThread = SRTThread()
         self.SRTThread.send2socket.connect(self.sendClient)
         self.SRTThread.endMotion.connect(self.sendEndMotion)
+        self.SRTThread.send2log.connect(self.receiveLog)
         self.sendToSRTSignal.connect(self.SRTThread.receiveCommand)
         self.SRTThread.start()
         # When in motion, stop asking for position. Tracking not affected
@@ -320,7 +330,7 @@ class ServerGUI(QMainWindow):
             while self.SRTThread.pending:
                 pass
             time2 = time.time_ns()
-            #self.addToLog(f"DEBUG: waited {round((time2 - time1) / 1e6)} ms for SRTThread to stop pending (in fn sendClient, "
+            # self.addToLog(f"DEBUG: waited {round((time2 - time1) / 1e6)} ms for SRTThread to stop pending (in fn sendClient, "
             #      f"sending message "+msg+")")
 
             msg = '&' + msg  # Adds a "begin" character
@@ -397,7 +407,6 @@ class ServerGUI(QMainWindow):
         """Sends message to client when motion is ended
 
         This is a slot connected to signal self.motionThread.endMotion"""
-        print(f"DEBUG : sendEndMotion with cmd = {cmd}, fb = {feedback}")
         self.sendClient("PRINT|" + feedback)
 
         if cmd == "connect":
@@ -408,6 +417,11 @@ class ServerGUI(QMainWindow):
             self.sendOK("tracking")
         else:
             self.sendOK("IDLE")
+
+    def receiveLog(self, log):
+        """ Slot activated when a thread adds a message to log window"""
+
+        self.addToLog(log)
 
     # ======== GUI methods ========
 
