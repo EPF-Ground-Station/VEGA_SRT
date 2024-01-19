@@ -859,7 +859,7 @@ class Srt(QObject):
         self.observing = False
         print("Observation killed. Notice some recorded data might have been corrupted")
 
-    def observe(self, repo=None, name=None, dev_args='rtl=0,bias=1', rf_gain=48, if_gain=25, bb_gain=18, fc=1420e6, bw=2.4e6, channels=2048, t_sample=1, duration=60, overwrite=False):
+    def observe(self, repo=None, name=None, dev_args='hackrf=0,bias=1', rf_gain=48, if_gain=25, bb_gain=18, fc=1420e6, bw=2.4e6, channels=2048, t_sample=1, duration=60, overwrite=False):
         """
         Launches a parallelized observation process. SRT's methods are still callable in the meanwhile
 
@@ -1007,7 +1007,8 @@ class Srt(QObject):
     def obsPower(self, duration, intTime=1, bandwidth=1.024, fc=1420, repo=None, obs=None, gain=480):
         """ Observes PSD at center frequency fc for a duration in seconds with
         integration time of intTime. Bandwidth and center frequency fc are
-        indicated in MHz"""
+        indicated in MHz
+        OBSOLETE : uses library rtl-sdr"""
 
         print(f"Observing for {duration} seconds...")
 
