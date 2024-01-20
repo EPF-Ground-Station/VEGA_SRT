@@ -1,3 +1,16 @@
+"""
+THIS SCRIPT RUNS THE SERVER IN CHARGE OF COMMUNICATING WITH THE APM
+
+Format of exchanged messages :
+    Client -> Server : &{cmd} {*args, separated by spaces}
+    Server -> Client : &{Status}|{feedback}
+
+    with Status in (PRINT, OK, WARNING, ERROR)
+
+    Notice hence forbidden characters & and | in the body of exchanged messages
+"""
+
+
 from GS_interface.lib.library_GS import *
 import sys
 from os.path import expanduser
@@ -13,17 +26,7 @@ import time
 
 sys.path.append("../")
 
-"""
-THIS SCRIPT RUNS THE SERVER IN CHARGE OF COMMUNICATING WITH THE APM
 
-Format of exchanged messages : 
-    Client -> Server : &{cmd} {*args, separated by spaces}
-    Server -> Client : &{Status}|{feedback}
-    
-    with Status in (PRINT, OK, WARNING, ERROR)     
-    
-    Notice hence forbidden characters & and | in the body of exchanged messages
-"""
 
 POS_LOGGING_RATE = 3
 WATER_RATE = 3600
