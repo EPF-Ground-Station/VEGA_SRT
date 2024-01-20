@@ -1,1 +1,7 @@
 furo
+numpy
+PySide6
+serial
+skyfield
+virgo
+SimpleSoapy
