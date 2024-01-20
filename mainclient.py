@@ -1,4 +1,11 @@
 # This Python file uses the following encoding: utf-8
+
+"""Graphical interface of the TCP client. A launcher first pops out and drives the first handshake with the server
+running on the antenna's computer. Then the main window shows up (if connected to the server), allowing operation of
+VEGA in an ergonomic way. This GUI allows to slew the Antenna Pointing Mechanism, acquire radio-astronomic data and
+process it to plot Power Spectrum Diagram.
+"""
+
 import sys
 import math
 import cv2
@@ -20,26 +27,40 @@ from GUI import ui_form_launcher
 
 DEBUG = 0
 VIDEOSOURCE = "rtsp://GroundStationEPFL:VegaStar2023@128.178.39.239/stream2"
+VIDEO_RATE = 0.05 # Rate at which the video stream from camera is read
 
 def HMStoDeg(h,m,s):
+    """Converts coordinates from time format (HH:MM:SS) to decimal degrees """
     return h*360/24+m*6/24+s/240
 
 def DegtoHMS(deg):
+    """Converts coordinates from decimal degrees to time format (HH:MM:SS) """
     h = math.trunc(deg/(360/24))
     m = math.trunc((deg-360/24*h)/(6/24))
     s = math.trunc((deg-h*360.0/24-m*6/24)/(1/240)*100)/100
     return (h,m,s)
 
 def DMStoDeg(d,m,s):
+    """Converts coordinates from hour degrees (DD:MM:SS) to decimal degrees """
     return d+m/60+s/3600
 
 def DegtoDMS(deg):
+    """Converts coordinates from decimal degrees to hour degrees (DD:MM:SS)"""
     d = math.trunc(deg)
     m = math.trunc((deg-d)*60)
     s = math.trunc((deg-d-m/60)*3600*100)/100
     return (d,m,s)
 
 class Launcher(QWidget):
+
+    """Widget showing at execution of the script. Manages the first handshake with the server. Allows to specify the
+    server address and target port. If the server accepts the connexion, the Launcher hides and the main GUI shows.
+
+    Note the Launcher does not have direct access to the TCP socket used for communication to the server. Instead, the
+    TCP socket is owned by the MainClient object. To attempt connexion, the Launcher emits a Qt signal (connectAttempt)
+    which is connected to the MainClient slot connectServ. This happens for reasons of necessary unicity of the
+    reference to a QTCPsocket object and should not be changed."""
+
     connectAttempt = Signal()
 
     def __init__(self, parent=None):
@@ -56,7 +77,7 @@ class Launcher(QWidget):
         self.connectAttempt.emit()
 
     def updateStatus(self, msg):
-        """Changes status displayed"""
+        """Changes status displayed in the textbar. Allows to show error messages, or feedbacks from the server."""
         if type(msg) != str:
             raise TypeError(
                 "Error : can only display strings in launcher's status")
@@ -65,6 +86,22 @@ class Launcher(QWidget):
 
 class MainClient(QWidget):
 
+    """Main class of the client GUI. It owns a Launcher object, and accesses its attributes to achieve connexion with
+    the server via self.client_socket before showing.
+
+    The window has 3 tabs : Motion, Measurements and Plot.
+
+    - MOTION tab serves to slew the antenna to any coordinates given by user (systems available are AzAlt, RaDec and Galactic). When the "Track" box is checked, the antenna shall track the input coordinates irrespective of the coord system.
+
+    - MEASUREMENTS tab serves to acquire data with the SDR. All parameters of the acquisition are tunable. See the antenna documentation for frequency ranges and specs of the SDR.
+
+    - PLOT allows to show the Power Spectrum Diagram of the processed data from any chosen observation and according calibration file.
+
+    Notice all 3 tabs are independent and methods from each can be triggered simultaneously, e.g. a measurement while
+    slewing the antenna.
+
+    See the SRT class documentation for more about calibration and observation process"""
+ # I don't know why Sphinx adds line breaks in the HTML when using endlines in the bullet points and nowhere else...
     def __init__(self, parent=None):
 
         super().__init__(parent)
@@ -89,6 +126,8 @@ class MainClient(QWidget):
         if DEBUG: self.initGUI()
     @Slot()
     def connectServ(self):
+        """Slot activated when the "Connect" button of the launcher is pressed. Tries to connect to indicated IP address
+        via TCP"""
         address = self.Launcher.ui.lineEdit_ipAddress.text()
         port = self.Launcher.ui.spinBox_port.value()
         self.Launcher.ui.label_Status.setText("Trying to connect...")
@@ -98,6 +137,7 @@ class MainClient(QWidget):
 
     @Slot()
     def connexionError(self):
+        """Triggered when self.socket_client returns error signal"""
         self.Launcher.updateStatus("Connexion failed")
         self.Launcher.ui.pushButton_Connect.setEnabled(1)
 
@@ -106,7 +146,7 @@ class MainClient(QWidget):
 
     # @Slot()
     def initGUI(self):
-
+        """Initializes the GUI appearance and features"""
         self.Launcher.hide()
 
         self.CalibFilePath = ''
@@ -167,6 +207,7 @@ class MainClient(QWidget):
         self.show()
 
     def onDisconnected(self):
+        """Triggered when the server disconnects the client, e.g. when admin closes the server, or at reboot"""
         self.addToLog("Disconnected from the server.")
         self.Launcher.updateStatus("Disconnected from the server.")
 
@@ -177,6 +218,10 @@ class MainClient(QWidget):
         # TODO self.client_socket disconnect?
 
     def sendServ(self, message):
+        """Formats and sends a message to the server.
+
+        :param message: command to send to the server. See class Server for more about commands formatting
+        :type message: str"""
         if DEBUG: print(message)
         if (not self.SRTconnected) and message != "connect":
             self.addToLog("No antenna connected. Aborting...")
@@ -187,11 +232,35 @@ class MainClient(QWidget):
             self.client_socket.write(message.encode())
 
     def receiveMessage(self, verbose=False):
+        """
+        Decodes bytes sent by server to a string object which is processed by self.processMsg
 
+        The need to process comes from concatenation of several server messages when received at too high frequency.
+        To prevent this phenomenon, all messages in two-ways server-client communications begin with the character '&'.
+
+        See self.processMsg for more about messages processing
+
+        :param verbose: passed to processMsg for debugging, printing the received message to console
+        """
         msg = self.client_socket.readAll().data().decode()
         self.processMsg(msg, verbose)
 
     def processMsg(self, msg, verbose):
+        """
+        Processes messages received from the server on the TCP socket.
+
+        First checks for concatenated messages. If several initial '&' characters are found in msg, processes them
+        one-by-one by the means of a recursive call.
+
+        Second, triggers the correct signals/methods depending on the message. Possible actions can be : hide launcher
+        and show main window ; enable grey buttons to allow sending a new slewing command ; update displayed coordinates
+        ; print feedback from server to the log textbox.
+
+        :param msg: string message received from server
+        :type msg: str
+        :param verbose: Debugging flag, prints msg to console
+        :type verbose: bool
+        """
 
         # Sort messages, sometimes several
         if '&' in msg:
@@ -213,7 +282,8 @@ class MainClient(QWidget):
                 f"Warning : incorrectly formated message received : {msg}")
             return      # Ignores incorrectly formatted messages
 
-        print(msg)
+        if verbose :
+            print(msg)
 
         if msg == "CONNECTED":
             self.initGUI()
@@ -254,6 +324,12 @@ class MainClient(QWidget):
         self.sendServ("goHome")
 
     def LaunchMeasurementClicked(self):
+        """
+        Sends to server the command to begin a measurement with parameters indicated in appropriate widgets by user.
+        The progression bar corresponds to the input observation time and is not related to actual activity of the SDR.
+
+        """
+
         if self.measuring:
             return
         self.measuring = 1
@@ -279,6 +355,10 @@ class MainClient(QWidget):
                       f" {self.ui.doubleSpinBox_gain.value()} {self.ui.spinBox_channels.value()}")
 
     def MeasurementDone(self):  # link to end of measurement thread!!
+        """
+        Triggered when the server confirms the measurement is over.
+        """
+
         self.measuring = 0
         self.ui.pushButton_LaunchMeasurement.setEnabled(1)
         self.ui.progressBar_measurement.setValue(0)
@@ -288,10 +368,25 @@ class MainClient(QWidget):
         print("Plot Measurement")
 
     def addToLog(self, strInput):
+        """
+        Adds a string to the log text box with timestamp.
+
+        :param strInput: message to log
+        :return: str
+        """
+
         self.ui.textBrowser_log.append(
             f"{strftime('%Y-%m-%d %H:%M:%S', localtime())}: " + strInput)
 
     def GoToClicked(self):
+        """
+        Processes and sends the command to slew VEGA to input coordinates. Depending on the coordinate system and if
+        tracking is enabled, the sent command varies. See class ServerGUI for more about commands formatting.
+
+        Note the signal MovementStarted has the effect to disable several buttons, waiting for the server to confirm
+        the motion of the mount is over nefore allowing sending a new slew command.
+        """
+
         # valeurs:
         self.MovementStarted()
 
@@ -343,6 +438,11 @@ class MainClient(QWidget):
         self.sendServ(message)
 
     def StopTrackingClicked(self):
+        """
+        Triggered  when the "Stop Tracking" button is pushed. Sends to the server the command to stop tracking the
+        target.
+        """
+
         self.tracking = 0
         self.ui.pushButton_StopTracking.setEnabled(0)
         self.ui.doubleSpinBox_TrackFirstCoordDecimal.setEnabled(1)
@@ -359,9 +459,14 @@ class MainClient(QWidget):
         self.ui.pushButton_GoTo.setEnabled(1)
         self.ui.checkBox_Tracking.setEnabled(1)
         self.sendServ("stopTracking")
-        print("Stop Tracking")
+        self.addToLog("Tracking stopped")
 
     def MovementFinished(self):
+        """
+        Slot triggered when the server sends the message IDLE, meaning the mount has finished its slew and is ready for
+        new slewing command.
+        """
+
         self.ui.pushButton_StopTracking.setEnabled(0)
         self.ui.pushButton_Standby.setEnabled(1)
         self.ui.pushButton_Untangle.setEnabled(1)
@@ -370,6 +475,11 @@ class MainClient(QWidget):
         self.ui.checkBox_Tracking.setEnabled(1)
 
     def MovementStarted(self):
+        """
+        Triggered when a slewing command is sent to server. Disables most button from Motion tab, waiting for the sever
+        to send IDLE before re-enabling them.
+        """
+
         self.ui.pushButton_Standby.setEnabled(0)
         self.ui.pushButton_Untangle.setEnabled(0)
         self.ui.pushButton_goHome.setEnabled(0)
@@ -378,11 +488,18 @@ class MainClient(QWidget):
         pass
 
     def ConnectClicked(self):
+        """
+        Sends the command to connect the mount. This usually triggers the water evacuation process.
+        """
         self.sendServ("connect")
         self.ui.pushButton_Connect.setEnabled(0)
         self.ui.pushButton_Disconnect.setEnabled(1)
 
     def DisconnectClicked(self):
+        """
+        Sends the command to disconnect the mount. Usually triggers the untangling of cables and parking to standby
+        (zenith) position.
+        """
         self.ui.pushButton_Connect.setEnabled(1)
         self.ui.pushButton_Disconnect.setEnabled(0)
         self.sendServ("disconnect")
@@ -443,6 +560,9 @@ class MainClient(QWidget):
             self.ui.checkBox_Tracking.setEnabled(0)
 
     def BrowseCalibClicked(self):
+
+        """Opens the file browser for the user to choose the calibration data file"""
+
         if self.WorkingDirectoryCalib:
             fileName = QFileDialog.getOpenFileName(self,
                                                    "Open Data file", self.WorkingDirectoryCalib, "Data Files (*.dat)")[
@@ -459,6 +579,7 @@ class MainClient(QWidget):
             self.ui.lineEdit_CalibFile.setText(self.CalibFilePath)
 
     def BrowseMeasureClicked(self):
+        """Opens the file browser for the user to choose the observation data file"""
         if self.WorkingDirectoryMeasure:
             fileName = QFileDialog.getOpenFileName(self,
                                                    "Open Data file", self.WorkingDirectoryMeasure,
@@ -490,12 +611,20 @@ class MainClient(QWidget):
             self.MeasurementDone()  # %TODO Temporary! link to thread end
 
     def untangleClicked(self):
+        """Sends command to untangle the cables of the mount by azimuthal rotation back to parking position"""
         self.sendServ("untangle")
 
     def standbyClicked(self):
+        """Sends command to park the mount by elevation slew to zenith"""
         self.sendServ("standby")
 
     def setCurrentCoords(self, *args):
+        """
+        Internal methods. Updates displayed coordinates of the mount.
+
+        :param args: a tuple containing the current coordinates to display in all systems
+        :type args: tuple of str
+        """
 
         args = [float(elt) for elt in args]
 
@@ -509,27 +638,38 @@ class MainClient(QWidget):
         self.ui.AzLabel.setText(f"{Az:.2f}")
 
     def openCameraClicked(self):
-        print(self.cameraThread.on)
+        """Triggered when the 'Open Camera' button is pushed by user. Opens/closes a window displaying the video stream
+         of VEGA's camera. Notice the text switches to Close Camera, but the button is still the same"""
+
         if not self.cameraThread.on:
             self.cameraThread = QCameraThread()
-            self.cameraThread.closeSignalCameraThread.connect(self.cameraThreadFinished)
+            self.cameraThread.display_image_widget.closeSignal.connect(self.openCameraClicked)
             self.cameraThread.turnOn()
-            self.cameraThread.start()
-            self.ui.pushButton_openCamera.setText("Close Camera")
+            #self.ui.pushButton_openCamera.setText("Close Camera")
+            self.ui.pushButton_openCamera.setEnabled(0)
         else:
             self.cameraThread.turnOff()
             while self.cameraThread.isRunning():
                 pass
             #self.cameraThread.exit()
             self.cameraThread = QCameraThread()
-            self.ui.pushButton_openCamera.setText("Open Camera")
+            #self.ui.pushButton_openCamera.setText("Open Camera")
+            self.ui.pushButton_openCamera.setEnabled(1)
 
     def cameraThreadFinished(self):
+        """Triggered when the camera window is closed"""
+
         print("triggered")
         self.ui.pushButton_openCamera.setText("Open Camera")
+        while self.cameraThread.isRunning():
+            pass
+        print("check")
         self.cameraThread = QCameraThread()
 
 class QCameraThread(QThread):
+    """
+    Thread handling the display of the camera stream
+    """
 
     closeSignalCameraThread = Signal()
     def __init__(self, parent=None):
@@ -537,7 +677,7 @@ class QCameraThread(QThread):
         self.on = False
 
         self.display_image_widget = DisplayImageWidget()
-        self.display_image_widget.closeSignal.connect(self.CustomClose)
+        #self.display_image_widget.closeSignal.connect(self.CustomClose)
 
     def turnOff(self):
         self.on = False
@@ -548,12 +688,13 @@ class QCameraThread(QThread):
     def turnOn(self):
         self.on = True
         self.display_image_widget.show()
+        self.start()
 
-    def CustomClose(self):
+    """def CustomClose(self):
         print("customclosed")
         self.closeSignalCameraThread.emit()
-        self.display_image_widget.close()
-        self.exit()
+        self.on=False"""
+
 
     def run(self):
         if VIDEOSOURCE == '':
@@ -573,11 +714,14 @@ class QCameraThread(QThread):
             #print("loading")
             self.ret, self.frame = self.cap.read()
             if self.frame is not None: self.display_image_widget.show_image(self.frame)
-            time.sleep(0.05)
+            time.sleep(VIDEO_RATE)
             #cv2.imshow('Camera', self.frame)
 
 
 class DisplayImageWidget(QWidget):
+    """
+    Widget on which the camera stream is displayed
+    """
 
     closeSignal = Signal()
     def __init__(self, parent=None):
@@ -590,11 +734,18 @@ class DisplayImageWidget(QWidget):
         self.setLayout(self.layout)
 
     def closeEvent(self, event):
-        print("closed")
+        """Override of the closeEvent method inherited from the Widget class in order to properly handle the destruction
+        of the QCameraThread object"""
+
+        event.ignore()
         self.closeSignal.emit()
 
     @Slot()
     def show_image(self, cap):
+
+        """Slot in charge of refreshing the camera stream frame.
+        """
+
         scale_percent = 100  # percent of original size
         width = int(cap.shape[1] * scale_percent / 100)
         height = int(cap.shape[0] * scale_percent / 100)
@@ -608,9 +759,9 @@ class DisplayImageWidget(QWidget):
         self.image_frame.setPixmap(QPixmap.fromImage(QImage(resized.data, width, height, 3*width, QImage.Format_BGR888)))
 
 if __name__ == "__main__":
-    sys.argv[0] = 'Astro Antenna'
+    sys.argv[0] = 'VEGA - Callista'
     app = QApplication(sys.argv)
-    app.setApplicationDisplayName("Astro Antenna")
+    app.setApplicationDisplayName("VEGA - Callista")
 
     widgetMainClient = MainClient()
     # widgetMainClient.show()

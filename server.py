@@ -369,7 +369,7 @@ class ServerGUI(QMainWindow):
         """Method that processes the command sent from client.
         Note that several messages might be received simultaneously, hence
         the recursive approach taking advantage of the format of messages :
-            &{command} {*args}
+        &{command} {*args}
         """
 
         # Sort messages, sometimes several

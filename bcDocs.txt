@@ -1,0 +1,20 @@
+html_theme = 'furo'
+html_static_path = ['_static']
+
+
+html_theme_options = {
+
+    "light_css_variables": {
+        "color-brand-primary" : "black",
+        "color-brand-content" : "black"
+    },
+    "dark_css_variables": {
+        "color-brand-primary" : "white",
+        "color-brand-content" : "white"
+    },
+
+
+    "light_logo": "logoCallistaLight.png",
+    "dark_logo" : "logoCallistaDark.png",
+    "sidebar_hide_name":True
+}
