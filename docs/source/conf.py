@@ -23,7 +23,7 @@ extensions = ["sphinx.ext.autodoc"]
 templates_path = ['_templates']
 exclude_patterns = []
 
-autodoc_mock_imports = ["virgo", "SoapySDR", "cv2", "PySide6", "serial", "skyfield"]
+autodoc_mock_imports = ["virgo", "SoapySDR", "cv2", "PySide6", "serial", "skyfield", "gnuradio"]
 
 
 # -- Options for HTML output -------------------------------------------------
