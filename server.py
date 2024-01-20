@@ -63,7 +63,8 @@ class StdoutRedirector(io.StringIO):
 
 
 class SRTThread(QThread):
-    """Thread that handles communication with SRT object, including tracking"""
+    """Thread that handles communication with SRT object, including tracking. Internal class instantiated by ServerGUI.
+    The self.msg is updated when a command is received from the client."""
 
     endMotion = Signal(str, str)
     send2log = Signal(str)
@@ -71,6 +72,12 @@ class SRTThread(QThread):
     send2socket = Signal(str)
 
     def __init__(self, msg: str = '', parent=None):
+        """
+        Constructor of the thread.
+
+        :param msg: Motion command sent from client, to be processed and executed. Continuously updated
+        :type msg: str
+        """
         super().__init__(parent)
 
         self.measuring = 0
@@ -89,25 +96,36 @@ class SRTThread(QThread):
         return self.SRT.tracking
 
     def sendClient(self, msgSend):
+        """
+        Method that emits a signal with a non-formatted message to send to the server as argument. The signal triggers
+        the ServerGUI.sendClient slot which in turns formats and sends the message to the client
+
+        :param msgSend: non-formatted message to send to the client
+        :type msgSend: str
+        """
 
         self.send2socket.emit(msgSend)
 
     def sendOK(self, msg):
+        """Adds prefix OK to message passed to sendClient. See self.sendClient for more"""
 
         msg = "OK|" + msg
         self.sendClient(msg)
 
     def sendWarning(self, msg):
+        """Adds prefix WARNING to message passed to sendClient. See self.sendClient for more"""
 
         msg = "WARNING|" + msg
         self.sendClient(msg)
 
     def sendError(self, msg):
+        """Adds prefix ERROR to message passed to sendClient. See self.sendClient for more"""
 
         msg = "ERROR|" + msg
         self.sendClient(msg)
 
     def receiveCommand(self, str):
+        """Slot triggered when ServerGui receives a command to be executed by the SRT class"""
         self.msg = str
 
     def pausePositionLogging(self):
@@ -117,6 +135,9 @@ class SRTThread(QThread):
         self.posLoggingOn = True
 
     def sendPos(self):
+        """
+        Method that sends to the client the current coordinates of the mount in all coordinate systems.
+        """
         if self.connected == 0:
             return
 
@@ -131,6 +152,7 @@ class SRTThread(QThread):
         self.sendOK(msgReturn)
 
     def run(self):
+        """Loop of the thread. Processes the command contained in self.msg, then resets it waiting for the next"""
 
         while self.on:
             self.pending = False
@@ -233,7 +255,7 @@ class ServerGUI(QMainWindow):
     """Class that operates the server by handshaking clients, receiving and
     sending messages and modifying the GUI display in consequence.
 
-    Owner of all threads operating the APM"""
+    Owner of the SRTthread that operates the mount"""
     sendToSRTSignal = Signal(str)
 
     def __init__(self, parent=None):
@@ -318,7 +340,7 @@ class ServerGUI(QMainWindow):
     # ======= Send / Receive methods =======
 
     def sendClient(self, msg, verbose=True):
-        """Send message to client"""
+        """Send message to client via TCP socket"""
 
         if self.client_socket:
             unpausePosLoggingLater = False
@@ -350,19 +372,22 @@ class ServerGUI(QMainWindow):
             self.addToLog(f"No connected client to send msg : {msg}")
 
     def sendOK(self, msg):
+        """Adds prefix OK to message passed to sendClient. See self.sendClient for more"""
         msg = "OK|" + msg
         self.sendClient(msg)
 
     def sendWarning(self, msg):
+        """Adds prefix WARNING to message passed to sendClient. See self.sendClient for more"""
         msg = "WARNING|" + msg
         self.sendClient(msg)
 
     def sendError(self, msg):
+        """Adds prefix ERROR to message passed to sendClient. See self.sendClient for more"""
         msg = "ERROR|" + msg
         self.sendClient(msg)
 
     def receiveMessage(self, verbose=True):
-        """Method that handles receiving a message from the client"""
+        """Method that handles receiving a message from the client via TCP socket"""
         if self.client_socket:
             msg = self.client_socket.readAll().data().decode()
 
@@ -407,7 +432,7 @@ class ServerGUI(QMainWindow):
             self.sendWarning("MOVING")
 
     def sendEndMotion(self, cmd, feedback):
-        """Sends message to client when motion is ended
+        """Sends message to client when motion is ended. See mainclient script for more detail
 
         This is a slot connected to signal self.motionThread.endMotion"""
         self.sendClient("PRINT|" + feedback)
@@ -436,12 +461,20 @@ class ServerGUI(QMainWindow):
         event.accept()
 
     def addToLog(self, strInput):
-        """Adds statement to the GUI log console """
+        """Adds statement to the GUI log console
+
+        :param strInput: Message to be logged
+        :type strInput: str
+        """
         self.ui.textBrowser_log.append(
             f"{strftime('%Y-%m-%d %H:%M:%S', localtime())}: " + strInput)
 
     def setIPAddress(self, stringIn):
-        """Sets the IP address displayed in the GUI """
+        """Sets the IP address displayed in the GUI
+
+        :param stringIn: IP address to update
+        :type stringIn: str
+        """
         self.ui.lineEdit_IP.setText(stringIn)
 
     def portChanged(self):
