@@ -4,6 +4,8 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 import os
 import sys
+from unittest.mock import MagicMock
+sys.modules['numpy'] = MagicMock()
 sys.path.insert(0, os.path.abspath(os.path.join('..', '..')))
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -21,6 +23,7 @@ extensions = ["sphinx.ext.autodoc"]
 templates_path = ['_templates']
 exclude_patterns = []
 
+autodoc_mock_imports = ["virgo", "SoapySDR", "cv2"]
 
 
 # -- Options for HTML output -------------------------------------------------
