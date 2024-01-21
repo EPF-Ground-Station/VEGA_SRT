@@ -47,7 +47,7 @@ import skyfield
 import matplotlib.pyplot as plt
 import numpy as np
 from multiprocessing import Process
-from rtlsdr import *
+# from rtlsdr import *
 from PySide6.QtCore import Slot, QFileInfo, QTimer, Signal, QThread, QObject
 
 NORTH = 990000
@@ -712,9 +712,9 @@ class Srt(QObject):
             return -1
 
     def getAzAlt(self):
-        """Getter on current position in AltAz coordinates
+        """Getter on current position in AltAz coordinates,
 
-        :return: Current azimuthal and elevation angled communicated by the APM encoders
+        :return: Current azimuthal and elevation angles communicated by the APM encoders
         :rtype: (float, float)
         """
 
@@ -724,7 +724,11 @@ class Srt(QObject):
         return az, alt
 
     def getPos(self):
-        """Returns current RaDec in degrees"""
+        """Returns current RaDec in degrees converted from AzAlt communicated by the APM encoders.
+
+        :return: Current RA and DEC coordinates
+        :rtype: (float, float)
+        """
 
         try:
             alt = self.getAlt()
@@ -744,7 +748,11 @@ class Srt(QObject):
         return ra, dec
 
     def getGal(self):
-        """Returns current long/lat in galactic coords"""
+        """Returns current long/lat in galactic coordinates converted from AzAlt communicated by the APM encoders.
+
+        :return: Current galactic longitude and latitude angles
+        :rtype: (float, float)
+        """
 
         az, alt = self.getAzAlt()
         long, lat = AzAlt2Gal(az, alt)
@@ -752,20 +760,31 @@ class Srt(QObject):
         return long, lat
 
     def getRA(self):
-        """Returns current RA"""
+        """Returns current RA coordinate converted from AzAlt communicated by the APM encoders.
+
+        :return: Current RA coordinate
+        :rtype: float
+        """
 
         ra, dec = self.getPos()
 
         return ra
 
     def getDec(self):
-        """Returns current Dec"""
+        """Returns current Dec converted from AzAlt communicated by the APM encoders
+
+        :return: Current Dec coordinate
+        :rtype: float
+        """
 
         ra, dec = self.getPos()
 
         return dec
 
     def getAllCoords(self):
+        """Refreshes all coordinates instance attributes from AzAlt communicated by the APM encoders."""
+
+
         try:
             alt = self.getAlt()
         except ValueError:
@@ -787,11 +806,24 @@ class Srt(QObject):
         return
 
     def returnStoredCoords(self):
-        return (self.az, self.alt, self.ra, self.dec, self.long, self.lat)
+        """
+        Getter on all stored current coordinates in all 3 systems : AzAlt, RaDec, Galactic. Handy for e.g. refreshing
+        displayed coordinates on GUI. See mainclient.py for more.
+
+        :return: Tuple with all coordinates in all 3 systems
+        :rtype: (float, float, float, float, float, float)
+        """
+
+
+        return self.az, self.alt, self.ra, self.dec, self.long, self.lat
     def untangle(self, verbose=False):
         """
-        Go back to resting position, untangling cables
+        Sends the command to untangle cables of the mount by azimuthal rotation back to initial position.
 
+        :param verbose: Flag used by self.send_APM
+        :type verbose: bool
+        :return: Last feedback from APM
+        :rtype: str
         """
         if self.tracking:               # Stops tracking before pointing
             self.stopTracking()
@@ -802,8 +834,12 @@ class Srt(QObject):
 
     def standby(self, verbose=False):
         """
-        Goes back to zenith and switches off motors
+        Sends the command to go back to zenith and switch off motors of the mount.
 
+        :param verbose: Flag used by self.send_APM
+        :type verbose: bool
+        :return: Last feedback from APM
+        :rtype: str
         """
         if self.tracking:               # Stops tracking before pointing
             self.stopTracking()
@@ -814,9 +850,12 @@ class Srt(QObject):
 
     def calibrate_north(self, value=NORTH, verbose=False):
         """
-        Defines offset for North position in azimuthal microsteps
-        EPFL current estimation : 990000
+        Defines offset for North position in azimuthal microsteps. The curent estimation is stored in constant NORTH.
 
+        :param verbose: Flag used by self.send_APM
+        :type verbose: bool
+        :return: Last feedback from APM
+        :rtype: str
         """
 
         print(f"Calibrating North offset to value {value}")
@@ -824,8 +863,16 @@ class Srt(QObject):
 
     def pointAzAlt(self, az, alt, verbose=False):
         """
-        Moves antenna to Azimuth and Altitude coordinates in degrees
+        Sends the command to slew to Azimuth and Altitude coordinates given in decimal degrees.
 
+        :param az: Target Azimuth coordinate
+        :type az: float
+        :param alt: Target Altitude coordinate
+        :type alt: float
+        :param verbose: Flag used by self.send_APM
+        :type verbose: bool
+        :return: Last feedback from APM
+        :rtype: str
         """
 
         if not self.tracking:               # Stops tracking before pointing
@@ -850,8 +897,16 @@ class Srt(QObject):
 
     def pointRaDec(self, ra, dec, verbose=False):
         """
-        Moves antenna to Right Ascension and Declination coordinates in degrees
+        Sends the command to slew to Ra Dec coordinates given in respectively decimal hour,degrees.
 
+        :param ra: Target RA coordinate
+        :type ra: float
+        :param dec: Target Dec coordinate
+        :type dec: float
+        :param verbose: Flag used by self.send_APM
+        :type verbose: bool
+        :return: Last feedback from APM
+        :rtype: str
         """
 
         if verbose:
@@ -861,8 +916,16 @@ class Srt(QObject):
 
     def pointGal(self, long, lat, verbose=False):
         """
-        Moves antenna to galactic coordinates in degrees
+        Sends the command to slew to Long Lat galactic coordinates given in decimal hours.
 
+        :param long: Target longitude coordinate
+        :type long: float
+        :param lat: Target latitude coordinate
+        :type lat: float
+        :param verbose: Flag used by self.send_APM
+        :type verbose: bool
+        :return: Last feedback from APM
+        :rtype: str
         """
 
         if verbose:
@@ -871,6 +934,17 @@ class Srt(QObject):
         return self.pointAzAlt(az, alt, verbose)
 
     def onTrackerSignal(self, az, alt):
+        """
+        Slot triggered when the QTracker thread emits signal to send a slewing command to APM.
+
+        Emits the signal trackMotionEnd when the APM has returned, which in turns switches back the QTracker thread on.
+        See QTracker class for more.
+
+        :param az: Target Azimuth coordinate
+        :type az: float
+        :param alt: Target Altitude coordinate
+        :type alt: float
+        """
 
         if self.tracking:
             self.pointAzAlt(az, alt)
@@ -878,18 +952,22 @@ class Srt(QObject):
                 self.trackMotionEnd.emit()
 
     def onPingSignal(self):
+        """Slot triggered when the QPing thread sends the signal to process the ping/pong with APM."""
         self.send_APM("ping")
 
     def trackRaDec(self, ra, dec):
         """
-        Starts tracking given sky coordinates in RaDec mode
+        Starts tracking given coordinates in RaDec mode. See QTracker class for more about the tracking system.
 
+        :param ra: Target RA coordinate
+        :type ra: float
+        :param dec: Target Dec coordinate
+        :type dec: float
         """
         self.tracking = True    # Updates flag BEFORE pointing
         self.pointRaDec(
             ra, dec)            # Goes to destination before allowing other command
         self.ping.pause()                   # Ping useless in tracking mode
-
 
         if not self.tracker.isRunning():     # Launches tracker thread
             # OLD: At this point, APM not yet tracking : tracker's flag 'on' is still off
@@ -901,15 +979,18 @@ class Srt(QObject):
 
     def trackGal(self, long, b):
         """
-        Starts tracking given sky coordinates in Galactic mode
+        Starts tracking given coordinates in Galactic mode. See QTracker class for more about the tracking system.
 
+        :param long: Target longitude coordinate
+        :type long: float
+        :param b: Target latitude coordinate
+        :type b: float
         """
 
         self.tracking = True                # Updates flag
         self.pointGal(
             long, b)  # Goes to destination before allowing other command
         self.ping.pause()                   # Ping useless in tracking mode
-
 
         if not self.tracker.isRunning():     # Launches tracker thread
             # At this point, APM not yet tracking : tracker's flag 'on' is still off
@@ -922,7 +1003,10 @@ class Srt(QObject):
 
     def trackSat(self, tle):
         """ 
-        Starts tracking given a satellite TLE
+        Starts tracking given a satellite TLE. See QTracker class for more about the tracking system.
+        TODO: Implement satellite tracking
+
+        :param tle: Target TLE
         """
 
         if type(tle) != skyfield.sgp4lib.EarthSatellite:
@@ -952,7 +1036,8 @@ class Srt(QObject):
 
     def stopTracking(self):
         """
-        Stops tracking motion
+        Stops the tracking motion by pausing the QTracker thread. Unpauses the QPing thread. See QTracker class for more
+        about the tracking system, QPing class for more about the ping system.
 
         """
 
@@ -971,8 +1056,11 @@ class Srt(QObject):
 
     def empty_water(self):
         """
-        Moves antenna to a position where water can flow out then goes back to
-        rest position after a while
+        Sends command to move the antenna to a position where water can flow out then goes back to
+        parking position after a while. TODO : create constants with coordinates and flowing duration
+
+        :return: An IDLE message. Handy for implementation of GUI
+        :rtype: str
 
         """
         print("Emptying water procedure launched...")
@@ -988,7 +1076,7 @@ class Srt(QObject):
 
     def waitObs(self):
         """
-        Waits for the observation to finish. 
+        Waits for the running observation to finish.
         Should only be used in command line; GUI must get
         rid of this another way round I guess...
         """
@@ -1001,7 +1089,7 @@ class Srt(QObject):
 
     def stopObs(self):
         """
-        Brute force kills the observation process
+        Brute force kills the observation process. Be aware this can corrupt the data being acquired.
         """
 
         if not self.observing:
@@ -1014,9 +1102,39 @@ class Srt(QObject):
 
     def observe(self, repo=None, name=None, dev_args='hackrf=0,bias=1', rf_gain=48, if_gain=25, bb_gain=18, fc=1420e6, bw=2.4e6, channels=2048, t_sample=1, duration=60, overwrite=False):
         """
-        Launches a parallelized observation process. SRT's methods are still callable in the meanwhile
+        Launches a parallelized observation process. All SRT methods are still callable in the meanwhile. See
+        self.__observe() for more.
 
-        Read SRT.__observe() docstring for more information.        
+        :param repo: Name of the repository where to store data under DATA_PATH. If None, the name of the repo is by
+        default an auto-generated timestamp
+        :type repo: str
+        :param name: Name of the .dat file in which the data is stored. If None, the name of the file is by default an
+        auto-generated timestamp
+        :type name: str
+        :param dev_args: Device string used by GNU-RADIO to activate the SDR with input parameters. Default to
+        'hackrf=0,bias=1' to indicate the SDR is a HackRF, and the bias-tee should be switched on to power the LNA. For
+        more about the acquisition pipeline, refer to VEGA technical documentation
+        :type dev_args: str
+        :param rf_gain: RF gain used by the SDR
+        :type rf_gain: float
+        :param if_gain:Intermediate frequency gain used by the SDR
+        :type if_gain: float
+        :param bb_gain:Base-band gain used by the SDR
+        :type bb_gain: float
+        :param fc: Central frequency of the observation in MHz. Default set to H21 rest state radiation frequency.
+        :type fc: float
+        :param bw: Bandwidth of the observation in MHz. Notice this is the "period" of the Nyquist-Shannon signal to be
+        sampled when measuring a Power Spectral Diagram
+        :type bw: float
+        :param channels: Numbers of channels to sample. Default value works fine
+        :type: float
+        :param t_sample: Sample duration in seconds
+        :type: float
+        :param duration: Total observation duration in seconds
+        :type duration:float
+        :param overwrite: Flag enabling overwriting of existing observation with same repo and name. If turned off, the
+        new file with overlapping name will be added a suffix '_(i)' to its path with i an integer counter
+        :type overwrite: bool
         """
         self.observing = True
         self.obsProcess = Process(target=self.__observe, args=(
@@ -1030,7 +1148,7 @@ class Srt(QObject):
 
             Recorded data is saved either under absolute path repo/name.dat, or
             relative path repo/name.dat under DATA_PATH directory. Parameters 
-            are saved in a json file
+            are saved in a json file. See self.observe() for documentation of the method arguments.
         """
 
         obs_params = {
@@ -1094,8 +1212,25 @@ class Srt(QObject):
 
     def plotAll(self, repo, name, calib, n=20, m=35, f_rest=1420.4057517667e6,
                 vlsr=False, dB=True, meta=False):
-        """ 
-        Plots full display of data using virgo library's virgo.plot function
+        """
+        Plots full display of data using virgo library's virgo.plot function. Notice the method needs the calibration
+        and the observation data files to be stored in the same repository to work properly.
+        TODO: Implement better method with new acquisition pipeline.
+
+        :param repo: Name of the repository under which data and params.json files are stored
+        :type repo: str
+        :param name: Name of the observation data file
+        :type name: str
+        :param calib: Name of the calibration data file
+        :type calib: str
+        :param n: TODO: understand this
+        :type n: float
+        :param m: TODO: understand this
+        :type m: float
+        :param f_rest: Center frequency at which the observation was performed. TODO: use params.json rather
+        :param vlsr: TODO: understand this
+        :param dB: Scales the calibrated plot in dB
+        :param meta: TODO: understand this
         """
 
         # Formatting repo
@@ -1157,84 +1292,87 @@ class Srt(QObject):
 
         print(f"Plot saved under {plot_path}. CSV saved under {csv_path}.")
 
-    def obsPower(self, duration, intTime=1, bandwidth=1.024, fc=1420, repo=None, obs=None, gain=480):
-        """ Observes PSD at center frequency fc for a duration in seconds with
-        integration time of intTime. Bandwidth and center frequency fc are
-        indicated in MHz
-        OBSOLETE : uses library rtl-sdr"""
-
-        print(f"Observing for {duration} seconds...")
-
-        # If no indicated repository to save data
-        if repo == None:
-            # Make repo the default today's timestamp
-            repo = datetime.today().strftime('%Y-%m-%d')
-
-        # Check if there exists a repo at this name
-        if not os.path.isdir(DATA_PATH + repo):
-            os.mkdir(DATA_PATH + repo)     # if not, create it
-
-        repo = DATA_PATH + repo + '/'
-
-        # If no indicated observation name
-        if obs == None:
-            # Make the name to current timestamp
-            obs = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-        # Check if there exists a repo at this name
-        if not os.path.isdir(repo + obs):
-            os.mkdir(repo + obs)     # if not, create it
-
-        obs = obs + '/'
-
-        fc *= 1e6  # MHz to Hz
-        print(f"fc={fc}")
-
-        rate = bandwidth * 2e6
-        print(f"rate = {rate}")
-
-        # Save parameters of observation for later analysis
-        with open(repo+obs+"params.json", "w") as jsFile:
-            d = {"fc": fc,
-                 "rate": rate, "channels": 1024,
-                 "gain": gain, "intTime": intTime}
-            json.dump(d, jsFile)
-
-        nbSamples = rate * intTime
-        m = np.floor(nbSamples/1024)    # Prefer a multiple of 1024 (channels)
-        nbObs = int(np.ceil(duration/intTime))
-
-        for i in range(nbObs):
-            # Collect data
-            self.sdr.open()
-            self.sdr.center_freq = fc
-            self.sdr.sample_rate = rate
-            self.gain = gain
-            self.sdr.set_bias_tee(True)
-            samples = self.sdr.read_samples(1024 * m)
-
-            print("DEBUG save")
-            # Save data
-            real = fits.Column(name='real', array=samples.real, format='1E')
-            im = fits.Column(name='im', array=samples.imag, format='1E')
-            table = fits.BinTableHDU.from_columns([real, im])
-            table.writeto(repo + obs + "sample#" +
-                          str(i) + '.fits', overwrite=True)
-            self.sdr.close()
-
-        print(f"Observation complete. Data stored in {repo+obs}")
-        print("Plotting averaged PSD")
-        plotAvPSD(repo+obs)     # Plot averaged PSD
+    # def obsPower(self, duration, intTime=1, bandwidth=1.024, fc=1420, repo=None, obs=None, gain=480):
+    #     """ Observes PSD at center frequency fc for a duration in seconds with
+    #     integration time of intTime. Bandwidth and center frequency fc are
+    #     indicated in MHz
+    #     OBSOLETE : uses library rtl-sdr"""
+    #
+    #     print(f"Observing for {duration} seconds...")
+    #
+    #     # If no indicated repository to save data
+    #     if repo == None:
+    #         # Make repo the default today's timestamp
+    #         repo = datetime.today().strftime('%Y-%m-%d')
+    #
+    #     # Check if there exists a repo at this name
+    #     if not os.path.isdir(DATA_PATH + repo):
+    #         os.mkdir(DATA_PATH + repo)     # if not, create it
+    #
+    #     repo = DATA_PATH + repo + '/'
+    #
+    #     # If no indicated observation name
+    #     if obs == None:
+    #         # Make the name to current timestamp
+    #         obs = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+    #     # Check if there exists a repo at this name
+    #     if not os.path.isdir(repo + obs):
+    #         os.mkdir(repo + obs)     # if not, create it
+    #
+    #     obs = obs + '/'
+    #
+    #     fc *= 1e6  # MHz to Hz
+    #     print(f"fc={fc}")
+    #
+    #     rate = bandwidth * 2e6
+    #     print(f"rate = {rate}")
+    #
+    #     # Save parameters of observation for later analysis
+    #     with open(repo+obs+"params.json", "w") as jsFile:
+    #         d = {"fc": fc,
+    #              "rate": rate, "channels": 1024,
+    #              "gain": gain, "intTime": intTime}
+    #         json.dump(d, jsFile)
+    #
+    #     nbSamples = rate * intTime
+    #     m = np.floor(nbSamples/1024)    # Prefer a multiple of 1024 (channels)
+    #     nbObs = int(np.ceil(duration/intTime))
+    #
+    #     for i in range(nbObs):
+    #         # Collect data
+    #         self.sdr.open()
+    #         self.sdr.center_freq = fc
+    #         self.sdr.sample_rate = rate
+    #         self.gain = gain
+    #         self.sdr.set_bias_tee(True)
+    #         samples = self.sdr.read_samples(1024 * m)
+    #
+    #         print("DEBUG save")
+    #         # Save data
+    #         real = fits.Column(name='real', array=samples.real, format='1E')
+    #         im = fits.Column(name='im', array=samples.imag, format='1E')
+    #         table = fits.BinTableHDU.from_columns([real, im])
+    #         table.writeto(repo + obs + "sample#" +
+    #                       str(i) + '.fits', overwrite=True)
+    #         self.sdr.close()
+    #
+    #     print(f"Observation complete. Data stored in {repo+obs}")
+    #     print("Plotting averaged PSD")
+    #     plotAvPSD(repo+obs)     # Plot averaged PSD
 
 
 def RaDec2AzAlt(ra, dec):
     """
-    Takes the star coordinates rightascension and declination as input and transforms them to altitude and azimuth coordinates.
+    Utilitary method that transforms the input Right Ascension (RA) and Declination (Dec) coordinates to
+    Azimuth (Az) and elevation (Alt) coordinates. AzAlt is computed taking into account the geolocation of VEGA,
+    stored in global variables OBS_LAT, OBS_LON and OBS_HEIGHT.
 
-    :param obs_loc an instance of the class EarthLocation containing the informations about the location of the observator
-    :param coords an instance of the class SkyCoord with coordinates corresponding to the input coordinates of the function
-    :param altaz another instance of the class Skycoord but with the original coordinates transformed to the corresponding altitude and azimuth
-    :param coords_altaz string containing the Azimuth in the first position and Altitude in the second position. Both as decimal numbers
-
+    :param ra: Input RA coordinate in decimal hours
+    :type ra: float
+    :param dec: Input Dec coordinate in decimal degrees
+    :type dec: float
+    :return: Converted AzAlt coordinates
+    :rtype: (float,float)
     """
 
     obs_loc = EarthLocation(
@@ -1252,13 +1390,16 @@ def RaDec2AzAlt(ra, dec):
 
 def AzAlt2RaDec(az, alt):
     """
-    Takes the star coordinates azimuth and altitude as input and transforms them to Ra Dec coordinates.
+    Utilitary method that transforms the input Azimuth (Az) and Elevation (Alt) coordinates to
+    Right Ascension (RA) and Declination (Dec) coordinates. AzAlt is computed taking into account the geolocation of VEGA,
+    stored in global variables OBS_LAT, OBS_LON and OBS_HEIGHT.
 
-    :param obs_loc an instance of the class EarthLocation containing the informations about the location of the observator
-    :param coords an instance of the class SkyCoord with coordinates corresponding to the input coordinates of the function
-    :param altaz another instance of the class Skycoord but with the original coordinates transformed to the corresponding altitude and azimuth
-    :param coords_altaz string containing the Azimuth in the first position and Altitude in the second position. Both as decimal numbers
-
+    :param az: Input Az coordinate in decimal degrees
+    :type az: float
+    :param alt: Input Alt coordinate in decimal degrees
+    :type alt: float
+    :return: Converted RaDec coordinates
+    :rtype: (float,float)
     """
 
     obs_loc = EarthLocation(
@@ -1276,7 +1417,18 @@ def AzAlt2RaDec(az, alt):
 
 
 def Gal2AzAlt(long, b):
-    """Converts galactic coordinates to AzAlt"""
+    """
+    Utilitary method that transforms the input galactic longitude (long) and latitude (b) coordinates to
+    Azimuth (Az) and elevation (Alt) coordinates. AzAlt is computed taking into account the geolocation of VEGA,
+    stored in global variables OBS_LAT, OBS_LON and OBS_HEIGHT.
+
+    :param long: Input long coordinate in decimal hours
+    :type long: float
+    :param b: Input b coordinate in decimal degrees
+    :type b: float
+    :return: Converted AzAlt coordinates
+    :rtype: (float,float)
+    """
 
     obs_loc = EarthLocation(
         # lat=46.52457*u.deg, lon=6.61650*u.deg, height=500*u.m)
@@ -1297,7 +1449,18 @@ def Gal2AzAlt(long, b):
 
 
 def AzAlt2Gal(az, alt):
-    """Converts AzAlt coordinates to galactic"""
+    """
+    Utilitary method that transforms the input Azimuth (Az) and Elevation (Alt) coordinates to galactic longitude (long)
+    and latitude (b) coordinates. AzAlt is computed taking into account the geolocation of VEGA,
+    stored in global variables OBS_LAT, OBS_LON and OBS_HEIGHT.
+
+    :param az: Input Az coordinate in decimal degrees
+    :type az: float
+    :param alt: Input Alt coordinate in decimal degrees
+    :type alt: float
+    :return: Converted galactic coordinates
+    :rtype: (float,float)
+    """
 
     obs_loc = EarthLocation(
         # lat=46.52457*u.deg, lon=6.61650*u.deg, height=500*u.m)
@@ -1316,7 +1479,16 @@ def AzAlt2Gal(az, alt):
 
 
 def TLE2AzAlt(tle, delay=0):
-    """Returns az and alt position of sat at current time given TLE"""
+    """Returns az and alt position of sat at current time given TLE
+
+    :param tle: The target satellite TLE
+    :type tle: ? TODO: find this
+    :param delay: Delay in seconds to introduce in the TLE propagation in order to ope with the slew duration to
+    the tracking path
+    :type delay: float
+    :return: The converted AzAlt coordinates
+    :rtype: (float, float)
+    """
 
     t = TS.now()
     if delay != 0:
@@ -1346,7 +1518,8 @@ def loadTLE(name):
 
 
 def plotAvPSD(path):
-    """Plots the averaged PSD of the observation located in path"""
+    """Plots the averaged PSD of the observation located in path
+    EXPERIMENTAL : work in progress"""
 
     path = path.strip("/")
     obsName = path.split('/')[-1]   # Extract name of observation from path
