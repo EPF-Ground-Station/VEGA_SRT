@@ -7,6 +7,13 @@
     <orderEntry type="jdk" jdkName="Python 3.9 (Antenna_Pointing_Mechanism_EPFL)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+  <component name="PyNamespacePackagesService">
+    <option name="namespacePackageFolders">
+      <list>
+        <option value="$MODULE_DIR$/Scripts" />
+      </list>
+    </option>
+  </component>
   <component name="SonarLintModuleSettings">
     <option name="uniqueId" value="5dcbb4b3-7118-4337-a41a-449161ac793f" />
   </component>

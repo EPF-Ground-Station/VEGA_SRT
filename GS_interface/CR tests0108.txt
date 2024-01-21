@@ -1,3 +1,0 @@
-CR test 1er aout : getters azalt ne fonctionnent pas, 
-			verbose at disconnect
-			todo : tester déconnexion imprévue

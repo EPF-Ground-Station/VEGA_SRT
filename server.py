@@ -16,7 +16,7 @@ Format of exchanged messages :
 """
 
 
-from GS_interface.lib.library_GS import *
+from lib_SRT.Srt import *
 import sys
 from os.path import expanduser
 from time import time, localtime, strftime
