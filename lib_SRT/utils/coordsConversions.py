@@ -1,5 +1,5 @@
 
-from ..lib_SRT.define import *
+from ..define import *
 from skyfield.api import load
 from astropy.time import Time
 from astropy.coordinates import SkyCoord, EarthLocation, AltAz, ICRS
