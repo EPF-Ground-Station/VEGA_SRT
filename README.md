@@ -1,6 +1,6 @@
 # Very Elegant Galactic Antenna (VEGA)
 
-Welcome to the VEGA radio-telescope repository! This project consists in developing and controlling a Small Radio Telescope (SRT) to support potential research in the field of radio-astronomy. 
+Welcome to the VEGA radio-telescope software repository! This project consists in developing and controlling a Small Radio Telescope (SRT) to support potential research in the field of radio-astronomy. 
 
 The radio-telescope, nominal since summer 2023, is currently operated by Callista, the EPFL astronomy club.
 
