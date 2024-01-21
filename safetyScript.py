@@ -8,5 +8,5 @@ Script aimed at ensuring security of SRT by safety connexion-deconnexion
 
 from Scripts.SRT_inline import *
 
-SRT.connect(False)
+SRT.connectAPM(False)
 SRT.disconnect()

@@ -19,4 +19,4 @@ sys.path.insert(0, dir_path[:-8])
 
 from lib_SRT.Srt import *
 
-SRT = Srt("/dev/ttyUSB0", 115200, 1)
+SRT = Srt("/dev/ttyUSB0", 115200, timeout=1)
