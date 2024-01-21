@@ -1,11 +1,11 @@
-Antenna_Pointing_Mechanism_EPFL
-===============================
+VEGA_SRT
+========
 
 .. toctree::
    :maxdepth: 4
 
-   GS_interface
    GUI
+   lib_SRT
    mainclient
+   mainserver
    safetyScript
-   server
