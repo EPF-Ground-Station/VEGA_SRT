@@ -633,34 +633,34 @@ class Srt(QObject):
         self.__observe() for more.
 
         :param repo: Name of the repository where to store data under DATA_PATH. If None, the name of the repo is by
-        default an auto-generated timestamp
+            default an auto-generated timestamp
         :type repo: str
         :param name: Name of the .dat file in which the data is stored. If None, the name of the file is by default an
-        auto-generated timestamp
+            auto-generated timestamp
         :type name: str
         :param dev_args: Device string used by GNU-RADIO to activate the SDR with input parameters. Default to
-        'hackrf=0,bias=1' to indicate the SDR is a HackRF, and the bias-tee should be switched on to power the LNA. For
-        more about the acquisition pipeline, refer to VEGA technical documentation
+            'hackrf=0,bias=1' to indicate the SDR is a HackRF, and the bias-tee should be switched on to power the LNA. For
+            more about the acquisition pipeline, refer to VEGA technical documentation
         :type dev_args: str
         :param rf_gain: RF gain used by the SDR
         :type rf_gain: float
-        :param if_gain:Intermediate frequency gain used by the SDR
+        :param if_gain: Intermediate frequency gain used by the SDR
         :type if_gain: float
-        :param bb_gain:Base-band gain used by the SDR
+        :param bb_gain: Base-band gain used by the SDR
         :type bb_gain: float
         :param fc: Central frequency of the observation in MHz. Default set to H21 rest state radiation frequency.
         :type fc: float
         :param bw: Bandwidth of the observation in MHz. Notice this is the "period" of the Nyquist-Shannon signal to be
-        sampled when measuring a Power Spectral Diagram
+            sampled when measuring a Power Spectral Diagram
         :type bw: float
         :param channels: Numbers of channels to sample. Default value works fine
         :type: float
         :param t_sample: Sample duration in seconds
         :type: float
         :param duration: Total observation duration in seconds
-        :type duration:float
+        :type duration: float
         :param overwrite: Flag enabling overwriting of existing observation with same repo and name. If turned off, the
-        new file with overlapping name will be added a suffix '_(i)' to its path with i an integer counter
+            new file with overlapping name will be added a suffix '_(i)' to its path with i an integer counter
         :type overwrite: bool
         """
         self.observing = True

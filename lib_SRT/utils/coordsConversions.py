@@ -127,8 +127,8 @@ def TLE2AzAlt(tle, delay=0):
 
     :param tle: The target satellite TLE
     :type tle: ? TODO: find this
-    :param delay: Delay in seconds to introduce in the TLE propagation in order to ope with the slew duration to
-    the tracking path
+    :param delay: Delay in seconds to introduce in the TLE propagation in order to cope with the slew duration to
+        the tracking path
     :type delay: float
     :return: The converted AzAlt coordinates
     :rtype: (float, float)
