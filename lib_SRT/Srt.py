@@ -64,14 +64,22 @@ class Srt(QObject):
     trackMotionEnd = Signal()
     pauseTracking = Signal()
 
-    def __init__(self, adress, baud, timeo=None, parent=None):
+    def __init__(self, address, baud, timeout=None, parent=None):
+        """
+        :param address: Address of the port on which the APM is connected
+        :type address: str
+        :param baud: Baud rate at which data is communicated between SRT and APM
+        :type: float
+        :param timeout: Timeout duration of the connexion between SRT and APM
+        :type timeout: float
+        """
 
         super().__init__(parent)
 
-        self.ser = SerialPort(adress, baud, timeo=None)
+        self.ser = SerialPort(address, baud, timeo=None)
         self.ser.disconnect()       # Keeps serial connection closed for safety
 
-        self.timeout = timeo
+        self.timeout = timeout
         self.apmMsg = ""        # Stores last message from APM
 
         self.tracker = QTracker()
