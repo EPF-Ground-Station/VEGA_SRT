@@ -697,6 +697,7 @@ class QCameraThread(QThread):
 
 
     def run(self):
+
         if VIDEOSOURCE == '':
             return
 

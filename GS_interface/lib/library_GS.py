@@ -1,6 +1,27 @@
 # -*- coding: utf-8 -*-
 """
-Library aimed at scripting Srt with Antenna pointing mechanism
+Library aimed at defining all classes and parameters relevant to the operation of VEGA radiotelescope.
+
+The constants in beginning of the file are fine-tuned for our antenna's location, storage system etc.
+
+The main class of the module is the SRT, which owns a SerialPort object and is thus thought as the only class being
+able to communicate with the Antenna Pointing Mechanism (APM) at a time. For more about the APM, see the embedded_teensy
+documentation.
+
+Other classes are the private class SerialPort which monitors communication with APM via the serial module, and
+QThreads such as QPing and QTracker, all owned and instantiated by the SRT class, which monitor background tasks of the
+APM.
+
+The main constraint of our current design is the fact the encoders of the mount work in synchronous mode, i.e. they can
+only execute one task at a time. In particular, a task cannot be stopped by software. This implies only one command
+should be sent to the APM at a time by the user interface.
+
+This strong requirement led to use the Qt library in the implementation of the multi-thread interface. QThreads
+communicate with one another via QSignals which can carry variables such as strings. This way, all background tasks
+that require to send commands to the APM rely on the SRT instance to actually send the corresponding messages via the
+serial port, by emitting QSignals carrying their messages, which are connected to appropriate slots in the SRT class.
+
+For more about this multi-threading architecture, see the SRT class.
 
 @LL
 """
@@ -46,22 +67,47 @@ TS = load.timescale()   # Loads skyfield timescale
 
 class SerialPort:
 
-    """Class aimed at representing the interaction with the APM serial port"""
+    """Class aimed at monitoring the interaction with the APM serial port using the serial module"""
 
-    def __init__(self, adress, baud, timeo=None):
-        self.ser = serial.Serial(adress, baud, timeout=timeo)
+    def __init__(self, address, baud, timeo=None):
+        """
+        :param address: address of the serial port (port on the linux machine)
+        :param baud: rate of data exchange
+        :param timeo: timeout of the communication. Default to None
+        """
+        self.ser = serial.Serial(address, baud, timeout=timeo)
         self.connected = False
 
     def connect(self):
+        """
+        Connects to the serial port. TODO: implement security check if an error occurs here
+        """
         self.ser.open()
         self.connected = True
 
     def disconnect(self):
+        """
+        Disconnects the serial port.
+        """
         self.connected = False
         self.ser.close()
 
     def listen(self):
-        """Reads last message from SerialPort with appropriate processing"""
+        """Reads last message from SerialPort with appropriate processing. Messages sent by the APM have format:
+
+        {Status}|{Feedback}
+
+        where status can either be OK, Warning or Error. Feedback is the actual return value of the APM : either message
+        if status is Warning or Error, or a string containing a value if the status is Success.
+
+        Example message : "Success | 33.85" , answer to command "getAz". The numeric value is thus the current Azimuth
+        angle value assumed by the APM Az encoder.
+
+        See APM_embedded_teensy/APM_embedded_teensy_2.ino for more
+
+        :return: Message sent by the APM
+        :rtype: str
+        """
 
         status, feedback = self.ser.readline().decode('utf-8').split(" | ")
 
@@ -72,10 +118,13 @@ class SerialPort:
         return feedback.strip()
 
     def send_Ser(self, msg: str):
-        """Sends message msg through the serial port.
+        """Sends message through the serial port to the APM. Returns answer from SerialPort, following the synchronous
+        philosophy : one command = one feedback. TODO: Make encoders asynchronous to allow multiple commands, command breaks etc (long term)
 
-        Returns answer from SerialPort.
-
+        :param msg: Command to send to APM
+        :type msg: str
+        :return: Feedback from APM after command execution
+        :rtype: str
         """
 
         if self.connected:
@@ -92,54 +141,55 @@ class SerialPort:
 
 
 class TrackMode(Enum):
-    """Tracking modes of SRT"""
+    """Tracking modes of SRT. Specifies the coordinate system to use while tracking. For now 3 options are foreseen:
+    RaDec, Galactic coordinates, and TLE (satellites) tracking. TODO: Implement satellite tracking"""
     RADEC = 1
     GAL = 2
     TLE = 3     # To be implemented
 
 
-class BckgrndTask(Thread):
-    """
+# class BckgrndTask(Thread):
+#     """
+#
+#     Methods :
+#         stop() : turns the stop flag on, allows to kill the thread when writing
+#         the run() method in daughter classes
+#
+#         pause() : turns on flag off. allows to pause the thread in run()
+#
+#         unpause() : turns on flag on
+#     """
+#
+#     def __init__(self):
+#
+#         Thread.__init__(self)
+#         self.on = False         # May pause the thread but does not kill it
+#         self.stop = False       # kills the thread
+#         self.pending = False    # flag on while waiting for answer from ser
+#
+#         self.daemon = True
+#
+#     def stop(self):             # Allows to kill the thread
+#         self.stop = True
+#
+#     def pause(self):
+#         self.on = False
+#
+#     def unpause(self):
+#         self.on = True
 
-    Methods :
-        stop() : turns the stop flag on, allows to kill the thread when writing
-        the run() method in daughter classes
-
-        pause() : turns on flag off. allows to pause the thread in run()
-
-        unpause() : turns on flag on
-    """
-
-    def __init__(self):
-
-        Thread.__init__(self)
-        self.on = False         # May pause the thread but does not kill it
-        self.stop = False       # kills the thread
-        self.pending = False    # flag on while waiting for answer from ser
-
-        self.daemon = True
-
-    def stop(self):             # Allows to kill the thread
-        self.stop = True
-
-    def pause(self):
-        self.on = False
-
-    def unpause(self):
-        self.on = True
-
-
-class BckgrndAPMTask(BckgrndTask):
-
-    """Virtual class aimed at making parallel tasks on APM easier """
-
-    def __init__(self, ser):
-        BckgrndTask.__init__(self)  # serial port over which APM communicates
-        self.ser = ser
-
-    def setSer(self, ser):
-        """Sets the serial port over which to communicate"""
-        self.ser = ser
+#
+# class BckgrndAPMTask(BckgrndTask):
+#
+#     """Virtual class aimed at making parallel tasks on APM easier """
+#
+#     def __init__(self, ser):
+#         BckgrndTask.__init__(self)  # serial port over which APM communicates
+#         self.ser = ser
+#
+#     def setSer(self, ser):
+#         """Sets the serial port over which to communicate"""
+#         self.ser = ser
 
 
 # class Ping(BckgrndAPMTask):
@@ -164,30 +214,64 @@ class BckgrndAPMTask(BckgrndTask):
 
 
 class QPing(QThread):
+    """
+    QThread monitoring the recurrent ping handshake with the APM. The APM is programmed to park the radiotelescope
+    automatically after a certain inactivity duration. In order to prevent this parking process to trigger during
+    e.g. a static measurement, or user lasting hesitation, a ping/pong is regularly performed with APM in the background
+    in order to reset its inactivity timer while the SRT object is "connected".
+
+    The rate at which these interactions are executed is fixed by the PING_RATE constant.
+
+    Notice the thread is paused during tracking motion : since the QTracker threads sends commands continuously at high
+    rate, the ping is useless in this case, and would only slow down communication with APM. See QTracker for more.
+    """
 
     sendPing = Signal()
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.stop = False
+        self.on = False
 
     def run(self):
+        """
+        Main loop of the thread. If the self.on flag is on, the ping signal is emitted for the SRT instance to ping the
+        APM. In any case, PING_RATE seconds are waited before next iteration.
+        """
         while not self.stop:
-            sendPing.emit()
+            if self.on:
+                self.sendPing.emit()
+            # Waits in any case
             timeNow = time.time()       # Waits before pinging again
             while time.time() < timeNow + PING_RATE:
                 pass
 
-    def stop(self):             # Allows to kill the thread
+    def stop(self):
+        """
+        Allows to kill the thread by switching on the stop flag
+        """
         self.stop = True
 
     def pause(self):
+        """Pauses the emission of ping signal in the main loop"""
         self.on = False
 
     def unpause(self):
+        """Enables the emission of ping signal in the main loop"""
         self.on = True
 
 
 class QTracker(QThread):
+    """
+    QThread monitoring the background commands during a track. Envisioned trackable targets are : tuples (a,b) of
+    coordinates in any of the RaDec or Galactic coordinates (More might be added in future), or satellites TLEs (TODO)
+
+    Target (a,b) or TLE are given at initialisation of the thread by user input, or modified by call to setTarget.
+    During tracking, current corresponding AzAlt coordinates are regularly refreshed and the slew command to those is
+    sent to APM. The rate at which these commands are sent is fixed by the TRACKING_RATE constant.
+
+    TODO: Implement satellite tracking
+    """
 
     sendPointTo = Signal(float, float)
 
@@ -208,7 +292,7 @@ class QTracker(QThread):
         self.pending = False
 
     def refresh_azalt(self):
-        """Refreshes coords of target depending on tracking mode"""
+        """Refreshes AzAlt coords of target depending on the tracking mode"""
 
         if self.mode.value == 1:  # if RADEC
             self.az, self.alt = RaDec2AzAlt(self.a, self.b)
@@ -227,18 +311,26 @@ class QTracker(QThread):
         #     self.stop = True
 
     def turnOn(self):
+        """Allows to turn on tracking"""
         self.on = True
 
     def pause(self):
+        """Allows to pause tracking"""
         self.on = False
         return
     def setMode(self, mode):
-        """Sets tracking mode"""
+        """Sets the tracking mode.
+
+        :param mode: Desired mode of tracking (RaDec, Gal or TLE)
+        :type mode: TrackMode"""
 
         self.mode = TrackMode(mode)
 
     def setTarget(self, *args):
-        """Sets target's coordinates"""
+        """Sets target's coordinates. TODO: Implement TLE, document type of args in this case
+
+        :param args: The target to track
+        :type args: (float, float) """
 
         # If coords mode
         if self.mode.value in (1, 2):
@@ -256,6 +348,14 @@ class QTracker(QThread):
             self.tle = args[0]
 
     def run(self):
+        """Main loop of the thread. If the self.on flag is on, the tracking signal is emitted for the SRT instance to
+         send the slew-to-AzAlt command to the APM every TRACKING_RATE seconds, OR as soon as the APM is IDLE.
+
+         Notice the self.on flag is turned off after sending a slewing command. This accounts for the time the APM
+         takes to execute the command and return IDLE to the SRT instance. When the IDLE feedback is received, the SRT
+         instance emits a signal which turns the self.on flag back on.
+
+         See self.onIdle and SRT class for more."""
 
         while not self.stop:
             self.pending = False
@@ -293,7 +393,7 @@ class QTracker(QThread):
 
     @Slot()
     def onIdle(self):
-        """Slot triggered when SRT is ready for next tracking motion"""
+        """Slot triggered when SRT is ready for the next tracking motion"""
 
         self.on = True
 
@@ -421,7 +521,18 @@ class QTracker(QThread):
 
 class Srt(QObject):
 
-    """Class that supervizes interface btw user and Small Radio Telescope"""
+    """Class that monitors the interface between the user and the VEGA Small Radio Telescope.
+
+    The features of the class include :
+
+    - Slewing the APM in either a simple pointing or tracking motion
+    - Acquiring data from the SDR
+    - Processing data TODO : update the processing pipeline for more control than with virgo
+
+    This class is intended to own and communicate with all threads sending commands to the APM. It also owns the
+    SerialPort instance, and as such is the only one to properly speaking communicate with the APM. This is required
+    to prevent multiple access to the Serial port.
+    """
 
     trackMotionEnd = Signal()
     pauseTracking = Signal()
@@ -450,12 +561,12 @@ class Srt(QObject):
         self.ping.sendPing.connect(self.onPingSignal)
 
         # Connect SDR and set default parameters
-        """self.sdr = RtlSdr()
-        self.sdr.sample_rate = 2.048e6
-        self.sdr.center_freq = 1420e06
-        self.sdr.gain = 480
-        self.sdr.set_bias_tee(True)
-        self.sdr.close()"""
+        # self.sdr = RtlSdr()
+        # self.sdr.sample_rate = 2.048e6
+        # self.sdr.center_freq = 1420e06
+        # self.sdr.gain = 480
+        # self.sdr.set_bias_tee(True)
+        # self.sdr.close()
 
         # Declares process that runs observations
         self.obsProcess = None
@@ -469,15 +580,31 @@ class Srt(QObject):
         self.long, self.lat = 0,0
 
     def go_home(self, verbose=False):
-        """Takes SRT to its home position and shuts motors off"""
+        """Takes SRT to its home position and shuts motors off
+
+        :return: Final feedback from APM
+        :rtype: str"""
         if self.tracking:               # Stops tracking before
             self.stopTracking()
 
         self.untangle(verbose)
-        self.standby(verbose)
+        return self.standby(verbose)
 
     def connectAPM(self, water=True):
-        """Connects to serial port"""
+        """
+        Connects to serial port. Performs the check-in routines :
+
+        - Unpause the QPing thread
+        - Calibrate the Azimuthal encoder to NORTH
+        - Untangle cables for safety and motor proper activation
+        - By default launch the water evacuation process
+        - Get all current coordinates from encoders
+
+        :param water: Flag enabling the water evacuation process launch upon connection
+        :type water: bool
+        :return: Final feedback from APM
+        :rtype: str
+        """
 
         if self.ser.connected:
             return "SRT already connected"
@@ -489,11 +616,19 @@ class Srt(QObject):
         if water:               # Evacuates water in default mode
             msg = self.empty_water()
 
-        self.getAllCoords()
+        self.getAllCoords()     # Get all current coords of the APM. This also resets the inactivity timer of the APM
         return msg
 
     def disconnectAPM(self):
-        """Disconnects from serial port"""
+        """Disconnects from serial port. Performs the check-out routines:
+
+        - Stop all background threads (ping, tracker)
+        - Park the mount
+        - Close connection to serial port
+
+        :return: Last feedback from APM
+        :rtype: str
+        """
 
         if not self.ser.connected:
             return "SRT already disconnected"
@@ -509,11 +644,17 @@ class Srt(QObject):
 
     def send_APM(self, msg: str, verbose=False, save=True):
         """
-        Utilitary function aimed at sending arbitrary messages to the pointing
-        mechanism via serial port.
+        Private method monitoring the command transfer to APM via the serial port. This is the only method whatsoever
+        envisioned to directly send commands to the APM.
 
-        Returns answer from APM. Saves it in apmMsg attr if save flag is on
-
+        :param msg: Command to send to APM
+        :type msg: str
+        :param verbose: Debugging flag. When on, all transiting commands are printed to console
+        :type verbose: bool
+        :param save: When this flag is on, the last command sent is saved to the instance attribute self.apmMsg
+        :type save: bool
+        :return: Feedback from APM
+        :rtype: str
         """
 
         self.pending = True
@@ -540,7 +681,11 @@ class Srt(QObject):
 
     def getAz(self):
         """Getter on current Azimuthal angle in degrees. In case of error
-        returns -1 """
+        returns -1.
+
+        :return: Current azimuthal angle communicated by the APM encoder
+        :rtype: float
+        """
 
         try:
             az = float(self.send_APM("getAz "))
@@ -552,7 +697,11 @@ class Srt(QObject):
 
     def getAlt(self):
         """Getter on current Altitude in degrees. In case of error
-        returns -1 """
+        returns -1
+
+        :return: Current elevation angle communicated by the APM encoder
+        :rtype: float
+        """
 
         try:
             alt = float(self.send_APM("getAlt "))
@@ -563,7 +712,11 @@ class Srt(QObject):
             return -1
 
     def getAzAlt(self):
-        """Getter on current pozition in AltAz coordinates"""
+        """Getter on current position in AltAz coordinates
+
+        :return: Current azimuthal and elevation angled communicated by the APM encoders
+        :rtype: (float, float)
+        """
 
         az = self.getAz()
         alt = self.getAlt()

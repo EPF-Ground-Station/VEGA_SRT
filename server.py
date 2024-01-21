@@ -37,12 +37,6 @@ class sigEmettor(QObject):
     """QObject that handles sending a signal from a non-Q thread.
     Used by StdoutRedirector to pass the Server a print statement
     to send to the client
-
-    .. py:attribute:: printMsg
-
-    Signal emitted when a message is to be printed on the client side
-
-    :param str message: The message to be printed
     """
 
     printMsg = Signal(str, bool)  # Signal emitted when sth is printed
