@@ -1,9 +1,6 @@
 lib\_SRT package
 ================
 
-Submodules
-----------
-
 lib\_SRT.Srt module
 -------------------
 
@@ -11,7 +8,7 @@ lib\_SRT.Srt module
    :members:
    :undoc-members:
    :show-inheritance:
-   
+
 lib\_SRT.QPing module
 ---------------------
 

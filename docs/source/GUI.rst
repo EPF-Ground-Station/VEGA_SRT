@@ -1,9 +1,6 @@
 GUI package
 ===========
 
-Submodules
-----------
-
 GUI.ui\_form\_client module
 ---------------------------
 

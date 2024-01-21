@@ -1,9 +1,6 @@
 lib\_SRT.virgo package
 ======================
 
-Submodules
-----------
-
 lib\_SRT.virgo.run\_ftf module
 ------------------------------
 

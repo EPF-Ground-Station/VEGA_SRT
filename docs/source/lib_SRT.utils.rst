@@ -1,9 +1,6 @@
 lib\_SRT.utils package
 ======================
 
-Submodules
-----------
-
 lib\_SRT.utils.coordsConversions module
 ---------------------------------------
 
