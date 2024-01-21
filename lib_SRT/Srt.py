@@ -29,7 +29,6 @@ For more about this multi-threading architecture, see the SRT class.
 
 
 import requests
-#yo
 import json
 from datetime import datetime
 from . import virgo
@@ -40,9 +39,9 @@ from astropy.io import fits
 
 import skyfield
 import matplotlib.pyplot as plt
-from SerialPort import *
-from QPing import QPing
-from QTracker import *
+from .SerialPort import *
+from .QPing import QPing
+from .QTracker import *
 from multiprocessing import Process
 from PySide6.QtCore import Signal, QObject
 
