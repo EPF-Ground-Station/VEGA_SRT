@@ -11,7 +11,12 @@ For external/sensible usage, prefer the GUI remote operation interface.
 When imported into a script, resolves all references to the library. Therefore, it can be very handy
 for automated measurement campaign scripts.
 """
+import sys
+import os
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
-from ..lib_SRT.Srt import *
+sys.path.insert(0, dir_path[:-8])
+
+from lib_SRT.Srt import *
 
 SRT = Srt("/dev/ttyUSB0", 115200, 1)
