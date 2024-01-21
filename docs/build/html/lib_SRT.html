@@ -1,220 +1,786 @@
-<!doctype html>
-<html class="no-js" lang="en" data-content_root="">
-  <head><meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="lib_SRT.utils package" href="lib_SRT.utils.html" /><link rel="prev" title="GUI package" href="GUI.html" />
 
-    <!-- Generated with Sphinx 6.2.1 and Furo 2023.09.10 -->
-        <title>lib_SRT package - Very Elegant Galactic Antenna (VEGA) 0.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=369552022d0b975c8e74270ce6eabe0fb7978f24" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
-    
-    
+<!DOCTYPE html>
 
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-<style>
-  body {
-    --color-code-background: #f8f8f8;
-  --color-code-foreground: black;
-  --color-brand-primary: black;
-  --color-brand-content: black;
-  
-  }
-  @media not print {
-    body[data-theme="dark"] {
-      --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  --color-brand-primary: white;
-  --color-brand-content: white;
-  
-    }
-    @media (prefers-color-scheme: dark) {
-      body:not([data-theme="light"]) {
-        --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  --color-brand-primary: white;
-  --color-brand-content: white;
-  
-      }
-    }
-  }
-</style></head>
-  <body>
-    
-    <script>
-      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
-    </script>
-    
+    <title>lib_SRT package &#8212; Very Elegant Galactic Antenna (VEGA) 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/traditional.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="lib_SRT.utils package" href="lib_SRT.utils.html" />
+    <link rel="prev" title="GUI package" href="GUI.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="lib_SRT.utils.html" title="lib_SRT.utils package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="GUI.html" title="GUI package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Very Elegant Galactic Antenna (VEGA) 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">VEGA_SRT</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">lib_SRT package</a></li> 
+      </ul>
+    </div>  
 
-<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-  <symbol id="svg-toc" viewBox="0 0 24 24">
-    <title>Contents</title>
-    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
-      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
-    </svg>
-  </symbol>
-  <symbol id="svg-menu" viewBox="0 0 24 24">
-    <title>Menu</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
-      <line x1="3" y1="12" x2="21" y2="12"></line>
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <line x1="3" y1="18" x2="21" y2="18"></line>
-    </svg>
-  </symbol>
-  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
-    <title>Expand</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
-      <polyline points="9 18 15 12 9 6"></polyline>
-    </svg>
-  </symbol>
-  <symbol id="svg-sun" viewBox="0 0 24 24">
-    <title>Light mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
-      <circle cx="12" cy="12" r="5"></circle>
-      <line x1="12" y1="1" x2="12" y2="3"></line>
-      <line x1="12" y1="21" x2="12" y2="23"></line>
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-      <line x1="1" y1="12" x2="3" y2="12"></line>
-      <line x1="21" y1="12" x2="23" y2="12"></line>
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-    </svg>
-  </symbol>
-  <symbol id="svg-moon" viewBox="0 0 24 24">
-    <title>Dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
-    </svg>
-  </symbol>
-  <symbol id="svg-sun-half" viewBox="0 0 24 24">
-    <title>Auto light/dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M13 12h5" />
-      <path d="M13 15h4" />
-      <path d="M13 18h1" />
-      <path d="M13 9h4" />
-      <path d="M13 6h1" />
-    </svg>
-  </symbol>
-</svg>
-
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
-<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
-<label class="overlay sidebar-overlay" for="__navigation">
-  <div class="visually-hidden">Hide navigation sidebar</div>
-</label>
-<label class="overlay toc-overlay" for="__toc">
-  <div class="visually-hidden">Hide table of contents sidebar</div>
-</label>
-
-
-
-<div class="page">
-  <header class="mobile-header">
-    <div class="header-left">
-      <label class="nav-overlay-icon" for="__navigation">
-        <div class="visually-hidden">Toggle site navigation sidebar</div>
-        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
-      </label>
-    </div>
-    <div class="header-center">
-      <a href="index.html"><div class="brand">Very Elegant Galactic Antenna (VEGA) 0.0.1 documentation</div></a>
-    </div>
-    <div class="header-right">
-      <div class="theme-toggle-container theme-toggle-header">
-        <button class="theme-toggle">
-          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
-          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
-          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
-        </button>
-      </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
-        <div class="visually-hidden">Toggle table of contents sidebar</div>
-        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-      </label>
-    </div>
-  </header>
-  <aside class="sidebar-drawer">
-    <div class="sidebar-container">
-      
-      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
-  
-  <div class="sidebar-logo-container">
-    <img class="sidebar-logo only-light" src="_static/logoCallistaLight.png" alt="Light Logo"/>
-    <img class="sidebar-logo only-dark" src="_static/logoCallistaDark.png" alt="Dark Logo"/>
-  </div>
-  
-  
-</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
-  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
-  <input type="hidden" name="check_keywords" value="yes">
-  <input type="hidden" name="area" value="default">
-</form>
-<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current has-children"><a class="reference internal" href="modules.html">VEGA_SRT</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of VEGA_SRT</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="GUI.html">GUI package</a></li>
-<li class="toctree-l2 current has-children current-page"><a class="current reference internal" href="#">lib_SRT package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of lib_SRT package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="lib_SRT.utils.html">lib_SRT.utils package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="lib_SRT.virgo.html">lib_SRT.virgo package</a></li>
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="lib-srt-package">
+<h1>lib_SRT package<a class="headerlink" href="#lib-srt-package" title="Permalink to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-lib_SRT.Srt">
+<span id="lib-srt-srt-module"></span><h2>lib_SRT.Srt module<a class="headerlink" href="#module-lib_SRT.Srt" title="Permalink to this heading">¶</a></h2>
+<p>Library aimed at defining all classes and parameters relevant to the operation of VEGA radiotelescope.</p>
+<p>The constants in beginning of the file are fine-tuned for our antenna’s location, storage system etc.</p>
+<p>The main class of the module is the SRT, which owns a SerialPort object and is thus thought as the only class being
+able to communicate with the Antenna Pointing Mechanism (APM) at a time. For more about the APM, see the embedded_teensy
+documentation.</p>
+<p>Other classes are the private class SerialPort which monitors communication with APM via the serial module, and
+QThreads such as QPing and QTracker, all owned and instantiated by the SRT class, which monitor background tasks of the
+APM.</p>
+<p>The main constraint of our current design is the fact the encoders of the mount work in synchronous mode, i.e. they can
+only execute one task at a time. In particular, a task cannot be stopped by software. This implies only one command
+should be sent to the APM at a time by the user interface.</p>
+<p>This strong requirement led to use the Qt library in the implementation of the multi-thread interface. QThreads
+communicate with one another via QSignals which can carry variables such as strings. This way, all background tasks
+that require to send commands to the APM rely on the SRT instance to actually send the corresponding messages via the
+serial port, by emitting QSignals carrying their messages, which are connected to appropriate slots in the SRT class.</p>
+<p>For more about this multi-threading architecture, see the SRT class.</p>
+<p>&#64;LL</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Srt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QObject</span></code></p>
+<p>Class that monitors the interface between the user and the VEGA Small Radio Telescope.</p>
+<p>The features of the class include :</p>
+<ul class="simple">
+<li><p>Slewing the APM in either a simple pointing or tracking motion</p></li>
+<li><p>Acquiring data from the SDR</p></li>
+<li><p>Processing data TODO : update the processing pipeline for more control than with virgo</p></li>
 </ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="mainclient.html">mainclient module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mainserver.html">mainserver module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="safetyScript.html">safetyScript module</a></li>
-</ul>
-</li>
-</ul>
+<p>This class is intended to own and communicate with all threads sending commands to the APM. It also owns the
+SerialPort instance, and as such is the only one to properly speaking communicate with the APM. This is required
+to prevent multiple access to the Serial port.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.calibrate_north">
+<span class="sig-name descname"><span class="pre">calibrate_north</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">990000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.calibrate_north" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines offset for North position in azimuthal microsteps. The curent estimation is stored in constant NORTH.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>verbose</strong> (<em>bool</em>) – Flag used by self.send_APM</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Last feedback from APM</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
-</div>
-</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.connectAPM">
+<span class="sig-name descname"><span class="pre">connectAPM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">water</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.connectAPM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connects to serial port. Performs the check-in routines :</p>
+<ul class="simple">
+<li><p>Unpause the QPing thread</p></li>
+<li><p>Calibrate the Azimuthal encoder to NORTH</p></li>
+<li><p>Untangle cables for safety and motor proper activation</p></li>
+<li><p>By default launch the water evacuation process</p></li>
+<li><p>Get all current coordinates from encoders</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>water</strong> (<em>bool</em>) – Flag enabling the water evacuation process launch upon connection</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Final feedback from APM</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
 
-      </div>
-      
-    </div>
-  </aside>
-  <div class="main">
-    <div class="content">
-      <div class="article-container">
-        <a href="#" class="back-to-top muted-link">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
-          </svg>
-          <span>Back to top</span>
-        </a>
-        <div class="content-icon-container">
-          
-<div class="theme-toggle-container theme-toggle-content">
-            <button class="theme-toggle">
-              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
-              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
-              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
-            </button>
-          </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
-            <div class="visually-hidden">Toggle table of contents sidebar</div>
-            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-          </label>
-        </div>
-        <article role="main">
-          <section id="lib-srt-package">
-<h1>lib_SRT package<a class="headerlink" href="#lib-srt-package" title="Permalink to this heading">#</a></h1>
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.disconnectAPM">
+<span class="sig-name descname"><span class="pre">disconnectAPM</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.disconnectAPM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disconnects from serial port. Performs the check-out routines:</p>
+<ul class="simple">
+<li><p>Stop all background threads (ping, tracker)</p></li>
+<li><p>Park the mount</p></li>
+<li><p>Close connection to serial port</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Last feedback from APM</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.empty_water">
+<span class="sig-name descname"><span class="pre">empty_water</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.empty_water" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends command to move the antenna to a position where water can flow out then goes back to
+parking position after a while. TODO : create constants with coordinates and flowing duration</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An IDLE message. Handy for implementation of GUI</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.getAllCoords">
+<span class="sig-name descname"><span class="pre">getAllCoords</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.getAllCoords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Refreshes all coordinates instance attributes from AzAlt communicated by the APM encoders.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.getAlt">
+<span class="sig-name descname"><span class="pre">getAlt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.getAlt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter on current Altitude in degrees. In case of error
+returns -1</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Current elevation angle communicated by the APM encoder</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.getAz">
+<span class="sig-name descname"><span class="pre">getAz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.getAz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter on current Azimuthal angle in degrees. In case of error
+returns -1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Current azimuthal angle communicated by the APM encoder</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.getAzAlt">
+<span class="sig-name descname"><span class="pre">getAzAlt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.getAzAlt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter on current position in AltAz coordinates,</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Current azimuthal and elevation angles communicated by the APM encoders</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(float, float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.getDec">
+<span class="sig-name descname"><span class="pre">getDec</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.getDec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns current Dec converted from AzAlt communicated by the APM encoders</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Current Dec coordinate</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.getGal">
+<span class="sig-name descname"><span class="pre">getGal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.getGal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns current long/lat in galactic coordinates converted from AzAlt communicated by the APM encoders.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Current galactic longitude and latitude angles</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(float, float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.getPos">
+<span class="sig-name descname"><span class="pre">getPos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.getPos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns current RaDec in degrees converted from AzAlt communicated by the APM encoders.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Current RA and DEC coordinates</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(float, float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.getRA">
+<span class="sig-name descname"><span class="pre">getRA</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.getRA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns current RA coordinate converted from AzAlt communicated by the APM encoders.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Current RA coordinate</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.go_home">
+<span class="sig-name descname"><span class="pre">go_home</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.go_home" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes SRT to its home position and shuts motors off</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Final feedback from APM</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.observe">
+<span class="sig-name descname"><span class="pre">observe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dev_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hackrf=0,bias=1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rf_gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">48</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">if_gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bb_gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">18</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1420000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2400000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2048</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.observe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Launches a parallelized observation process. All SRT methods are still callable in the meanwhile. See
+self.__observe() for more.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo</strong> (<em>str</em>) – Name of the repository where to store data under DATA_PATH. If None, the name of the repo is by
+default an auto-generated timestamp</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Name of the .dat file in which the data is stored. If None, the name of the file is by default an
+auto-generated timestamp</p></li>
+<li><p><strong>dev_args</strong> (<em>str</em>) – Device string used by GNU-RADIO to activate the SDR with input parameters. Default to
+‘hackrf=0,bias=1’ to indicate the SDR is a HackRF, and the bias-tee should be switched on to power the LNA. For
+more about the acquisition pipeline, refer to VEGA technical documentation</p></li>
+<li><p><strong>rf_gain</strong> (<em>float</em>) – RF gain used by the SDR</p></li>
+<li><p><strong>if_gain</strong> (<em>float</em>) – Intermediate frequency gain used by the SDR</p></li>
+<li><p><strong>bb_gain</strong> (<em>float</em>) – Base-band gain used by the SDR</p></li>
+<li><p><strong>fc</strong> (<em>float</em>) – Central frequency of the observation in MHz. Default set to H21 rest state radiation frequency.</p></li>
+<li><p><strong>bw</strong> (<em>float</em>) – Bandwidth of the observation in MHz. Notice this is the “period” of the Nyquist-Shannon signal to be
+sampled when measuring a Power Spectral Diagram</p></li>
+<li><p><strong>channels</strong> – Numbers of channels to sample. Default value works fine</p></li>
+<li><p><strong>t_sample</strong> – Sample duration in seconds</p></li>
+<li><p><strong>duration</strong> (<em>float</em>) – Total observation duration in seconds</p></li>
+<li><p><strong>overwrite</strong> (<em>bool</em>) – Flag enabling overwriting of existing observation with same repo and name. If turned off, the
+new file with overlapping name will be added a suffix ‘_(i)’ to its path with i an integer counter</p></li>
+</ul>
+</dd>
+<dt class="field-even">Type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.onPingSignal">
+<span class="sig-name descname"><span class="pre">onPingSignal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.onPingSignal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Slot triggered when the QPing thread sends the signal to process the ping/pong with APM.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.onTrackerSignal">
+<span class="sig-name descname"><span class="pre">onTrackerSignal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">az</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.onTrackerSignal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Slot triggered when the QTracker thread emits signal to send a slewing command to APM.</p>
+<p>Emits the signal trackMotionEnd when the APM has returned, which in turns switches back the QTracker thread on.
+See QTracker class for more.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>az</strong> (<em>float</em>) – Target Azimuth coordinate</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Target Altitude coordinate</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.plotAll">
+<span class="sig-name descname"><span class="pre">plotAll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calib</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">35</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_rest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1420405751.7667</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vlsr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.plotAll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots full display of data using virgo library’s virgo.plot function. Notice the method needs the calibration
+and the observation data files to be stored in the same repository to work properly.
+TODO: Implement better method with new acquisition pipeline.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>repo</strong> (<em>str</em>) – Name of the repository under which data and params.json files are stored</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Name of the observation data file</p></li>
+<li><p><strong>calib</strong> (<em>str</em>) – Name of the calibration data file</p></li>
+<li><p><strong>n</strong> (<em>float</em>) – TODO: understand this</p></li>
+<li><p><strong>m</strong> (<em>float</em>) – TODO: understand this</p></li>
+<li><p><strong>f_rest</strong> – Center frequency at which the observation was performed. TODO: use params.json rather</p></li>
+<li><p><strong>vlsr</strong> – TODO: understand this</p></li>
+<li><p><strong>dB</strong> – Scales the calibrated plot in dB</p></li>
+<li><p><strong>meta</strong> – TODO: understand this</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.pointAzAlt">
+<span class="sig-name descname"><span class="pre">pointAzAlt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">az</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.pointAzAlt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends the command to slew to Azimuth and Altitude coordinates given in decimal degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>az</strong> (<em>float</em>) – Target Azimuth coordinate</p></li>
+<li><p><strong>alt</strong> (<em>float</em>) – Target Altitude coordinate</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Flag used by self.send_APM</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Last feedback from APM</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.pointGal">
+<span class="sig-name descname"><span class="pre">pointGal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">long</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.pointGal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends the command to slew to Long Lat galactic coordinates given in decimal hours.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>long</strong> (<em>float</em>) – Target longitude coordinate</p></li>
+<li><p><strong>lat</strong> (<em>float</em>) – Target latitude coordinate</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Flag used by self.send_APM</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Last feedback from APM</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.pointRaDec">
+<span class="sig-name descname"><span class="pre">pointRaDec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ra</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.pointRaDec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends the command to slew to Ra Dec coordinates given in respectively decimal hour,degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ra</strong> (<em>float</em>) – Target RA coordinate</p></li>
+<li><p><strong>dec</strong> (<em>float</em>) – Target Dec coordinate</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Flag used by self.send_APM</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Last feedback from APM</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.returnStoredCoords">
+<span class="sig-name descname"><span class="pre">returnStoredCoords</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.returnStoredCoords" title="Permalink to this definition">¶</a></dt>
+<dd><p>Getter on all stored current coordinates in all 3 systems : AzAlt, RaDec, Galactic. Handy for e.g. refreshing
+displayed coordinates on GUI. See mainclient.py for more.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Tuple with all coordinates in all 3 systems</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>(float, float, float, float, float, float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.send_APM">
+<span class="sig-name descname"><span class="pre">send_APM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.send_APM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Private method monitoring the command transfer to APM via the serial port. This is the only method whatsoever
+envisioned to directly send commands to the APM.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg</strong> (<em>str</em>) – Command to send to APM</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Debugging flag. When on, all transiting commands are printed to console</p></li>
+<li><p><strong>save</strong> (<em>bool</em>) – When this flag is on, the last command sent is saved to the instance attribute self.apmMsg</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Feedback from APM</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.standby">
+<span class="sig-name descname"><span class="pre">standby</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.standby" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends the command to go back to zenith and switch off motors of the mount.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>verbose</strong> (<em>bool</em>) – Flag used by self.send_APM</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Last feedback from APM</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.stopObs">
+<span class="sig-name descname"><span class="pre">stopObs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.stopObs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Brute force kills the observation process. Be aware this can corrupt the data being acquired.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.stopTracking">
+<span class="sig-name descname"><span class="pre">stopTracking</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.stopTracking" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops the tracking motion by pausing the QTracker thread. Unpauses the QPing thread. See QTracker class for more
+about the tracking system, QPing class for more about the ping system.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.trackGal">
+<span class="sig-name descname"><span class="pre">trackGal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">long</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.trackGal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts tracking given coordinates in Galactic mode. See QTracker class for more about the tracking system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>long</strong> (<em>float</em>) – Target longitude coordinate</p></li>
+<li><p><strong>b</strong> (<em>float</em>) – Target latitude coordinate</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.trackRaDec">
+<span class="sig-name descname"><span class="pre">trackRaDec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ra</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.trackRaDec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts tracking given coordinates in RaDec mode. See QTracker class for more about the tracking system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ra</strong> (<em>float</em>) – Target RA coordinate</p></li>
+<li><p><strong>dec</strong> (<em>float</em>) – Target Dec coordinate</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.trackSat">
+<span class="sig-name descname"><span class="pre">trackSat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.trackSat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts tracking given a satellite TLE. See QTracker class for more about the tracking system.
+TODO: Implement satellite tracking</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>tle</strong> – Target TLE</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.untangle">
+<span class="sig-name descname"><span class="pre">untangle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.untangle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends the command to untangle cables of the mount by azimuthal rotation back to initial position.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>verbose</strong> (<em>bool</em>) – Flag used by self.send_APM</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Last feedback from APM</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.waitObs">
+<span class="sig-name descname"><span class="pre">waitObs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.waitObs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Waits for the running observation to finish.
+Should only be used in command line; GUI must get
+rid of this another way round I guess…</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lib_SRT.Srt.loadTLE">
+<span class="sig-name descname"><span class="pre">loadTLE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.loadTLE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads TLEs from TLE_PATH</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lib_SRT.Srt.plotAvPSD">
+<span class="sig-name descname"><span class="pre">plotAvPSD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.plotAvPSD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the averaged PSD of the observation located in path
+EXPERIMENTAL : work in progress</p>
+</dd></dl>
+
+</section>
+<section id="module-lib_SRT.QPing">
+<span id="lib-srt-qping-module"></span><h2>lib_SRT.QPing module<a class="headerlink" href="#module-lib_SRT.QPing" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="lib_SRT.QPing.QPing">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">QPing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QPing.QPing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QThread</span></code></p>
+<p>QThread monitoring the recurrent ping handshake with the APM. The APM is programmed to park the radiotelescope
+automatically after a certain inactivity duration. In order to prevent this parking process to trigger during
+e.g. a static measurement, or user lasting hesitation, a ping/pong is regularly performed with APM in the background
+in order to reset its inactivity timer while the SRT object is “connected”.</p>
+<p>The rate at which these interactions are executed is fixed by the PING_RATE constant.</p>
+<p>Notice the thread is paused during tracking motion : since the QTracker threads sends commands continuously at high
+rate, the ping is useless in this case, and would only slow down communication with APM. See QTracker for more.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.QPing.QPing.pause">
+<span class="sig-name descname"><span class="pre">pause</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QPing.QPing.pause" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pauses the emission of ping signal in the main loop</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.QPing.QPing.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QPing.QPing.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main loop of the thread. If the self.on flag is on, the ping signal is emitted for the SRT instance to ping the
+APM. In any case, PING_RATE seconds are waited before next iteration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.QPing.QPing.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QPing.QPing.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows to kill the thread by switching on the stop flag</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.QPing.QPing.unpause">
+<span class="sig-name descname"><span class="pre">unpause</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QPing.QPing.unpause" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables the emission of ping signal in the main loop</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-lib_SRT.QTracker">
+<span id="lib-srt-qtracker-module"></span><h2>lib_SRT.QTracker module<a class="headerlink" href="#module-lib_SRT.QTracker" title="Permalink to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="lib_SRT.QTracker.QTracker">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">QTracker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QTracker.QTracker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QThread</span></code></p>
+<p>QThread monitoring the background commands during a track. Envisioned trackable targets are : tuples (a,b) of
+coordinates in any of the RaDec or Galactic coordinates (More might be added in future), or satellites TLEs (TODO)</p>
+<p>Target (a,b) or TLE are given at initialisation of the thread by user input, or modified by call to setTarget.
+During tracking, current corresponding AzAlt coordinates are regularly refreshed and the slew command to those is
+sent to APM. The rate at which these commands are sent is fixed by the TRACKING_RATE constant.</p>
+<p>TODO: Implement satellite tracking</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.QTracker.QTracker.onIdle">
+<span class="sig-name descname"><span class="pre">onIdle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QTracker.QTracker.onIdle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Slot triggered when SRT is ready for the next tracking motion</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.QTracker.QTracker.pause">
+<span class="sig-name descname"><span class="pre">pause</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QTracker.QTracker.pause" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows to pause tracking</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.QTracker.QTracker.refresh_azalt">
+<span class="sig-name descname"><span class="pre">refresh_azalt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QTracker.QTracker.refresh_azalt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Refreshes AzAlt coords of target depending on the tracking mode</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.QTracker.QTracker.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QTracker.QTracker.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main loop of the thread. If the self.on flag is on, the tracking signal is emitted for the SRT instance to
+send the slew-to-AzAlt command to the APM every TRACKING_RATE seconds, OR as soon as the APM is IDLE.</p>
+<p>Notice the self.on flag is turned off after sending a slewing command. This accounts for the time the APM
+takes to execute the command and return IDLE to the SRT instance. When the IDLE feedback is received, the SRT
+instance emits a signal which turns the self.on flag back on.</p>
+<p>See self.onIdle and SRT class for more.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib_SRT.QTracker.QTracker.sendPointTo">
+<span class="sig-name descname"><span class="pre">sendPointTo</span></span><a class="headerlink" href="#lib_SRT.QTracker.QTracker.sendPointTo" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.QTracker.QTracker.setMode">
+<span class="sig-name descname"><span class="pre">setMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QTracker.QTracker.setMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the tracking mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mode</strong> (<a class="reference internal" href="#lib_SRT.QTracker.TrackMode" title="lib_SRT.QTracker.TrackMode"><em>TrackMode</em></a>) – Desired mode of tracking (RaDec, Gal or TLE)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.QTracker.QTracker.setTarget">
+<span class="sig-name descname"><span class="pre">setTarget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QTracker.QTracker.setTarget" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets target’s coordinates. TODO: Implement TLE, document type of args in this case</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>args</strong> (<em>(</em><em>float</em><em>, </em><em>float</em><em>)</em>) – The target to track</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.QTracker.QTracker.turnOn">
+<span class="sig-name descname"><span class="pre">turnOn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QTracker.QTracker.turnOn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows to turn on tracking</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="lib_SRT.QTracker.TrackMode">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TrackMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QTracker.TrackMode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>Tracking modes of SRT. Specifies the coordinate system to use while tracking. For now 3 options are foreseen:
+RaDec, Galactic coordinates, and TLE (satellites) tracking. TODO: Implement satellite tracking</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib_SRT.QTracker.TrackMode.GAL">
+<span class="sig-name descname"><span class="pre">GAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#lib_SRT.QTracker.TrackMode.GAL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib_SRT.QTracker.TrackMode.RADEC">
+<span class="sig-name descname"><span class="pre">RADEC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#lib_SRT.QTracker.TrackMode.RADEC" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="lib_SRT.QTracker.TrackMode.TLE">
+<span class="sig-name descname"><span class="pre">TLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#lib_SRT.QTracker.TrackMode.TLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-lib_SRT.SerialPort">
+<span id="lib-srt-serialport-module"></span><h2>lib_SRT.SerialPort module<a class="headerlink" href="#module-lib_SRT.SerialPort" title="Permalink to this heading">¶</a></h2>
+<p>Module containing the private class SerialPort, used by SRT to communicate with APM.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="lib_SRT.SerialPort.SerialPort">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SerialPort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baud</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.SerialPort.SerialPort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class aimed at monitoring the interaction with the APM serial port using the serial module</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.SerialPort.SerialPort.connect">
+<span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.SerialPort.SerialPort.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connects to the serial port. TODO: implement security check if an error occurs here</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.SerialPort.SerialPort.disconnect">
+<span class="sig-name descname"><span class="pre">disconnect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.SerialPort.SerialPort.disconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Disconnects the serial port.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.SerialPort.SerialPort.listen">
+<span class="sig-name descname"><span class="pre">listen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.SerialPort.SerialPort.listen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads last message from SerialPort with appropriate processing. Messages sent by the APM have format:</p>
+<p>{Status}|{Feedback}</p>
+<p>where status can either be OK, Warning or Error. Feedback is the actual return value of the APM : either message
+if status is Warning or Error, or a string containing a value if the status is Success.</p>
+<p>Example message : “Success | 33.85” , answer to command “getAz”. The numeric value is thus the current Azimuth
+angle value assumed by the APM Az encoder.</p>
+<p>See APM_embedded_teensy/APM_embedded_teensy_2.ino for more</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Message sent by the APM</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="lib_SRT.SerialPort.SerialPort.send_Ser">
+<span class="sig-name descname"><span class="pre">send_Ser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.SerialPort.SerialPort.send_Ser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends message through the serial port to the APM. Returns answer from SerialPort, following the synchronous
+philosophy : one command = one feedback. TODO: Make encoders asynchronous to allow multiple commands, command breaks etc (long term)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>msg</strong> (<em>str</em>) – Command to send to APM</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Feedback from APM after command execution</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-lib_SRT.define">
+<span id="lib-srt-define-module"></span><h2>lib_SRT.define module<a class="headerlink" href="#module-lib_SRT.define" title="Permalink to this heading">¶</a></h2>
+<p>Definition of parameters used when instantiating the SRT object</p>
+</section>
+<section id="module-lib_SRT">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-lib_SRT" title="Permalink to this heading">¶</a></h2>
+</section>
 <section id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading">#</a></h2>
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="lib_SRT.utils.html">lib_SRT.utils package</a><ul>
@@ -329,819 +895,58 @@
 </ul>
 </div>
 </section>
-<section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">#</a></h2>
-</section>
-<section id="module-lib_SRT.QPing">
-<span id="lib-srt-qping-module"></span><h2>lib_SRT.QPing module<a class="headerlink" href="#module-lib_SRT.QPing" title="Permalink to this heading">#</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="lib_SRT.QPing.QPing">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib_SRT.QPing.</span></span><span class="sig-name descname"><span class="pre">QPing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QPing.QPing" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QThread</span></code></p>
-<p>QThread monitoring the recurrent ping handshake with the APM. The APM is programmed to park the radiotelescope
-automatically after a certain inactivity duration. In order to prevent this parking process to trigger during
-e.g. a static measurement, or user lasting hesitation, a ping/pong is regularly performed with APM in the background
-in order to reset its inactivity timer while the SRT object is “connected”.</p>
-<p>The rate at which these interactions are executed is fixed by the PING_RATE constant.</p>
-<p>Notice the thread is paused during tracking motion : since the QTracker threads sends commands continuously at high
-rate, the ping is useless in this case, and would only slow down communication with APM. See QTracker for more.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.QPing.QPing.pause">
-<span class="sig-name descname"><span class="pre">pause</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QPing.QPing.pause" title="Permalink to this definition">#</a></dt>
-<dd><p>Pauses the emission of ping signal in the main loop</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.QPing.QPing.run">
-<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QPing.QPing.run" title="Permalink to this definition">#</a></dt>
-<dd><p>Main loop of the thread. If the self.on flag is on, the ping signal is emitted for the SRT instance to ping the
-APM. In any case, PING_RATE seconds are waited before next iteration.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.QPing.QPing.stop">
-<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QPing.QPing.stop" title="Permalink to this definition">#</a></dt>
-<dd><p>Allows to kill the thread by switching on the stop flag</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.QPing.QPing.unpause">
-<span class="sig-name descname"><span class="pre">unpause</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QPing.QPing.unpause" title="Permalink to this definition">#</a></dt>
-<dd><p>Enables the emission of ping signal in the main loop</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-lib_SRT.QTracker">
-<span id="lib-srt-qtracker-module"></span><h2>lib_SRT.QTracker module<a class="headerlink" href="#module-lib_SRT.QTracker" title="Permalink to this heading">#</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="lib_SRT.QTracker.QTracker">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib_SRT.QTracker.</span></span><span class="sig-name descname"><span class="pre">QTracker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">TrackMode.RADEC</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QTracker.QTracker" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QThread</span></code></p>
-<p>QThread monitoring the background commands during a track. Envisioned trackable targets are : tuples (a,b) of
-coordinates in any of the RaDec or Galactic coordinates (More might be added in future), or satellites TLEs (TODO)</p>
-<p>Target (a,b) or TLE are given at initialisation of the thread by user input, or modified by call to setTarget.
-During tracking, current corresponding AzAlt coordinates are regularly refreshed and the slew command to those is
-sent to APM. The rate at which these commands are sent is fixed by the TRACKING_RATE constant.</p>
-<p>TODO: Implement satellite tracking</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.QTracker.QTracker.onIdle">
-<span class="sig-name descname"><span class="pre">onIdle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QTracker.QTracker.onIdle" title="Permalink to this definition">#</a></dt>
-<dd><p>Slot triggered when SRT is ready for the next tracking motion</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.QTracker.QTracker.pause">
-<span class="sig-name descname"><span class="pre">pause</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QTracker.QTracker.pause" title="Permalink to this definition">#</a></dt>
-<dd><p>Allows to pause tracking</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.QTracker.QTracker.refresh_azalt">
-<span class="sig-name descname"><span class="pre">refresh_azalt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QTracker.QTracker.refresh_azalt" title="Permalink to this definition">#</a></dt>
-<dd><p>Refreshes AzAlt coords of target depending on the tracking mode</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.QTracker.QTracker.run">
-<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QTracker.QTracker.run" title="Permalink to this definition">#</a></dt>
-<dd><p>Main loop of the thread. If the self.on flag is on, the tracking signal is emitted for the SRT instance to
-send the slew-to-AzAlt command to the APM every TRACKING_RATE seconds, OR as soon as the APM is IDLE.</p>
-<p>Notice the self.on flag is turned off after sending a slewing command. This accounts for the time the APM
-takes to execute the command and return IDLE to the SRT instance. When the IDLE feedback is received, the SRT
-instance emits a signal which turns the self.on flag back on.</p>
-<p>See self.onIdle and SRT class for more.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="lib_SRT.QTracker.QTracker.sendPointTo">
-<span class="sig-name descname"><span class="pre">sendPointTo</span></span><a class="headerlink" href="#lib_SRT.QTracker.QTracker.sendPointTo" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.QTracker.QTracker.setMode">
-<span class="sig-name descname"><span class="pre">setMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QTracker.QTracker.setMode" title="Permalink to this definition">#</a></dt>
-<dd><p>Sets the tracking mode.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>mode</strong> (<a class="reference internal" href="#lib_SRT.QTracker.TrackMode" title="lib_SRT.QTracker.TrackMode"><em>TrackMode</em></a>) – Desired mode of tracking (RaDec, Gal or TLE)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.QTracker.QTracker.setTarget">
-<span class="sig-name descname"><span class="pre">setTarget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QTracker.QTracker.setTarget" title="Permalink to this definition">#</a></dt>
-<dd><p>Sets target’s coordinates. TODO: Implement TLE, document type of args in this case</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>args</strong> (<em>(</em><em>float</em><em>, </em><em>float</em><em>)</em>) – The target to track</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="lib_SRT.QTracker.QTracker.staticMetaObject">
-<span class="sig-name descname"><span class="pre">staticMetaObject</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PySide6.QtCore.QMetaObject(&quot;QTracker&quot;</span> <span class="pre">inherits</span> <span class="pre">&quot;QThread&quot;:</span> <span class="pre">Methods:</span>&#160;&#160; <span class="pre">#13</span> <span class="pre">type=Signal,</span> <span class="pre">signature=sendPointTo(double,double),</span> <span class="pre">parameters=double,</span> <span class="pre">double</span>&#160;&#160; <span class="pre">#14</span> <span class="pre">type=Slot,</span> <span class="pre">signature=onIdle()</span> <span class="pre">)</span></em><a class="headerlink" href="#lib_SRT.QTracker.QTracker.staticMetaObject" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.QTracker.QTracker.turnOn">
-<span class="sig-name descname"><span class="pre">turnOn</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QTracker.QTracker.turnOn" title="Permalink to this definition">#</a></dt>
-<dd><p>Allows to turn on tracking</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="lib_SRT.QTracker.TrackMode">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib_SRT.QTracker.</span></span><span class="sig-name descname"><span class="pre">TrackMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.QTracker.TrackMode" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
-<p>Tracking modes of SRT. Specifies the coordinate system to use while tracking. For now 3 options are foreseen:
-RaDec, Galactic coordinates, and TLE (satellites) tracking. TODO: Implement satellite tracking</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="lib_SRT.QTracker.TrackMode.GAL">
-<span class="sig-name descname"><span class="pre">GAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#lib_SRT.QTracker.TrackMode.GAL" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="lib_SRT.QTracker.TrackMode.RADEC">
-<span class="sig-name descname"><span class="pre">RADEC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#lib_SRT.QTracker.TrackMode.RADEC" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="lib_SRT.QTracker.TrackMode.TLE">
-<span class="sig-name descname"><span class="pre">TLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#lib_SRT.QTracker.TrackMode.TLE" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-lib_SRT.SerialPort">
-<span id="lib-srt-serialport-module"></span><h2>lib_SRT.SerialPort module<a class="headerlink" href="#module-lib_SRT.SerialPort" title="Permalink to this heading">#</a></h2>
-<p>Module containing the private class SerialPort, used by SRT to communicate with APM.</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="lib_SRT.SerialPort.SerialPort">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib_SRT.SerialPort.</span></span><span class="sig-name descname"><span class="pre">SerialPort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baud</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.SerialPort.SerialPort" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Class aimed at monitoring the interaction with the APM serial port using the serial module</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.SerialPort.SerialPort.connect">
-<span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.SerialPort.SerialPort.connect" title="Permalink to this definition">#</a></dt>
-<dd><p>Connects to the serial port. TODO: implement security check if an error occurs here</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.SerialPort.SerialPort.disconnect">
-<span class="sig-name descname"><span class="pre">disconnect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.SerialPort.SerialPort.disconnect" title="Permalink to this definition">#</a></dt>
-<dd><p>Disconnects the serial port.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.SerialPort.SerialPort.listen">
-<span class="sig-name descname"><span class="pre">listen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.SerialPort.SerialPort.listen" title="Permalink to this definition">#</a></dt>
-<dd><p>Reads last message from SerialPort with appropriate processing. Messages sent by the APM have format:</p>
-<p>{Status}|{Feedback}</p>
-<p>where status can either be OK, Warning or Error. Feedback is the actual return value of the APM : either message
-if status is Warning or Error, or a string containing a value if the status is Success.</p>
-<p>Example message : “Success | 33.85” , answer to command “getAz”. The numeric value is thus the current Azimuth
-angle value assumed by the APM Az encoder.</p>
-<p>See APM_embedded_teensy/APM_embedded_teensy_2.ino for more</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Message sent by the APM</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.SerialPort.SerialPort.send_Ser">
-<span class="sig-name descname"><span class="pre">send_Ser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.SerialPort.SerialPort.send_Ser" title="Permalink to this definition">#</a></dt>
-<dd><p>Sends message through the serial port to the APM. Returns answer from SerialPort, following the synchronous
-philosophy : one command = one feedback. TODO: Make encoders asynchronous to allow multiple commands, command breaks etc (long term)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>msg</strong> (<em>str</em>) – Command to send to APM</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Feedback from APM after command execution</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-lib_SRT.Srt">
-<span id="lib-srt-srt-module"></span><h2>lib_SRT.Srt module<a class="headerlink" href="#module-lib_SRT.Srt" title="Permalink to this heading">#</a></h2>
-<p>Library aimed at defining all classes and parameters relevant to the operation of VEGA radiotelescope.</p>
-<p>The constants in beginning of the file are fine-tuned for our antenna’s location, storage system etc.</p>
-<p>The main class of the module is the SRT, which owns a SerialPort object and is thus thought as the only class being
-able to communicate with the Antenna Pointing Mechanism (APM) at a time. For more about the APM, see the embedded_teensy
-documentation.</p>
-<p>Other classes are the private class SerialPort which monitors communication with APM via the serial module, and
-QThreads such as QPing and QTracker, all owned and instantiated by the SRT class, which monitor background tasks of the
-APM.</p>
-<p>The main constraint of our current design is the fact the encoders of the mount work in synchronous mode, i.e. they can
-only execute one task at a time. In particular, a task cannot be stopped by software. This implies only one command
-should be sent to the APM at a time by the user interface.</p>
-<p>This strong requirement led to use the Qt library in the implementation of the multi-thread interface. QThreads
-communicate with one another via QSignals which can carry variables such as strings. This way, all background tasks
-that require to send commands to the APM rely on the SRT instance to actually send the corresponding messages via the
-serial port, by emitting QSignals carrying their messages, which are connected to appropriate slots in the SRT class.</p>
-<p>For more about this multi-threading architecture, see the SRT class.</p>
-<p>&#64;LL</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib_SRT.Srt.</span></span><span class="sig-name descname"><span class="pre">Srt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adress</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baud</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">QObject</span></code></p>
-<p>Class that monitors the interface between the user and the VEGA Small Radio Telescope.</p>
-<p>The features of the class include :</p>
-<ul class="simple">
-<li><p>Slewing the APM in either a simple pointing or tracking motion</p></li>
-<li><p>Acquiring data from the SDR</p></li>
-<li><p>Processing data TODO : update the processing pipeline for more control than with virgo</p></li>
-</ul>
-<p>This class is intended to own and communicate with all threads sending commands to the APM. It also owns the
-SerialPort instance, and as such is the only one to properly speaking communicate with the APM. This is required
-to prevent multiple access to the Serial port.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.calibrate_north">
-<span class="sig-name descname"><span class="pre">calibrate_north</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">990000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.calibrate_north" title="Permalink to this definition">#</a></dt>
-<dd><p>Defines offset for North position in azimuthal microsteps. The curent estimation is stored in constant NORTH.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>verbose</strong> (<em>bool</em>) – Flag used by self.send_APM</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Last feedback from APM</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.connectAPM">
-<span class="sig-name descname"><span class="pre">connectAPM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">water</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.connectAPM" title="Permalink to this definition">#</a></dt>
-<dd><p>Connects to serial port. Performs the check-in routines :</p>
-<ul class="simple">
-<li><p>Unpause the QPing thread</p></li>
-<li><p>Calibrate the Azimuthal encoder to NORTH</p></li>
-<li><p>Untangle cables for safety and motor proper activation</p></li>
-<li><p>By default launch the water evacuation process</p></li>
-<li><p>Get all current coordinates from encoders</p></li>
-</ul>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>water</strong> (<em>bool</em>) – Flag enabling the water evacuation process launch upon connection</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Final feedback from APM</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.disconnectAPM">
-<span class="sig-name descname"><span class="pre">disconnectAPM</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.disconnectAPM" title="Permalink to this definition">#</a></dt>
-<dd><p>Disconnects from serial port. Performs the check-out routines:</p>
-<ul class="simple">
-<li><p>Stop all background threads (ping, tracker)</p></li>
-<li><p>Park the mount</p></li>
-<li><p>Close connection to serial port</p></li>
-</ul>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Last feedback from APM</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.empty_water">
-<span class="sig-name descname"><span class="pre">empty_water</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.empty_water" title="Permalink to this definition">#</a></dt>
-<dd><p>Sends command to move the antenna to a position where water can flow out then goes back to
-parking position after a while. TODO : create constants with coordinates and flowing duration</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>An IDLE message. Handy for implementation of GUI</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.getAllCoords">
-<span class="sig-name descname"><span class="pre">getAllCoords</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.getAllCoords" title="Permalink to this definition">#</a></dt>
-<dd><p>Refreshes all coordinates instance attributes from AzAlt communicated by the APM encoders.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.getAlt">
-<span class="sig-name descname"><span class="pre">getAlt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.getAlt" title="Permalink to this definition">#</a></dt>
-<dd><p>Getter on current Altitude in degrees. In case of error
-returns -1</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Current elevation angle communicated by the APM encoder</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.getAz">
-<span class="sig-name descname"><span class="pre">getAz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.getAz" title="Permalink to this definition">#</a></dt>
-<dd><p>Getter on current Azimuthal angle in degrees. In case of error
-returns -1.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Current azimuthal angle communicated by the APM encoder</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.getAzAlt">
-<span class="sig-name descname"><span class="pre">getAzAlt</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.getAzAlt" title="Permalink to this definition">#</a></dt>
-<dd><p>Getter on current position in AltAz coordinates,</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Current azimuthal and elevation angles communicated by the APM encoders</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>(float, float)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.getDec">
-<span class="sig-name descname"><span class="pre">getDec</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.getDec" title="Permalink to this definition">#</a></dt>
-<dd><p>Returns current Dec converted from AzAlt communicated by the APM encoders</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Current Dec coordinate</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.getGal">
-<span class="sig-name descname"><span class="pre">getGal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.getGal" title="Permalink to this definition">#</a></dt>
-<dd><p>Returns current long/lat in galactic coordinates converted from AzAlt communicated by the APM encoders.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Current galactic longitude and latitude angles</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>(float, float)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.getPos">
-<span class="sig-name descname"><span class="pre">getPos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.getPos" title="Permalink to this definition">#</a></dt>
-<dd><p>Returns current RaDec in degrees converted from AzAlt communicated by the APM encoders.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Current RA and DEC coordinates</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>(float, float)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.getRA">
-<span class="sig-name descname"><span class="pre">getRA</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.getRA" title="Permalink to this definition">#</a></dt>
-<dd><p>Returns current RA coordinate converted from AzAlt communicated by the APM encoders.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Current RA coordinate</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.go_home">
-<span class="sig-name descname"><span class="pre">go_home</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.go_home" title="Permalink to this definition">#</a></dt>
-<dd><p>Takes SRT to its home position and shuts motors off</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Final feedback from APM</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.observe">
-<span class="sig-name descname"><span class="pre">observe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dev_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'hackrf=0,bias=1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rf_gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">48</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">if_gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bb_gain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">18</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1420000000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bw</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2400000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2048</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t_sample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.observe" title="Permalink to this definition">#</a></dt>
-<dd><p>Launches a parallelized observation process. All SRT methods are still callable in the meanwhile. See
-self.__observe() for more.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>repo</strong> (<em>str</em>) – Name of the repository where to store data under DATA_PATH. If None, the name of the repo is by
-default an auto-generated timestamp</p></li>
-<li><p><strong>name</strong> (<em>str</em>) – Name of the .dat file in which the data is stored. If None, the name of the file is by default an
-auto-generated timestamp</p></li>
-<li><p><strong>dev_args</strong> (<em>str</em>) – Device string used by GNU-RADIO to activate the SDR with input parameters. Default to
-‘hackrf=0,bias=1’ to indicate the SDR is a HackRF, and the bias-tee should be switched on to power the LNA. For
-more about the acquisition pipeline, refer to VEGA technical documentation</p></li>
-<li><p><strong>rf_gain</strong> (<em>float</em>) – RF gain used by the SDR</p></li>
-<li><p><strong>if_gain</strong> (<em>float</em>) – Intermediate frequency gain used by the SDR</p></li>
-<li><p><strong>bb_gain</strong> (<em>float</em>) – Base-band gain used by the SDR</p></li>
-<li><p><strong>fc</strong> (<em>float</em>) – Central frequency of the observation in MHz. Default set to H21 rest state radiation frequency.</p></li>
-<li><p><strong>bw</strong> (<em>float</em>) – Bandwidth of the observation in MHz. Notice this is the “period” of the Nyquist-Shannon signal to be
-sampled when measuring a Power Spectral Diagram</p></li>
-<li><p><strong>channels</strong> – Numbers of channels to sample. Default value works fine</p></li>
-<li><p><strong>t_sample</strong> – Sample duration in seconds</p></li>
-<li><p><strong>duration</strong> (<em>float</em>) – Total observation duration in seconds</p></li>
-<li><p><strong>overwrite</strong> (<em>bool</em>) – Flag enabling overwriting of existing observation with same repo and name. If turned off, the
-new file with overlapping name will be added a suffix ‘_(i)’ to its path with i an integer counter</p></li>
-</ul>
-</dd>
-<dt class="field-even">Type<span class="colon">:</span></dt>
-<dd class="field-even"><p>float</p>
-</dd>
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.onPingSignal">
-<span class="sig-name descname"><span class="pre">onPingSignal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.onPingSignal" title="Permalink to this definition">#</a></dt>
-<dd><p>Slot triggered when the QPing thread sends the signal to process the ping/pong with APM.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.onTrackerSignal">
-<span class="sig-name descname"><span class="pre">onTrackerSignal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">az</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.onTrackerSignal" title="Permalink to this definition">#</a></dt>
-<dd><p>Slot triggered when the QTracker thread emits signal to send a slewing command to APM.</p>
-<p>Emits the signal trackMotionEnd when the APM has returned, which in turns switches back the QTracker thread on.
-See QTracker class for more.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>az</strong> (<em>float</em>) – Target Azimuth coordinate</p></li>
-<li><p><strong>alt</strong> (<em>float</em>) – Target Altitude coordinate</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.pauseTracking">
-<span class="sig-name descname"><span class="pre">pauseTracking</span></span><a class="headerlink" href="#lib_SRT.Srt.Srt.pauseTracking" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.plotAll">
-<span class="sig-name descname"><span class="pre">plotAll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">repo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calib</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">35</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_rest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1420405751.7667</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vlsr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.plotAll" title="Permalink to this definition">#</a></dt>
-<dd><p>Plots full display of data using virgo library’s virgo.plot function. Notice the method needs the calibration
-and the observation data files to be stored in the same repository to work properly.
-TODO: Implement better method with new acquisition pipeline.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>repo</strong> (<em>str</em>) – Name of the repository under which data and params.json files are stored</p></li>
-<li><p><strong>name</strong> (<em>str</em>) – Name of the observation data file</p></li>
-<li><p><strong>calib</strong> (<em>str</em>) – Name of the calibration data file</p></li>
-<li><p><strong>n</strong> (<em>float</em>) – TODO: understand this</p></li>
-<li><p><strong>m</strong> (<em>float</em>) – TODO: understand this</p></li>
-<li><p><strong>f_rest</strong> – Center frequency at which the observation was performed. TODO: use params.json rather</p></li>
-<li><p><strong>vlsr</strong> – TODO: understand this</p></li>
-<li><p><strong>dB</strong> – Scales the calibrated plot in dB</p></li>
-<li><p><strong>meta</strong> – TODO: understand this</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.pointAzAlt">
-<span class="sig-name descname"><span class="pre">pointAzAlt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">az</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.pointAzAlt" title="Permalink to this definition">#</a></dt>
-<dd><p>Sends the command to slew to Azimuth and Altitude coordinates given in decimal degrees.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>az</strong> (<em>float</em>) – Target Azimuth coordinate</p></li>
-<li><p><strong>alt</strong> (<em>float</em>) – Target Altitude coordinate</p></li>
-<li><p><strong>verbose</strong> (<em>bool</em>) – Flag used by self.send_APM</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Last feedback from APM</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.pointGal">
-<span class="sig-name descname"><span class="pre">pointGal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">long</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.pointGal" title="Permalink to this definition">#</a></dt>
-<dd><p>Sends the command to slew to Long Lat galactic coordinates given in decimal hours.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>long</strong> (<em>float</em>) – Target longitude coordinate</p></li>
-<li><p><strong>lat</strong> (<em>float</em>) – Target latitude coordinate</p></li>
-<li><p><strong>verbose</strong> (<em>bool</em>) – Flag used by self.send_APM</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Last feedback from APM</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.pointRaDec">
-<span class="sig-name descname"><span class="pre">pointRaDec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ra</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.pointRaDec" title="Permalink to this definition">#</a></dt>
-<dd><p>Sends the command to slew to Ra Dec coordinates given in respectively decimal hour,degrees.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ra</strong> (<em>float</em>) – Target RA coordinate</p></li>
-<li><p><strong>dec</strong> (<em>float</em>) – Target Dec coordinate</p></li>
-<li><p><strong>verbose</strong> (<em>bool</em>) – Flag used by self.send_APM</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Last feedback from APM</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.returnStoredCoords">
-<span class="sig-name descname"><span class="pre">returnStoredCoords</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.returnStoredCoords" title="Permalink to this definition">#</a></dt>
-<dd><p>Getter on all stored current coordinates in all 3 systems : AzAlt, RaDec, Galactic. Handy for e.g. refreshing
-displayed coordinates on GUI. See mainclient.py for more.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Tuple with all coordinates in all 3 systems</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>(float, float, float, float, float, float)</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.send_APM">
-<span class="sig-name descname"><span class="pre">send_APM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.send_APM" title="Permalink to this definition">#</a></dt>
-<dd><p>Private method monitoring the command transfer to APM via the serial port. This is the only method whatsoever
-envisioned to directly send commands to the APM.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>msg</strong> (<em>str</em>) – Command to send to APM</p></li>
-<li><p><strong>verbose</strong> (<em>bool</em>) – Debugging flag. When on, all transiting commands are printed to console</p></li>
-<li><p><strong>save</strong> (<em>bool</em>) – When this flag is on, the last command sent is saved to the instance attribute self.apmMsg</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Feedback from APM</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.standby">
-<span class="sig-name descname"><span class="pre">standby</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.standby" title="Permalink to this definition">#</a></dt>
-<dd><p>Sends the command to go back to zenith and switch off motors of the mount.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>verbose</strong> (<em>bool</em>) – Flag used by self.send_APM</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Last feedback from APM</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.staticMetaObject">
-<span class="sig-name descname"><span class="pre">staticMetaObject</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">PySide6.QtCore.QMetaObject(&quot;Srt&quot;</span> <span class="pre">inherits</span> <span class="pre">&quot;QObject&quot;:</span> <span class="pre">Methods:</span>&#160;&#160; <span class="pre">#5</span> <span class="pre">type=Signal,</span> <span class="pre">signature=trackMotionEnd()</span>&#160;&#160; <span class="pre">#6</span> <span class="pre">type=Signal,</span> <span class="pre">signature=pauseTracking()</span> <span class="pre">)</span></em><a class="headerlink" href="#lib_SRT.Srt.Srt.staticMetaObject" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.stopObs">
-<span class="sig-name descname"><span class="pre">stopObs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.stopObs" title="Permalink to this definition">#</a></dt>
-<dd><p>Brute force kills the observation process. Be aware this can corrupt the data being acquired.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.stopTracking">
-<span class="sig-name descname"><span class="pre">stopTracking</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.stopTracking" title="Permalink to this definition">#</a></dt>
-<dd><p>Stops the tracking motion by pausing the QTracker thread. Unpauses the QPing thread. See QTracker class for more
-about the tracking system, QPing class for more about the ping system.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.trackGal">
-<span class="sig-name descname"><span class="pre">trackGal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">long</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.trackGal" title="Permalink to this definition">#</a></dt>
-<dd><p>Starts tracking given coordinates in Galactic mode. See QTracker class for more about the tracking system.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>long</strong> (<em>float</em>) – Target longitude coordinate</p></li>
-<li><p><strong>b</strong> (<em>float</em>) – Target latitude coordinate</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.trackMotionEnd">
-<span class="sig-name descname"><span class="pre">trackMotionEnd</span></span><a class="headerlink" href="#lib_SRT.Srt.Srt.trackMotionEnd" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.trackRaDec">
-<span class="sig-name descname"><span class="pre">trackRaDec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ra</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.trackRaDec" title="Permalink to this definition">#</a></dt>
-<dd><p>Starts tracking given coordinates in RaDec mode. See QTracker class for more about the tracking system.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>ra</strong> (<em>float</em>) – Target RA coordinate</p></li>
-<li><p><strong>dec</strong> (<em>float</em>) – Target Dec coordinate</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.trackSat">
-<span class="sig-name descname"><span class="pre">trackSat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.trackSat" title="Permalink to this definition">#</a></dt>
-<dd><p>Starts tracking given a satellite TLE. See QTracker class for more about the tracking system.
-TODO: Implement satellite tracking</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>tle</strong> – Target TLE</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.untangle">
-<span class="sig-name descname"><span class="pre">untangle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.untangle" title="Permalink to this definition">#</a></dt>
-<dd><p>Sends the command to untangle cables of the mount by azimuthal rotation back to initial position.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>verbose</strong> (<em>bool</em>) – Flag used by self.send_APM</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Last feedback from APM</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="lib_SRT.Srt.Srt.waitObs">
-<span class="sig-name descname"><span class="pre">waitObs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.Srt.waitObs" title="Permalink to this definition">#</a></dt>
-<dd><p>Waits for the running observation to finish.
-Should only be used in command line; GUI must get
-rid of this another way round I guess…</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="lib_SRT.Srt.loadTLE">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.Srt.</span></span><span class="sig-name descname"><span class="pre">loadTLE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.loadTLE" title="Permalink to this definition">#</a></dt>
-<dd><p>Loads TLEs from TLE_PATH</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="lib_SRT.Srt.plotAvPSD">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.Srt.</span></span><span class="sig-name descname"><span class="pre">plotAvPSD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.Srt.plotAvPSD" title="Permalink to this definition">#</a></dt>
-<dd><p>Plots the averaged PSD of the observation located in path
-EXPERIMENTAL : work in progress</p>
-</dd></dl>
-
-</section>
-<section id="module-lib_SRT.define">
-<span id="lib-srt-define-module"></span><h2>lib_SRT.define module<a class="headerlink" href="#module-lib_SRT.define" title="Permalink to this heading">#</a></h2>
-<p>Definition of parameters used when instantiating the SRT object</p>
-</section>
-<section id="module-lib_SRT">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-lib_SRT" title="Permalink to this heading">#</a></h2>
-</section>
 </section>
 
-        </article>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
       </div>
-      <footer>
-        
-        <div class="related-pages">
-          <a class="next-page" href="lib_SRT.utils.html">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">lib_SRT.utils package</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
-          <a class="prev-page" href="GUI.html">
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-              <div class="page-info">
-                <div class="context">
-                  <span>Previous</span>
-                </div>
-                
-                <div class="title">GUI package</div>
-                
-              </div>
-            </a>
-        </div>
-        <div class="bottom-of-page">
-          <div class="left-details">
-            <div class="copyright">
-                Copyright &#169; 2024, LL
-            </div>
-            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
-            
-            <a href="https://github.com/pradyunsg/furo">Furo</a>
-            
-          </div>
-          <div class="right-details">
-            
-          </div>
-        </div>
-        
-      </footer>
-    </div>
-    <aside class="toc-drawer">
-      
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">lib_SRT package</a><ul>
-<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-lib_SRT.Srt">lib_SRT.Srt module</a><ul>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt"><code class="docutils literal notranslate"><span class="pre">Srt</span></code></a><ul>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.calibrate_north"><code class="docutils literal notranslate"><span class="pre">Srt.calibrate_north()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.connectAPM"><code class="docutils literal notranslate"><span class="pre">Srt.connectAPM()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.disconnectAPM"><code class="docutils literal notranslate"><span class="pre">Srt.disconnectAPM()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.empty_water"><code class="docutils literal notranslate"><span class="pre">Srt.empty_water()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.getAllCoords"><code class="docutils literal notranslate"><span class="pre">Srt.getAllCoords()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.getAlt"><code class="docutils literal notranslate"><span class="pre">Srt.getAlt()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.getAz"><code class="docutils literal notranslate"><span class="pre">Srt.getAz()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.getAzAlt"><code class="docutils literal notranslate"><span class="pre">Srt.getAzAlt()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.getDec"><code class="docutils literal notranslate"><span class="pre">Srt.getDec()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.getGal"><code class="docutils literal notranslate"><span class="pre">Srt.getGal()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.getPos"><code class="docutils literal notranslate"><span class="pre">Srt.getPos()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.getRA"><code class="docutils literal notranslate"><span class="pre">Srt.getRA()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.go_home"><code class="docutils literal notranslate"><span class="pre">Srt.go_home()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.observe"><code class="docutils literal notranslate"><span class="pre">Srt.observe()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.onPingSignal"><code class="docutils literal notranslate"><span class="pre">Srt.onPingSignal()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.onTrackerSignal"><code class="docutils literal notranslate"><span class="pre">Srt.onTrackerSignal()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.plotAll"><code class="docutils literal notranslate"><span class="pre">Srt.plotAll()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.pointAzAlt"><code class="docutils literal notranslate"><span class="pre">Srt.pointAzAlt()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.pointGal"><code class="docutils literal notranslate"><span class="pre">Srt.pointGal()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.pointRaDec"><code class="docutils literal notranslate"><span class="pre">Srt.pointRaDec()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.returnStoredCoords"><code class="docutils literal notranslate"><span class="pre">Srt.returnStoredCoords()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.send_APM"><code class="docutils literal notranslate"><span class="pre">Srt.send_APM()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.standby"><code class="docutils literal notranslate"><span class="pre">Srt.standby()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.stopObs"><code class="docutils literal notranslate"><span class="pre">Srt.stopObs()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.stopTracking"><code class="docutils literal notranslate"><span class="pre">Srt.stopTracking()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.trackGal"><code class="docutils literal notranslate"><span class="pre">Srt.trackGal()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.trackRaDec"><code class="docutils literal notranslate"><span class="pre">Srt.trackRaDec()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.trackSat"><code class="docutils literal notranslate"><span class="pre">Srt.trackSat()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.untangle"><code class="docutils literal notranslate"><span class="pre">Srt.untangle()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.Srt.waitObs"><code class="docutils literal notranslate"><span class="pre">Srt.waitObs()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#lib_SRT.Srt.loadTLE"><code class="docutils literal notranslate"><span class="pre">loadTLE()</span></code></a></li>
+<li><a class="reference internal" href="#lib_SRT.Srt.plotAvPSD"><code class="docutils literal notranslate"><span class="pre">plotAvPSD()</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#module-lib_SRT.QPing">lib_SRT.QPing module</a><ul>
 <li><a class="reference internal" href="#lib_SRT.QPing.QPing"><code class="docutils literal notranslate"><span class="pre">QPing</span></code></a><ul>
 <li><a class="reference internal" href="#lib_SRT.QPing.QPing.pause"><code class="docutils literal notranslate"><span class="pre">QPing.pause()</span></code></a></li>
@@ -1161,7 +966,6 @@ EXPERIMENTAL : work in progress</p>
 <li><a class="reference internal" href="#lib_SRT.QTracker.QTracker.sendPointTo"><code class="docutils literal notranslate"><span class="pre">QTracker.sendPointTo</span></code></a></li>
 <li><a class="reference internal" href="#lib_SRT.QTracker.QTracker.setMode"><code class="docutils literal notranslate"><span class="pre">QTracker.setMode()</span></code></a></li>
 <li><a class="reference internal" href="#lib_SRT.QTracker.QTracker.setTarget"><code class="docutils literal notranslate"><span class="pre">QTracker.setTarget()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.QTracker.QTracker.staticMetaObject"><code class="docutils literal notranslate"><span class="pre">QTracker.staticMetaObject</span></code></a></li>
 <li><a class="reference internal" href="#lib_SRT.QTracker.QTracker.turnOn"><code class="docutils literal notranslate"><span class="pre">QTracker.turnOn()</span></code></a></li>
 </ul>
 </li>
@@ -1183,63 +987,68 @@ EXPERIMENTAL : work in progress</p>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-lib_SRT.Srt">lib_SRT.Srt module</a><ul>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt"><code class="docutils literal notranslate"><span class="pre">Srt</span></code></a><ul>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.calibrate_north"><code class="docutils literal notranslate"><span class="pre">Srt.calibrate_north()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.connectAPM"><code class="docutils literal notranslate"><span class="pre">Srt.connectAPM()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.disconnectAPM"><code class="docutils literal notranslate"><span class="pre">Srt.disconnectAPM()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.empty_water"><code class="docutils literal notranslate"><span class="pre">Srt.empty_water()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.getAllCoords"><code class="docutils literal notranslate"><span class="pre">Srt.getAllCoords()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.getAlt"><code class="docutils literal notranslate"><span class="pre">Srt.getAlt()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.getAz"><code class="docutils literal notranslate"><span class="pre">Srt.getAz()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.getAzAlt"><code class="docutils literal notranslate"><span class="pre">Srt.getAzAlt()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.getDec"><code class="docutils literal notranslate"><span class="pre">Srt.getDec()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.getGal"><code class="docutils literal notranslate"><span class="pre">Srt.getGal()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.getPos"><code class="docutils literal notranslate"><span class="pre">Srt.getPos()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.getRA"><code class="docutils literal notranslate"><span class="pre">Srt.getRA()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.go_home"><code class="docutils literal notranslate"><span class="pre">Srt.go_home()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.observe"><code class="docutils literal notranslate"><span class="pre">Srt.observe()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.onPingSignal"><code class="docutils literal notranslate"><span class="pre">Srt.onPingSignal()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.onTrackerSignal"><code class="docutils literal notranslate"><span class="pre">Srt.onTrackerSignal()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.pauseTracking"><code class="docutils literal notranslate"><span class="pre">Srt.pauseTracking</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.plotAll"><code class="docutils literal notranslate"><span class="pre">Srt.plotAll()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.pointAzAlt"><code class="docutils literal notranslate"><span class="pre">Srt.pointAzAlt()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.pointGal"><code class="docutils literal notranslate"><span class="pre">Srt.pointGal()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.pointRaDec"><code class="docutils literal notranslate"><span class="pre">Srt.pointRaDec()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.returnStoredCoords"><code class="docutils literal notranslate"><span class="pre">Srt.returnStoredCoords()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.send_APM"><code class="docutils literal notranslate"><span class="pre">Srt.send_APM()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.standby"><code class="docutils literal notranslate"><span class="pre">Srt.standby()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.staticMetaObject"><code class="docutils literal notranslate"><span class="pre">Srt.staticMetaObject</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.stopObs"><code class="docutils literal notranslate"><span class="pre">Srt.stopObs()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.stopTracking"><code class="docutils literal notranslate"><span class="pre">Srt.stopTracking()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.trackGal"><code class="docutils literal notranslate"><span class="pre">Srt.trackGal()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.trackMotionEnd"><code class="docutils literal notranslate"><span class="pre">Srt.trackMotionEnd</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.trackRaDec"><code class="docutils literal notranslate"><span class="pre">Srt.trackRaDec()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.trackSat"><code class="docutils literal notranslate"><span class="pre">Srt.trackSat()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.untangle"><code class="docutils literal notranslate"><span class="pre">Srt.untangle()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.Srt.waitObs"><code class="docutils literal notranslate"><span class="pre">Srt.waitObs()</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#lib_SRT.Srt.loadTLE"><code class="docutils literal notranslate"><span class="pre">loadTLE()</span></code></a></li>
-<li><a class="reference internal" href="#lib_SRT.Srt.plotAvPSD"><code class="docutils literal notranslate"><span class="pre">plotAvPSD()</span></code></a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#module-lib_SRT.define">lib_SRT.define module</a></li>
 <li><a class="reference internal" href="#module-lib_SRT">Module contents</a></li>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
 </ul>
 </li>
 </ul>
 
-          </div>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="GUI.html"
+                          title="previous chapter">GUI package</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="lib_SRT.utils.html"
+                          title="next chapter">lib_SRT.utils package</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/lib_SRT.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
-      
-      
-    </aside>
-  </div>
-</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/scripts/furo.js"></script>
-    </body>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="lib_SRT.utils.html" title="lib_SRT.utils package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="GUI.html" title="GUI package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Very Elegant Galactic Antenna (VEGA) 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >VEGA_SRT</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">lib_SRT package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, LL.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    </div>
+  </body>
 </html>

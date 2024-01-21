@@ -1,18 +1,17 @@
 lib\_SRT package
 ================
 
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 4
-
-   lib_SRT.utils
-   lib_SRT.virgo
-
 Submodules
 ----------
 
+lib\_SRT.Srt module
+-------------------
+
+.. automodule:: lib_SRT.Srt
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   
 lib\_SRT.QPing module
 ---------------------
 
@@ -37,14 +36,6 @@ lib\_SRT.SerialPort module
    :undoc-members:
    :show-inheritance:
 
-lib\_SRT.Srt module
--------------------
-
-.. automodule:: lib_SRT.Srt
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 lib\_SRT.define module
 ----------------------
 
@@ -60,3 +51,12 @@ Module contents
    :members:
    :undoc-members:
    :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   lib_SRT.utils
+   lib_SRT.virgo

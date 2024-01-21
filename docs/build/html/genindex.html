@@ -1,1182 +1,875 @@
-<!doctype html>
-<html class="no-js" lang="en" data-content_root="">
-  <head><meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#" /><link rel="search" title="Search" href="search.html" />
 
-    <!-- Generated with Sphinx 6.2.1 and Furo 2023.09.10 --><title>Index - Very Elegant Galactic Antenna (VEGA) 0.0.1 documentation</title>
-<link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=369552022d0b975c8e74270ce6eabe0fb7978f24" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
-    
-    
-
-
-<style>
-  body {
-    --color-code-background: #f8f8f8;
-  --color-code-foreground: black;
-  --color-brand-primary: black;
-  --color-brand-content: black;
-  
-  }
-  @media not print {
-    body[data-theme="dark"] {
-      --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  --color-brand-primary: white;
-  --color-brand-content: white;
-  
-    }
-    @media (prefers-color-scheme: dark) {
-      body:not([data-theme="light"]) {
-        --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  --color-brand-primary: white;
-  --color-brand-content: white;
-  
-      }
-    }
-  }
-</style></head>
-  <body>
-    
-    <script>
-      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
-    </script>
-    
-
-<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-  <symbol id="svg-toc" viewBox="0 0 24 24">
-    <title>Contents</title>
-    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
-      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
-    </svg>
-  </symbol>
-  <symbol id="svg-menu" viewBox="0 0 24 24">
-    <title>Menu</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
-      <line x1="3" y1="12" x2="21" y2="12"></line>
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <line x1="3" y1="18" x2="21" y2="18"></line>
-    </svg>
-  </symbol>
-  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
-    <title>Expand</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
-      <polyline points="9 18 15 12 9 6"></polyline>
-    </svg>
-  </symbol>
-  <symbol id="svg-sun" viewBox="0 0 24 24">
-    <title>Light mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
-      <circle cx="12" cy="12" r="5"></circle>
-      <line x1="12" y1="1" x2="12" y2="3"></line>
-      <line x1="12" y1="21" x2="12" y2="23"></line>
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-      <line x1="1" y1="12" x2="3" y2="12"></line>
-      <line x1="21" y1="12" x2="23" y2="12"></line>
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-    </svg>
-  </symbol>
-  <symbol id="svg-moon" viewBox="0 0 24 24">
-    <title>Dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
-    </svg>
-  </symbol>
-  <symbol id="svg-sun-half" viewBox="0 0 24 24">
-    <title>Auto light/dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M13 12h5" />
-      <path d="M13 15h4" />
-      <path d="M13 18h1" />
-      <path d="M13 9h4" />
-      <path d="M13 6h1" />
-    </svg>
-  </symbol>
-</svg>
-
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
-<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
-<label class="overlay sidebar-overlay" for="__navigation">
-  <div class="visually-hidden">Hide navigation sidebar</div>
-</label>
-<label class="overlay toc-overlay" for="__toc">
-  <div class="visually-hidden">Hide table of contents sidebar</div>
-</label>
-
-
-
-<div class="page">
-  <header class="mobile-header">
-    <div class="header-left">
-      <label class="nav-overlay-icon" for="__navigation">
-        <div class="visually-hidden">Toggle site navigation sidebar</div>
-        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
-      </label>
-    </div>
-    <div class="header-center">
-      <a href="index.html"><div class="brand">Very Elegant Galactic Antenna (VEGA) 0.0.1 documentation</div></a>
-    </div>
-    <div class="header-right">
-      <div class="theme-toggle-container theme-toggle-header">
-        <button class="theme-toggle">
-          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
-          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
-          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
-        </button>
-      </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
-        <div class="visually-hidden">Toggle table of contents sidebar</div>
-        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-      </label>
-    </div>
-  </header>
-  <aside class="sidebar-drawer">
-    <div class="sidebar-container">
-      
-      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
-  
-  <div class="sidebar-logo-container">
-    <img class="sidebar-logo only-light" src="_static/logoCallistaLight.png" alt="Light Logo"/>
-    <img class="sidebar-logo only-dark" src="_static/logoCallistaDark.png" alt="Dark Logo"/>
-  </div>
-  
-  
-</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
-  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
-  <input type="hidden" name="check_keywords" value="yes">
-  <input type="hidden" name="area" value="default">
-</form>
-<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">VEGA_SRT</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of VEGA_SRT</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="GUI.html">GUI package</a></li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="lib_SRT.html">lib_SRT package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of lib_SRT package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="lib_SRT.utils.html">lib_SRT.utils package</a></li>
-<li class="toctree-l3"><a class="reference internal" href="lib_SRT.virgo.html">lib_SRT.virgo package</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="mainclient.html">mainclient module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mainserver.html">mainserver module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="safetyScript.html">safetyScript module</a></li>
-</ul>
-</li>
-</ul>
-
-</div>
-</div>
-
-      </div>
-      
-    </div>
-  </aside>
-  <div class="main">
-    <div class="content">
-      <div class="article-container">
-        <a href="#" class="back-to-top muted-link">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
-          </svg>
-          <span>Back to top</span>
-        </a>
-        <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
-            <button class="theme-toggle">
-              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
-              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
-              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
-            </button>
-          </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
-            <div class="visually-hidden">Toggle table of contents sidebar</div>
-            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-          </label>
-        </div>
-        <article role="main">
-          
-<section class="genindex-section">
-  <h1 id="index">Index</h1>
-  <div class="genindex-jumpbox"><a href="#A"><strong>A</strong></a> | <a href="#B"><strong>B</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#H"><strong>H</strong></a> | <a href="#I"><strong>I</strong></a> | <a href="#L"><strong>L</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#N"><strong>N</strong></a> | <a href="#O"><strong>O</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#Q"><strong>Q</strong></a> | <a href="#R"><strong>R</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#U"><strong>U</strong></a> | <a href="#W"><strong>W</strong></a></div>
-</section>
-<section id="A" class="genindex-section">
-  <h2>A</h2>
-  <table style="width: 100%" class="indextable genindextable"><tr>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.A_e">A_e() (in module lib_SRT.virgo.virgo)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.addToLog">addToLog() (mainclient.MainClient method)</a>
-
-        <ul>
-          <li><a href="mainserver.html#mainserver.ServerGUI.addToLog">(mainserver.ServerGUI method)</a>
-</li>
-        </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.argument_parser">argument_parser() (in module lib_SRT.virgo.run_ftf)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.argument_parser">(in module lib_SRT.virgo.run_wola)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.utils.html#lib_SRT.utils.coordsConversions.AzAlt2Gal">AzAlt2Gal() (in module lib_SRT.utils.coordsConversions)</a>
-</li>
-        <li><a href="lib_SRT.utils.html#lib_SRT.utils.coordsConversions.AzAlt2RaDec">AzAlt2RaDec() (in module lib_SRT.utils.coordsConversions)</a>
-</li>
-    </ul></td>
-  </tr></table>
-</section>
-
-<section id="B" class="genindex-section">
-  <h2>B</h2>
-  <table style="width: 100%" class="indextable genindextable"><tr>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.beamwidth">beamwidth() (in module lib_SRT.virgo.virgo)</a>
-</li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="mainclient.html#mainclient.MainClient.BrowseCalibClicked">BrowseCalibClicked() (mainclient.MainClient method)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.BrowseMeasureClicked">BrowseMeasureClicked() (mainclient.MainClient method)</a>
-</li>
-    </ul></td>
-  </tr></table>
-</section>
-
-<section id="C" class="genindex-section">
-  <h2>C</h2>
-  <table style="width: 100%" class="indextable genindextable"><tr>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.calibrate_north">calibrate_north() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.cameraThreadFinished">cameraThreadFinished() (mainclient.MainClient method)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.DisplayImageWidget.closeEvent">closeEvent() (mainclient.DisplayImageWidget method)</a>
-
-        <ul>
-          <li><a href="mainserver.html#mainserver.ServerGUI.closeEvent">(mainserver.ServerGUI method)</a>
-</li>
-        </ul></li>
-        <li><a href="mainclient.html#mainclient.DisplayImageWidget.closeSignal">closeSignal (mainclient.DisplayImageWidget attribute)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.QCameraThread.closeSignalCameraThread">closeSignalCameraThread (mainclient.QCameraThread attribute)</a>
-</li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.html#lib_SRT.SerialPort.SerialPort.connect">connect() (lib_SRT.SerialPort.SerialPort method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.connectAPM">connectAPM() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.Launcher.connectAttempt">connectAttempt (mainclient.Launcher attribute)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.Launcher.ConnectClicked">ConnectClicked() (mainclient.Launcher method)</a>
-
-        <ul>
-          <li><a href="mainclient.html#mainclient.MainClient.ConnectClicked">(mainclient.MainClient method)</a>
-</li>
-        </ul></li>
-        <li><a href="mainclient.html#mainclient.MainClient.connectServ">connectServ() (mainclient.MainClient method)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.connexionError">connexionError() (mainclient.MainClient method)</a>
-</li>
-    </ul></td>
-  </tr></table>
-</section>
-
-<section id="D" class="genindex-section">
-  <h2>D</h2>
-  <table style="width: 100%" class="indextable genindextable"><tr>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="mainclient.html#mainclient.DegtoDMS">DegtoDMS() (in module mainclient)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.DegtoHMS">DegtoHMS() (in module mainclient)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.SerialPort.SerialPort.disconnect">disconnect() (lib_SRT.SerialPort.SerialPort method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.disconnectAPM">disconnectAPM() (lib_SRT.Srt.Srt method)</a>
-</li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="mainclient.html#mainclient.MainClient.DisconnectClicked">DisconnectClicked() (mainclient.MainClient method)</a>
-</li>
-        <li><a href="mainserver.html#mainserver.ServerGUI.disconnectClient">disconnectClient() (mainserver.ServerGUI method)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.DisplayImageWidget">DisplayImageWidget (class in mainclient)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.DMStoDeg">DMStoDeg() (in module mainclient)</a>
-</li>
-    </ul></td>
-  </tr></table>
-</section>
-
-<section id="E" class="genindex-section">
-  <h2>E</h2>
-  <table style="width: 100%" class="indextable genindextable"><tr>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.empty_water">empty_water() (lib_SRT.Srt.Srt method)</a>
-</li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="mainserver.html#mainserver.SRTThread.endMotion">endMotion (mainserver.SRTThread attribute)</a>
-</li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.equatorial">equatorial() (in module lib_SRT.virgo.virgo)</a>
-</li>
-    </ul></td>
-  </tr></table>
-</section>
-
-<section id="F" class="genindex-section">
-  <h2>F</h2>
-  <table style="width: 100%" class="indextable genindextable"><tr>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.frequency">frequency() (in module lib_SRT.virgo.virgo)</a>
-</li>
-    </ul></td>
-  </tr></table>
-</section>
-
-<section id="G" class="genindex-section">
-  <h2>G</h2>
-  <table style="width: 100%" class="indextable genindextable"><tr>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.G_T">G_T() (in module lib_SRT.virgo.virgo)</a>
-</li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.gain">gain() (in module lib_SRT.virgo.virgo)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.QTracker.TrackMode.GAL">GAL (lib_SRT.QTracker.TrackMode attribute)</a>
-</li>
-        <li><a href="lib_SRT.utils.html#lib_SRT.utils.coordsConversions.Gal2AzAlt">Gal2AzAlt() (in module lib_SRT.utils.coordsConversions)</a>
-</li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.galactic">galactic() (in module lib_SRT.virgo.virgo)</a>
-</li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_bandwidth">get_bandwidth() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_bandwidth">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_bb_gain">get_bb_gain() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_bb_gain">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_channels">get_channels() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_channels">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_custom_window">get_custom_window() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_custom_window">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_dev_args">get_dev_args() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_dev_args">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_duration">get_duration() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_duration">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_frequency">get_frequency() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_frequency">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_if_gain">get_if_gain() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_if_gain">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="mainserver.html#mainserver.get_ipv4_address">get_ipv4_address() (in module mainserver)</a>
-</li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_obs_file">get_obs_file() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_obs_file">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_rf_gain">get_rf_gain() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_rf_gain">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_sinc">get_sinc() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_sinc">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_sinc_sample_locations">get_sinc_sample_locations() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_sinc_sample_locations">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_t_sample">get_t_sample() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_t_sample">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.getAllCoords">getAllCoords() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.getAlt">getAlt() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.getAz">getAz() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.getAzAlt">getAzAlt() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.getDec">getDec() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.getGal">getGal() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.getPos">getPos() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.getRA">getRA() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.go_home">go_home() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.GoHomeClicked">GoHomeClicked() (mainclient.MainClient method)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.GoToClicked">GoToClicked() (mainclient.MainClient method)</a>
-</li>
-        <li>
-    GUI
-
-        <ul>
-          <li><a href="GUI.html#module-GUI">module</a>
-</li>
-        </ul></li>
-        <li>
-    GUI.ui_form_client
-
-        <ul>
-          <li><a href="GUI.html#module-GUI.ui_form_client">module</a>
-</li>
-        </ul></li>
-        <li>
-    GUI.ui_form_launcher
-
-        <ul>
-          <li><a href="GUI.html#module-GUI.ui_form_launcher">module</a>
-</li>
-        </ul></li>
-        <li>
-    GUI.ui_form_server
-
-        <ul>
-          <li><a href="GUI.html#module-GUI.ui_form_server">module</a>
-</li>
-        </ul></li>
-    </ul></td>
-  </tr></table>
-</section>
-
-<section id="H" class="genindex-section">
-  <h2>H</h2>
-  <table style="width: 100%" class="indextable genindextable"><tr>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="mainserver.html#mainserver.ServerGUI.handleConnection">handleConnection() (mainserver.ServerGUI method)</a>
-</li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="mainclient.html#mainclient.HMStoDeg">HMStoDeg() (in module mainclient)</a>
-</li>
-    </ul></td>
-  </tr></table>
-</section>
-
-<section id="I" class="genindex-section">
-  <h2>I</h2>
-  <table style="width: 100%" class="indextable genindextable"><tr>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="mainclient.html#mainclient.MainClient.initGUI">initGUI() (mainclient.MainClient method)</a>
-</li>
-    </ul></td>
-  </tr></table>
-</section>
-
-<section id="L" class="genindex-section">
-  <h2>L</h2>
-  <table style="width: 100%" class="indextable genindextable"><tr>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="mainclient.html#mainclient.Launcher">Launcher (class in mainclient)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.LaunchMeasurementClicked">LaunchMeasurementClicked() (mainclient.MainClient method)</a>
-</li>
-        <li>
-    lib_SRT
-
-        <ul>
-          <li><a href="lib_SRT.html#module-lib_SRT">module</a>
-</li>
-        </ul></li>
-        <li>
-    lib_SRT.define
-
-        <ul>
-          <li><a href="lib_SRT.html#module-lib_SRT.define">module</a>
-</li>
-        </ul></li>
-        <li>
-    lib_SRT.QPing
-
-        <ul>
-          <li><a href="lib_SRT.html#module-lib_SRT.QPing">module</a>
-</li>
-        </ul></li>
-        <li>
-    lib_SRT.QTracker
-
-        <ul>
-          <li><a href="lib_SRT.html#module-lib_SRT.QTracker">module</a>
-</li>
-        </ul></li>
-        <li>
-    lib_SRT.SerialPort
-
-        <ul>
-          <li><a href="lib_SRT.html#module-lib_SRT.SerialPort">module</a>
-</li>
-        </ul></li>
-        <li>
-    lib_SRT.Srt
-
-        <ul>
-          <li><a href="lib_SRT.html#module-lib_SRT.Srt">module</a>
-</li>
-        </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li>
-    lib_SRT.utils
-
-        <ul>
-          <li><a href="lib_SRT.utils.html#module-lib_SRT.utils">module</a>
-</li>
-        </ul></li>
-        <li>
-    lib_SRT.utils.coordsConversions
-
-        <ul>
-          <li><a href="lib_SRT.utils.html#module-lib_SRT.utils.coordsConversions">module</a>
-</li>
-        </ul></li>
-        <li>
-    lib_SRT.virgo
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#module-lib_SRT.virgo">module</a>
-</li>
-        </ul></li>
-        <li>
-    lib_SRT.virgo.run_ftf
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#module-lib_SRT.virgo.run_ftf">module</a>
-</li>
-        </ul></li>
-        <li>
-    lib_SRT.virgo.run_wola
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#module-lib_SRT.virgo.run_wola">module</a>
-</li>
-        </ul></li>
-        <li>
-    lib_SRT.virgo.virgo
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#module-lib_SRT.virgo.virgo">module</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.html#lib_SRT.SerialPort.SerialPort.listen">listen() (lib_SRT.SerialPort.SerialPort method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.loadTLE">loadTLE() (in module lib_SRT.Srt)</a>
-</li>
-    </ul></td>
-  </tr></table>
-</section>
-
-<section id="M" class="genindex-section">
-  <h2>M</h2>
-  <table style="width: 100%" class="indextable genindextable"><tr>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.main">main() (in module lib_SRT.virgo.run_ftf)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.main">(in module lib_SRT.virgo.run_wola)</a>
-</li>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.main">(in module lib_SRT.virgo.virgo)</a>
-</li>
-        </ul></li>
-        <li>
-    mainclient
-
-        <ul>
-          <li><a href="mainclient.html#module-mainclient">module</a>
-</li>
-        </ul></li>
-        <li><a href="mainclient.html#mainclient.MainClient">MainClient (class in mainclient)</a>
-</li>
-        <li>
-    mainserver
-
-        <ul>
-          <li><a href="mainserver.html#module-mainserver">module</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.map_hi">map_hi() (in module lib_SRT.virgo.virgo)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.MeasurementDone">MeasurementDone() (mainclient.MainClient method)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.MeasureProgressBarUpdater">MeasureProgressBarUpdater() (mainclient.MainClient method)</a>
-</li>
-        <li>
-    module
-
-        <ul>
-          <li><a href="GUI.html#module-GUI">GUI</a>
-</li>
-          <li><a href="GUI.html#module-GUI.ui_form_client">GUI.ui_form_client</a>
-</li>
-          <li><a href="GUI.html#module-GUI.ui_form_launcher">GUI.ui_form_launcher</a>
-</li>
-          <li><a href="GUI.html#module-GUI.ui_form_server">GUI.ui_form_server</a>
-</li>
-          <li><a href="lib_SRT.html#module-lib_SRT">lib_SRT</a>
-</li>
-          <li><a href="lib_SRT.html#module-lib_SRT.define">lib_SRT.define</a>
-</li>
-          <li><a href="lib_SRT.html#module-lib_SRT.QPing">lib_SRT.QPing</a>
-</li>
-          <li><a href="lib_SRT.html#module-lib_SRT.QTracker">lib_SRT.QTracker</a>
-</li>
-          <li><a href="lib_SRT.html#module-lib_SRT.SerialPort">lib_SRT.SerialPort</a>
-</li>
-          <li><a href="lib_SRT.html#module-lib_SRT.Srt">lib_SRT.Srt</a>
-</li>
-          <li><a href="lib_SRT.utils.html#module-lib_SRT.utils">lib_SRT.utils</a>
-</li>
-          <li><a href="lib_SRT.utils.html#module-lib_SRT.utils.coordsConversions">lib_SRT.utils.coordsConversions</a>
-</li>
-          <li><a href="lib_SRT.virgo.html#module-lib_SRT.virgo">lib_SRT.virgo</a>
-</li>
-          <li><a href="lib_SRT.virgo.html#module-lib_SRT.virgo.run_ftf">lib_SRT.virgo.run_ftf</a>
-</li>
-          <li><a href="lib_SRT.virgo.html#module-lib_SRT.virgo.run_wola">lib_SRT.virgo.run_wola</a>
-</li>
-          <li><a href="lib_SRT.virgo.html#module-lib_SRT.virgo.virgo">lib_SRT.virgo.virgo</a>
-</li>
-          <li><a href="mainclient.html#module-mainclient">mainclient</a>
-</li>
-          <li><a href="mainserver.html#module-mainserver">mainserver</a>
-</li>
-        </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.monitor_rfi">monitor_rfi() (in module lib_SRT.virgo.virgo)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.MovementFinished">MovementFinished() (mainclient.MainClient method)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.MovementStarted">MovementStarted() (mainclient.MainClient method)</a>
-</li>
-    </ul></td>
-  </tr></table>
-</section>
-
-<section id="N" class="genindex-section">
-  <h2>N</h2>
-  <table style="width: 100%" class="indextable genindextable"><tr>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.NF">NF() (in module lib_SRT.virgo.virgo)</a>
-</li>
-    </ul></td>
-  </tr></table>
-</section>
-
-<section id="O" class="genindex-section">
-  <h2>O</h2>
-  <table style="width: 100%" class="indextable genindextable"><tr>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.observe">observe() (in module lib_SRT.virgo.virgo)</a>
-
-        <ul>
-          <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.observe">(lib_SRT.Srt.Srt method)</a>
-</li>
-        </ul></li>
-        <li><a href="mainclient.html#mainclient.MainClient.onDisconnected">onDisconnected() (mainclient.MainClient method)</a>
-</li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.html#lib_SRT.QTracker.QTracker.onIdle">onIdle() (lib_SRT.QTracker.QTracker method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.onPingSignal">onPingSignal() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.onTrackerSignal">onTrackerSignal() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.openCameraClicked">openCameraClicked() (mainclient.MainClient method)</a>
-</li>
-    </ul></td>
-  </tr></table>
-</section>
-
-<section id="P" class="genindex-section">
-  <h2>P</h2>
-  <table style="width: 100%" class="indextable genindextable"><tr>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.html#lib_SRT.QPing.QPing.pause">pause() (lib_SRT.QPing.QPing method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.html#lib_SRT.QTracker.QTracker.pause">(lib_SRT.QTracker.QTracker method)</a>
-</li>
-        </ul></li>
-        <li><a href="mainserver.html#mainserver.SRTThread.pausePositionLogging">pausePositionLogging() (mainserver.SRTThread method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.pauseTracking">pauseTracking (lib_SRT.Srt.Srt attribute)</a>
-</li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.plot">plot() (in module lib_SRT.virgo.virgo)</a>
-</li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.plot_rfi">plot_rfi() (in module lib_SRT.virgo.virgo)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.plotAll">plotAll() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.plotAvPSD">plotAvPSD() (in module lib_SRT.Srt)</a>
-</li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="mainclient.html#mainclient.MainClient.PlotClicked">PlotClicked() (mainclient.MainClient method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.pointAzAlt">pointAzAlt() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.pointGal">pointGal() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.pointRaDec">pointRaDec() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="mainserver.html#mainserver.ServerGUI.portChanged">portChanged() (mainserver.ServerGUI method)</a>
-</li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.predict">predict() (in module lib_SRT.virgo.virgo)</a>
-</li>
-        <li><a href="mainserver.html#mainserver.sigEmettor.printMsg">printMsg (mainserver.sigEmettor attribute)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.processMsg">processMsg() (mainclient.MainClient method)</a>
-
-        <ul>
-          <li><a href="mainserver.html#mainserver.ServerGUI.processMsg">(mainserver.ServerGUI method)</a>
-</li>
-        </ul></li>
-    </ul></td>
-  </tr></table>
-</section>
-
-<section id="Q" class="genindex-section">
-  <h2>Q</h2>
-  <table style="width: 100%" class="indextable genindextable"><tr>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="mainclient.html#mainclient.QCameraThread">QCameraThread (class in mainclient)</a>
-</li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.html#lib_SRT.QPing.QPing">QPing (class in lib_SRT.QPing)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.QTracker.QTracker">QTracker (class in lib_SRT.QTracker)</a>
-</li>
-    </ul></td>
-  </tr></table>
-</section>
-
-<section id="R" class="genindex-section">
-  <h2>R</h2>
-  <table style="width: 100%" class="indextable genindextable"><tr>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.html#lib_SRT.QTracker.TrackMode.RADEC">RADEC (lib_SRT.QTracker.TrackMode attribute)</a>
-</li>
-        <li><a href="lib_SRT.utils.html#lib_SRT.utils.coordsConversions.RaDec2AzAlt">RaDec2AzAlt() (in module lib_SRT.utils.coordsConversions)</a>
-</li>
-        <li><a href="mainserver.html#mainserver.SRTThread.receiveCommand">receiveCommand() (mainserver.SRTThread method)</a>
-</li>
-        <li><a href="mainserver.html#mainserver.ServerGUI.receiveLog">receiveLog() (mainserver.ServerGUI method)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.receiveMessage">receiveMessage() (mainclient.MainClient method)</a>
-
-        <ul>
-          <li><a href="mainserver.html#mainserver.ServerGUI.receiveMessage">(mainserver.ServerGUI method)</a>
-</li>
-        </ul></li>
-        <li><a href="mainserver.html#mainserver.ServerGUI.redirect_stdout">redirect_stdout() (mainserver.ServerGUI method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.QTracker.QTracker.refresh_azalt">refresh_azalt() (lib_SRT.QTracker.QTracker method)</a>
-</li>
-        <li><a href="mainserver.html#mainserver.ServerGUI.restore_stdout">restore_stdout() (mainserver.ServerGUI method)</a>
-</li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="GUI.html#GUI.ui_form_client.Ui_Widget.retranslateUi">retranslateUi() (GUI.ui_form_client.Ui_Widget method)</a>
-
-        <ul>
-          <li><a href="GUI.html#GUI.ui_form_launcher.Ui_Form.retranslateUi">(GUI.ui_form_launcher.Ui_Form method)</a>
-</li>
-          <li><a href="GUI.html#GUI.ui_form_server.Ui_MainWindow.retranslateUi">(GUI.ui_form_server.Ui_MainWindow method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.returnStoredCoords">returnStoredCoords() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.QPing.QPing.run">run() (lib_SRT.QPing.QPing method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.html#lib_SRT.QTracker.QTracker.run">(lib_SRT.QTracker.QTracker method)</a>
-</li>
-          <li><a href="mainclient.html#mainclient.QCameraThread.run">(mainclient.QCameraThread method)</a>
-</li>
-          <li><a href="mainserver.html#mainserver.SRTThread.run">(mainserver.SRTThread method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation">run_observation (class in lib_SRT.virgo.run_ftf)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation">(class in lib_SRT.virgo.run_wola)</a>
-</li>
-        </ul></li>
-    </ul></td>
-  </tr></table>
-</section>
-
-<section id="S" class="genindex-section">
-  <h2>S</h2>
-  <table style="width: 100%" class="indextable genindextable"><tr>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.SEFD">SEFD() (in module lib_SRT.virgo.virgo)</a>
-</li>
-        <li><a href="mainserver.html#mainserver.SRTThread.send2log">send2log (mainserver.SRTThread attribute)</a>
-</li>
-        <li><a href="mainserver.html#mainserver.SRTThread.send2socket">send2socket (mainserver.SRTThread attribute)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.send_APM">send_APM() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.SerialPort.SerialPort.send_Ser">send_Ser() (lib_SRT.SerialPort.SerialPort method)</a>
-</li>
-        <li><a href="mainserver.html#mainserver.ServerGUI.sendClient">sendClient() (mainserver.ServerGUI method)</a>
-
-        <ul>
-          <li><a href="mainserver.html#mainserver.SRTThread.sendClient">(mainserver.SRTThread method)</a>
-</li>
-        </ul></li>
-        <li><a href="mainserver.html#mainserver.ServerGUI.sendEndMotion">sendEndMotion() (mainserver.ServerGUI method)</a>
-</li>
-        <li><a href="mainserver.html#mainserver.ServerGUI.sendError">sendError() (mainserver.ServerGUI method)</a>
-
-        <ul>
-          <li><a href="mainserver.html#mainserver.SRTThread.sendError">(mainserver.SRTThread method)</a>
-</li>
-        </ul></li>
-        <li><a href="mainserver.html#mainserver.ServerGUI.sendOK">sendOK() (mainserver.ServerGUI method)</a>
-
-        <ul>
-          <li><a href="mainserver.html#mainserver.SRTThread.sendOK">(mainserver.SRTThread method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.html#lib_SRT.QTracker.QTracker.sendPointTo">sendPointTo (lib_SRT.QTracker.QTracker attribute)</a>
-</li>
-        <li><a href="mainserver.html#mainserver.SRTThread.sendPos">sendPos() (mainserver.SRTThread method)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.sendServ">sendServ() (mainclient.MainClient method)</a>
-</li>
-        <li><a href="mainserver.html#mainserver.ServerGUI.sendToSRTSignal">sendToSRTSignal (mainserver.ServerGUI attribute)</a>
-</li>
-        <li><a href="mainserver.html#mainserver.ServerGUI.sendWarning">sendWarning() (mainserver.ServerGUI method)</a>
-
-        <ul>
-          <li><a href="mainserver.html#mainserver.SRTThread.sendWarning">(mainserver.SRTThread method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.html#lib_SRT.SerialPort.SerialPort">SerialPort (class in lib_SRT.SerialPort)</a>
-</li>
-        <li><a href="mainserver.html#mainserver.ServerGUI">ServerGUI (class in mainserver)</a>
-</li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_bandwidth">set_bandwidth() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_bandwidth">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_bb_gain">set_bb_gain() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_bb_gain">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_channels">set_channels() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_channels">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_custom_window">set_custom_window() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_custom_window">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_dev_args">set_dev_args() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_dev_args">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_duration">set_duration() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_duration">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_frequency">set_frequency() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_frequency">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_if_gain">set_if_gain() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_if_gain">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_obs_file">set_obs_file() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_obs_file">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_rf_gain">set_rf_gain() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_rf_gain">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_sinc">set_sinc() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_sinc">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_sinc_sample_locations">set_sinc_sample_locations() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_sinc_sample_locations">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_t_sample">set_t_sample() (lib_SRT.virgo.run_ftf.run_observation method)</a>
-
-        <ul>
-          <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_t_sample">(lib_SRT.virgo.run_wola.run_observation method)</a>
-</li>
-        </ul></li>
-        <li><a href="mainclient.html#mainclient.MainClient.setCurrentCoords">setCurrentCoords() (mainclient.MainClient method)</a>
-</li>
-        <li><a href="mainserver.html#mainserver.ServerGUI.setIPAddress">setIPAddress() (mainserver.ServerGUI method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.QTracker.QTracker.setMode">setMode() (lib_SRT.QTracker.QTracker method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.QTracker.QTracker.setTarget">setTarget() (lib_SRT.QTracker.QTracker method)</a>
-</li>
-        <li><a href="GUI.html#GUI.ui_form_client.Ui_Widget.setupUi">setupUi() (GUI.ui_form_client.Ui_Widget method)</a>
-
-        <ul>
-          <li><a href="GUI.html#GUI.ui_form_launcher.Ui_Form.setupUi">(GUI.ui_form_launcher.Ui_Form method)</a>
-</li>
-          <li><a href="GUI.html#GUI.ui_form_server.Ui_MainWindow.setupUi">(GUI.ui_form_server.Ui_MainWindow method)</a>
-</li>
-        </ul></li>
-        <li><a href="mainclient.html#mainclient.DisplayImageWidget.show_image">show_image() (mainclient.DisplayImageWidget method)</a>
-</li>
-        <li><a href="mainserver.html#mainserver.sigEmettor">sigEmettor (class in mainserver)</a>
-</li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.simulate">simulate() (in module lib_SRT.virgo.virgo)</a>
-</li>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.snr">snr() (in module lib_SRT.virgo.virgo)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt">Srt (class in lib_SRT.Srt)</a>
-</li>
-        <li><a href="mainserver.html#mainserver.SRTThread">SRTThread (class in mainserver)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.standby">standby() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.standbyClicked">standbyClicked() (mainclient.MainClient method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.QTracker.QTracker.staticMetaObject">staticMetaObject (lib_SRT.QTracker.QTracker attribute)</a>
-
-        <ul>
-          <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.staticMetaObject">(lib_SRT.Srt.Srt attribute)</a>
-</li>
-          <li><a href="mainclient.html#mainclient.QCameraThread.staticMetaObject">(mainclient.QCameraThread attribute)</a>
-</li>
-        </ul></li>
-        <li><a href="mainserver.html#mainserver.StdoutRedirector">StdoutRedirector (class in mainserver)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.QPing.QPing.stop">stop() (lib_SRT.QPing.QPing method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.stopObs">stopObs() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.stopTracking">stopTracking() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.StopTrackingClicked">StopTrackingClicked() (mainclient.MainClient method)</a>
-</li>
-    </ul></td>
-  </tr></table>
-</section>
-
-<section id="T" class="genindex-section">
-  <h2>T</h2>
-  <table style="width: 100%" class="indextable genindextable"><tr>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.T_noise">T_noise() (in module lib_SRT.virgo.virgo)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.QTracker.TrackMode.TLE">TLE (lib_SRT.QTracker.TrackMode attribute)</a>
-</li>
-        <li><a href="lib_SRT.utils.html#lib_SRT.utils.coordsConversions.TLE2AzAlt">TLE2AzAlt() (in module lib_SRT.utils.coordsConversions)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.TrackFirstCoordDegreeChanged">TrackFirstCoordDegreeChanged() (mainclient.MainClient method)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.TrackFirstCoordHMSChanged">TrackFirstCoordHMSChanged() (mainclient.MainClient method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.trackGal">trackGal() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="mainserver.html#mainserver.SRTThread.tracking">tracking() (mainserver.SRTThread method)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.TrackingComboBoxChanged">TrackingComboBoxChanged() (mainclient.MainClient method)</a>
-</li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.html#lib_SRT.QTracker.TrackMode">TrackMode (class in lib_SRT.QTracker)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.trackMotionEnd">trackMotionEnd (lib_SRT.Srt.Srt attribute)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.trackRaDec">trackRaDec() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.trackSat">trackSat() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.TrackSecondCoordDegreeChanged">TrackSecondCoordDegreeChanged() (mainclient.MainClient method)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.TrackSecondCoordHMSChanged">TrackSecondCoordHMSChanged() (mainclient.MainClient method)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.QCameraThread.turnOff">turnOff() (mainclient.QCameraThread method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.QTracker.QTracker.turnOn">turnOn() (lib_SRT.QTracker.QTracker method)</a>
-
-        <ul>
-          <li><a href="mainclient.html#mainclient.QCameraThread.turnOn">(mainclient.QCameraThread method)</a>
-</li>
-        </ul></li>
-    </ul></td>
-  </tr></table>
-</section>
-
-<section id="U" class="genindex-section">
-  <h2>U</h2>
-  <table style="width: 100%" class="indextable genindextable"><tr>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="GUI.html#GUI.ui_form_launcher.Ui_Form">Ui_Form (class in GUI.ui_form_launcher)</a>
-</li>
-        <li><a href="GUI.html#GUI.ui_form_server.Ui_MainWindow">Ui_MainWindow (class in GUI.ui_form_server)</a>
-</li>
-        <li><a href="GUI.html#GUI.ui_form_client.Ui_Widget">Ui_Widget (class in GUI.ui_form_client)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.QPing.QPing.unpause">unpause() (lib_SRT.QPing.QPing method)</a>
-</li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="mainserver.html#mainserver.SRTThread.unpausePositionLogging">unpausePositionLogging() (mainserver.SRTThread method)</a>
-</li>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.untangle">untangle() (lib_SRT.Srt.Srt method)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.MainClient.untangleClicked">untangleClicked() (mainclient.MainClient method)</a>
-</li>
-        <li><a href="mainclient.html#mainclient.Launcher.updateStatus">updateStatus() (mainclient.Launcher method)</a>
-</li>
-    </ul></td>
-  </tr></table>
-</section>
-
-<section id="W" class="genindex-section">
-  <h2>W</h2>
-  <table style="width: 100%" class="indextable genindextable"><tr>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.waitObs">waitObs() (lib_SRT.Srt.Srt method)</a>
-</li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.wavelength">wavelength() (in module lib_SRT.virgo.virgo)</a>
-</li>
-        <li><a href="mainserver.html#mainserver.StdoutRedirector.write">write() (mainserver.StdoutRedirector method)</a>
-</li>
-    </ul></td>
-  </tr></table>
-</section>
-
-
-        </article>
-      </div>
-      <footer>
-        
-        <div class="related-pages">
-          
-          
-        </div>
-        <div class="bottom-of-page">
-          <div class="left-details">
-            <div class="copyright">
-                Copyright &#169; 2024, LL
-            </div>
-            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
-            
-            <a href="https://github.com/pradyunsg/furo">Furo</a>
-            
-          </div>
-          <div class="right-details">
-            
-          </div>
-        </div>
-        
-      </footer>
-    </div>
-    <aside class="toc-drawer no-toc">
-      
-      
-      
-    </aside>
-  </div>
-</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Index &#8212; Very Elegant Galactic Antenna (VEGA) 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/traditional.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/doctools.js"></script>
     <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/scripts/furo.js"></script>
-    </body>
+    <link rel="index" title="Index" href="#" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="#" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Very Elegant Galactic Antenna (VEGA) 0.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Index</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+
+<h1 id="index">Index</h1>
+
+<div class="genindex-jumpbox">
+ <a href="#A"><strong>A</strong></a>
+ | <a href="#B"><strong>B</strong></a>
+ | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
+ | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
+ | <a href="#W"><strong>W</strong></a>
+ 
+</div>
+<h2 id="A">A</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.A_e">A_e() (in module lib_SRT.virgo.virgo)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.addToLog">addToLog() (MainClient method)</a>
+
+      <ul>
+        <li><a href="mainserver.html#mainserver.ServerGUI.addToLog">(ServerGUI method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.argument_parser">argument_parser() (in module lib_SRT.virgo.run_ftf)</a>
+
+      <ul>
+        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.argument_parser">(in module lib_SRT.virgo.run_wola)</a>
+</li>
+      </ul></li>
+      <li><a href="lib_SRT.utils.html#lib_SRT.utils.coordsConversions.AzAlt2Gal">AzAlt2Gal() (in module lib_SRT.utils.coordsConversions)</a>
+</li>
+      <li><a href="lib_SRT.utils.html#lib_SRT.utils.coordsConversions.AzAlt2RaDec">AzAlt2RaDec() (in module lib_SRT.utils.coordsConversions)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="B">B</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.beamwidth">beamwidth() (in module lib_SRT.virgo.virgo)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="mainclient.html#mainclient.MainClient.BrowseCalibClicked">BrowseCalibClicked() (MainClient method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.BrowseMeasureClicked">BrowseMeasureClicked() (MainClient method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.calibrate_north">calibrate_north() (Srt method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.cameraThreadFinished">cameraThreadFinished() (MainClient method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.DisplayImageWidget.closeEvent">closeEvent() (DisplayImageWidget method)</a>
+
+      <ul>
+        <li><a href="mainserver.html#mainserver.ServerGUI.closeEvent">(ServerGUI method)</a>
+</li>
+      </ul></li>
+      <li><a href="mainclient.html#mainclient.DisplayImageWidget.closeSignal">closeSignal (DisplayImageWidget attribute)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.QCameraThread.closeSignalCameraThread">closeSignalCameraThread (QCameraThread attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.html#lib_SRT.SerialPort.SerialPort.connect">connect() (SerialPort method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.connectAPM">connectAPM() (Srt method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.Launcher.connectAttempt">connectAttempt (Launcher attribute)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.Launcher.ConnectClicked">ConnectClicked() (Launcher method)</a>
+
+      <ul>
+        <li><a href="mainclient.html#mainclient.MainClient.ConnectClicked">(MainClient method)</a>
+</li>
+      </ul></li>
+      <li><a href="mainclient.html#mainclient.MainClient.connectServ">connectServ() (MainClient method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.connexionError">connexionError() (MainClient method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.html#lib_SRT.SerialPort.SerialPort.disconnect">disconnect() (SerialPort method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.disconnectAPM">disconnectAPM() (Srt method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="mainclient.html#mainclient.MainClient.DisconnectClicked">DisconnectClicked() (MainClient method)</a>
+</li>
+      <li><a href="mainserver.html#mainserver.ServerGUI.disconnectClient">disconnectClient() (ServerGUI method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.DisplayImageWidget">DisplayImageWidget (class in mainclient)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.empty_water">empty_water() (Srt method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="mainserver.html#mainserver.SRTThread.endMotion">endMotion (SRTThread attribute)</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.equatorial">equatorial() (in module lib_SRT.virgo.virgo)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.frequency">frequency() (in module lib_SRT.virgo.virgo)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.G_T">G_T() (in module lib_SRT.virgo.virgo)</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.gain">gain() (in module lib_SRT.virgo.virgo)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.QTracker.TrackMode.GAL">GAL (TrackMode attribute)</a>
+</li>
+      <li><a href="lib_SRT.utils.html#lib_SRT.utils.coordsConversions.Gal2AzAlt">Gal2AzAlt() (in module lib_SRT.utils.coordsConversions)</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.galactic">galactic() (in module lib_SRT.virgo.virgo)</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_bandwidth">get_bandwidth() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_bandwidth">[1]</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_bb_gain">get_bb_gain() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_bb_gain">[1]</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_channels">get_channels() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_channels">[1]</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_custom_window">get_custom_window() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_custom_window">[1]</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_dev_args">get_dev_args() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_dev_args">[1]</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_duration">get_duration() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_duration">[1]</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_frequency">get_frequency() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_frequency">[1]</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_if_gain">get_if_gain() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_if_gain">[1]</a>
+</li>
+      <li><a href="mainserver.html#mainserver.get_ipv4_address">get_ipv4_address() (in module mainserver)</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_obs_file">get_obs_file() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_obs_file">[1]</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_rf_gain">get_rf_gain() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_rf_gain">[1]</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_sinc">get_sinc() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_sinc">[1]</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_sinc_sample_locations">get_sinc_sample_locations() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_sinc_sample_locations">[1]</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.get_t_sample">get_t_sample() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.get_t_sample">[1]</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.getAllCoords">getAllCoords() (Srt method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.getAlt">getAlt() (Srt method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.getAz">getAz() (Srt method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.getAzAlt">getAzAlt() (Srt method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.getDec">getDec() (Srt method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.getGal">getGal() (Srt method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.getPos">getPos() (Srt method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.getRA">getRA() (Srt method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.go_home">go_home() (Srt method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.GoHomeClicked">GoHomeClicked() (MainClient method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.GoToClicked">GoToClicked() (MainClient method)</a>
+</li>
+      <li>
+    GUI
+
+      <ul>
+        <li><a href="GUI.html#module-GUI">module</a>
+</li>
+      </ul></li>
+      <li>
+    GUI.ui_form_client
+
+      <ul>
+        <li><a href="GUI.html#module-GUI.ui_form_client">module</a>
+</li>
+      </ul></li>
+      <li>
+    GUI.ui_form_launcher
+
+      <ul>
+        <li><a href="GUI.html#module-GUI.ui_form_launcher">module</a>
+</li>
+      </ul></li>
+      <li>
+    GUI.ui_form_server
+
+      <ul>
+        <li><a href="GUI.html#module-GUI.ui_form_server">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="mainserver.html#mainserver.ServerGUI.handleConnection">handleConnection() (ServerGUI method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="mainclient.html#mainclient.MainClient.initGUI">initGUI() (MainClient method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="mainclient.html#mainclient.Launcher">Launcher (class in mainclient)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.LaunchMeasurementClicked">LaunchMeasurementClicked() (MainClient method)</a>
+</li>
+      <li>
+    lib_SRT
+
+      <ul>
+        <li><a href="lib_SRT.html#module-lib_SRT">module</a>
+</li>
+      </ul></li>
+      <li>
+    lib_SRT.define
+
+      <ul>
+        <li><a href="lib_SRT.html#module-lib_SRT.define">module</a>
+</li>
+      </ul></li>
+      <li>
+    lib_SRT.QPing
+
+      <ul>
+        <li><a href="lib_SRT.html#module-lib_SRT.QPing">module</a>
+</li>
+      </ul></li>
+      <li>
+    lib_SRT.QTracker
+
+      <ul>
+        <li><a href="lib_SRT.html#module-lib_SRT.QTracker">module</a>
+</li>
+      </ul></li>
+      <li>
+    lib_SRT.SerialPort
+
+      <ul>
+        <li><a href="lib_SRT.html#module-lib_SRT.SerialPort">module</a>
+</li>
+      </ul></li>
+      <li>
+    lib_SRT.Srt
+
+      <ul>
+        <li><a href="lib_SRT.html#module-lib_SRT.Srt">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    lib_SRT.utils
+
+      <ul>
+        <li><a href="lib_SRT.utils.html#module-lib_SRT.utils">module</a>
+</li>
+      </ul></li>
+      <li>
+    lib_SRT.utils.coordsConversions
+
+      <ul>
+        <li><a href="lib_SRT.utils.html#module-lib_SRT.utils.coordsConversions">module</a>
+</li>
+      </ul></li>
+      <li>
+    lib_SRT.virgo
+
+      <ul>
+        <li><a href="lib_SRT.virgo.html#module-lib_SRT.virgo">module</a>
+</li>
+      </ul></li>
+      <li>
+    lib_SRT.virgo.run_ftf
+
+      <ul>
+        <li><a href="lib_SRT.virgo.html#module-lib_SRT.virgo.run_ftf">module</a>
+</li>
+      </ul></li>
+      <li>
+    lib_SRT.virgo.run_wola
+
+      <ul>
+        <li><a href="lib_SRT.virgo.html#module-lib_SRT.virgo.run_wola">module</a>
+</li>
+      </ul></li>
+      <li>
+    lib_SRT.virgo.virgo
+
+      <ul>
+        <li><a href="lib_SRT.virgo.html#module-lib_SRT.virgo.virgo">module</a>
+</li>
+      </ul></li>
+      <li><a href="lib_SRT.html#lib_SRT.SerialPort.SerialPort.listen">listen() (SerialPort method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.loadTLE">loadTLE() (in module lib_SRT.Srt)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.main">main() (in module lib_SRT.virgo.run_ftf)</a>
+
+      <ul>
+        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.main">(in module lib_SRT.virgo.run_wola)</a>
+</li>
+        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.main">(in module lib_SRT.virgo.virgo)</a>
+</li>
+      </ul></li>
+      <li>
+    mainclient
+
+      <ul>
+        <li><a href="mainclient.html#module-mainclient">module</a>
+</li>
+      </ul></li>
+      <li><a href="mainclient.html#mainclient.MainClient">MainClient (class in mainclient)</a>
+</li>
+      <li>
+    mainserver
+
+      <ul>
+        <li><a href="mainserver.html#module-mainserver">module</a>
+</li>
+      </ul></li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.map_hi">map_hi() (in module lib_SRT.virgo.virgo)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.MeasurementDone">MeasurementDone() (MainClient method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.MeasureProgressBarUpdater">MeasureProgressBarUpdater() (MainClient method)</a>
+</li>
+      <li>
+    module
+
+      <ul>
+        <li><a href="GUI.html#module-GUI">GUI</a>
+</li>
+        <li><a href="GUI.html#module-GUI.ui_form_client">GUI.ui_form_client</a>
+</li>
+        <li><a href="GUI.html#module-GUI.ui_form_launcher">GUI.ui_form_launcher</a>
+</li>
+        <li><a href="GUI.html#module-GUI.ui_form_server">GUI.ui_form_server</a>
+</li>
+        <li><a href="lib_SRT.html#module-lib_SRT">lib_SRT</a>
+</li>
+        <li><a href="lib_SRT.html#module-lib_SRT.define">lib_SRT.define</a>
+</li>
+        <li><a href="lib_SRT.html#module-lib_SRT.QPing">lib_SRT.QPing</a>
+</li>
+        <li><a href="lib_SRT.html#module-lib_SRT.QTracker">lib_SRT.QTracker</a>
+</li>
+        <li><a href="lib_SRT.html#module-lib_SRT.SerialPort">lib_SRT.SerialPort</a>
+</li>
+        <li><a href="lib_SRT.html#module-lib_SRT.Srt">lib_SRT.Srt</a>
+</li>
+        <li><a href="lib_SRT.utils.html#module-lib_SRT.utils">lib_SRT.utils</a>
+</li>
+        <li><a href="lib_SRT.utils.html#module-lib_SRT.utils.coordsConversions">lib_SRT.utils.coordsConversions</a>
+</li>
+        <li><a href="lib_SRT.virgo.html#module-lib_SRT.virgo">lib_SRT.virgo</a>
+</li>
+        <li><a href="lib_SRT.virgo.html#module-lib_SRT.virgo.run_ftf">lib_SRT.virgo.run_ftf</a>
+</li>
+        <li><a href="lib_SRT.virgo.html#module-lib_SRT.virgo.run_wola">lib_SRT.virgo.run_wola</a>
+</li>
+        <li><a href="lib_SRT.virgo.html#module-lib_SRT.virgo.virgo">lib_SRT.virgo.virgo</a>
+</li>
+        <li><a href="mainclient.html#module-mainclient">mainclient</a>
+</li>
+        <li><a href="mainserver.html#module-mainserver">mainserver</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.monitor_rfi">monitor_rfi() (in module lib_SRT.virgo.virgo)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.MovementFinished">MovementFinished() (MainClient method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.MovementStarted">MovementStarted() (MainClient method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.NF">NF() (in module lib_SRT.virgo.virgo)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.observe">observe() (in module lib_SRT.virgo.virgo)</a>
+
+      <ul>
+        <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.observe">(Srt method)</a>
+</li>
+      </ul></li>
+      <li><a href="mainclient.html#mainclient.MainClient.onDisconnected">onDisconnected() (MainClient method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.html#lib_SRT.QTracker.QTracker.onIdle">onIdle() (QTracker method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.onPingSignal">onPingSignal() (Srt method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.onTrackerSignal">onTrackerSignal() (Srt method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.openCameraClicked">openCameraClicked() (MainClient method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.html#lib_SRT.QPing.QPing.pause">pause() (QPing method)</a>
+
+      <ul>
+        <li><a href="lib_SRT.html#lib_SRT.QTracker.QTracker.pause">(QTracker method)</a>
+</li>
+      </ul></li>
+      <li><a href="mainserver.html#mainserver.SRTThread.pausePositionLogging">pausePositionLogging() (SRTThread method)</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.plot">plot() (in module lib_SRT.virgo.virgo)</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.plot_rfi">plot_rfi() (in module lib_SRT.virgo.virgo)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.plotAll">plotAll() (Srt method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.plotAvPSD">plotAvPSD() (in module lib_SRT.Srt)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.PlotClicked">PlotClicked() (MainClient method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.pointAzAlt">pointAzAlt() (Srt method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.pointGal">pointGal() (Srt method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.pointRaDec">pointRaDec() (Srt method)</a>
+</li>
+      <li><a href="mainserver.html#mainserver.ServerGUI.portChanged">portChanged() (ServerGUI method)</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.predict">predict() (in module lib_SRT.virgo.virgo)</a>
+</li>
+      <li><a href="mainserver.html#mainserver.sigEmettor.printMsg">printMsg (sigEmettor attribute)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.processMsg">processMsg() (MainClient method)</a>
+
+      <ul>
+        <li><a href="mainserver.html#mainserver.ServerGUI.processMsg">(ServerGUI method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="mainclient.html#mainclient.QCameraThread">QCameraThread (class in mainclient)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.html#lib_SRT.QPing.QPing">QPing (class in lib_SRT.QPing)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.QTracker.QTracker">QTracker (class in lib_SRT.QTracker)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.html#lib_SRT.QTracker.TrackMode.RADEC">RADEC (TrackMode attribute)</a>
+</li>
+      <li><a href="lib_SRT.utils.html#lib_SRT.utils.coordsConversions.RaDec2AzAlt">RaDec2AzAlt() (in module lib_SRT.utils.coordsConversions)</a>
+</li>
+      <li><a href="mainserver.html#mainserver.SRTThread.receiveCommand">receiveCommand() (SRTThread method)</a>
+</li>
+      <li><a href="mainserver.html#mainserver.ServerGUI.receiveLog">receiveLog() (ServerGUI method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.receiveMessage">receiveMessage() (MainClient method)</a>
+
+      <ul>
+        <li><a href="mainserver.html#mainserver.ServerGUI.receiveMessage">(ServerGUI method)</a>
+</li>
+      </ul></li>
+      <li><a href="mainserver.html#mainserver.ServerGUI.redirect_stdout">redirect_stdout() (ServerGUI method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.QTracker.QTracker.refresh_azalt">refresh_azalt() (QTracker method)</a>
+</li>
+      <li><a href="mainserver.html#mainserver.ServerGUI.restore_stdout">restore_stdout() (ServerGUI method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="GUI.html#GUI.ui_form_launcher.Ui_Form.retranslateUi">retranslateUi() (Ui_Form method)</a>
+
+      <ul>
+        <li><a href="GUI.html#GUI.ui_form_server.Ui_MainWindow.retranslateUi">(Ui_MainWindow method)</a>
+</li>
+        <li><a href="GUI.html#GUI.ui_form_client.Ui_Widget.retranslateUi">(Ui_Widget method)</a>
+</li>
+      </ul></li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.returnStoredCoords">returnStoredCoords() (Srt method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.QCameraThread.run">run() (QCameraThread method)</a>
+
+      <ul>
+        <li><a href="lib_SRT.html#lib_SRT.QPing.QPing.run">(QPing method)</a>
+</li>
+        <li><a href="lib_SRT.html#lib_SRT.QTracker.QTracker.run">(QTracker method)</a>
+</li>
+        <li><a href="mainserver.html#mainserver.SRTThread.run">(SRTThread method)</a>
+</li>
+      </ul></li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation">run_observation (class in lib_SRT.virgo.run_ftf)</a>
+
+      <ul>
+        <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation">(class in lib_SRT.virgo.run_wola)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.SEFD">SEFD() (in module lib_SRT.virgo.virgo)</a>
+</li>
+      <li><a href="mainserver.html#mainserver.SRTThread.send2log">send2log (SRTThread attribute)</a>
+</li>
+      <li><a href="mainserver.html#mainserver.SRTThread.send2socket">send2socket (SRTThread attribute)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.send_APM">send_APM() (Srt method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.SerialPort.SerialPort.send_Ser">send_Ser() (SerialPort method)</a>
+</li>
+      <li><a href="mainserver.html#mainserver.ServerGUI.sendClient">sendClient() (ServerGUI method)</a>
+
+      <ul>
+        <li><a href="mainserver.html#mainserver.SRTThread.sendClient">(SRTThread method)</a>
+</li>
+      </ul></li>
+      <li><a href="mainserver.html#mainserver.ServerGUI.sendEndMotion">sendEndMotion() (ServerGUI method)</a>
+</li>
+      <li><a href="mainserver.html#mainserver.ServerGUI.sendError">sendError() (ServerGUI method)</a>
+
+      <ul>
+        <li><a href="mainserver.html#mainserver.SRTThread.sendError">(SRTThread method)</a>
+</li>
+      </ul></li>
+      <li><a href="mainserver.html#mainserver.ServerGUI.sendOK">sendOK() (ServerGUI method)</a>
+
+      <ul>
+        <li><a href="mainserver.html#mainserver.SRTThread.sendOK">(SRTThread method)</a>
+</li>
+      </ul></li>
+      <li><a href="lib_SRT.html#lib_SRT.QTracker.QTracker.sendPointTo">sendPointTo (QTracker attribute)</a>
+</li>
+      <li><a href="mainserver.html#mainserver.SRTThread.sendPos">sendPos() (SRTThread method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.sendServ">sendServ() (MainClient method)</a>
+</li>
+      <li><a href="mainserver.html#mainserver.ServerGUI.sendToSRTSignal">sendToSRTSignal (ServerGUI attribute)</a>
+</li>
+      <li><a href="mainserver.html#mainserver.ServerGUI.sendWarning">sendWarning() (ServerGUI method)</a>
+
+      <ul>
+        <li><a href="mainserver.html#mainserver.SRTThread.sendWarning">(SRTThread method)</a>
+</li>
+      </ul></li>
+      <li><a href="lib_SRT.html#lib_SRT.SerialPort.SerialPort">SerialPort (class in lib_SRT.SerialPort)</a>
+</li>
+      <li><a href="mainserver.html#mainserver.ServerGUI">ServerGUI (class in mainserver)</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_bandwidth">set_bandwidth() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_bandwidth">[1]</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_bb_gain">set_bb_gain() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_bb_gain">[1]</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_channels">set_channels() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_channels">[1]</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_custom_window">set_custom_window() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_custom_window">[1]</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_dev_args">set_dev_args() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_dev_args">[1]</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_duration">set_duration() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_duration">[1]</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_frequency">set_frequency() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_frequency">[1]</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_if_gain">set_if_gain() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_if_gain">[1]</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_obs_file">set_obs_file() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_obs_file">[1]</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_rf_gain">set_rf_gain() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_rf_gain">[1]</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_sinc">set_sinc() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_sinc">[1]</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_sinc_sample_locations">set_sinc_sample_locations() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_sinc_sample_locations">[1]</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.run_ftf.run_observation.set_t_sample">set_t_sample() (run_observation method)</a>, <a href="lib_SRT.virgo.html#lib_SRT.virgo.run_wola.run_observation.set_t_sample">[1]</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.setCurrentCoords">setCurrentCoords() (MainClient method)</a>
+</li>
+      <li><a href="mainserver.html#mainserver.ServerGUI.setIPAddress">setIPAddress() (ServerGUI method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.QTracker.QTracker.setMode">setMode() (QTracker method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.QTracker.QTracker.setTarget">setTarget() (QTracker method)</a>
+</li>
+      <li><a href="GUI.html#GUI.ui_form_launcher.Ui_Form.setupUi">setupUi() (Ui_Form method)</a>
+
+      <ul>
+        <li><a href="GUI.html#GUI.ui_form_server.Ui_MainWindow.setupUi">(Ui_MainWindow method)</a>
+</li>
+        <li><a href="GUI.html#GUI.ui_form_client.Ui_Widget.setupUi">(Ui_Widget method)</a>
+</li>
+      </ul></li>
+      <li><a href="mainclient.html#mainclient.DisplayImageWidget.show_image">show_image() (DisplayImageWidget method)</a>
+</li>
+      <li><a href="mainserver.html#mainserver.sigEmettor">sigEmettor (class in mainserver)</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.simulate">simulate() (in module lib_SRT.virgo.virgo)</a>
+</li>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.snr">snr() (in module lib_SRT.virgo.virgo)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt">Srt (class in lib_SRT.Srt)</a>
+</li>
+      <li><a href="mainserver.html#mainserver.SRTThread">SRTThread (class in mainserver)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.standby">standby() (Srt method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.standbyClicked">standbyClicked() (MainClient method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.QCameraThread.staticMetaObject">staticMetaObject (QCameraThread attribute)</a>
+
+      <ul>
+        <li><a href="mainserver.html#mainserver.ServerGUI.staticMetaObject">(ServerGUI attribute)</a>
+</li>
+        <li><a href="mainserver.html#mainserver.sigEmettor.staticMetaObject">(sigEmettor attribute)</a>
+</li>
+        <li><a href="mainserver.html#mainserver.SRTThread.staticMetaObject">(SRTThread attribute)</a>
+</li>
+      </ul></li>
+      <li><a href="mainserver.html#mainserver.StdoutRedirector">StdoutRedirector (class in mainserver)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.QPing.QPing.stop">stop() (QPing method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.stopObs">stopObs() (Srt method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.stopTracking">stopTracking() (Srt method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.StopTrackingClicked">StopTrackingClicked() (MainClient method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.T_noise">T_noise() (in module lib_SRT.virgo.virgo)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.QTracker.TrackMode.TLE">TLE (TrackMode attribute)</a>
+</li>
+      <li><a href="lib_SRT.utils.html#lib_SRT.utils.coordsConversions.TLE2AzAlt">TLE2AzAlt() (in module lib_SRT.utils.coordsConversions)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.TrackFirstCoordDegreeChanged">TrackFirstCoordDegreeChanged() (MainClient method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.TrackFirstCoordHMSChanged">TrackFirstCoordHMSChanged() (MainClient method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.trackGal">trackGal() (Srt method)</a>
+</li>
+      <li><a href="mainserver.html#mainserver.SRTThread.tracking">tracking() (SRTThread method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.TrackingComboBoxChanged">TrackingComboBoxChanged() (MainClient method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.html#lib_SRT.QTracker.TrackMode">TrackMode (class in lib_SRT.QTracker)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.trackRaDec">trackRaDec() (Srt method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.trackSat">trackSat() (Srt method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.TrackSecondCoordDegreeChanged">TrackSecondCoordDegreeChanged() (MainClient method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.TrackSecondCoordHMSChanged">TrackSecondCoordHMSChanged() (MainClient method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.QCameraThread.turnOff">turnOff() (QCameraThread method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.QCameraThread.turnOn">turnOn() (QCameraThread method)</a>
+
+      <ul>
+        <li><a href="lib_SRT.html#lib_SRT.QTracker.QTracker.turnOn">(QTracker method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="GUI.html#GUI.ui_form_launcher.Ui_Form">Ui_Form (class in GUI.ui_form_launcher)</a>
+</li>
+      <li><a href="GUI.html#GUI.ui_form_server.Ui_MainWindow">Ui_MainWindow (class in GUI.ui_form_server)</a>
+</li>
+      <li><a href="GUI.html#GUI.ui_form_client.Ui_Widget">Ui_Widget (class in GUI.ui_form_client)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.QPing.QPing.unpause">unpause() (QPing method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="mainserver.html#mainserver.SRTThread.unpausePositionLogging">unpausePositionLogging() (SRTThread method)</a>
+</li>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.untangle">untangle() (Srt method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.MainClient.untangleClicked">untangleClicked() (MainClient method)</a>
+</li>
+      <li><a href="mainclient.html#mainclient.Launcher.updateStatus">updateStatus() (Launcher method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="W">W</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.html#lib_SRT.Srt.Srt.waitObs">waitObs() (Srt method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lib_SRT.virgo.html#lib_SRT.virgo.virgo.wavelength">wavelength() (in module lib_SRT.virgo.virgo)</a>
+</li>
+      <li><a href="mainserver.html#mainserver.StdoutRedirector.write">write() (StdoutRedirector method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="#" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Very Elegant Galactic Antenna (VEGA) 0.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Index</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, LL.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    </div>
+  </body>
 </html>

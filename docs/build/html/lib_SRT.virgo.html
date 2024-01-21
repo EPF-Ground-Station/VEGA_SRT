@@ -1,524 +1,357 @@
-<!doctype html>
-<html class="no-js" lang="en" data-content_root="">
-  <head><meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="mainclient module" href="mainclient.html" /><link rel="prev" title="lib_SRT.utils package" href="lib_SRT.utils.html" />
 
-    <!-- Generated with Sphinx 6.2.1 and Furo 2023.09.10 -->
-        <title>lib_SRT.virgo package - Very Elegant Galactic Antenna (VEGA) 0.0.1 documentation</title>
-      <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=369552022d0b975c8e74270ce6eabe0fb7978f24" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
-    
-    
+<!DOCTYPE html>
 
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-<style>
-  body {
-    --color-code-background: #f8f8f8;
-  --color-code-foreground: black;
-  --color-brand-primary: black;
-  --color-brand-content: black;
-  
-  }
-  @media not print {
-    body[data-theme="dark"] {
-      --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  --color-brand-primary: white;
-  --color-brand-content: white;
-  
-    }
-    @media (prefers-color-scheme: dark) {
-      body:not([data-theme="light"]) {
-        --color-code-background: #202020;
-  --color-code-foreground: #d0d0d0;
-  --color-brand-primary: white;
-  --color-brand-content: white;
-  
-      }
-    }
-  }
-</style></head>
-  <body>
-    
-    <script>
-      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
-    </script>
-    
+    <title>lib_SRT.virgo package &#8212; Very Elegant Galactic Antenna (VEGA) 0.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/traditional.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="mainclient module" href="mainclient.html" />
+    <link rel="prev" title="lib_SRT.utils package" href="lib_SRT.utils.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mainclient.html" title="mainclient module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="lib_SRT.utils.html" title="lib_SRT.utils package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Very Elegant Galactic Antenna (VEGA) 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >VEGA_SRT</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="lib_SRT.html" accesskey="U">lib_SRT package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">lib_SRT.virgo package</a></li> 
+      </ul>
+    </div>  
 
-<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-  <symbol id="svg-toc" viewBox="0 0 24 24">
-    <title>Contents</title>
-    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
-      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
-    </svg>
-  </symbol>
-  <symbol id="svg-menu" viewBox="0 0 24 24">
-    <title>Menu</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
-      <line x1="3" y1="12" x2="21" y2="12"></line>
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <line x1="3" y1="18" x2="21" y2="18"></line>
-    </svg>
-  </symbol>
-  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
-    <title>Expand</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
-      <polyline points="9 18 15 12 9 6"></polyline>
-    </svg>
-  </symbol>
-  <symbol id="svg-sun" viewBox="0 0 24 24">
-    <title>Light mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
-      <circle cx="12" cy="12" r="5"></circle>
-      <line x1="12" y1="1" x2="12" y2="3"></line>
-      <line x1="12" y1="21" x2="12" y2="23"></line>
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-      <line x1="1" y1="12" x2="3" y2="12"></line>
-      <line x1="21" y1="12" x2="23" y2="12"></line>
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-    </svg>
-  </symbol>
-  <symbol id="svg-moon" viewBox="0 0 24 24">
-    <title>Dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
-    </svg>
-  </symbol>
-  <symbol id="svg-sun-half" viewBox="0 0 24 24">
-    <title>Auto light/dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M13 12h5" />
-      <path d="M13 15h4" />
-      <path d="M13 18h1" />
-      <path d="M13 9h4" />
-      <path d="M13 6h1" />
-    </svg>
-  </symbol>
-</svg>
-
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
-<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
-<label class="overlay sidebar-overlay" for="__navigation">
-  <div class="visually-hidden">Hide navigation sidebar</div>
-</label>
-<label class="overlay toc-overlay" for="__toc">
-  <div class="visually-hidden">Hide table of contents sidebar</div>
-</label>
-
-
-
-<div class="page">
-  <header class="mobile-header">
-    <div class="header-left">
-      <label class="nav-overlay-icon" for="__navigation">
-        <div class="visually-hidden">Toggle site navigation sidebar</div>
-        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
-      </label>
-    </div>
-    <div class="header-center">
-      <a href="index.html"><div class="brand">Very Elegant Galactic Antenna (VEGA) 0.0.1 documentation</div></a>
-    </div>
-    <div class="header-right">
-      <div class="theme-toggle-container theme-toggle-header">
-        <button class="theme-toggle">
-          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
-          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
-          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
-        </button>
-      </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
-        <div class="visually-hidden">Toggle table of contents sidebar</div>
-        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-      </label>
-    </div>
-  </header>
-  <aside class="sidebar-drawer">
-    <div class="sidebar-container">
-      
-      <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
-  
-  <div class="sidebar-logo-container">
-    <img class="sidebar-logo only-light" src="_static/logoCallistaLight.png" alt="Light Logo"/>
-    <img class="sidebar-logo only-dark" src="_static/logoCallistaDark.png" alt="Dark Logo"/>
-  </div>
-  
-  
-</a><form class="sidebar-search-container" method="get" action="search.html" role="search">
-  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
-  <input type="hidden" name="check_keywords" value="yes">
-  <input type="hidden" name="area" value="default">
-</form>
-<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current has-children"><a class="reference internal" href="modules.html">VEGA_SRT</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of VEGA_SRT</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="GUI.html">GUI package</a></li>
-<li class="toctree-l2 current has-children"><a class="reference internal" href="lib_SRT.html">lib_SRT package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of lib_SRT package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="lib_SRT.utils.html">lib_SRT.utils package</a></li>
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">lib_SRT.virgo package</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="mainclient.html">mainclient module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mainserver.html">mainserver module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="safetyScript.html">safetyScript module</a></li>
-</ul>
-</li>
-</ul>
-
-</div>
-</div>
-
-      </div>
-      
-    </div>
-  </aside>
-  <div class="main">
-    <div class="content">
-      <div class="article-container">
-        <a href="#" class="back-to-top muted-link">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
-          </svg>
-          <span>Back to top</span>
-        </a>
-        <div class="content-icon-container">
-          
-<div class="theme-toggle-container theme-toggle-content">
-            <button class="theme-toggle">
-              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
-              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
-              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
-            </button>
-          </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
-            <div class="visually-hidden">Toggle table of contents sidebar</div>
-            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-          </label>
-        </div>
-        <article role="main">
-          <section id="lib-srt-virgo-package">
-<h1>lib_SRT.virgo package<a class="headerlink" href="#lib-srt-virgo-package" title="Permalink to this heading">#</a></h1>
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="lib-srt-virgo-package">
+<h1>lib_SRT.virgo package<a class="headerlink" href="#lib-srt-virgo-package" title="Permalink to this heading">¶</a></h1>
 <section id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">#</a></h2>
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
 </section>
 <section id="module-lib_SRT.virgo.run_ftf">
-<span id="lib-srt-virgo-run-ftf-module"></span><h2>lib_SRT.virgo.run_ftf module<a class="headerlink" href="#module-lib_SRT.virgo.run_ftf" title="Permalink to this heading">#</a></h2>
+<span id="lib-srt-virgo-run-ftf-module"></span><h2>lib_SRT.virgo.run_ftf module<a class="headerlink" href="#module-lib_SRT.virgo.run_ftf" title="Permalink to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.argument_parser">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.run_ftf.</span></span><span class="sig-name descname"><span class="pre">argument_parser</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.argument_parser" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">argument_parser</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.argument_parser" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.main">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.run_ftf.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">top_block_cls=&lt;class</span> <span class="pre">'lib_SRT.virgo.run_ftf.run_observation'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.main" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">top_block_cls=&lt;class</span> <span class="pre">'lib_SRT.virgo.run_ftf.run_observation'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.main" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.run_ftf.</span></span><span class="sig-name descname"><span class="pre">run_observation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run_observation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">top_block</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.get_bandwidth">
-<span class="sig-name descname"><span class="pre">get_bandwidth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_bandwidth" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_bandwidth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_bandwidth" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.get_bb_gain">
-<span class="sig-name descname"><span class="pre">get_bb_gain</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_bb_gain" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_bb_gain</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_bb_gain" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.get_channels">
-<span class="sig-name descname"><span class="pre">get_channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_channels" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_channels" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.get_custom_window">
-<span class="sig-name descname"><span class="pre">get_custom_window</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_custom_window" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_custom_window</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_custom_window" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.get_dev_args">
-<span class="sig-name descname"><span class="pre">get_dev_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_dev_args" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_dev_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_dev_args" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.get_duration">
-<span class="sig-name descname"><span class="pre">get_duration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_duration" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_duration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_duration" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.get_frequency">
-<span class="sig-name descname"><span class="pre">get_frequency</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_frequency" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_frequency</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_frequency" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.get_if_gain">
-<span class="sig-name descname"><span class="pre">get_if_gain</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_if_gain" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_if_gain</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_if_gain" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.get_obs_file">
-<span class="sig-name descname"><span class="pre">get_obs_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_obs_file" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_obs_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_obs_file" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.get_rf_gain">
-<span class="sig-name descname"><span class="pre">get_rf_gain</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_rf_gain" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_rf_gain</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_rf_gain" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.get_sinc">
-<span class="sig-name descname"><span class="pre">get_sinc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_sinc" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_sinc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_sinc" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.get_sinc_sample_locations">
-<span class="sig-name descname"><span class="pre">get_sinc_sample_locations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_sinc_sample_locations" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_sinc_sample_locations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_sinc_sample_locations" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.get_t_sample">
-<span class="sig-name descname"><span class="pre">get_t_sample</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_t_sample" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_t_sample</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.get_t_sample" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.set_bandwidth">
-<span class="sig-name descname"><span class="pre">set_bandwidth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bandwidth</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_bandwidth" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_bandwidth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bandwidth</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_bandwidth" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.set_bb_gain">
-<span class="sig-name descname"><span class="pre">set_bb_gain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bb_gain</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_bb_gain" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_bb_gain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bb_gain</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_bb_gain" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.set_channels">
-<span class="sig-name descname"><span class="pre">set_channels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_channels" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_channels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_channels" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.set_custom_window">
-<span class="sig-name descname"><span class="pre">set_custom_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">custom_window</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_custom_window" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_custom_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">custom_window</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_custom_window" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.set_dev_args">
-<span class="sig-name descname"><span class="pre">set_dev_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dev_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_dev_args" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_dev_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dev_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_dev_args" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.set_duration">
-<span class="sig-name descname"><span class="pre">set_duration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_duration" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_duration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_duration" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.set_frequency">
-<span class="sig-name descname"><span class="pre">set_frequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_frequency" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_frequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_frequency" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.set_if_gain">
-<span class="sig-name descname"><span class="pre">set_if_gain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">if_gain</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_if_gain" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_if_gain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">if_gain</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_if_gain" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.set_obs_file">
-<span class="sig-name descname"><span class="pre">set_obs_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_obs_file" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_obs_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_obs_file" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.set_rf_gain">
-<span class="sig-name descname"><span class="pre">set_rf_gain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rf_gain</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_rf_gain" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_rf_gain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rf_gain</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_rf_gain" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.set_sinc">
-<span class="sig-name descname"><span class="pre">set_sinc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_sinc" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_sinc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_sinc" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.set_sinc_sample_locations">
-<span class="sig-name descname"><span class="pre">set_sinc_sample_locations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinc_sample_locations</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_sinc_sample_locations" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_sinc_sample_locations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinc_sample_locations</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_sinc_sample_locations" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_ftf.run_observation.set_t_sample">
-<span class="sig-name descname"><span class="pre">set_t_sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_sample</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_t_sample" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_t_sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_sample</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_ftf.run_observation.set_t_sample" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 </section>
 <section id="module-lib_SRT.virgo.run_wola">
-<span id="lib-srt-virgo-run-wola-module"></span><h2>lib_SRT.virgo.run_wola module<a class="headerlink" href="#module-lib_SRT.virgo.run_wola" title="Permalink to this heading">#</a></h2>
+<span id="lib-srt-virgo-run-wola-module"></span><h2>lib_SRT.virgo.run_wola module<a class="headerlink" href="#module-lib_SRT.virgo.run_wola" title="Permalink to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.argument_parser">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.run_wola.</span></span><span class="sig-name descname"><span class="pre">argument_parser</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.argument_parser" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">argument_parser</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.argument_parser" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.main">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.run_wola.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">top_block_cls=&lt;class</span> <span class="pre">'lib_SRT.virgo.run_wola.run_observation'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.main" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">top_block_cls=&lt;class</span> <span class="pre">'lib_SRT.virgo.run_wola.run_observation'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.main" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.run_wola.</span></span><span class="sig-name descname"><span class="pre">run_observation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run_observation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">top_block</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.get_bandwidth">
-<span class="sig-name descname"><span class="pre">get_bandwidth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_bandwidth" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_bandwidth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_bandwidth" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.get_bb_gain">
-<span class="sig-name descname"><span class="pre">get_bb_gain</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_bb_gain" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_bb_gain</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_bb_gain" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.get_channels">
-<span class="sig-name descname"><span class="pre">get_channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_channels" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_channels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_channels" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.get_custom_window">
-<span class="sig-name descname"><span class="pre">get_custom_window</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_custom_window" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_custom_window</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_custom_window" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.get_dev_args">
-<span class="sig-name descname"><span class="pre">get_dev_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_dev_args" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_dev_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_dev_args" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.get_duration">
-<span class="sig-name descname"><span class="pre">get_duration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_duration" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_duration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_duration" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.get_frequency">
-<span class="sig-name descname"><span class="pre">get_frequency</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_frequency" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_frequency</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_frequency" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.get_if_gain">
-<span class="sig-name descname"><span class="pre">get_if_gain</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_if_gain" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_if_gain</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_if_gain" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.get_obs_file">
-<span class="sig-name descname"><span class="pre">get_obs_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_obs_file" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_obs_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_obs_file" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.get_rf_gain">
-<span class="sig-name descname"><span class="pre">get_rf_gain</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_rf_gain" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_rf_gain</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_rf_gain" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.get_sinc">
-<span class="sig-name descname"><span class="pre">get_sinc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_sinc" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_sinc</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_sinc" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.get_sinc_sample_locations">
-<span class="sig-name descname"><span class="pre">get_sinc_sample_locations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_sinc_sample_locations" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_sinc_sample_locations</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_sinc_sample_locations" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.get_t_sample">
-<span class="sig-name descname"><span class="pre">get_t_sample</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_t_sample" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_t_sample</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.get_t_sample" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.set_bandwidth">
-<span class="sig-name descname"><span class="pre">set_bandwidth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bandwidth</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_bandwidth" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_bandwidth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bandwidth</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_bandwidth" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.set_bb_gain">
-<span class="sig-name descname"><span class="pre">set_bb_gain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bb_gain</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_bb_gain" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_bb_gain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bb_gain</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_bb_gain" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.set_channels">
-<span class="sig-name descname"><span class="pre">set_channels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_channels" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_channels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">channels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_channels" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.set_custom_window">
-<span class="sig-name descname"><span class="pre">set_custom_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">custom_window</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_custom_window" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_custom_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">custom_window</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_custom_window" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.set_dev_args">
-<span class="sig-name descname"><span class="pre">set_dev_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dev_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_dev_args" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_dev_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dev_args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_dev_args" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.set_duration">
-<span class="sig-name descname"><span class="pre">set_duration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_duration" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_duration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_duration" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.set_frequency">
-<span class="sig-name descname"><span class="pre">set_frequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_frequency" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_frequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_frequency" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.set_if_gain">
-<span class="sig-name descname"><span class="pre">set_if_gain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">if_gain</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_if_gain" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_if_gain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">if_gain</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_if_gain" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.set_obs_file">
-<span class="sig-name descname"><span class="pre">set_obs_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_obs_file" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_obs_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_obs_file" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.set_rf_gain">
-<span class="sig-name descname"><span class="pre">set_rf_gain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rf_gain</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_rf_gain" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_rf_gain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rf_gain</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_rf_gain" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.set_sinc">
-<span class="sig-name descname"><span class="pre">set_sinc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_sinc" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_sinc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinc</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_sinc" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.set_sinc_sample_locations">
-<span class="sig-name descname"><span class="pre">set_sinc_sample_locations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinc_sample_locations</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_sinc_sample_locations" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_sinc_sample_locations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sinc_sample_locations</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_sinc_sample_locations" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="lib_SRT.virgo.run_wola.run_observation.set_t_sample">
-<span class="sig-name descname"><span class="pre">set_t_sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_sample</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_t_sample" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">set_t_sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t_sample</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.run_wola.run_observation.set_t_sample" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 </section>
 <section id="module-lib_SRT.virgo.virgo">
-<span id="lib-srt-virgo-virgo-module"></span><h2>lib_SRT.virgo.virgo module<a class="headerlink" href="#module-lib_SRT.virgo.virgo" title="Permalink to this heading">#</a></h2>
+<span id="lib-srt-virgo-virgo-module"></span><h2>lib_SRT.virgo.virgo module<a class="headerlink" href="#module-lib_SRT.virgo.virgo" title="Permalink to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.virgo.A_e">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.virgo.</span></span><span class="sig-name descname"><span class="pre">A_e</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.A_e" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">A_e</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.A_e" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform antenna gain to effective aperture [m^2].</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>gain: float. Antenna gain [dBi]
@@ -529,7 +362,7 @@ f: float. Frequency [Hz]</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.virgo.G_T">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.virgo.</span></span><span class="sig-name descname"><span class="pre">G_T</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_sys</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.G_T" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">G_T</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gain</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_sys</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.G_T" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute antenna gain-to-noise-temperature (G/T).</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>gain: float. Antenna gain [dBi]
@@ -540,7 +373,7 @@ T_sys: float. System noise temperature [K]</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.virgo.NF">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.virgo.</span></span><span class="sig-name descname"><span class="pre">NF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T_noise</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">290</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.NF" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">NF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T_noise</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">290</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.NF" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert noise temperature to noise figure [dB].</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>T_noise: float. Noise temperature [K]
@@ -551,7 +384,7 @@ T_ref: float. Reference temperature [K]</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.virgo.SEFD">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.virgo.</span></span><span class="sig-name descname"><span class="pre">SEFD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A_e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_sys</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.SEFD" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">SEFD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">A_e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_sys</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.SEFD" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute system equivalent flux density [Jy].</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>A_e: float. Effective antenna aperture [m^2]
@@ -562,7 +395,7 @@ T_sys: float. System noise temperature [K]</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.virgo.T_noise">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.virgo.</span></span><span class="sig-name descname"><span class="pre">T_noise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">NF</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">290</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.T_noise" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">T_noise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">NF</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">290</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.T_noise" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert noise figure to noise temperature [K].</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>NF: float. Noise figure [dB]
@@ -573,7 +406,7 @@ T_ref: float. Reference temperature [K]</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.virgo.beamwidth">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.virgo.</span></span><span class="sig-name descname"><span class="pre">beamwidth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">D</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.beamwidth" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">beamwidth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">D</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.beamwidth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Estimate parabolic antenna half-power beamwidth (FWHM).</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>D: float. Antenna diameter [m]
@@ -584,7 +417,7 @@ f: float. Frequency [Hz]</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.virgo.equatorial">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.virgo.</span></span><span class="sig-name descname"><span class="pre">equatorial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">az</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.equatorial" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">equatorial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">az</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.equatorial" title="Permalink to this definition">¶</a></dt>
 <dd><p>Takes observer’s location and Alt/Az as input and returns RA/Dec as a tuple.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>alt: float. Altitude [deg]
@@ -598,7 +431,7 @@ height: float. Observer elevation [m]</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.virgo.frequency">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.virgo.</span></span><span class="sig-name descname"><span class="pre">frequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelength</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.frequency" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">frequency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavelength</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.frequency" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform wavelength to frequency.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>wavelength: float. Wavelength [m]</p>
@@ -608,7 +441,7 @@ height: float. Observer elevation [m]</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.virgo.gain">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.virgo.</span></span><span class="sig-name descname"><span class="pre">gain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">D</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dBi'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.gain" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">gain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">D</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.7</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dBi'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.gain" title="Permalink to this definition">¶</a></dt>
 <dd><p>Estimate parabolic antenna gain.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>D: float. Antenna diameter [m]
@@ -621,7 +454,7 @@ u: string. Output gain unit (‘dBi’, ‘linear’ or ‘K/Jy’)</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.virgo.galactic">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.virgo.</span></span><span class="sig-name descname"><span class="pre">galactic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ra</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.galactic" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">galactic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ra</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.galactic" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts RA/Dec. to galactic coordinates, returning galactic longitude and latitude (tuple).</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>ra: float. Right ascension [hr]
@@ -632,12 +465,12 @@ dec: float. Declination [deg]</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.virgo.main">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.virgo.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.main" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.main" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.virgo.map_hi">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.virgo.</span></span><span class="sig-name descname"><span class="pre">map_hi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.map_hi" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">map_hi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ra</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.map_hi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots the all-sky 21 cm map (LAB HI survey). Setting RA/Dec (optional args) will add a red dot indicating where the telescope is pointing to.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>ra: float. Right ascension [hr]
@@ -649,7 +482,7 @@ plot_file: string. Output plot filename</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.virgo.monitor_rfi">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.virgo.</span></span><span class="sig-name descname"><span class="pre">monitor_rfi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f_lo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_hi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rfi_data'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.monitor_rfi" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">monitor_rfi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f_lo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_hi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rfi_data'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.monitor_rfi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Begin data acquisition (wideband RFI survey).</p>
 <dl>
 <dt>Args:</dt><dd><p>f_lo: float. Start frequency [Hz]
@@ -676,7 +509,7 @@ az_alt: string: azimuth and altitude of observation target (float, separated by 
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.virgo.observe">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.virgo.</span></span><span class="sig-name descname"><span class="pre">observe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectrometer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wola'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'observation.dat'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.observe" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">observe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectrometer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'wola'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'observation.dat'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_in</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.observe" title="Permalink to this definition">¶</a></dt>
 <dd><p>Begin data acquisition (requires SDR connected to the machine).</p>
 <dl>
 <dt>Args:</dt><dd><dl class="simple">
@@ -703,7 +536,7 @@ start_in: float. Schedule observation start [sec]</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.virgo.plot">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.virgo.</span></span><span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_rest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slope_correction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vlsr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cal_ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rfi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'observation.dat'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cal_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">waterfall_fits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectra_csv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">power_csv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'plot.png'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avplot_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'average.png'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calplot_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'calibrated.png'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">waterplot_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'waterfall.png'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">powplot_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'powerDist.png'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.plot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obs_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_rest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slope_correction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vlsr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">meta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avg_ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cal_ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rfi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">0]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'observation.dat'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cal_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">waterfall_fits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spectra_csv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">power_csv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'plot.png'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avplot_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'average.png'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calplot_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'calibrated.png'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">waterplot_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'waterfall.png'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">powplot_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'powerDist.png'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Process, analyze and plot data.</p>
 <dl>
 <dt>Args:</dt><dd><dl class="simple">
@@ -746,7 +579,7 @@ plot_file: string. Output plot filename</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.virgo.plot_rfi">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.virgo.</span></span><span class="sig-name descname"><span class="pre">plot_rfi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rfi_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rfi_data'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'plot.png'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.plot_rfi" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">plot_rfi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rfi_parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rfi_data'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dB</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'plot.png'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.plot_rfi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots wideband RFI survey spectrum.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>rfi_parameters: dict. Identical to obs_parameters, but also including ‘f_lo’: f_lo
@@ -759,7 +592,7 @@ plot_file: string. Output plot filename</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.virgo.predict">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.virgo.</span></span><span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_sun</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.predict" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">date</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_sun</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.predict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plots source Alt/Az given the observer’s Earth coordinates.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>lat: float. Observer latitude [deg]
@@ -775,7 +608,7 @@ plot_file: string. Output plot filename</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.virgo.simulate">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.virgo.</span></span><span class="sig-name descname"><span class="pre">simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beamwidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.simulate" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beamwidth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.simulate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simulate 21 cm profiles based on the LAB HI Survey.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>l: float. Target galactic longitude [deg]
@@ -790,7 +623,7 @@ plot_file: string. Output plot filename</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.virgo.snr">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.virgo.</span></span><span class="sig-name descname"><span class="pre">snr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sefd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.snr" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">snr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">S</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sefd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.snr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Estimate the obtained signal-to-noise ratio of an observation (radiometer equation).</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>S: float. Source flux density [Jy]
@@ -803,7 +636,7 @@ bw: float. Acquisition bandwidth [Hz]</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="lib_SRT.virgo.virgo.wavelength">
-<span class="sig-prename descclassname"><span class="pre">lib_SRT.virgo.virgo.</span></span><span class="sig-name descname"><span class="pre">wavelength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.wavelength" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">wavelength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lib_SRT.virgo.virgo.wavelength" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform frequency to wavelength.</p>
 <dl class="simple">
 <dt>Args:</dt><dd><p>frequency: float. Wave frequency [Hz]</p>
@@ -813,65 +646,20 @@ bw: float. Acquisition bandwidth [Hz]</p>
 
 </section>
 <section id="module-lib_SRT.virgo">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-lib_SRT.virgo" title="Permalink to this heading">#</a></h2>
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-lib_SRT.virgo" title="Permalink to this heading">¶</a></h2>
 </section>
 </section>
 
-        </article>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
       </div>
-      <footer>
-        
-        <div class="related-pages">
-          <a class="next-page" href="mainclient.html">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">mainclient module</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
-          <a class="prev-page" href="lib_SRT.utils.html">
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-              <div class="page-info">
-                <div class="context">
-                  <span>Previous</span>
-                </div>
-                
-                <div class="title">lib_SRT.utils package</div>
-                
-              </div>
-            </a>
-        </div>
-        <div class="bottom-of-page">
-          <div class="left-details">
-            <div class="copyright">
-                Copyright &#169; 2024, LL
-            </div>
-            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
-            
-            <a href="https://github.com/pradyunsg/furo">Furo</a>
-            
-          </div>
-          <div class="right-details">
-            
-          </div>
-        </div>
-        
-      </footer>
-    </div>
-    <aside class="toc-drawer">
-      
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">lib_SRT.virgo package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-lib_SRT.virgo.run_ftf">lib_SRT.virgo.run_ftf module</a><ul>
@@ -970,16 +758,62 @@ bw: float. Acquisition bandwidth [Hz]</p>
 </li>
 </ul>
 
-          </div>
+  </div>
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="lib_SRT.utils.html"
+                          title="previous chapter">lib_SRT.utils package</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="mainclient.html"
+                          title="next chapter">mainclient module</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/lib_SRT.virgo.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
-      
-      
-    </aside>
-  </div>
-</div><script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/scripts/furo.js"></script>
-    </body>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mainclient.html" title="mainclient module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="lib_SRT.utils.html" title="lib_SRT.utils package"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Very Elegant Galactic Antenna (VEGA) 0.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >VEGA_SRT</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="lib_SRT.html" >lib_SRT package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">lib_SRT.virgo package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2024, LL.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.2.1.
+    </div>
+  </body>
 </html>
