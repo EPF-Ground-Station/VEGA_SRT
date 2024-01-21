@@ -25,11 +25,22 @@ However, some packages are required for the client to work properly, namely PySi
 
 ## Global Architecture
 
-The VEGA radiotelescope is motorized and its motion is monitored by an Antenna Pointing Mechanism (APM), the code of which is available in the APM folder, and runs on an ESP32 in VEGA's electrical cabinet. Slewing commands are sent from VEGA's computer to the APM via an UART serial port. 
+### Hardware
+
+The VEGA radiotelescope is motorized and its motion is monitored by an Antenna Pointing Mechanism (APM), the code of which is available in the APM folder, and runs on an ESP32 in VEGA's electrical cabinet. Slewing commands are sent from VEGA's computer to the APM via an UART serial port. Measurements are performed via the HackRF Software Defined Radio (SDR) connected to VEGA's computer and antenna acquisition pipeline.
+
+### Interface 
 
 To operate this APM, several interface modes can be chosen : either using lib_SRT in command line (see section 3) by logging in VEGA's PC via VNC, or using the provided graphical interface client (see section 2), given mainserver.py is running on VEGA's PC. Notice the critical importance to avoid multiple connexions to VEGA, and as such the interface development is still in progress to allow supervision of the server utilization. 
 
+### Dependencies
+
 One of the main constraint/driver of the lib_SRT architecture is the synchronous mode of VEGA's encoder which forbids multiple simultaneous commands to be executed by the APM. Therefore, everything was made to avoid sending multiple commands to the APM via e.g. different python threads. This reflexion led to the choice of Qt Signals and Slots framework, which turned appropriate for our purpose.
+
+### Data storage
+
+In order to store high amounts of radioastronomic data, the Physics department graciously provided some storage on their NAS. The path can be updated anytime under lib_SRT/define.py .
+
 
 ## Client/Server
 
@@ -39,6 +50,22 @@ Hereafter is explained how to get the best out of VEGA using its graphical inter
 
 The mainserver.py script is only meant to run on VEGA's computer, and as such all initialization parameter such as the address of the serial port on which to communicate with the Antenna Pointing Mechanism are filled accordingly. The server takes care of the first handshake with incoming TCP connexions from clients, upon which it decides wether or not to accept the connexion. In particular, only one client connexion at a time is allowed.
 
+For more about the server, check the code and the online documentation.
 
+### The client
 
+The mainclient.py script can be run from any computer and pops up a launcher from which connexion to the server can be established. For now, the connexion is only feasible if the user's computer is connected to the EPFL network, either physically, on EPFL wi-fi or via the VPN. 
 
+Once connexion is established, the main client window pops up, allowing to perform slew, tracking, data acquisition and basic plotting. 
+
+For more about the client, check the code and the online documentation.
+
+## Command Line mode
+
+VEGA can also be used in command line, provided the server is not running in order to avoid multiple access to the APM from several users. Note this mode can only be used by accessing VEGA's computer via VNC.
+
+Under Scripts, the python interpreter can be opened by typing "python3" in the command line. From there, run "from SRT_inline import *". That's all! You can now operate VEGA by typing python command from lib_SRT off the fly.
+
+## Scripting VEGA
+
+Another utilization of SRT_inline is to import it in a script. Under Scripts, examples of such automated observations can be found. This feature allows to completely plan a measurement campaign with customized features. Future envisioned projects could for instance include a complete, automated of the Milky Way H21 radiations.
