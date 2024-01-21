@@ -7,7 +7,7 @@ Welcome to Very Elegant Galactic Antenna (VEGA)'s documentation!
 ================================================================
 
 .. toctree::
-   :maxdepth: 0
+   :maxdepth: 4
    :caption: Contents:
    
    modules

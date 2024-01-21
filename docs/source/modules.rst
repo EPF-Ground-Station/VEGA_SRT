@@ -2,7 +2,7 @@ VEGA_SRT
 ========
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 0
 
    GUI
    lib_SRT
