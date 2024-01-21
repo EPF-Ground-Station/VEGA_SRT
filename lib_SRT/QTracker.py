@@ -2,7 +2,7 @@
 
 from enum import Enum
 from PySide6.QtCore import Slot, Signal, QThread
-from ..utils.coordsConversions import *
+from .utils.coordsConversions import *
 import time
 
 class TrackMode(Enum):
