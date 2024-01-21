@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.abspath(os.path.join('..', '..')))
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'Very Elegant Galactic Antenna (VEGA)'
+project = 'VEGA Small Radio-Telescope'
 copyright = '2024, LL'
 author = 'LL'
 release = '0.0.1'
