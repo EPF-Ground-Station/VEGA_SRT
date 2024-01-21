@@ -24,7 +24,7 @@ templates_path = ['_templates']
 exclude_patterns = []
 
 autodoc_mock_imports = ["virgo", "SoapySDR", "cv2", "PySide6", "serial", "skyfield", "gnuradio", "matplotlib", "astropy", "rtlsdr", "osmosdr"]
-
+add_module_names = False
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
