@@ -1,7 +1,7 @@
 
 
 from PySide6.QtCore import Signal, QThread
-from define import PING_RATE
+from .define import PING_RATE
 import time
 
 
