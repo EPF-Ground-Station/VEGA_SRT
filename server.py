@@ -1,5 +1,9 @@
 """
-THIS SCRIPT RUNS THE SERVER IN CHARGE OF COMMUNICATING WITH THE APM
+Module defining the server to be run on the VEGA radio-telescope computer for monitoring remote users connexion to
+the antenna backend. If executed as main, simply instanciates and runs the server.
+
+Notice that in addition to enabling remote connexions and ergonomic operation of VEGA, the proposed server-client
+architecture adds a layer of security by only allowing indirect user access to the APM features.
 
 Format of exchanged messages :
     Client -> Server : &{cmd} {*args, separated by spaces}
