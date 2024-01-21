@@ -3,6 +3,7 @@ THIS SCRIPT RUNS THE SERVER IN CHARGE OF COMMUNICATING WITH THE APM
 
 Format of exchanged messages :
     Client -> Server : &{cmd} {*args, separated by spaces}
+
     Server -> Client : &{Status}|{feedback}
 
     with Status in (PRINT, OK, WARNING, ERROR)
@@ -35,7 +36,14 @@ WATER_RATE = 3600
 class sigEmettor(QObject):
     """QObject that handles sending a signal from a non-Q thread.
     Used by StdoutRedirector to pass the Server a print statement
-    to send to the client"""
+    to send to the client
+
+    .. py:attribute:: printMsg
+
+    Signal emitted when a message is to be printed on the client side
+
+    :param str message: The message to be printed
+    """
 
     printMsg = Signal(str, bool)  # Signal emitted when sth is printed
 
