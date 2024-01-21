@@ -8,7 +8,6 @@ process it to plot Power Spectrum Diagram.
 
 import sys
 import cv2
-import numpy as np
 from lib_SRT.utils.degConversion import *
 from os.path import expanduser
 import time
