@@ -4,7 +4,7 @@ Library aimed at defining all classes and parameters relevant to the operation o
 
 The constants in beginning of the file are fine-tuned for our antenna's location, storage system etc.
 
-The main class of the module is the SRT, which owns a SerialPort object and is thus thought as the only class being
+The main class of the package is the SRT, which owns a SerialPort object and is thus thought as the only class being
 able to communicate with the Antenna Pointing Mechanism (APM) at a time. For more about the APM, see the embedded_teensy
 documentation.
 

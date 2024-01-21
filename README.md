@@ -4,14 +4,12 @@ This Project consists of developing and controlling a Small Radio Telescope (SRT
 The code provided generates a general user interface in which one can select a satelite of choice. Once connected, the radiotelescope will move to the 
 chosen satelite. 
 
-## GS_embedded_teensy_2
-Actually run on an ESP32 and not a teensy.
 
 ### Initialization ! IMPORTANT !
 To enforce the security to avoid ripping the cables the code makes some assumption and the following rules should be followed :
 
 - The APM should always be started with the cables completely untangled (the encoder can't detect if there was a full turn when powered off)
-- If "Error initializing turn count in constructor" is printed on start up there was a problem setting the value of the turn counter and the security likely won't work, the APM should be powered off-on (or the MCU reset maybe) until this msg does not appears, it might also be due to the multiturn encoder detecting that there was a rotation when powered off (see encoder doc for more details, link in documentation.md) (if this does not solve the problem well fuck)
+- If "Error initializing turn count in constructor" is printed on start up there was a problem setting the value of the turn counter and the security likely won't work, the APM should be powered off-on (or the MCU reset maybe) until this msg does not appear, it might also be due to the multiturn encoder detecting that there was a rotation when powered off (see encoder doc for more details, link in documentation.md) (if this does not solve the problem well fuck)
 
 ### Support 4 commands :
 
