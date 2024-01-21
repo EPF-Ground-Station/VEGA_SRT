@@ -32,6 +32,7 @@ import requests
 import json
 from datetime import datetime
 from . import virgo
+from .define import *
 
 from time import sleep
 from astropy.io import fits
