@@ -9,4 +9,3 @@ Antenna_Pointing_Mechanism_EPFL
    mainclient
    safetyScript
    server
-   serverOld
