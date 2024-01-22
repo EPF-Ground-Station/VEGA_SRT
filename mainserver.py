@@ -34,7 +34,7 @@ sys.path.append("../")
 
 
 POS_LOGGING_RATE = 3
-WATER_RATE = 3600
+WATER_RATE = 120
 
 
 class sigEmettor(QObject):

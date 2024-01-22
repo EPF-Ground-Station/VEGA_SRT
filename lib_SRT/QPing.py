@@ -14,7 +14,7 @@ class QPing(QThread):
 
     The rate at which these interactions are executed is fixed by the PING_RATE constant.
 
-    Notice the thread is paused during tracking motion : since the QTracker threads sends commands continuously at high
+    Notice the thread is not ypaused during tracking motion : since the QTracker threads sends commands continuously at high
     rate, the ping is useless in this case, and would only slow down communication with APM. See QTracker for more.
     """
 

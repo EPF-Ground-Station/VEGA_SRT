@@ -2,11 +2,20 @@
 
 This library is aimed at defining all classes and parameters relevant to the operation of VEGA radiotelescope.
 
-The constants in beginning of the file are fine-tuned for our antenna's location, storage system etc.
+## Definitions
+
+The constants in define.py are fine-tuned for our antenna's location, storage system etc. Here you can modify tracking 
+rates, ping rates, North calibration constant etc. Those should not be changed without serious study of the consequences
+on the global functioning of the system. For example, changing the ping rate to higher may cause the APM to go to standby
+mode in the middle of an observation for inactivity. Check APM package for more.
+
+## SRT
 
 The main class of the package is the SRT, which owns a SerialPort object and is thus thought as the only class being
 able to communicate with the Antenna Pointing Mechanism (APM) at a time. For more about the APM, see the embedded_teensy
 documentation.
+
+## Others : SerialPort and QThreads
 
 Other classes are the private class SerialPort which monitors communication with APM via the serial module, and
 QThreads such as QPing and QTracker, all owned and instantiated by the SRT class, which monitor background tasks of the
@@ -23,4 +32,8 @@ serial port, by emitting QSignals carrying their messages, which are connected t
 
 For more about this multi-threading architecture, see the SRT class.
 
-@LL
+## Virgo
+
+For now, the data acquisition is performed using the external virgo package. Slight modifications were brought to the 
+original version, which explains why it is stored as a local subpackage. In the long run, it might be interesting to 
+modify further in order to gain more control on the data processing pipeline, especially within an academic framework.

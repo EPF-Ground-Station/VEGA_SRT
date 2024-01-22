@@ -481,7 +481,7 @@ class Srt(QObject):
         self.tracking = True    # Updates flag BEFORE pointing
         self.pointRaDec(
             ra, dec)            # Goes to destination before allowing other command
-        self.ping.pause()                   # Ping useless in tracking mode
+        #self.ping.pause()                   # Ping useless in tracking mode ACTUALLY its not, lets keep it
 
         if not self.tracker.isRunning():     # Launches tracker thread
             # OLD: At this point, APM not yet tracking : tracker's flag 'on' is still off
@@ -504,7 +504,7 @@ class Srt(QObject):
         self.tracking = True                # Updates flag
         self.pointGal(
             long, b)  # Goes to destination before allowing other command
-        self.ping.pause()                   # Ping useless in tracking mode
+        #self.ping.pause()                   # Ping useless in tracking mode ACTUALLY its not, lets keep it
 
         if not self.tracker.isRunning():     # Launches tracker thread
             # At this point, APM not yet tracking : tracker's flag 'on' is still off
@@ -536,7 +536,7 @@ class Srt(QObject):
         #     startTime = time.time()
         #     self.pointAzAlt(TLE2AzAlt(tle, delay=SAT_INITIAL_DELAY))
 
-        self.ping.pause()                   # Ping useless in tracking mode
+        #self.ping.pause()                   # Ping useless in tracking mode ACTUALLY its not, lets keep it
         self.tracking = True                # Updates flag
 
         if not self.tracker.isRunning():     # Launches tracker thread
@@ -566,7 +566,7 @@ class Srt(QObject):
         #del self.tracker                    # Deletes tracker
         #self.tracker = Tracker(self.ser)    # Prepares new tracker
 
-        self.ping.unpause()                 # Keep sending activity
+        #self.ping.unpause()                 # Keep sending activity
 
     def empty_water(self):
         """
