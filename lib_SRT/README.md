@@ -32,6 +32,27 @@ serial port, by emitting QSignals carrying their messages, which are connected t
 
 For more about this multi-threading architecture, see the SRT class.
 
+### Troubleshooting with QThreads
+
+A recurrent ``Multiple access on port`` error occured when trying to implement the water evacuation routine. The teaching 
+of this seems to be that long methods, containing several commands to the APM overlap with commands sent by signal catching.
+
+The problem was an overlapping between the Pings (sent after sendPing signal is caught) and the several pointing commands
+of ``evacuate_water``. My hypothesis is even though in general slots only execute one after another, here the evacuate_water
+is considered as plain function and as such, if the Ping signal is received between two pointing commands, the ``onPingSignal`` slot 
+is triggered simultaneously with the execution of the following line of the method, i.e. another command sent to APM. This
+seems to cause the overlap. The hypothesis seems to be corroborated by the fact this trouble does not occur when operating 
+normally the APM with commands such as ``pointAzAlt``, which only execute one command to the APM. 
+
+The problem was solved by only activating the Ping after the evacuation routine. If the problem occurs again, the entire 
+QThread structure should probably be revised to deliver a more robust one (ish).
+
+If this hypothesis turns true, then : 
+- Coding new methods of class SRT with more than one APM command should be avoided
+- If necessary, these commands can be implemented externally to the SRT class in functions OR
+- Those commands may eventually be implemented directly in the APM arduino, then as a single-APM command SRT method
+
+
 ## Virgo
 
 For now, the data acquisition is performed using the external virgo package. Slight modifications were brought to the 
