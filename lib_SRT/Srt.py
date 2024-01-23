@@ -124,13 +124,14 @@ class Srt(QObject):
             return "SRT already connected"
 
         self.ser.connect()
-        self.ping.unpause()     # Starts pinging asa connected
         self.calibrate_north()  # Sets north offset
         msg = self.untangle()
         if water:               # Evacuates water in default mode
             msg = self.empty_water()
 
         self.getAllCoords()     # Get all current coords of the APM. This also resets the inactivity timer of the APM
+
+        self.ping.unpause()     # Starts pinging asa connected
         return msg
 
     def disconnectAPM(self):
