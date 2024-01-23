@@ -39,7 +39,7 @@ of this seems to be that long methods, containing several commands to the APM ov
 
 The problem was an overlapping between the Pings (sent after sendPing signal is caught) and the several pointing commands
 of ``evacuate_water``. My hypothesis is even though in general slots only execute one after another, here the ``evacuate_water``
-is considered as plain function and as such, if the Ping signal is received between two pointing commands, the ``onPingSignal`` slot 
+is considered as plain function and as such, if the Ping signal is received between two pointing commands, then the ``onPingSignal`` slot 
 is triggered simultaneously with the execution of the following line of the method, i.e. another command sent to APM. This
 seems to cause the overlap. The hypothesis seems to be corroborated by the fact this trouble does not occur when operating 
 normally the APM with commands such as ``pointAzAlt``, which only execute one command to the APM. 
