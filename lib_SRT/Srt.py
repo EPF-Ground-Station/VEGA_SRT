@@ -582,7 +582,9 @@ class Srt(QObject):
         print(self.pointAzAlt(180, 89.9))
         print("Inclinating to evacuate water...")
         print(self.pointAzAlt(180, 5))
-        sleep(15)
+        timenow = time.time()
+        while time.time() - timenow < 15 :
+            continue
         print(self.untangle())
         print(self.standby())
         print("Water evacuated. SRT is now ready for use.")
