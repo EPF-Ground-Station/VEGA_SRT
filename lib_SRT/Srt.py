@@ -87,6 +87,7 @@ class Srt(QObject):
         self.observing = False
 
         self.pending = False
+        self.pingPending = False
 
 
         self.az, self.alt = 0,0
@@ -172,9 +173,14 @@ class Srt(QObject):
         :rtype: str
         """
 
+        # WAITS FOR PING RETURN
+        while self.pingPending:
+            continue
+
         self.pending = True
 
         if self.ser.connected:
+
 
             answer = self.ser.send_Ser(msg)  # Sends message to serial port
 
@@ -468,7 +474,13 @@ class Srt(QObject):
 
     def onPingSignal(self):
         """Slot triggered when the QPing thread sends the signal to process the ping/pong with APM."""
+        #WAITS FOR LAST MESSAGE
+        while self.pending:
+            continue
+
+        self.pingPending = True
         self.send_APM("ping")
+        self.pingPending = False
 
     def trackRaDec(self, ra, dec):
         """
