@@ -16,7 +16,8 @@ For now, no sophisticated installation procedure has been defined yet, so that i
 However, some packages are required for the client to work properly, namely PySide6 and its Qt library dependencies. To install PySide6, refer to its documentation : https://pypi.org/project/PySide6/
 
 Another option for the distribution of the client is to use Nuitka. A standalone executable of mainclient.py can be generated e.g. in EL-B 216 by using the Anaconda Prompt command :
-```python -m nuitka --standalone --enable-plugin=pyside6 mainclient.py ```
+```python -m nuitka --standalone --enable-plugin=pyside6 mainclient.py ```. The dist folder can then be zipped and shared to windows users. To avoid the cumbersome folder and get only one file, the ```--onefile```
+option can also be substituted to ```--standalone```. 
 Optionally one can use the additional ```--disable-console``` option in order to get rid of the console popping up at launch of the executable. However this console might ne handy for debugging / troubleshooting.
 
 
