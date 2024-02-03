@@ -628,7 +628,7 @@ class Srt(QObject):
         self.observing = False
         print("Observation killed. Notice some recorded data might have been corrupted")
 
-    def observe(self, repo=None, name=None, dev_args='hackrf=0,bias=1', rf_gain=48, if_gain=25, bb_gain=18, fc=1420e6, bw=2.4e6, channels=2048, t_sample=1, duration=60, overwrite=False):
+    def observe(self, repo=None, name=None, dev_args='hackrf=0,bias=1', rf_gain=48, if_gain=25, bb_gain=18, fc=1420e6, bw=2.4e6, channels=2048, t_sample=1, duration=60, overwrite=False, obs_mode=True, raw_mode=False):
         """
         Launches a parallelized observation process. All SRT methods are still callable in the meanwhile. See
         self.__observe() for more.
@@ -663,14 +663,18 @@ class Srt(QObject):
         :param overwrite: Flag enabling overwriting of existing observation with same repo and name. If turned off, the
             new file with overlapping name will be added a suffix '_(i)' to its path with i an integer counter
         :type overwrite: bool
+        :param obs_mode: Flag enabling processed output to be written to the repo.
+        :type obs_mode: bool
+        :param raw_mode: Flag enabling processed output to be written to the repo.
+        :type raw_mode: bool
         """
         self.observing = True
         self.obsProcess = Process(target=self.__observe, args=(
-            repo, name, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample, duration, overwrite))
+            repo, name, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample, duration, overwrite, obs_mode, raw_mode))
         self.obsProcess.start()
         print(f"observing status : {self.observing}")
 
-    def __observe(self, repo, name, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample, duration, overwrite):
+    def __observe(self, repo, name, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample, duration, overwrite, obs_mode=True, raw_mode=False):
         """
             Private method that uses virgo library to observe with given parameters. 
 
@@ -731,8 +735,17 @@ class Srt(QObject):
         with open(pathObs+"_params.json", "w") as jsFile:
             json.dump(obs_params, jsFile)
 
-        virgo.observe(obs_parameters=obs_params, obs_file=pathObs +
-                      '.dat', raw_file=pathObs+'_raw.dat')
+        if obs_mode:
+            obs_file = pathObs+'.dat'
+        else:
+            obs_file = "/dev/null"
+
+        if raw_mode:
+            raw_file = pathObs+'_raw.dat'
+        else:
+            raw_file = "/dev/null"
+
+        virgo.observe(obs_parameters=obs_params, obs_file=obs_file, raw_file=raw_file)
         print(f"Observation complete. Data stored in {pathObs+'.dat'}")
 
         # /!\ SINCE multiprocessing CREATES A COPY OF THE SRT OBJECT, THE FOLLOWING
