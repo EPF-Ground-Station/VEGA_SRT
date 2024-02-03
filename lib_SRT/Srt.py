@@ -732,7 +732,7 @@ class Srt(QObject):
         with open(pathObs+"_params.json", "w") as jsFile:
             json.dump(obs_params, jsFile)
 
-        virgo.observe(obs_parameters=obs_params, obs_file=pathObs+'.dat')
+        virgo.observe(obs_parameters=obs_params, obs_file=pathObs+'.dat', raw_file=pathObs+'_raw.dat')
         print(f"Observation complete. Data stored in {pathObs+'.dat'}")
 
         # /!\ SINCE multiprocessing CREATES A COPY OF THE SRT OBJECT, THE FOLLOWING

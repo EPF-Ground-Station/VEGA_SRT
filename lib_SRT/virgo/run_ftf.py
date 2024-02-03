@@ -27,7 +27,7 @@ import time
 
 class run_observation(gr.top_block):
 
-    def __init__(self, bandwidth=2e6, bb_gain=20, channels=1024, dev_args='', duration=60, frequency=1420e6, if_gain=20, obs_file='observation.dat', rf_gain=30, t_sample=1):
+    def __init__(self, bandwidth=2e6, bb_gain=20, channels=1024, dev_args='', duration=60, frequency=1420e6, if_gain=20, obs_file='observation.dat', raw_file='raw.dat', rf_gain=30, t_sample=1):
         gr.top_block.__init__(self, "Run Observation", catch_exceptions=True)
 
         ##################################################
@@ -41,6 +41,7 @@ class run_observation(gr.top_block):
         self.frequency = frequency
         self.if_gain = if_gain
         self.obs_file = obs_file
+        self.raw_file = raw_file
         self.rf_gain = rf_gain
         self.t_sample = t_sample
 
@@ -73,6 +74,8 @@ class run_observation(gr.top_block):
         self.blocks_stream_to_vector_0 = blocks.stream_to_vector(gr.sizeof_gr_complex*1, channels)
         self.blocks_integrate_xx_0 = blocks.integrate_ff(int(t_sample*bandwidth/channels), channels)
         self.blocks_head_0 = blocks.head(gr.sizeof_gr_complex*1, int(duration*bandwidth))
+        self.blocks_file_sink_1 = blocks.file_sink(gr.sizeof_gr_complex*1, raw_file, False)
+        self.blocks_file_sink_1.set_unbuffered(False)
         self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_float*channels, obs_file, True)
         self.blocks_file_sink_0.set_unbuffered(False)
         self.blocks_complex_to_mag_squared_0 = blocks.complex_to_mag_squared(channels)
@@ -82,6 +85,7 @@ class run_observation(gr.top_block):
         # Connections
         ##################################################
         self.connect((self.blocks_complex_to_mag_squared_0, 0), (self.blocks_integrate_xx_0, 0))
+        self.connect((self.blocks_head_0, 0), (self.blocks_file_sink_1, 0))
         self.connect((self.blocks_head_0, 0), (self.blocks_stream_to_vector_0, 0))
         self.connect((self.blocks_integrate_xx_0, 0), (self.blocks_file_sink_0, 0))
         self.connect((self.blocks_stream_to_vector_0, 0), (self.fft_vxx_0, 0))
@@ -146,6 +150,13 @@ class run_observation(gr.top_block):
         self.obs_file = obs_file
         self.blocks_file_sink_0.open(self.obs_file)
 
+    def get_raw_file(self):
+        return self.raw_file
+
+    def set_raw_file(self, raw_file):
+        self.raw_file = raw_file
+        self.blocks_file_sink_1.open(self.raw_file)
+
     def get_rf_gain(self):
         return self.rf_gain
 
@@ -209,6 +220,9 @@ def argument_parser():
         "--obs-file", dest="obs_file", type=str, default='observation.dat',
         help="Set obs_file [default=%(default)r]")
     parser.add_argument(
+        "--raw-file", dest="raw_file", type=str, default='raw.dat',
+        help="Set raw_file [default=%(default)r]")
+    parser.add_argument(
         "--rf-gain", dest="rf_gain", type=eng_float, default=eng_notation.num_to_str(float(30)),
         help="Set rf_gain [default=%(default)r]")
     parser.add_argument(
@@ -220,7 +234,7 @@ def argument_parser():
 def main(top_block_cls=run_observation, options=None):
     if options is None:
         options = argument_parser().parse_args()
-    tb = top_block_cls(bandwidth=options.bandwidth, bb_gain=options.bb_gain, channels=options.channels, dev_args=options.dev_args, duration=options.duration, frequency=options.frequency, if_gain=options.if_gain, obs_file=options.obs_file, rf_gain=options.rf_gain, t_sample=options.t_sample)
+    tb = top_block_cls(bandwidth=options.bandwidth, bb_gain=options.bb_gain, channels=options.channels, dev_args=options.dev_args, duration=options.duration, frequency=options.frequency, if_gain=options.if_gain, obs_file=options.obs_file, raw_file=options.raw_file, rf_gain=options.rf_gain, t_sample=options.t_sample)
 
     def sig_handler(sig=None, frame=None):
         tb.stop()

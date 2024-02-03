@@ -519,7 +519,7 @@ def map_hi(ra=None, dec=None, plot_file=''):
     plt.close()
 
 
-def observe(obs_parameters, spectrometer='wola', obs_file='observation.dat', start_in=0):
+def observe(obs_parameters, spectrometer='wola', obs_file='observation.dat', start_in=0, raw_file="/dev/null"):
     '''
     Begin data acquisition (requires SDR connected to the machine).
 
@@ -541,6 +541,7 @@ def observe(obs_parameters, spectrometer='wola', obs_file='observation.dat', sta
             obs_file: string. Output data filename
             start_in: float. Schedule observation start [sec]
     '''
+    print(f"Begin obs {spectrometer} {obs_file} {raw_file}")
     if spectrometer.lower() != 'wola':
         try:
             from run_ftf import run_observation
@@ -588,7 +589,7 @@ def observe(obs_parameters, spectrometer='wola', obs_file='observation.dat', sta
 
     observation = run_observation(dev_args=dev_args, frequency=frequency, bandwidth=bandwidth, rf_gain=rf_gain,
                                   if_gain=if_gain, bb_gain=bb_gain, channels=channels,
-                                  duration=duration, t_sample=t_sample, obs_file=obs_file)
+                                  duration=duration, t_sample=t_sample, obs_file=obs_file, raw_file=raw_file)
     observation.start()
     observation.wait()
 
@@ -1928,7 +1929,7 @@ def map_hi(ra=None, dec=None, plot_file=''):
     plt.close()
 
 
-def observe(obs_parameters, spectrometer='wola', obs_file='observation.dat', start_in=0):
+def observe(obs_parameters, spectrometer='wola', obs_file='observation.dat', start_in=0, raw_file="/dev/null"):
     '''
     Begin data acquisition (requires SDR connected to the machine).
 
@@ -1997,7 +1998,7 @@ def observe(obs_parameters, spectrometer='wola', obs_file='observation.dat', sta
 
     observation = run_observation(dev_args=dev_args, frequency=frequency, bandwidth=bandwidth, rf_gain=rf_gain,
                                   if_gain=if_gain, bb_gain=bb_gain, channels=channels,
-                                  duration=duration, t_sample=t_sample, obs_file=obs_file)
+                                  duration=duration, t_sample=t_sample, obs_file=obs_file, raw_file=raw_file)
     observation.start()
     observation.wait()
 

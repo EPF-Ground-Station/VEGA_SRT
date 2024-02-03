@@ -137,6 +137,24 @@ blocks:
     coordinate: [1080, 388.0]
     rotation: 0
     state: enabled
+- name: blocks_file_sink_1
+  id: blocks_file_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    append: 'False'
+    comment: ''
+    file: raw_file
+    type: complex
+    unbuffered: 'False'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [672, 276.0]
+    rotation: 0
+    state: true
 - name: blocks_head_0
   id: blocks_head
   parameters:
@@ -684,6 +702,23 @@ blocks:
     coordinate: [320, 108.0]
     rotation: 0
     state: enabled
+- name: raw_file
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: ''
+    short_id: ''
+    type: str
+    value: raw.dat
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [120, 588.0]
+    rotation: 0
+    state: true
 - name: rf_gain
   id: parameter
   parameters:
@@ -721,6 +756,7 @@ blocks:
 
 connections:
 - [blocks_complex_to_mag_squared_0, '0', blocks_integrate_xx_0, '0']
+- [blocks_head_0, '0', blocks_file_sink_1, '0']
 - [blocks_head_0, '0', blocks_stream_to_vector_0, '0']
 - [blocks_integrate_xx_0, '0', blocks_file_sink_0, '0']
 - [blocks_stream_to_vector_0, '0', fft_vxx_0, '0']
