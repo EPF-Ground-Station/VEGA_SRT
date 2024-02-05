@@ -359,7 +359,7 @@ class ServerGUI(QMainWindow):
             # messages sent to client
             time1 = time.time_ns()
 
-            if self.SRTThread.pending:
+            #if self.SRTThread.pending:
                 #print("DEBUG : waiting for SRTthread to stop pending...")
             while self.SRTThread.pending:
                 pass
