@@ -32,7 +32,6 @@ import time
 sys.path.append("../")
 
 
-
 POS_LOGGING_RATE = 3
 WATER_RATE = 3600
 
@@ -161,7 +160,6 @@ class SRTThread(QThread):
         """Loop of the thread. Processes the command contained in self.msg, then resets it waiting for the next"""
 
         while self.on:
-            self.pending = False
             feedback = ''
             if time.time() > self.timeLastPosCheck + POS_LOGGING_RATE:
                 self.timeLastPosCheck = time.time()
@@ -244,6 +242,7 @@ class SRTThread(QThread):
 
                 print("SRT Thread handled: " + msg +
                       " with feedback: " + feedback)
+                self.pending = False
                 self.endMotion.emit(msg, feedback)
                 self.msg = ''
 
@@ -254,6 +253,7 @@ class SRTThread(QThread):
                 self.pending = True
                 self.SRT.connectAPM(water=True)
                 feedback = str(self.SRT.disconnectAPM())
+                self.pending = False
                 self.send2log.emit("Water evacuation process over")
 
 
@@ -358,8 +358,12 @@ class ServerGUI(QMainWindow):
             # Waits for the previous request to have returned to avoid multiple
             # messages sent to client
             time1 = time.time_ns()
+
+            if self.SRTThread.pending:
+                print("DEBUG : waiting for SRTthread to stop pending...")
             while self.SRTThread.pending:
                 pass
+            print("DEBUG : SRTthread stopped pending...")
             time2 = time.time_ns()
             # self.addToLog(f"DEBUG: waited {round((time2 - time1) / 1e6)} ms for SRTThread to stop pending (in fn sendClient, "
             #      f"sending message "+msg+")")

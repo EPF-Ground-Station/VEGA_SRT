@@ -6,7 +6,6 @@ The SRT owns the background threads QPing and QTracker. For more about those, se
 """
 
 
-
 import requests
 import json
 from datetime import datetime
@@ -89,10 +88,9 @@ class Srt(QObject):
         self.pending = False
         self.pingPending = False
 
-
-        self.az, self.alt = 0,0
-        self.ra, self.dec = 0,0
-        self.long, self.lat = 0,0
+        self.az, self.alt = 0, 0
+        self.ra, self.dec = 0, 0
+        self.long, self.lat = 0, 0
 
     def go_home(self, verbose=False):
         """Takes SRT to its home position and shuts motors off
@@ -130,7 +128,8 @@ class Srt(QObject):
         if water:               # Evacuates water in default mode
             msg = self.empty_water()
 
-        self.getAllCoords()     # Get all current coords of the APM. This also resets the inactivity timer of the APM
+        # Get all current coords of the APM. This also resets the inactivity timer of the APM
+        self.getAllCoords()
 
         self.ping.unpause()     # Starts pinging asa connected
         return msg
@@ -174,13 +173,14 @@ class Srt(QObject):
         """
 
         # WAITS FOR PING RETURN
+
+        print("DEBUG : waiting for ping to stop pending")
         while self.pingPending:
             continue
-
+        print("DEBUG : Ping stopped pending")
         self.pending = True
 
         if self.ser.connected:
-
 
             answer = self.ser.send_Ser(msg)  # Sends message to serial port
 
@@ -305,7 +305,6 @@ class Srt(QObject):
     def getAllCoords(self):
         """Refreshes all coordinates instance attributes from AzAlt communicated by the APM encoders."""
 
-
         try:
             alt = self.getAlt()
         except ValueError:
@@ -335,8 +334,8 @@ class Srt(QObject):
         :rtype: (float, float, float, float, float, float)
         """
 
-
         return self.az, self.alt, self.ra, self.dec, self.long, self.lat
+
     def untangle(self, verbose=False):
         """
         Sends the command to untangle cables of the mount by azimuthal rotation back to initial position.
@@ -474,7 +473,7 @@ class Srt(QObject):
 
     def onPingSignal(self):
         """Slot triggered when the QPing thread sends the signal to process the ping/pong with APM."""
-        #WAITS FOR LAST MESSAGE
+        # WAITS FOR LAST MESSAGE
         while self.pending:
             continue
 
@@ -494,7 +493,7 @@ class Srt(QObject):
         self.tracking = True    # Updates flag BEFORE pointing
         self.pointRaDec(
             ra, dec)            # Goes to destination before allowing other command
-        #self.ping.pause()                   # Ping useless in tracking mode ACTUALLY its not, lets keep it
+        # self.ping.pause()                   # Ping useless in tracking mode ACTUALLY its not, lets keep it
 
         if not self.tracker.isRunning():     # Launches tracker thread
             # OLD: At this point, APM not yet tracking : tracker's flag 'on' is still off
@@ -517,7 +516,7 @@ class Srt(QObject):
         self.tracking = True                # Updates flag
         self.pointGal(
             long, b)  # Goes to destination before allowing other command
-        #self.ping.pause()                   # Ping useless in tracking mode ACTUALLY its not, lets keep it
+        # self.ping.pause()                   # Ping useless in tracking mode ACTUALLY its not, lets keep it
 
         if not self.tracker.isRunning():     # Launches tracker thread
             # At this point, APM not yet tracking : tracker's flag 'on' is still off
@@ -549,7 +548,7 @@ class Srt(QObject):
         #     startTime = time.time()
         #     self.pointAzAlt(TLE2AzAlt(tle, delay=SAT_INITIAL_DELAY))
 
-        #self.ping.pause()                   # Ping useless in tracking mode ACTUALLY its not, lets keep it
+        # self.ping.pause()                   # Ping useless in tracking mode ACTUALLY its not, lets keep it
         self.tracking = True                # Updates flag
 
         if not self.tracker.isRunning():     # Launches tracker thread
@@ -576,10 +575,10 @@ class Srt(QObject):
             while self.tracker.pending:    # Waits for last answer from APM
                 pass
 
-        #del self.tracker                    # Deletes tracker
-        #self.tracker = Tracker(self.ser)    # Prepares new tracker
+        # del self.tracker                    # Deletes tracker
+        # self.tracker = Tracker(self.ser)    # Prepares new tracker
 
-        #self.ping.unpause()                 # Keep sending activity
+        # self.ping.unpause()                 # Keep sending activity
 
     def empty_water(self):
         """
@@ -596,7 +595,7 @@ class Srt(QObject):
         print("Inclinating to evacuate water...")
         print(self.pointAzAlt(180, 5))
         timenow = time.time()
-        while time.time() - timenow < 15 :
+        while time.time() - timenow < 15:
             continue
         print(self.untangle())
         print(self.standby())
@@ -732,7 +731,8 @@ class Srt(QObject):
         with open(pathObs+"_params.json", "w") as jsFile:
             json.dump(obs_params, jsFile)
 
-        virgo.observe(obs_parameters=obs_params, obs_file=pathObs+'.dat', raw_file=pathObs+'_raw.dat')
+        virgo.observe(obs_parameters=obs_params, obs_file=pathObs +
+                      '.dat', raw_file=pathObs+'_raw.dat')
         print(f"Observation complete. Data stored in {pathObs+'.dat'}")
 
         # /!\ SINCE multiprocessing CREATES A COPY OF THE SRT OBJECT, THE FOLLOWING
@@ -888,8 +888,6 @@ class Srt(QObject):
     #     print(f"Observation complete. Data stored in {repo+obs}")
     #     print("Plotting averaged PSD")
     #     plotAvPSD(repo+obs)     # Plot averaged PSD
-
-
 
 
 def loadTLE(name):
