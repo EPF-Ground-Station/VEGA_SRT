@@ -201,7 +201,7 @@ class SRTThread(QThread):
                         if cmd == "goHome":
                             feedback = self.SRT.go_home()
                         elif cmd == "connect":
-                            feedback = self.SRT.connectAPM()  # TODO: remove False for debug
+                            feedback = self.SRT.connectAPM(False)  # TODO: remove False for debug
                             if feedback == 'IDLE' or feedback == 'Untangled':
                                 print("SRT Thread connected")
                                 self.connected = 1
@@ -360,10 +360,10 @@ class ServerGUI(QMainWindow):
             time1 = time.time_ns()
 
             if self.SRTThread.pending:
-                print("DEBUG : waiting for SRTthread to stop pending...")
+                #print("DEBUG : waiting for SRTthread to stop pending...")
             while self.SRTThread.pending:
                 pass
-            print(f"DEBUG : SRTthread stopped pending... Sending msg {msg}")
+            #print(f"DEBUG : SRTthread stopped pending... Sending msg {msg}")
             time2 = time.time_ns()
             # self.addToLog(f"DEBUG: waited {round((time2 - time1) / 1e6)} ms for SRTThread to stop pending (in fn sendClient, "
             #      f"sending message "+msg+")")
