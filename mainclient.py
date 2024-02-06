@@ -347,8 +347,8 @@ class MainClient(QWidget):
                       f"{self.ui.doubleSpinBox_bbgain.value()} "  # bb gain
                       f"{self.ui.doubleSpinBox_centerFreq.value()} "  # fc
                       f"{self.ui.doubleSpinBox_Bandwidth.value()} "  # bw
-                      f" {self.ui.spinBox_channels.value()} "  # channels
-                      f" {self.ui.doubleSpinBox_tsample.value()} "  # sample_t
+                      f"{self.ui.spinBox_channels.value()} "  # channels
+                      f"{self.ui.doubleSpinBox_tsample.value()} "  # sample_t
                       f"{self.ui.doubleSpinBox_duration.value()} "  # duration
                       f"{int(self.ui.checkBox_FFT.isChecked())} "  # obs_mode
                       f"{int(self.ui.checkBox_Raw.isChecked())}")  # raw_mode
