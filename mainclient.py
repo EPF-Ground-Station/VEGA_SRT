@@ -278,7 +278,7 @@ class MainClient(QWidget):
         elif '|' in msg:
 
             status, answer = msg.split('|')
-            print(status, answer)
+            print(status+"answer: "+answer)
             if status in ('WARNING', 'ERROR'):
                 self.addToLog(status + ' ' + answer)
 
@@ -345,8 +345,8 @@ class MainClient(QWidget):
                       f"{self.ui.doubleSpinBox_rfgain.value()} "  # rf gain
                       f"{self.ui.doubleSpinBox_ifgain.value()} "  # if gain
                       f"{self.ui.doubleSpinBox_bbgain.value()} "  # bb gain
-                      f"{self.ui.doubleSpinBox_centerFreq.value()} "  # fc
-                      f"{self.ui.doubleSpinBox_Bandwidth.value()} "  # bw
+                      f"{self.ui.doubleSpinBox_centerFreq.value()*1e6} "  # fc
+                      f"{self.ui.doubleSpinBox_Bandwidth.value()*1e6} "  # bw
                       f"{self.ui.spinBox_channels.value()} "  # channels
                       f"{self.ui.doubleSpinBox_tsample.value()} "  # sample_t
                       f"{self.ui.doubleSpinBox_duration.value()} "  # duration
@@ -357,7 +357,7 @@ class MainClient(QWidget):
         """
         Triggered when the server confirms the measurement is over.
         """
-
+        self.MeasureProgressBarUpdater(101)
         self.measuring = 0
         self.ui.pushButton_LaunchMeasurement.setEnabled(1)
         self.ui.progressBar_measurement.setValue(0)
@@ -611,9 +611,13 @@ class MainClient(QWidget):
             self.MeasureFilePath = fileName
             self.ui.lineEdit_MeasureFile.setText(self.MeasureFilePath)
 
-    def MeasureProgressBarUpdater(self):  # ProgressBar updater
+    def MeasureProgressBarUpdater(self, valueOverride=-1):  # ProgressBar updater
         self.timerIterations += 1
-        value = self.timerIterations / self.measureDuration * 100
+        if valueOverride == -1:
+            value = self.timerIterations / (self.measureDuration+5) * 100
+        else:
+            value = valueOverride
+
         if 100 >= value >= 0:
             self.ui.progressBar_measurement.setValue(int(value))
             self.ui.label_MeasureStatus.setText("Measuring...")
@@ -623,7 +627,7 @@ class MainClient(QWidget):
             self.ui.progressBar_measurement.setValue(100)
             self.timerIterations = 0
 
-            self.MeasurementDone()  # %TODO Temporary! link to thread end
+            # self.MeasurementDone()  # %TODO Temporary! link to thread end
 
     def untangleClicked(self):
         """Sends command to untangle the cables of the mount by azimuthal rotation back to parking position"""

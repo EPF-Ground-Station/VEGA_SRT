@@ -1028,7 +1028,7 @@ class QObsProcess(QThread):
         raw_mode = self.raw_mode
 
         # If no indicated repository to save data
-        if repo is None:
+        if repo is None or repo is '':
             # Make repo the default today's timestamp
             repo = datetime.today().strftime('%Y-%m-%d')
 
@@ -1047,7 +1047,7 @@ class QObsProcess(QThread):
         repo = repo + '/'
 
         # If no indicated observation name
-        if name is None:
+        if name is None or name is '':
             # Make the name to current timestamp
             name = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
 
