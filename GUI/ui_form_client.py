@@ -17,9 +17,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDoubleSpinBox,
     QFrame, QGraphicsView, QGridLayout, QHBoxLayout,
-    QLabel, QLayout, QLineEdit, QProgressBar,
-    QPushButton, QSizePolicy, QSpacerItem, QSpinBox,
-    QTabWidget, QTextBrowser, QVBoxLayout, QWidget)
+    QLabel, QLineEdit, QProgressBar, QPushButton,
+    QSizePolicy, QSpacerItem, QSpinBox, QTabWidget,
+    QTextBrowser, QVBoxLayout, QWidget)
 
 class Ui_Widget(object):
     def setupUi(self, Widget):
@@ -516,96 +516,102 @@ class Ui_Widget(object):
         self.tab_measure.setObjectName(u"tab_measure")
         self.verticalLayout_4 = QVBoxLayout(self.tab_measure)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
-        self.gridLayout_2 = QGridLayout()
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.gridLayout_2.setSizeConstraint(QLayout.SetMinimumSize)
-        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.label_19 = QLabel(self.tab_measure)
+        self.label_19.setObjectName(u"label_19")
+        self.label_19.setAlignment(Qt.AlignCenter)
 
-        self.gridLayout_2.addItem(self.horizontalSpacer_6, 0, 0, 1, 1)
+        self.verticalLayout_4.addWidget(self.label_19)
+
+        self.horizontalLayout_13 = QHBoxLayout()
+        self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
+        self.horizontalLayout_13.setContentsMargins(-1, 10, -1, -1)
+        self.horizontalSpacer_16 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_13.addItem(self.horizontalSpacer_16)
+
+        self.label_9 = QLabel(self.tab_measure)
+        self.label_9.setObjectName(u"label_9")
+        self.label_9.setMaximumSize(QSize(10000, 16777215))
+
+        self.horizontalLayout_13.addWidget(self.label_9)
+
+        self.doubleSpinBox_rfgain = QDoubleSpinBox(self.tab_measure)
+        self.doubleSpinBox_rfgain.setObjectName(u"doubleSpinBox_rfgain")
+        self.doubleSpinBox_rfgain.setMaximumSize(QSize(70, 16777215))
+        self.doubleSpinBox_rfgain.setDecimals(0)
+        self.doubleSpinBox_rfgain.setValue(48.000000000000000)
+
+        self.horizontalLayout_13.addWidget(self.doubleSpinBox_rfgain)
+
+        self.horizontalSpacer_14 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_13.addItem(self.horizontalSpacer_14)
+
+        self.label_20 = QLabel(self.tab_measure)
+        self.label_20.setObjectName(u"label_20")
+        self.label_20.setMaximumSize(QSize(10000, 16777215))
+
+        self.horizontalLayout_13.addWidget(self.label_20)
+
+        self.doubleSpinBox_ifgain = QDoubleSpinBox(self.tab_measure)
+        self.doubleSpinBox_ifgain.setObjectName(u"doubleSpinBox_ifgain")
+        self.doubleSpinBox_ifgain.setMaximumSize(QSize(70, 16777215))
+        self.doubleSpinBox_ifgain.setDecimals(0)
+        self.doubleSpinBox_ifgain.setValue(25.000000000000000)
+
+        self.horizontalLayout_13.addWidget(self.doubleSpinBox_ifgain)
+
+        self.horizontalSpacer_15 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_13.addItem(self.horizontalSpacer_15)
+
+        self.label_21 = QLabel(self.tab_measure)
+        self.label_21.setObjectName(u"label_21")
+        self.label_21.setMaximumSize(QSize(10000, 16777215))
+
+        self.horizontalLayout_13.addWidget(self.label_21)
+
+        self.doubleSpinBox_bbgain = QDoubleSpinBox(self.tab_measure)
+        self.doubleSpinBox_bbgain.setObjectName(u"doubleSpinBox_bbgain")
+        self.doubleSpinBox_bbgain.setMaximumSize(QSize(70, 16777215))
+        self.doubleSpinBox_bbgain.setDecimals(0)
+        self.doubleSpinBox_bbgain.setValue(18.000000000000000)
+
+        self.horizontalLayout_13.addWidget(self.doubleSpinBox_bbgain)
+
+        self.horizontalSpacer_17 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_13.addItem(self.horizontalSpacer_17)
+
+
+        self.verticalLayout_4.addLayout(self.horizontalLayout_13)
+
+        self.line_9 = QFrame(self.tab_measure)
+        self.line_9.setObjectName(u"line_9")
+        self.line_9.setFrameShape(QFrame.HLine)
+        self.line_9.setFrameShadow(QFrame.Sunken)
+
+        self.verticalLayout_4.addWidget(self.line_9)
+
+        self.label_22 = QLabel(self.tab_measure)
+        self.label_22.setObjectName(u"label_22")
+        self.label_22.setAlignment(Qt.AlignCenter)
+
+        self.verticalLayout_4.addWidget(self.label_22)
+
+        self.horizontalLayout_14 = QHBoxLayout()
+        self.horizontalLayout_14.setObjectName(u"horizontalLayout_14")
+        self.horizontalLayout_14.setContentsMargins(-1, 10, -1, -1)
+        self.horizontalSpacer_18 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_14.addItem(self.horizontalSpacer_18)
 
         self.label_3 = QLabel(self.tab_measure)
         self.label_3.setObjectName(u"label_3")
         self.label_3.setMinimumSize(QSize(0, 21))
         self.label_3.setMaximumSize(QSize(100000, 16777215))
 
-        self.gridLayout_2.addWidget(self.label_3, 0, 1, 1, 1)
-
-        self.label_5 = QLabel(self.tab_measure)
-        self.label_5.setObjectName(u"label_5")
-        self.label_5.setMinimumSize(QSize(0, 21))
-        self.label_5.setMaximumSize(QSize(10000, 16777215))
-
-        self.gridLayout_2.addWidget(self.label_5, 0, 3, 1, 1)
-
-        self.label_8 = QLabel(self.tab_measure)
-        self.label_8.setObjectName(u"label_8")
-        self.label_8.setMaximumSize(QSize(10000, 16777215))
-
-        self.gridLayout_2.addWidget(self.label_8, 1, 3, 1, 1)
-
-        self.doubleSpinBox_duration = QDoubleSpinBox(self.tab_measure)
-        self.doubleSpinBox_duration.setObjectName(u"doubleSpinBox_duration")
-        self.doubleSpinBox_duration.setMaximumSize(QSize(70, 16777215))
-        self.doubleSpinBox_duration.setMaximum(3600.000000000000000)
-        self.doubleSpinBox_duration.setValue(60.000000000000000)
-
-        self.gridLayout_2.addWidget(self.doubleSpinBox_duration, 1, 4, 1, 1)
-
-        self.doubleSpinBox_tsample = QDoubleSpinBox(self.tab_measure)
-        self.doubleSpinBox_tsample.setObjectName(u"doubleSpinBox_tsample")
-        self.doubleSpinBox_tsample.setMaximumSize(QSize(70, 16777215))
-        self.doubleSpinBox_tsample.setMaximum(3600.000000000000000)
-        self.doubleSpinBox_tsample.setValue(1.000000000000000)
-
-        self.gridLayout_2.addWidget(self.doubleSpinBox_tsample, 1, 2, 1, 1)
-
-        self.doubleSpinBox_Bandwidth = QDoubleSpinBox(self.tab_measure)
-        self.doubleSpinBox_Bandwidth.setObjectName(u"doubleSpinBox_Bandwidth")
-        self.doubleSpinBox_Bandwidth.setMinimumSize(QSize(0, 21))
-        self.doubleSpinBox_Bandwidth.setMaximumSize(QSize(70, 16777215))
-        self.doubleSpinBox_Bandwidth.setDecimals(2)
-        self.doubleSpinBox_Bandwidth.setValue(2.460000000000000)
-
-        self.gridLayout_2.addWidget(self.doubleSpinBox_Bandwidth, 0, 4, 1, 1)
-
-        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.gridLayout_2.addItem(self.horizontalSpacer_5, 0, 5, 1, 1)
-
-        self.label_7 = QLabel(self.tab_measure)
-        self.label_7.setObjectName(u"label_7")
-        self.label_7.setMaximumSize(QSize(10000, 16777215))
-
-        self.gridLayout_2.addWidget(self.label_7, 1, 1, 1, 1)
-
-        self.label_10 = QLabel(self.tab_measure)
-        self.label_10.setObjectName(u"label_10")
-        self.label_10.setMaximumSize(QSize(10000, 16777215))
-
-        self.gridLayout_2.addWidget(self.label_10, 2, 3, 1, 1)
-
-        self.label_9 = QLabel(self.tab_measure)
-        self.label_9.setObjectName(u"label_9")
-        self.label_9.setMaximumSize(QSize(10000, 16777215))
-
-        self.gridLayout_2.addWidget(self.label_9, 2, 1, 1, 1)
-
-        self.doubleSpinBox_gain = QDoubleSpinBox(self.tab_measure)
-        self.doubleSpinBox_gain.setObjectName(u"doubleSpinBox_gain")
-        self.doubleSpinBox_gain.setMaximumSize(QSize(70, 16777215))
-        self.doubleSpinBox_gain.setDecimals(1)
-        self.doubleSpinBox_gain.setValue(48.000000000000000)
-
-        self.gridLayout_2.addWidget(self.doubleSpinBox_gain, 2, 2, 1, 1)
-
-        self.spinBox_channels = QSpinBox(self.tab_measure)
-        self.spinBox_channels.setObjectName(u"spinBox_channels")
-        self.spinBox_channels.setMaximumSize(QSize(70, 16777215))
-        self.spinBox_channels.setMaximum(4096)
-        self.spinBox_channels.setSingleStep(16)
-        self.spinBox_channels.setValue(2048)
-
-        self.gridLayout_2.addWidget(self.spinBox_channels, 2, 4, 1, 1)
+        self.horizontalLayout_14.addWidget(self.label_3)
 
         self.doubleSpinBox_centerFreq = QDoubleSpinBox(self.tab_measure)
         self.doubleSpinBox_centerFreq.setObjectName(u"doubleSpinBox_centerFreq")
@@ -615,10 +621,111 @@ class Ui_Widget(object):
         self.doubleSpinBox_centerFreq.setMaximum(2000.000000000000000)
         self.doubleSpinBox_centerFreq.setValue(1420.000000000000000)
 
-        self.gridLayout_2.addWidget(self.doubleSpinBox_centerFreq, 0, 2, 1, 1)
+        self.horizontalLayout_14.addWidget(self.doubleSpinBox_centerFreq)
+
+        self.horizontalSpacer_19 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_14.addItem(self.horizontalSpacer_19)
+
+        self.label_5 = QLabel(self.tab_measure)
+        self.label_5.setObjectName(u"label_5")
+        self.label_5.setMinimumSize(QSize(0, 21))
+        self.label_5.setMaximumSize(QSize(10000, 16777215))
+
+        self.horizontalLayout_14.addWidget(self.label_5)
+
+        self.doubleSpinBox_Bandwidth = QDoubleSpinBox(self.tab_measure)
+        self.doubleSpinBox_Bandwidth.setObjectName(u"doubleSpinBox_Bandwidth")
+        self.doubleSpinBox_Bandwidth.setMinimumSize(QSize(0, 21))
+        self.doubleSpinBox_Bandwidth.setMaximumSize(QSize(70, 16777215))
+        self.doubleSpinBox_Bandwidth.setDecimals(2)
+        self.doubleSpinBox_Bandwidth.setValue(2.460000000000000)
+
+        self.horizontalLayout_14.addWidget(self.doubleSpinBox_Bandwidth)
+
+        self.horizontalSpacer_20 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_14.addItem(self.horizontalSpacer_20)
+
+        self.label_10 = QLabel(self.tab_measure)
+        self.label_10.setObjectName(u"label_10")
+        self.label_10.setMaximumSize(QSize(10000, 16777215))
+
+        self.horizontalLayout_14.addWidget(self.label_10)
+
+        self.spinBox_channels = QSpinBox(self.tab_measure)
+        self.spinBox_channels.setObjectName(u"spinBox_channels")
+        self.spinBox_channels.setMaximumSize(QSize(70, 16777215))
+        self.spinBox_channels.setMaximum(4096)
+        self.spinBox_channels.setSingleStep(16)
+        self.spinBox_channels.setValue(2048)
+
+        self.horizontalLayout_14.addWidget(self.spinBox_channels)
+
+        self.horizontalSpacer_9 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_14.addItem(self.horizontalSpacer_9)
 
 
-        self.verticalLayout_4.addLayout(self.gridLayout_2)
+        self.verticalLayout_4.addLayout(self.horizontalLayout_14)
+
+        self.label_23 = QLabel(self.tab_measure)
+        self.label_23.setObjectName(u"label_23")
+        self.label_23.setAlignment(Qt.AlignCenter)
+
+        self.verticalLayout_4.addWidget(self.label_23)
+
+        self.horizontalLayout_15 = QHBoxLayout()
+        self.horizontalLayout_15.setObjectName(u"horizontalLayout_15")
+        self.horizontalLayout_15.setContentsMargins(-1, 10, -1, -1)
+        self.horizontalSpacer_21 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_15.addItem(self.horizontalSpacer_21)
+
+        self.label_7 = QLabel(self.tab_measure)
+        self.label_7.setObjectName(u"label_7")
+        self.label_7.setMaximumSize(QSize(10000, 16777215))
+
+        self.horizontalLayout_15.addWidget(self.label_7)
+
+        self.doubleSpinBox_tsample = QDoubleSpinBox(self.tab_measure)
+        self.doubleSpinBox_tsample.setObjectName(u"doubleSpinBox_tsample")
+        self.doubleSpinBox_tsample.setMaximumSize(QSize(70, 16777215))
+        self.doubleSpinBox_tsample.setMaximum(3600.000000000000000)
+        self.doubleSpinBox_tsample.setValue(1.000000000000000)
+
+        self.horizontalLayout_15.addWidget(self.doubleSpinBox_tsample)
+
+        self.horizontalSpacer_22 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_15.addItem(self.horizontalSpacer_22)
+
+        self.label_8 = QLabel(self.tab_measure)
+        self.label_8.setObjectName(u"label_8")
+        self.label_8.setMaximumSize(QSize(10000, 16777215))
+
+        self.horizontalLayout_15.addWidget(self.label_8)
+
+        self.doubleSpinBox_duration = QDoubleSpinBox(self.tab_measure)
+        self.doubleSpinBox_duration.setObjectName(u"doubleSpinBox_duration")
+        self.doubleSpinBox_duration.setMaximumSize(QSize(70, 16777215))
+        self.doubleSpinBox_duration.setMaximum(3600.000000000000000)
+        self.doubleSpinBox_duration.setValue(60.000000000000000)
+
+        self.horizontalLayout_15.addWidget(self.doubleSpinBox_duration)
+
+        self.horizontalSpacer_24 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_15.addItem(self.horizontalSpacer_24)
+
+
+        self.verticalLayout_4.addLayout(self.horizontalLayout_15)
+
+        self.label_24 = QLabel(self.tab_measure)
+        self.label_24.setObjectName(u"label_24")
+        self.label_24.setAlignment(Qt.AlignCenter)
+
+        self.verticalLayout_4.addWidget(self.label_24)
 
         self.horizontalLayout_9 = QHBoxLayout()
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
@@ -637,9 +744,9 @@ class Ui_Widget(object):
 
         self.horizontalLayout_9.addWidget(self.pushButton_StopMeasurement)
 
-        self.horizontalSpacer_9 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_5 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
-        self.horizontalLayout_9.addItem(self.horizontalSpacer_9)
+        self.horizontalLayout_9.addItem(self.horizontalSpacer_5)
 
 
         self.verticalLayout_4.addLayout(self.horizontalLayout_9)
@@ -821,7 +928,7 @@ class Ui_Widget(object):
 
         self.retranslateUi(Widget)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(Widget)
@@ -844,8 +951,8 @@ class Ui_Widget(object):
         self.label_4.setText(QCoreApplication.translate("Widget", u"Ra/Dec", None))
         self.label_GalL.setText(QCoreApplication.translate("Widget", u"-", None))
         self.AltLabel.setText(QCoreApplication.translate("Widget", u"-", None))
-        self.label_6.setText(QCoreApplication.translate("Widget", u"Gal. Coords", None))
-        self.label_CurrentPosition_2.setText(QCoreApplication.translate("Widget", u"<html><head/><body><p><span style=\" font-size:16pt;\">Go To</span></p></body></html>", None))
+        self.label_6.setText(QCoreApplication.translate("Widget", u"Gal. coords", None))
+        self.label_CurrentPosition_2.setText(QCoreApplication.translate("Widget", u"<html><head/><body><p><span style=\" font-size:16pt;\">Go to</span></p></body></html>", None))
         self.comboBoxTracking.setItemText(0, QCoreApplication.translate("Widget", u"Ra/Dec", None))
         self.comboBoxTracking.setItemText(1, QCoreApplication.translate("Widget", u"Galactic", None))
         self.comboBoxTracking.setItemText(2, QCoreApplication.translate("Widget", u"Az/Alt", None))
@@ -860,19 +967,25 @@ class Ui_Widget(object):
         self.LabelTrackingSecondCoord_3.setText(QCoreApplication.translate("Widget", u"\u00b0", None))
         self.LabelTrackingSecondCoord_4.setText(QCoreApplication.translate("Widget", u"m", None))
         self.LabelTrackingSecondCoord_5.setText(QCoreApplication.translate("Widget", u"s", None))
-        self.pushButton_GoTo.setText(QCoreApplication.translate("Widget", u"Go To", None))
-        self.pushButton_StopTracking.setText(QCoreApplication.translate("Widget", u"Stop Tracking", None))
+        self.pushButton_GoTo.setText(QCoreApplication.translate("Widget", u"Go to", None))
+        self.pushButton_StopTracking.setText(QCoreApplication.translate("Widget", u"Stop tracking", None))
         self.checkBox_Tracking.setText(QCoreApplication.translate("Widget", u"Tracking", None))
         self.pushButton_Connect.setText(QCoreApplication.translate("Widget", u"Connect", None))
         self.pushButton_Disconnect.setText(QCoreApplication.translate("Widget", u"Disconnect", None))
         self.ConnectedLabel.setText(QCoreApplication.translate("Widget", u"Connected to []", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_home), QCoreApplication.translate("Widget", u"Home", None))
-        self.label_3.setText(QCoreApplication.translate("Widget", u"Center Frequency (MHz)", None))
+        self.label_19.setText(QCoreApplication.translate("Widget", u"<html><head/><body><p><span style=\" font-size:16pt;\">Gain configuration</span></p></body></html>", None))
+        self.label_9.setText(QCoreApplication.translate("Widget", u"RF gain", None))
+        self.label_20.setText(QCoreApplication.translate("Widget", u"IF gain", None))
+        self.label_21.setText(QCoreApplication.translate("Widget", u"BB gain", None))
+        self.label_22.setText(QCoreApplication.translate("Widget", u"<html><head/><body><p><span style=\" font-size:16pt;\">Frequency domain</span></p></body></html>", None))
+        self.label_3.setText(QCoreApplication.translate("Widget", u"Center frequency (MHz)", None))
         self.label_5.setText(QCoreApplication.translate("Widget", u"Bandwidth (MHz)", None))
-        self.label_8.setText(QCoreApplication.translate("Widget", u"Duration", None))
-        self.label_7.setText(QCoreApplication.translate("Widget", u"Sample Time", None))
         self.label_10.setText(QCoreApplication.translate("Widget", u"Channels", None))
-        self.label_9.setText(QCoreApplication.translate("Widget", u"Gain", None))
+        self.label_23.setText(QCoreApplication.translate("Widget", u"<html><head/><body><p><span style=\" font-size:16pt;\">Duration and sample time</span></p></body></html>", None))
+        self.label_7.setText(QCoreApplication.translate("Widget", u"Sample time", None))
+        self.label_8.setText(QCoreApplication.translate("Widget", u"Duration", None))
+        self.label_24.setText(QCoreApplication.translate("Widget", u"<html><head/><body><p><span style=\" font-size:16pt;\">Launch measurement</span></p></body></html>", None))
         self.pushButton_LaunchMeasurement.setText(QCoreApplication.translate("Widget", u"Launch Measurement", None))
         self.pushButton_StopMeasurement.setText(QCoreApplication.translate("Widget", u"Stop measurement", None))
         self.label_17.setText(QCoreApplication.translate("Widget", u"Progress", None))
