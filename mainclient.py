@@ -84,6 +84,8 @@ class MainClient(QWidget):
 
         super().__init__(parent)
 
+        self.measurementPrefix = ''
+        self.measurementRepo = ''
         self.parent = parent
         self.SRTconnected = False
 
@@ -276,7 +278,7 @@ class MainClient(QWidget):
         elif '|' in msg:
 
             status, answer = msg.split('|')
-            print(answer)
+            print(status, answer)
             if status in ('WARNING', 'ERROR'):
                 self.addToLog(status + ' ' + answer)
 
@@ -284,19 +286,15 @@ class MainClient(QWidget):
                 self.ui.pushButton_Disconnect.setEnabled(1)
                 self.SRTconnected = True
                 self.MovementFinished()
+                self.ConnectedToMount()
 
             if answer == 'disconnected':
                 self.ui.pushButton_Connect.setEnabled(1)
                 self.SRTconnected = False
+                self.DisconnectedFromMount()
 
             if answer == 'IDLE':
                 self.MovementFinished()
-
-            if answer == 'APMConnected':
-                self.ConnectedToMount()
-
-            if answer == 'APMDisconnected':
-                self.DisconnectedFromMount()
 
             if "COORDS" in answer:
                 print(answer)
@@ -322,13 +320,23 @@ class MainClient(QWidget):
         self.measuring = 1
         self.ui.pushButton_LaunchMeasurement.setEnabled(0)
 
-
+        self.measureDuration = self.ui.doubleSpinBox_duration.value()
         self.ui.progressBar_measurement.setValue(0)  # from 0 to 100
         self.timerIterations = 0
         # Launch timer to update progress bar
         self.timerProgressBar.start(1000)
 
         self.ui.label_MeasureStatus.setText('')  # measuring, saving, etc...
+
+        self.measurementRepo = self.ui.lineEdit_measurement_directoryname.text()
+        if self.measurementRepo == '':
+            self.measurementRepo = 'devnull'
+
+        self.measurementPrefix = self.ui.lineEdit_measurementprefix.text()
+        if self.measurementPrefix == '':
+            self.measurementPrefix = 'devnull'
+
+
         print("Launch Measurement")
         self.addToLog(f"Started measurement | Center Freq.: {self.ui.doubleSpinBox_centerFreq.value()} MHz, "
                       f"Duration: {self.measureDuration} s")
@@ -498,11 +506,12 @@ class MainClient(QWidget):
         print("Disconnect")
 
     def ConnectedToMount(self):
+        self.ui.ConnectedLabel.setText("Connected to SRT")
         self.ui.pushButton_Connect.setEnabled(0)
         self.ui.pushButton_Disconnect.setEnabled(1)
 
     def DisconnectedFromMount(self):
-        self.ui.ConnectedLabel.setText("Disconnected from APM")
+        self.ui.ConnectedLabel.setText("Disconnected from SRT")
         self.ui.pushButton_Connect.setEnabled(1)
         self.ui.pushButton_Disconnect.setEnabled(0)
 
