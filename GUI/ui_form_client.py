@@ -801,6 +801,31 @@ class Ui_Widget(object):
 
         self.verticalLayout_4.addWidget(self.label_24)
 
+        self.horizontalLayout_17 = QHBoxLayout()
+        self.horizontalLayout_17.setObjectName(u"horizontalLayout_17")
+        self.horizontalLayout_17.setContentsMargins(-1, 0, -1, -1)
+        self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_17.addItem(self.horizontalSpacer_6)
+
+        self.checkBox_Raw = QCheckBox(self.tab_measure)
+        self.checkBox_Raw.setObjectName(u"checkBox_Raw")
+
+        self.horizontalLayout_17.addWidget(self.checkBox_Raw)
+
+        self.checkBox_FFT = QCheckBox(self.tab_measure)
+        self.checkBox_FFT.setObjectName(u"checkBox_FFT")
+        self.checkBox_FFT.setChecked(True)
+
+        self.horizontalLayout_17.addWidget(self.checkBox_FFT)
+
+        self.horizontalSpacer_27 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_17.addItem(self.horizontalSpacer_27)
+
+
+        self.verticalLayout_4.addLayout(self.horizontalLayout_17)
+
         self.horizontalLayout_9 = QHBoxLayout()
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
         self.horizontalLayout_9.setContentsMargins(-1, 0, -1, -1)
@@ -1064,6 +1089,8 @@ class Ui_Widget(object):
         self.label_27.setText(QCoreApplication.translate("Widget", u"Filename prefix", None))
         self.label_28.setText(QCoreApplication.translate("Widget", u"Note: filenames end in a timestamp automatically.", None))
         self.label_24.setText(QCoreApplication.translate("Widget", u"<html><head/><body><p><span style=\" font-size:16pt;\">Launch measurement</span></p></body></html>", None))
+        self.checkBox_Raw.setText(QCoreApplication.translate("Widget", u"Raw file", None))
+        self.checkBox_FFT.setText(QCoreApplication.translate("Widget", u"FFT file", None))
         self.pushButton_LaunchMeasurement.setText(QCoreApplication.translate("Widget", u"Launch Measurement", None))
         self.pushButton_StopMeasurement.setText(QCoreApplication.translate("Widget", u"Stop measurement", None))
         self.label_17.setText(QCoreApplication.translate("Widget", u"Progress", None))
