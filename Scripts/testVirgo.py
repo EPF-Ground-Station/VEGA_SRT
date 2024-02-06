@@ -41,6 +41,7 @@ SRT.trackGal(100.7075, 65.32)  # Moves to calibration target
 print("Collecting calibration data")
 
 SRT.observe(repo="Tests", name="calib", overwrite=True)
+SRT.observe(repo="Tests", name="calib", overwrite=True) # test if two measuremetns yield error
 SRT.waitObs()
 # SRT.trackGal(189.726, 4.17)  # Moves to Tejat
 SRT.trackGal(84.29, 2)  # Moves to Deneb
