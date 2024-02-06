@@ -179,6 +179,7 @@ class SRTThread(QThread):
                 self.pending = True
                 msg = self.msg
                 print("Handling "+msg+" at the moment.")
+
                 args = msg.split(" ")
                 cmd = args[0]
                 print("SRT Thread handling command: " + cmd +
