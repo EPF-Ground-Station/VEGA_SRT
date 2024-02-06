@@ -5,7 +5,6 @@ This module contains the main class for VEGA operation. To be instantiated only 
 The SRT owns the background threads QPing and QTracker. For more about those, see their respective modules.
 """
 
-
 import requests
 import json
 from datetime import datetime
@@ -13,7 +12,6 @@ from . import virgo
 
 from time import sleep
 from astropy.io import fits
-
 
 import skyfield
 import matplotlib.pyplot as plt
@@ -25,7 +23,6 @@ from PySide6.QtCore import Signal, QObject
 
 
 class Srt(QObject):
-
     """Class that monitors the interface between the user and the VEGA Small Radio Telescope.
 
     The features of the class include :
@@ -55,10 +52,10 @@ class Srt(QObject):
         super().__init__(parent)
 
         self.ser = SerialPort(address, baud, timeo=None)
-        self.ser.disconnect()       # Keeps serial connection closed for safety
+        self.ser.disconnect()  # Keeps serial connection closed for safety
 
         self.timeout = timeout
-        self.apmMsg = ""        # Stores last message from APM
+        self.apmMsg = ""  # Stores last message from APM
 
         self.tracker = QTracker()
 
@@ -70,7 +67,7 @@ class Srt(QObject):
         self.pauseTracking.connect(self.tracker.pause)
 
         self.ping = QPing()
-        self.ping.start()   # Initializes pinger : still needs to be unpaused to begin pinging
+        self.ping.start()  # Initializes pinger : still needs to be unpaused to begin pinging
         self.ping.sendPing.connect(self.onPingSignal)
 
         # Connect SDR and set default parameters
@@ -97,7 +94,7 @@ class Srt(QObject):
 
         :return: Final feedback from APM
         :rtype: str"""
-        if self.tracking:               # Stops tracking before
+        if self.tracking:  # Stops tracking before
             self.stopTracking()
 
         self.untangle(verbose)
@@ -125,13 +122,13 @@ class Srt(QObject):
         self.ser.connect()
         self.calibrate_north()  # Sets north offset
         msg = self.untangle()
-        if water:               # Evacuates water in default mode
+        if water:  # Evacuates water in default mode
             msg = self.empty_water()
 
         # Get all current coords of the APM. This also resets the inactivity timer of the APM
         self.getAllCoords()
 
-        self.ping.unpause()     # Starts pinging asa connected
+        self.ping.unpause()  # Starts pinging asa connected
         return msg
 
     def disconnectAPM(self):
@@ -151,9 +148,9 @@ class Srt(QObject):
         self.stopTracking()
 
         msg = self.go_home()  # Gets SRT to home position
-        self.ping.pause()           # Stop pinging
+        self.ping.pause()  # Stop pinging
 
-        self.ser.disconnect()       # Ciao
+        self.ser.disconnect()  # Ciao
 
         return msg
 
@@ -192,7 +189,7 @@ class Srt(QObject):
             if verbose:
                 print(f"Message sent : {msg}")
             if save:
-                self.apmMsg = answer      # Saves last answer from APM
+                self.apmMsg = answer  # Saves last answer from APM
 
             return answer
 
@@ -345,7 +342,7 @@ class Srt(QObject):
         :return: Last feedback from APM
         :rtype: str
         """
-        if self.tracking:               # Stops tracking before pointing
+        if self.tracking:  # Stops tracking before pointing
             self.stopTracking()
 
         if verbose:
@@ -361,7 +358,7 @@ class Srt(QObject):
         :return: Last feedback from APM
         :rtype: str
         """
-        if self.tracking:               # Stops tracking before pointing
+        if self.tracking:  # Stops tracking before pointing
             self.stopTracking()
 
         if verbose:
@@ -379,7 +376,7 @@ class Srt(QObject):
         """
 
         print(f"Calibrating North offset to value {value}")
-        return self.send_APM("set_north_offset "+str(value) + " ", verbose)
+        return self.send_APM("set_north_offset " + str(value) + " ", verbose)
 
     def pointAzAlt(self, az, alt, verbose=False):
         """
@@ -395,7 +392,7 @@ class Srt(QObject):
         :rtype: str
         """
 
-        if not self.tracking:               # Stops tracking before pointing
+        if not self.tracking:  # Stops tracking before pointing
             self.stopTracking()
 
         alt %= 90
@@ -412,7 +409,7 @@ class Srt(QObject):
         self.getAllCoords()
         time1 = time.time()
 
-        print(f"{(time1-time0)*1000} ms")
+        print(f"{(time1 - time0) * 1000} ms")
         return answer
 
     def pointRaDec(self, ra, dec, verbose=False):
@@ -490,18 +487,18 @@ class Srt(QObject):
         :param dec: Target Dec coordinate
         :type dec: float
         """
-        self.tracking = True    # Updates flag BEFORE pointing
+        self.tracking = True  # Updates flag BEFORE pointing
         self.pointRaDec(
-            ra, dec)            # Goes to destination before allowing other command
+            ra, dec)  # Goes to destination before allowing other command
         # self.ping.pause()                   # Ping useless in tracking mode ACTUALLY its not, lets keep it
 
-        if not self.tracker.isRunning():     # Launches tracker thread
+        if not self.tracker.isRunning():  # Launches tracker thread
             # OLD: At this point, APM not yet tracking : tracker's flag 'on' is still off
             self.tracker.start()
 
         self.tracker.setMode(1)
         self.tracker.setTarget(ra, dec)
-        self.tracker.on = True              # Now tracking
+        self.tracker.on = True  # Now tracking
 
     def trackGal(self, long, b):
         """
@@ -513,19 +510,19 @@ class Srt(QObject):
         :type b: float
         """
 
-        self.tracking = True                # Updates flag
+        self.tracking = True  # Updates flag
         self.pointGal(
             long, b)  # Goes to destination before allowing other command
         # self.ping.pause()                   # Ping useless in tracking mode ACTUALLY its not, lets keep it
 
-        if not self.tracker.isRunning():     # Launches tracker thread
+        if not self.tracker.isRunning():  # Launches tracker thread
             # At this point, APM not yet tracking : tracker's flag 'on' is still off
             self.tracker.start()
 
         mode = 2
         self.tracker.setMode(mode)
         self.tracker.setTarget(long, b)
-        self.tracker.on = True              # Now tracking
+        self.tracker.on = True  # Now tracking
 
     def trackSat(self, tle):
         """ 
@@ -549,16 +546,16 @@ class Srt(QObject):
         #     self.pointAzAlt(TLE2AzAlt(tle, delay=SAT_INITIAL_DELAY))
 
         # self.ping.pause()                   # Ping useless in tracking mode ACTUALLY its not, lets keep it
-        self.tracking = True                # Updates flag
+        self.tracking = True  # Updates flag
 
-        if not self.tracker.isRunning():     # Launches tracker thread
+        if not self.tracker.isRunning():  # Launches tracker thread
             # At this point, APM not yet tracking : tracker's flag 'on' is still off
             self.tracker.start()
 
         mode = 3
         self.tracker.setMode(mode)
         self.tracker.setTarget(tle)
-        self.tracker.on = True              # Now tracking
+        self.tracker.on = True  # Now tracking
 
     def stopTracking(self):
         """
@@ -567,12 +564,12 @@ class Srt(QObject):
 
         """
 
-        self.tracking = False             # Updates flag
+        self.tracking = False  # Updates flag
 
         if self.tracker.isRunning():
 
-            self.pauseTracking.emit()        # Kills tracker
-            while self.tracker.pending:    # Waits for last answer from APM
+            self.pauseTracking.emit()  # Kills tracker
+            while self.tracker.pending:  # Waits for last answer from APM
                 pass
 
         # del self.tracker                    # Deletes tracker
@@ -615,6 +612,14 @@ class Srt(QObject):
         self.obsProcess.join()
         self.observing = False
 
+    def obsFinished(self):
+        """
+        Is connected to observing thread ending.
+        :return:
+        """
+        print("Observation finished registered.")
+        self.observing = False
+
     def stopObs(self):
         """
         Brute force kills the observation process. Be aware this can corrupt the data being acquired.
@@ -625,10 +630,11 @@ class Srt(QObject):
             return "ERROR : no observation to stop"
 
         self.obsProcess.terminate()
-        self.observing = False
+        self.obsFinished()
         print("Observation killed. Notice some recorded data might have been corrupted")
 
-    def observe(self, repo=None, name=None, dev_args='hackrf=0,bias=1', rf_gain=48, if_gain=25, bb_gain=18, fc=1420e6, bw=2.4e6, channels=2048, t_sample=1, duration=60, overwrite=False, obs_mode=True, raw_mode=False):
+    def observe(self, repo=None, name=None, dev_args='hackrf=0,bias=1', rf_gain=48, if_gain=25, bb_gain=18, fc=1420e6,
+                bw=2.4e6, channels=2048, t_sample=1, duration=60, overwrite=False, obs_mode=True, raw_mode=False):
         """
         Launches a parallelized observation process. All SRT methods are still callable in the meanwhile. See
         self.__observe() for more.
@@ -668,14 +674,30 @@ class Srt(QObject):
         :param raw_mode: Flag enabling processed output to be written to the repo.
         :type raw_mode: bool
         """
-        self.observing = True
-        self.obsProcess = Process(target=self.__observe, args=(
-            repo, name, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample, duration, overwrite, obs_mode, raw_mode))
-        self.obsProcess.start()
-        print(f"observing status : {self.observing}")
 
-    def __observe(self, repo, name, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample, duration, overwrite, obs_mode=True, raw_mode=False):
+        if self.observing:
+            print("Already observing!")
+            return
+
+        self.observing = True
+        self.obsProcess = QObsProcess()
+        self.obsProcess.setParams(repo, name, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample,
+                                  duration, overwrite, obs_mode, raw_mode)
+        self.obsProcess.setOrientation(self.ra,self.dec,self.az,self.alt)
+        self.obsProcess.finished.connect(self.obsFinished)
+        self.obsProcess.start()
+
         """
+        self.obsProcess = Process(target=self.__observe, args=(
+            repo, name, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample, duration, overwrite, obs_mode,
+            raw_mode))
+        self.obsProcess.start()
+        print(f"observing status : {self.observing}")"""
+
+    def __observe(self, repo, name, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample, duration,
+                  overwrite, obs_mode=True, raw_mode=False):
+        """
+            Useless now.
             Private method that uses virgo library to observe with given parameters. 
 
             Recorded data is saved either under absolute path repo/name.dat, or
@@ -708,9 +730,9 @@ class Srt(QObject):
         # Check absolute path
         if not os.path.isdir(repo):
             # Check relative path
-            repo = DATA_PATH+repo
+            repo = DATA_PATH + repo
             if not os.path.isdir(repo):
-                os.mkdir(repo)     # if not, create it
+                os.mkdir(repo)  # if not, create it
                 print(f"Creating repository {repo}")
 
         repo = repo + '/'
@@ -721,32 +743,32 @@ class Srt(QObject):
             name = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
 
         name = name.strip('/')
-        pathObs = repo+name
+        pathObs = repo + name
 
         # If overwrite flag turned off, create nth copy
         if (os.path.isfile(pathObs)) and (not overwrite):
             pathObs += "_(1)"
             while os.path.isfile(pathObs):
-                digit = int(pathObs[pathObs.rfind('(')+1:-1])
+                digit = int(pathObs[pathObs.rfind('(') + 1:-1])
                 digit += 1
-                pathObs = pathObs[:pathObs.rfind('(')+1] + str(digit) + ')'
+                pathObs = pathObs[:pathObs.rfind('(') + 1] + str(digit) + ')'
 
         # Save parameters of observation for later analysis
-        with open(pathObs+"_params.json", "w") as jsFile:
+        with open(pathObs + "_params.json", "w") as jsFile:
             json.dump(obs_params, jsFile)
 
         if obs_mode:
-            obs_file = pathObs+'.dat'
+            obs_file = pathObs + '.dat'
         else:
             obs_file = "/dev/null"
 
         if raw_mode:
-            raw_file = pathObs+'_raw.dat'
+            raw_file = pathObs + '_raw.dat'
         else:
             raw_file = "/dev/null"
 
         virgo.observe(obs_parameters=obs_params, obs_file=obs_file, raw_file=raw_file)
-        print(f"Observation complete. Data stored in {pathObs+'.dat'}")
+        print(f"Observation complete. Data stored in {pathObs + '.dat'}")
 
         # /!\ SINCE multiprocessing CREATES A COPY OF THE SRT OBJECT, THE FOLLOWING
         # HAS NO EFFECT : TO BE IMPROVED
@@ -784,9 +806,9 @@ class Srt(QObject):
             repo += '/'
 
         # Load observation parameters
-        if os.path.isfile(repo+f"/{name}_params.json"):
+        if os.path.isfile(repo + f"/{name}_params.json"):
 
-            with open(repo+f"/{name}_params.json", "r") as jsFile:
+            with open(repo + f"/{name}_params.json", "r") as jsFile:
                 obs_params = json.load(jsFile)
 
         elif not os.path.isdir(repo):
@@ -806,8 +828,8 @@ class Srt(QObject):
         if not calib.endswith('.dat'):
             calib += '.dat'
 
-        calibPath = repo+calib
-        obsPath = repo+obs
+        calibPath = repo + calib
+        obsPath = repo + obs
 
         if not os.path.isfile(calibPath):
             print(
@@ -818,13 +840,13 @@ class Srt(QObject):
                 f"ERROR : no observation file found at {obsPath} Aborting...")
             return
 
-        plot_path = repo+f'plot_{name}.png'
-        av_path = repo+f'average_{name}.png'
-        cal_path = repo+f'calibrated_{name}.png'
-        water_path = repo+f'waterfall_{name}.png'
-        pow_path = repo+f'power_{name}.png'
+        plot_path = repo + f'plot_{name}.png'
+        av_path = repo + f'average_{name}.png'
+        cal_path = repo + f'calibrated_{name}.png'
+        water_path = repo + f'waterfall_{name}.png'
+        pow_path = repo + f'power_{name}.png'
 
-        csv_path = repo+f'spectrum_{name}.csv'
+        csv_path = repo + f'spectrum_{name}.csv'
 
         virgo.plot(obs_parameters=obs_params, n=n, m=m, f_rest=f_rest,
                    vlsr=vlsr, dB=dB, meta=meta,
@@ -925,16 +947,16 @@ def plotAvPSD(path):
     EXPERIMENTAL : work in progress"""
 
     path = path.strip("/")
-    obsName = path.split('/')[-1]   # Extract name of observation from path
-    path = "/" + path + '/'    # Formatting
+    obsName = path.split('/')[-1]  # Extract name of observation from path
+    path = "/" + path + '/'  # Formatting
 
     # Allow for relative paths
     if not os.path.isdir(path):
         path = DATA_PATH + path
 
-    if os.path.isfile(path+"params.json"):
+    if os.path.isfile(path + "params.json"):
 
-        with open(path+"params.json", "r") as jsFile:
+        with open(path + "params.json", "r") as jsFile:
             params = json.load(jsFile)
     elif not os.path.isdir(path):
         print("ERROR : path does not relate to any recorded observation")
@@ -950,26 +972,26 @@ def plotAvPSD(path):
     rate = params["rate"]
     channels = params["channels"]
 
-    for root, repo, files in os.walk(path):   # I did not find any other way...
+    for root, repo, files in os.walk(path):  # I did not find any other way...
         fitsFiles = [file for file in files if ".fits" in file]
 
     obsNb = len(fitsFiles)  # Number of files in observation
 
     firstFile = fitsFiles.pop(0)  # Pops the first element of the list
-    real = fits.open(path+firstFile)[1].data.field('real').flatten()
-    image = fits.open(path+firstFile)[1].data.field('im').flatten()
+    real = fits.open(path + firstFile)[1].data.field('real').flatten()
+    image = fits.open(path + firstFile)[1].data.field('im').flatten()
 
     for file in fitsFiles:
-        data = fits.open(path+file)[1].data
+        data = fits.open(path + file)[1].data
         real += data.field('real').flatten()
         image += data.field('im').flatten()
 
-    average = (real + 1.0j*image)/obsNb
+    average = (real + 1.0j * image) / obsNb
 
-    plt.psd(average, NFFT=channels, Fs=rate/1e6, Fc=fc/1e6)
+    plt.psd(average, NFFT=channels, Fs=rate / 1e6, Fc=fc / 1e6)
     plt.xlabel('frequency (Mhz)')
     plt.ylabel('Relative power (db)')
-    plt.savefig(path+"PSD.png", format="png")
+    plt.savefig(path + "PSD.png", format="png")
     plt.show()
     print("Figure saved at " + path + "PSD.png")
 
@@ -1015,3 +1037,124 @@ def plotAvPSD(path):
 #     freq, psd = welch(average, rate, detrend=False)
 #     freq += fc
 #     return freq, psd
+
+class QObsProcess(QThread):
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.raw_mode = None
+        self.obs_mode = None
+        self.overwrite = None
+        self.obs_params = {
+            'dev_args': '',
+            'rf_gain': '',
+            'if_gain': '',
+            'bb_gain': '',
+            'frequency': '',
+            'bandwidth': '',
+            'channels': '',
+            't_sample': '',
+            'duration': '',
+            'loc': '',
+            'ra': '',
+            'dec': '',
+            'az': '',
+            'alt': ''
+        }
+        self.repo = None
+        self.name = None
+        self.ProcessObserving = False
+
+    def setParams(self, repo, name, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample, duration,
+                  overwrite, obs_mode, raw_mode):
+
+        self.repo = repo
+        self.name = name
+        self.overwrite = overwrite
+        self.obs_mode = obs_mode
+        self.raw_mode = raw_mode
+
+        self.obs_params = {
+            'dev_args': dev_args,
+            'rf_gain': rf_gain,
+            'if_gain': if_gain,
+            'bb_gain': bb_gain,
+            'frequency': fc,
+            'bandwidth': bw,
+            'channels': channels,
+            't_sample': t_sample,
+            'duration': duration,
+            'loc': LOC,
+            'ra': '',
+            'dec': '',
+            'az': '',
+            'alt': ''
+        }
+
+    def setOrientation(self, ra, dec, az, alt):
+        self.obs_params['ra'] = ra
+        self.obs_params['dec'] = dec
+        self.obs_params['az'] = az
+        self.obs_params['alt'] = alt
+
+    def run(self):
+        self.ProcessObserving = True
+        # If no indicated repository to save data
+        repo = self.repo
+        name = self.name
+        overwrite = self.overwrite
+        obs_params = self.obs_params
+        obs_mode = self.obs_mode
+        raw_mode = self.raw_mode
+
+        # If no indicated repository to save data
+        if repo is None:
+            # Make repo the default today's timestamp
+            repo = datetime.today().strftime('%Y-%m-%d')
+
+        repo = repo.strip("/")
+
+        # Check absolute path
+        if not os.path.isdir(repo):
+            # Check relative path
+            repo = DATA_PATH + repo
+            if not os.path.isdir(repo):
+                os.mkdir(repo)  # if not, create it
+                print(f"Creating repository {repo}")
+
+        repo = repo + '/'
+
+        # If no indicated observation name
+        if name is None:
+            # Make the name to current timestamp
+            name = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+
+        name = name.strip('/')
+        pathObs = repo + name
+
+        # If overwrite flag turned off, create nth copy
+        if (os.path.isfile(pathObs)) and (not overwrite):
+            pathObs += "_(1)"
+            while os.path.isfile(pathObs):
+                digit = int(pathObs[pathObs.rfind('(') + 1:-1])
+                digit += 1
+                pathObs = pathObs[:pathObs.rfind('(') + 1] + str(digit) + ')'
+
+        # Save parameters of observation for later analysis
+        with open(pathObs + "_params.json", "w") as jsFile:
+            json.dump(obs_params, jsFile)
+
+        if obs_mode:
+            obs_file = pathObs + '.dat'
+        else:
+            obs_file = "/dev/null"
+
+        if raw_mode:
+            raw_file = pathObs + '_raw.dat'
+        else:
+            raw_file = "/dev/null"
+
+        virgo.observe(obs_parameters=obs_params, obs_file=obs_file, raw_file=raw_file)
+        print(f"Observation complete. Data stored in {pathObs + '.dat'}")
+
+        self.ProcessObserving = False
