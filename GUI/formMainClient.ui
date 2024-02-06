@@ -920,7 +920,7 @@
               </sizepolicy>
              </property>
              <property name="text">
-              <string>Disconnected</string>
+              <string>Disconnected from SRT</string>
              </property>
             </widget>
            </item>

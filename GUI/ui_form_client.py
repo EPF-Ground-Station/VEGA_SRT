@@ -1071,7 +1071,7 @@ class Ui_Widget(object):
         self.checkBox_Tracking.setText(QCoreApplication.translate("Widget", u"Tracking", None))
         self.pushButton_Connect.setText(QCoreApplication.translate("Widget", u"Connect", None))
         self.pushButton_Disconnect.setText(QCoreApplication.translate("Widget", u"Disconnect", None))
-        self.ConnectedLabel.setText(QCoreApplication.translate("Widget", u"Disconnected", None))
+        self.ConnectedLabel.setText(QCoreApplication.translate("Widget", u"Disconnected from SRT", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_home), QCoreApplication.translate("Widget", u"Home", None))
         self.label_19.setText(QCoreApplication.translate("Widget", u"<html><head/><body><p><span style=\" font-size:16pt;\">Gain configuration</span></p></body></html>", None))
         self.label_9.setText(QCoreApplication.translate("Widget", u"RF gain", None))
