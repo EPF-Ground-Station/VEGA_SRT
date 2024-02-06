@@ -79,7 +79,7 @@ class Srt(QObject):
         # self.sdr.close()
 
         # Declares process that runs observations
-        self.obsProcess = None
+        self.obsProcess = QObsProcess()
         self.observing = False
 
         self.pending = False
@@ -609,7 +609,7 @@ class Srt(QObject):
         if not self.observing:
             return
 
-        self.obsProcess.join()
+        self.obsProcess.wait()
         self.observing = False
 
     def obsFinished(self):
@@ -634,7 +634,7 @@ class Srt(QObject):
         print("Observation killed. Notice some recorded data might have been corrupted")
 
     def observe(self, repo=None, name=None, dev_args='hackrf=0,bias=1', rf_gain=48, if_gain=25, bb_gain=18, fc=1420e6,
-                bw=2.4e6, channels=2048, t_sample=1, duration=60, overwrite=False, obs_mode=True, raw_mode=False):
+                bw=2.4e6, channels=2048, t_sample=1, duration=10, overwrite=False, obs_mode=True, raw_mode=False):
         """
         Launches a parallelized observation process. All SRT methods are still callable in the meanwhile. See
         self.__observe() for more.
