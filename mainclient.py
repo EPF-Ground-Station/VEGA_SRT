@@ -328,13 +328,13 @@ class MainClient(QWidget):
 
         self.ui.label_MeasureStatus.setText('')  # measuring, saving, etc...
 
-        self.measurementRepo = self.ui.lineEdit_measurement_directoryname.text()
+        """self.measurementRepo = self.ui.lineEdit_measurement_directoryname.text()
         if self.measurementRepo == '':
             self.measurementRepo = 'devnull'
 
         self.measurementPrefix = self.ui.lineEdit_measurementprefix.text()
         if self.measurementPrefix == '':
-            self.measurementPrefix = 'devnull'
+            self.measurementPrefix = 'devnull'"""
 
 
         print("Launch Measurement")
