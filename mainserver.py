@@ -213,10 +213,12 @@ class SRTThread(QThread):
                             if feedback == 'IDLE' or feedback == 'Untangled':
                                 print("SRT Thread connected")
                                 self.connected = 1
+                                feedback = 'APMConnected'
                         elif cmd == "disconnect":
                             feedback = self.SRT.disconnectAPM()
                             self.timeLastWater = time.time()  # Reset timer for water evacuation after activity
                             self.connected = 0
+                            feedback = 'APMDisconnected'
                         elif cmd == "untangle":
                             feedback = self.SRT.untangle()
                         elif cmd == "standby":

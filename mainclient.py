@@ -45,6 +45,7 @@ class Launcher(QWidget):
         self.ui = ui_form_launcher.Ui_Form()
         self.ui.setupUi(self)
         self.ui.label_Status.setText("")
+        print("hi")
 
         self.ui.pushButton_Connect.clicked.connect(self.ConnectClicked)
 
@@ -291,6 +292,12 @@ class MainClient(QWidget):
             if answer == 'IDLE':
                 self.MovementFinished()
 
+            if answer == 'APMConnected':
+                self.ConnectedToMount()
+
+            if answer == 'APMDisconnected':
+                self.DisconnectedFromMount()
+
             if "COORDS" in answer:
                 print(answer)
                 az, alt, ra, dec, long, lat = answer.split(' ')[1:]
@@ -314,12 +321,7 @@ class MainClient(QWidget):
             return
         self.measuring = 1
         self.ui.pushButton_LaunchMeasurement.setEnabled(0)
-        self.ui.doubleSpinBox_gain.value()
-        self.ui.doubleSpinBox_tsample.value()
-        self.ui.doubleSpinBox_Bandwidth.value()
-        self.measureDuration = self.ui.doubleSpinBox_duration.value()
-        self.ui.doubleSpinBox_centerFreq.value()
-        self.ui.spinBox_channels.value()
+
 
         self.ui.progressBar_measurement.setValue(0)  # from 0 to 100
         self.timerIterations = 0
@@ -482,17 +484,28 @@ class MainClient(QWidget):
         """
         self.sendServ("connect")
         self.ui.pushButton_Connect.setEnabled(0)
-        self.ui.pushButton_Disconnect.setEnabled(1)
+
 
     def DisconnectClicked(self):
         """
         Sends the command to disconnect the mount. Usually triggers the untangling of cables and parking to standby
         (zenith) position.
         """
-        self.ui.pushButton_Connect.setEnabled(1)
+
         self.ui.pushButton_Disconnect.setEnabled(0)
         self.sendServ("disconnect")
+        self.DisconnectedFromMount()
         print("Disconnect")
+
+    def ConnectedToMount(self):
+        self.ui.pushButton_Connect.setEnabled(0)
+        self.ui.pushButton_Disconnect.setEnabled(1)
+
+    def DisconnectedFromMount(self):
+        self.ui.ConnectedLabel.setText("Disconnected from APM")
+        self.ui.pushButton_Connect.setEnabled(1)
+        self.ui.pushButton_Disconnect.setEnabled(0)
+
 
     def TrackFirstCoordDegreeChanged(self, val):
         (h, m, s) = DegtoHMS(val)
