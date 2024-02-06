@@ -543,7 +543,7 @@ class Ui_Widget(object):
 
         self.horizontalLayout_13.addWidget(self.doubleSpinBox_rfgain)
 
-        self.horizontalSpacer_14 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_14 = QSpacerItem(30, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
 
         self.horizontalLayout_13.addItem(self.horizontalSpacer_14)
 
@@ -561,7 +561,7 @@ class Ui_Widget(object):
 
         self.horizontalLayout_13.addWidget(self.doubleSpinBox_ifgain)
 
-        self.horizontalSpacer_15 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_15 = QSpacerItem(30, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
 
         self.horizontalLayout_13.addItem(self.horizontalSpacer_15)
 
@@ -623,7 +623,7 @@ class Ui_Widget(object):
 
         self.horizontalLayout_14.addWidget(self.doubleSpinBox_centerFreq)
 
-        self.horizontalSpacer_19 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_19 = QSpacerItem(30, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
 
         self.horizontalLayout_14.addItem(self.horizontalSpacer_19)
 
@@ -643,7 +643,7 @@ class Ui_Widget(object):
 
         self.horizontalLayout_14.addWidget(self.doubleSpinBox_Bandwidth)
 
-        self.horizontalSpacer_20 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.horizontalSpacer_20 = QSpacerItem(30, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
 
         self.horizontalLayout_14.addItem(self.horizontalSpacer_20)
 
@@ -689,24 +689,6 @@ class Ui_Widget(object):
 
         self.horizontalLayout_15.addItem(self.horizontalSpacer_21)
 
-        self.label_7 = QLabel(self.tab_measure)
-        self.label_7.setObjectName(u"label_7")
-        self.label_7.setMaximumSize(QSize(10000, 16777215))
-
-        self.horizontalLayout_15.addWidget(self.label_7)
-
-        self.doubleSpinBox_tsample = QDoubleSpinBox(self.tab_measure)
-        self.doubleSpinBox_tsample.setObjectName(u"doubleSpinBox_tsample")
-        self.doubleSpinBox_tsample.setMaximumSize(QSize(70, 16777215))
-        self.doubleSpinBox_tsample.setMaximum(3600.000000000000000)
-        self.doubleSpinBox_tsample.setValue(1.000000000000000)
-
-        self.horizontalLayout_15.addWidget(self.doubleSpinBox_tsample)
-
-        self.horizontalSpacer_22 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout_15.addItem(self.horizontalSpacer_22)
-
         self.label_8 = QLabel(self.tab_measure)
         self.label_8.setObjectName(u"label_8")
         self.label_8.setMaximumSize(QSize(10000, 16777215))
@@ -720,6 +702,24 @@ class Ui_Widget(object):
         self.doubleSpinBox_duration.setValue(60.000000000000000)
 
         self.horizontalLayout_15.addWidget(self.doubleSpinBox_duration)
+
+        self.horizontalSpacer_22 = QSpacerItem(30, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+
+        self.horizontalLayout_15.addItem(self.horizontalSpacer_22)
+
+        self.label_7 = QLabel(self.tab_measure)
+        self.label_7.setObjectName(u"label_7")
+        self.label_7.setMaximumSize(QSize(10000, 16777215))
+
+        self.horizontalLayout_15.addWidget(self.label_7)
+
+        self.doubleSpinBox_tsample = QDoubleSpinBox(self.tab_measure)
+        self.doubleSpinBox_tsample.setObjectName(u"doubleSpinBox_tsample")
+        self.doubleSpinBox_tsample.setMaximumSize(QSize(70, 16777215))
+        self.doubleSpinBox_tsample.setMaximum(3600.000000000000000)
+        self.doubleSpinBox_tsample.setValue(1.000000000000000)
+
+        self.horizontalLayout_15.addWidget(self.doubleSpinBox_tsample)
 
         self.horizontalSpacer_24 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
@@ -942,7 +942,7 @@ class Ui_Widget(object):
 
         self.retranslateUi(Widget)
 
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(Widget)
@@ -997,8 +997,8 @@ class Ui_Widget(object):
         self.label_5.setText(QCoreApplication.translate("Widget", u"Bandwidth (MHz)", None))
         self.label_10.setText(QCoreApplication.translate("Widget", u"Channels", None))
         self.label_23.setText(QCoreApplication.translate("Widget", u"<html><head/><body><p><span style=\" font-size:16pt;\">Duration and sample time</span></p></body></html>", None))
-        self.label_7.setText(QCoreApplication.translate("Widget", u"Sample time", None))
         self.label_8.setText(QCoreApplication.translate("Widget", u"Duration", None))
+        self.label_7.setText(QCoreApplication.translate("Widget", u"Sample time", None))
         self.label_24.setText(QCoreApplication.translate("Widget", u"<html><head/><body><p><span style=\" font-size:16pt;\">Launch measurement</span></p></body></html>", None))
         self.pushButton_LaunchMeasurement.setText(QCoreApplication.translate("Widget", u"Launch Measurement", None))
         self.pushButton_StopMeasurement.setText(QCoreApplication.translate("Widget", u"Stop measurement", None))
