@@ -1056,10 +1056,8 @@ class QObsProcess(QThread):
             't_sample': '',
             'duration': '',
             'loc': '',
-            'ra': '',
-            'dec': '',
-            'az': '',
-            'alt': ''
+            'ra_dec': '',
+            'az_alt': ''
         }
         self.repo = None
         self.name = None
@@ -1085,17 +1083,13 @@ class QObsProcess(QThread):
             't_sample': t_sample,
             'duration': duration,
             'loc': LOC,
-            'ra': '',
-            'dec': '',
-            'az': '',
-            'alt': ''
+            'ra_dec': '',
+            'az_alt': ''
         }
 
     def setOrientation(self, ra, dec, az, alt):
-        self.obs_params['ra'] = ra
-        self.obs_params['dec'] = dec
-        self.obs_params['az'] = az
-        self.obs_params['alt'] = alt
+        self.obs_params['ra_dec'] = ra, dec
+        self.obs_params['az_alt'] = az, alt
 
     def run(self):
         self.ProcessObserving = True

@@ -1972,10 +1972,8 @@ def observe(obs_parameters, spectrometer='wola', obs_file='observation.dat', sta
     t_sample = obs_parameters['t_sample']
     duration = obs_parameters['duration']
     loc = obs_parameters['loc']
-    ra = obs_parameters['ra']
-    dec = obs_parameters['dec']
-    az = obs_parameters['az']
-    alt = obs_parameters['alt']
+    ra_dec = obs_parameters['ra_dec']
+    az_alt = obs_parameters['az_alt']
 
     # Schedule observation
     # if start_in != 0:
@@ -2019,10 +2017,8 @@ channels='''+str(channels)+'''
 t_sample='''+str(t_sample)+'''
 duration='''+str(duration)+'''
 loc='''+str(loc)+'''
-ra='''+str(ra)+'''
-dec='''+str(dec)+'''
-az='''+str(az)+'''
-alt='''+str(alt))
+ra_dec='''+str(ra_dec)+'''
+az_alt='''+str(az_alt))
 
 
 def plot(obs_parameters='', n=0, m=0, f_rest=0, slope_correction=False, dB=False, vlsr=False, meta=False, avg_ylim=[0, 0], cal_ylim=[0, 0], rfi=[], xlim=[0, 0], ylim=[0, 0], dm=0,
