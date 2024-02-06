@@ -178,6 +178,7 @@ class SRTThread(QThread):
 
                 self.pending = True
                 msg = self.msg
+                print("Handling "+msg+" at the moment.")
                 args = msg.split(" ")
                 cmd = args[0]
                 print("SRT Thread handling command: " + cmd +
@@ -238,8 +239,8 @@ class SRTThread(QThread):
                         (repo, prefix, rf_gain, if_gain, bb_gain, centerFreq, bandwidth, channels, sampleTime, duration,
                          obs_mode, raw_mode) = (
                             str(args[1]), str(args[2]), float(args[3]), float(args[4]), float(args[5]),
-                            float(args[6]), float(args[7]), float(args[8]),float(args[8]), float(args[9]),
-                            bool(int(args[10])), bool(int(args[11])))
+                            float(args[6]), float(args[7]), float(args[8]),float(args[9]), float(args[10]),
+                            bool(int(args[11])), bool(int(args[12])))
 
                         if repo == 'devnull':  # Just a trick since empty strings are not recognised as arguments
                             repo = ''
