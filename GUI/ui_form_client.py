@@ -524,7 +524,7 @@ class Ui_Widget(object):
 
         self.horizontalLayout_13 = QHBoxLayout()
         self.horizontalLayout_13.setObjectName(u"horizontalLayout_13")
-        self.horizontalLayout_13.setContentsMargins(-1, 10, -1, -1)
+        self.horizontalLayout_13.setContentsMargins(-1, 0, -1, -1)
         self.horizontalSpacer_16 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout_13.addItem(self.horizontalSpacer_16)
@@ -601,7 +601,7 @@ class Ui_Widget(object):
 
         self.horizontalLayout_14 = QHBoxLayout()
         self.horizontalLayout_14.setObjectName(u"horizontalLayout_14")
-        self.horizontalLayout_14.setContentsMargins(-1, 10, -1, -1)
+        self.horizontalLayout_14.setContentsMargins(-1, 0, -1, -1)
         self.horizontalSpacer_18 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout_14.addItem(self.horizontalSpacer_18)
@@ -684,7 +684,7 @@ class Ui_Widget(object):
 
         self.horizontalLayout_15 = QHBoxLayout()
         self.horizontalLayout_15.setObjectName(u"horizontalLayout_15")
-        self.horizontalLayout_15.setContentsMargins(-1, 10, -1, -1)
+        self.horizontalLayout_15.setContentsMargins(-1, 0, -1, -1)
         self.horizontalSpacer_21 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout_15.addItem(self.horizontalSpacer_21)
@@ -734,6 +734,66 @@ class Ui_Widget(object):
         self.line_11.setFrameShadow(QFrame.Sunken)
 
         self.verticalLayout_4.addWidget(self.line_11)
+
+        self.label_25 = QLabel(self.tab_measure)
+        self.label_25.setObjectName(u"label_25")
+        self.label_25.setAlignment(Qt.AlignCenter)
+
+        self.verticalLayout_4.addWidget(self.label_25)
+
+        self.horizontalLayout_16 = QHBoxLayout()
+        self.horizontalLayout_16.setObjectName(u"horizontalLayout_16")
+        self.horizontalLayout_16.setContentsMargins(-1, 0, -1, -1)
+        self.horizontalSpacer_23 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_16.addItem(self.horizontalSpacer_23)
+
+        self.label_26 = QLabel(self.tab_measure)
+        self.label_26.setObjectName(u"label_26")
+        self.label_26.setMaximumSize(QSize(10000, 16777215))
+
+        self.horizontalLayout_16.addWidget(self.label_26)
+
+        self.lineEdit_measurement_directoryname = QLineEdit(self.tab_measure)
+        self.lineEdit_measurement_directoryname.setObjectName(u"lineEdit_measurement_directoryname")
+        sizePolicy.setHeightForWidth(self.lineEdit_measurement_directoryname.sizePolicy().hasHeightForWidth())
+        self.lineEdit_measurement_directoryname.setSizePolicy(sizePolicy)
+        self.lineEdit_measurement_directoryname.setMinimumSize(QSize(120, 0))
+        self.lineEdit_measurement_directoryname.setMaximumSize(QSize(120, 16777215))
+
+        self.horizontalLayout_16.addWidget(self.lineEdit_measurement_directoryname)
+
+        self.horizontalSpacer_25 = QSpacerItem(30, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+
+        self.horizontalLayout_16.addItem(self.horizontalSpacer_25)
+
+        self.label_27 = QLabel(self.tab_measure)
+        self.label_27.setObjectName(u"label_27")
+        self.label_27.setMaximumSize(QSize(10000, 16777215))
+
+        self.horizontalLayout_16.addWidget(self.label_27)
+
+        self.lineEdit_measurementprefix = QLineEdit(self.tab_measure)
+        self.lineEdit_measurementprefix.setObjectName(u"lineEdit_measurementprefix")
+        sizePolicy.setHeightForWidth(self.lineEdit_measurementprefix.sizePolicy().hasHeightForWidth())
+        self.lineEdit_measurementprefix.setSizePolicy(sizePolicy)
+        self.lineEdit_measurementprefix.setMinimumSize(QSize(120, 0))
+        self.lineEdit_measurementprefix.setMaximumSize(QSize(120, 16777215))
+
+        self.horizontalLayout_16.addWidget(self.lineEdit_measurementprefix)
+
+        self.horizontalSpacer_26 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_16.addItem(self.horizontalSpacer_26)
+
+
+        self.verticalLayout_4.addLayout(self.horizontalLayout_16)
+
+        self.label_28 = QLabel(self.tab_measure)
+        self.label_28.setObjectName(u"label_28")
+        self.label_28.setAlignment(Qt.AlignCenter)
+
+        self.verticalLayout_4.addWidget(self.label_28)
 
         self.label_24 = QLabel(self.tab_measure)
         self.label_24.setObjectName(u"label_24")
@@ -942,7 +1002,7 @@ class Ui_Widget(object):
 
         self.retranslateUi(Widget)
 
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(Widget)
@@ -999,6 +1059,10 @@ class Ui_Widget(object):
         self.label_23.setText(QCoreApplication.translate("Widget", u"<html><head/><body><p><span style=\" font-size:16pt;\">Duration and sample time</span></p></body></html>", None))
         self.label_8.setText(QCoreApplication.translate("Widget", u"Duration", None))
         self.label_7.setText(QCoreApplication.translate("Widget", u"Sample time", None))
+        self.label_25.setText(QCoreApplication.translate("Widget", u"<html><head/><body><p><span style=\" font-size:16pt;\">Directory and file name</span></p></body></html>", None))
+        self.label_26.setText(QCoreApplication.translate("Widget", u"Directory name", None))
+        self.label_27.setText(QCoreApplication.translate("Widget", u"Filename prefix", None))
+        self.label_28.setText(QCoreApplication.translate("Widget", u"Note: filenames end in a timestamp automatically.", None))
         self.label_24.setText(QCoreApplication.translate("Widget", u"<html><head/><body><p><span style=\" font-size:16pt;\">Launch measurement</span></p></body></html>", None))
         self.pushButton_LaunchMeasurement.setText(QCoreApplication.translate("Widget", u"Launch Measurement", None))
         self.pushButton_StopMeasurement.setText(QCoreApplication.translate("Widget", u"Stop measurement", None))
