@@ -629,16 +629,19 @@ class Srt(QObject):
             print("ERROR : no observation to stop")
             return "ERROR : no observation to stop"
 
-        self.obsProcess.terminate()
+        self.obsProcess.quit()
+        self.obsProcess.wait()
         self.obsFinished()
         print("Observation killed. Notice some recorded data might have been corrupted")
 
-    def observe(self, repo=None, name=None, dev_args='hackrf=0,bias=1', rf_gain=48, if_gain=25, bb_gain=18, fc=1420e6,
+    def observe(self, repo=None, name=None, prefix="", dev_args='hackrf=0,bias=1', rf_gain=48, if_gain=25, bb_gain=18,
+                fc=1420e6,
                 bw=2.4e6, channels=2048, t_sample=1, duration=10, overwrite=False, obs_mode=True, raw_mode=False):
         """
-        Launches a parallelized observation process. All SRT methods are still callable in the meanwhile. See
-        self.__observe() for more.
+        Launches a parallelized observation process. All SRT methods are still callable in the meanwhile.
 
+        :param prefix: added before the folder and file names.
+        :type prefix: str
         :param repo: Name of the repository where to store data under DATA_PATH. If None, the name of the repo is by
             default an auto-generated timestamp
         :type repo: str
@@ -681,9 +684,9 @@ class Srt(QObject):
 
         self.observing = True
         self.obsProcess = QObsProcess()
-        self.obsProcess.setParams(repo, name, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample,
+        self.obsProcess.setParams(repo, name, prefix, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample,
                                   duration, overwrite, obs_mode, raw_mode)
-        self.obsProcess.setOrientation(self.ra,self.dec,self.az,self.alt)
+        self.obsProcess.setOrientation(self.ra, self.dec, self.az, self.alt)
         self.obsProcess.finished.connect(self.obsFinished)
         self.obsProcess.start()
 
@@ -693,86 +696,6 @@ class Srt(QObject):
             raw_mode))
         self.obsProcess.start()
         print(f"observing status : {self.observing}")"""
-
-    def __observe(self, repo, name, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample, duration,
-                  overwrite, obs_mode=True, raw_mode=False):
-        """
-            Useless now.
-            Private method that uses virgo library to observe with given parameters. 
-
-            Recorded data is saved either under absolute path repo/name.dat, or
-            relative path repo/name.dat under DATA_PATH directory. Parameters 
-            are saved in a json file. See self.observe() for documentation of the method arguments.
-        """
-
-        obs_params = {
-            'dev_args': dev_args,
-            'rf_gain': rf_gain,
-            'if_gain': if_gain,
-            'bb_gain': bb_gain,
-            'frequency': fc,
-            'bandwidth': bw,
-            'channels': channels,
-            't_sample': t_sample,
-            'duration': duration,
-            'loc': LOC,
-            'ra_dec': '',
-            'az_alt': ''
-        }
-
-        # If no indicated repository to save data
-        if repo == None:
-            # Make repo the default today's timestamp
-            repo = datetime.today().strftime('%Y-%m-%d')
-
-        repo = repo.strip("/")
-
-        # Check absolute path
-        if not os.path.isdir(repo):
-            # Check relative path
-            repo = DATA_PATH + repo
-            if not os.path.isdir(repo):
-                os.mkdir(repo)  # if not, create it
-                print(f"Creating repository {repo}")
-
-        repo = repo + '/'
-
-        # If no indicated observation name
-        if name == None:
-            # Make the name to current timestamp
-            name = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
-
-        name = name.strip('/')
-        pathObs = repo + name
-
-        # If overwrite flag turned off, create nth copy
-        if (os.path.isfile(pathObs)) and (not overwrite):
-            pathObs += "_(1)"
-            while os.path.isfile(pathObs):
-                digit = int(pathObs[pathObs.rfind('(') + 1:-1])
-                digit += 1
-                pathObs = pathObs[:pathObs.rfind('(') + 1] + str(digit) + ')'
-
-        # Save parameters of observation for later analysis
-        with open(pathObs + "_params.json", "w") as jsFile:
-            json.dump(obs_params, jsFile)
-
-        if obs_mode:
-            obs_file = pathObs + '.dat'
-        else:
-            obs_file = "/dev/null"
-
-        if raw_mode:
-            raw_file = pathObs + '_raw.dat'
-        else:
-            raw_file = "/dev/null"
-
-        virgo.observe(obs_parameters=obs_params, obs_file=obs_file, raw_file=raw_file)
-        print(f"Observation complete. Data stored in {pathObs + '.dat'}")
-
-        # /!\ SINCE multiprocessing CREATES A COPY OF THE SRT OBJECT, THE FOLLOWING
-        # HAS NO EFFECT : TO BE IMPROVED
-        self.observing = False
 
     def plotAll(self, repo, name, calib, n=20, m=35, f_rest=1420.4057517667e6,
                 vlsr=False, dB=True, meta=False):
@@ -1042,6 +965,7 @@ class QObsProcess(QThread):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.prefix = None
         self.raw_mode = None
         self.obs_mode = None
         self.overwrite = None
@@ -1063,11 +987,12 @@ class QObsProcess(QThread):
         self.name = None
         self.ProcessObserving = False
 
-    def setParams(self, repo, name, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample, duration,
+    def setParams(self, repo, name, prefix, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample, duration,
                   overwrite, obs_mode, raw_mode):
 
         self.repo = repo
         self.name = name
+        self.prefix = prefix
         self.overwrite = overwrite
         self.obs_mode = obs_mode
         self.raw_mode = raw_mode
@@ -1096,6 +1021,7 @@ class QObsProcess(QThread):
         # If no indicated repository to save data
         repo = self.repo
         name = self.name
+        prefix = self.prefix
         overwrite = self.overwrite
         obs_params = self.obs_params
         obs_mode = self.obs_mode
@@ -1107,6 +1033,8 @@ class QObsProcess(QThread):
             repo = datetime.today().strftime('%Y-%m-%d')
 
         repo = repo.strip("/")
+
+        repo = prefix+repo
 
         # Check absolute path
         if not os.path.isdir(repo):
@@ -1124,6 +1052,9 @@ class QObsProcess(QThread):
             name = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
 
         name = name.strip('/')
+
+        name = prefix+name
+
         pathObs = repo + name
 
         # If overwrite flag turned off, create nth copy

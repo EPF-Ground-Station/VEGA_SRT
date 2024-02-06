@@ -85,7 +85,7 @@ class SRTThread(QThread):
         """
         super().__init__(parent)
 
-        self.measuring = 0
+        self.measuring = False
         self.on = True
         self.posLoggingOn = True
         self.pending = False
@@ -139,6 +139,10 @@ class SRTThread(QThread):
     def unpausePositionLogging(self):
         self.posLoggingOn = True
 
+    def measurementDone(self):
+        self.measuring = False
+        self.sendOK("measurement completed")
+
     def sendPos(self):
         """
         Method that sends to the client the current coordinates of the mount in all coordinate systems.
@@ -165,6 +169,10 @@ class SRTThread(QThread):
                 self.timeLastPosCheck = time.time()
                 self.sendPos()
             #print("DEBUG Value of self.connected : ", self.connected)
+
+            if self.measuring:
+                if not self.SRT.observing:
+                    self.measurementDone()
 
             if self.msg != '':
 
@@ -224,20 +232,24 @@ class SRTThread(QThread):
                             "ERROR : invalid command passed to server")
 
                 if cmd == "measure":
-                    if len(args) == 7:  # Parses arguments (measurement)
-                        centerFreq, bandwidth, sampleTime, duration, gain, channels = (
-                            float(args[1]), float(args[2]), float(args[3]),
-                            float(args[4]), float(args[5]), float(args[6]))
+                    if len(args) == 10+1:  # Parses arguments (measurement)
+                        (prefix, rf_gain, if_gain, bb_gain, centerFreq, bandwidth, channels, sampleTime, duration,
+                         obs_mode, raw_mode) = (
+                            str(args[1]), float(args[2]), float(args[3]), float(args[4]), float(args[5]),
+                            float(args[6]), float(args[7]), float(args[8]),  int(args[9]), bool(int(args[10])),
+                            bool(int(args[11])))
 
-                        if self.measuring == 0:
-                            self.measuring = 1
-                            # TODO connect measurement, (remember to set self.measuring to 0). parameters are above.
+                        if self.SRT.observing == 0:
+                            self.measuring = True
+                            self.SRT.observe(prefix=prefix, rf_gain=rf_gain, if_gain=if_gain, bb_gain=bb_gain,
+                                             fc=centerFreq, bw=bandwidth, channels=channels, t_sample=sampleTime,
+                                             duration=duration, obs_mode=obs_mode, raw_mode=raw_mode)
                         else:
                             self.sendError("Already measuring!")
                     else:
                         raise ValueError(
                             "ERROR : invalid command passed to server")
-
+                # TODO: stop measurement
                 feedback = str(feedback)
 
                 print("SRT Thread handled: " + msg +
@@ -295,8 +307,6 @@ class ServerGUI(QMainWindow):
         self.sendToSRTSignal.connect(self.SRTThread.receiveCommand)
         self.SRTThread.start()
         # When in motion, stop asking for position. Tracking not affected
-
-        self.measuring = 0
 
     def handleConnection(self):
         """Method triggered when a new client connects the server
