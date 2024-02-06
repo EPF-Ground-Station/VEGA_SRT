@@ -1034,7 +1034,7 @@ class QObsProcess(QThread):
 
         repo = repo.strip("/")
 
-        repo = prefix+repo
+        repo = repo
 
         # Check absolute path
         if not os.path.isdir(repo):
@@ -1053,7 +1053,7 @@ class QObsProcess(QThread):
 
         name = name.strip('/')
 
-        name = prefix+name
+        name = prefix+"_"+name
 
         pathObs = repo + name
 
