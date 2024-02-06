@@ -669,6 +669,13 @@ class Ui_Widget(object):
 
         self.verticalLayout_4.addLayout(self.horizontalLayout_14)
 
+        self.line_10 = QFrame(self.tab_measure)
+        self.line_10.setObjectName(u"line_10")
+        self.line_10.setFrameShape(QFrame.HLine)
+        self.line_10.setFrameShadow(QFrame.Sunken)
+
+        self.verticalLayout_4.addWidget(self.line_10)
+
         self.label_23 = QLabel(self.tab_measure)
         self.label_23.setObjectName(u"label_23")
         self.label_23.setAlignment(Qt.AlignCenter)
@@ -720,6 +727,13 @@ class Ui_Widget(object):
 
 
         self.verticalLayout_4.addLayout(self.horizontalLayout_15)
+
+        self.line_11 = QFrame(self.tab_measure)
+        self.line_11.setObjectName(u"line_11")
+        self.line_11.setFrameShape(QFrame.HLine)
+        self.line_11.setFrameShadow(QFrame.Sunken)
+
+        self.verticalLayout_4.addWidget(self.line_11)
 
         self.label_24 = QLabel(self.tab_measure)
         self.label_24.setObjectName(u"label_24")
