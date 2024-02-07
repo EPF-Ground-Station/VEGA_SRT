@@ -24,7 +24,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab_home">
       <attribute name="title">
@@ -1572,7 +1572,7 @@
        <item>
         <widget class="QLabel" name="label_28">
          <property name="text">
-          <string>Note: filenames end in a timestamp automatically.</string>
+          <string>Note: filenames end in a timestamp automatically. If the directory name is left empty, it will be a timestamp as well.</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>

@@ -1027,7 +1027,7 @@ class Ui_Widget(object):
 
         self.retranslateUi(Widget)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(Widget)
@@ -1087,7 +1087,7 @@ class Ui_Widget(object):
         self.label_25.setText(QCoreApplication.translate("Widget", u"<html><head/><body><p><span style=\" font-size:16pt;\">Directory and file name</span></p></body></html>", None))
         self.label_26.setText(QCoreApplication.translate("Widget", u"Directory name", None))
         self.label_27.setText(QCoreApplication.translate("Widget", u"Filename prefix", None))
-        self.label_28.setText(QCoreApplication.translate("Widget", u"Note: filenames end in a timestamp automatically.", None))
+        self.label_28.setText(QCoreApplication.translate("Widget", u"Note: filenames end in a timestamp automatically. If the directory name is left empty, it will be a timestamp as well.", None))
         self.label_24.setText(QCoreApplication.translate("Widget", u"<html><head/><body><p><span style=\" font-size:16pt;\">Launch measurement</span></p></body></html>", None))
         self.checkBox_Raw.setText(QCoreApplication.translate("Widget", u"Raw file", None))
         self.checkBox_FFT.setText(QCoreApplication.translate("Widget", u"FFT file", None))
