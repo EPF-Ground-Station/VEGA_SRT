@@ -9,6 +9,7 @@ NORTH = 990000
 TRACKING_RATE = 0.1  # Necessary delay for sending point_to to APM while tracking
 PING_RATE = 60  # Ping every minute
 DATA_PATH = "/mnt/PhData/dev/RadioData/"  # Finds data dir of user
+DATA_PATH_STUDENT = "/mnt/PhData/TP3_SMR/TP/"
 TLE_PATH = os.path.expanduser("~") + "/TLEs/"
 OBS_LAT = 46.5194444
 OBS_LON = 6.565

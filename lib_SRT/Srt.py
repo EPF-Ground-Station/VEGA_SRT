@@ -635,8 +635,8 @@ class Srt(QObject):
         print("Observation killed. Notice some recorded data might have been corrupted")
 
     def observe(self, repo=None, name=None, prefix="", dev_args='hackrf=0,bias=1', rf_gain=48, if_gain=25, bb_gain=18,
-                fc=1420e6,
-                bw=2.4e6, channels=2048, t_sample=1, duration=10, overwrite=False, obs_mode=True, raw_mode=False):
+                fc=1420e6, bw=2.4e6, channels=2048, t_sample=1, duration=10, overwrite=False, obs_mode=True,
+                raw_mode=False, studentflag=False):
         """
         Launches a parallelized observation process. All SRT methods are still callable in the meanwhile.
 
@@ -676,6 +676,8 @@ class Srt(QObject):
         :type obs_mode: bool
         :param raw_mode: Flag enabling processed output to be written to the repo.
         :type raw_mode: bool
+        :param studentflag: Flag which when enabled changes path to which files are written to student path.
+        :type studentflag: bool
         """
 
         if self.observing:
@@ -685,7 +687,7 @@ class Srt(QObject):
         self.observing = True
         self.obsProcess = QObsProcess()
         self.obsProcess.setParams(repo, name, prefix, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample,
-                                  duration, overwrite, obs_mode, raw_mode)
+                                  duration, overwrite, obs_mode, raw_mode, studentflag)
         self.obsProcess.setOrientation(self.ra, self.dec, self.az, self.alt)
         self.obsProcess.finished.connect(self.obsFinished)
         self.obsProcess.start()
@@ -965,10 +967,12 @@ class QObsProcess(QThread):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.prefix = None
-        self.raw_mode = None
-        self.obs_mode = None
-        self.overwrite = None
+        self.prefix = ''
+        self.raw_mode = False
+        self.obs_mode = True
+        self.overwrite = True
+        self.studentflag = False
+
         self.obs_params = {
             'dev_args': '',
             'rf_gain': '',
@@ -988,7 +992,7 @@ class QObsProcess(QThread):
         self.ProcessObserving = False
 
     def setParams(self, repo, name, prefix, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample, duration,
-                  overwrite, obs_mode, raw_mode):
+                  overwrite, obs_mode, raw_mode, studentflag):
 
         self.repo = repo
         self.name = name
@@ -996,6 +1000,11 @@ class QObsProcess(QThread):
         self.overwrite = overwrite
         self.obs_mode = obs_mode
         self.raw_mode = raw_mode
+        self.studentflag = studentflag
+
+        if self.studentflag:
+            self.raw_mode = True
+            self.obs_mode = False
 
         self.obs_params = {
             'dev_args': dev_args,
@@ -1034,12 +1043,14 @@ class QObsProcess(QThread):
 
         repo = repo.strip("/")
 
-        repo = repo
 
         # Check absolute path
         if not os.path.isdir(repo):
             # Check relative path
-            repo = DATA_PATH + repo
+            if not self.studentflag:
+                repo = DATA_PATH + repo
+            else:
+                repo = DATA_PATH_STUDENT + repo
             if not os.path.isdir(repo):
                 os.mkdir(repo)  # if not, create it
                 print(f"Creating repository {repo}")

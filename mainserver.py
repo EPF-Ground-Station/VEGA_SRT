@@ -236,12 +236,12 @@ class SRTThread(QThread):
                             "ERROR : invalid command passed to server")
 
                 if cmd == "measure":
-                    if len(args) == 12+1:  # Parses arguments (measurement)
+                    if len(args) == 13+1:  # Parses arguments (measurement)
                         (repo, prefix, rf_gain, if_gain, bb_gain, centerFreq, bandwidth, channels, sampleTime, duration,
-                         obs_mode, raw_mode) = (
+                         obs_mode, raw_mode, studentflag) = (
                             str(args[1]), str(args[2]), float(args[3]), float(args[4]), float(args[5]),
                             float(args[6]), float(args[7]), float(args[8]),float(args[9]), float(args[10]),
-                            bool(int(args[11])), bool(int(args[12])))
+                            bool(int(args[11])), bool(int(args[12])), bool(int(args[13])))
 
                         """if repo == 'devnull':  # Just a trick since empty strings are not recognised as arguments
                             repo = ''
@@ -252,7 +252,8 @@ class SRTThread(QThread):
                             self.measuring = True
                             self.SRT.observe(repo=repo, prefix=prefix, rf_gain=rf_gain, if_gain=if_gain, bb_gain=bb_gain,
                                              fc=centerFreq, bw=bandwidth, channels=int(channels), t_sample=sampleTime,
-                                             duration=duration, obs_mode=obs_mode, raw_mode=raw_mode)
+                                             duration=duration, obs_mode=obs_mode, raw_mode=raw_mode,
+                                             studentflag=studentflag)
                         else:
                             self.sendError("Already measuring!")
                     else:
