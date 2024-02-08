@@ -116,6 +116,7 @@ class MainClient(QWidget):
             self.ui.tabWidget.removeTab(2)
             self.ui.lineEdit_measurement_directoryname.hide()
             self.ui.pushButton_openCamera.setEnabled(0)
+            self.ui.textBrowser_log.hide()
             self.ui.label_26.hide()
             self.ui.label_28.setText("Note: filenames end in a timestamp automatically. The directory name will "
                                      "be a timestamp.")
