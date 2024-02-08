@@ -106,6 +106,19 @@ class MainClient(QWidget):
 
         if DEBUG: self.initGUI()
 
+        if STUDENT_VERSION:
+            self.ui.checkBox_FFT.setChecked(0)
+            self.ui.checkBox_Raw.setChecked(1)
+            self.ui.checkBox_FFT.setEnabled(0)
+            self.ui.checkBox_Raw.setEnabled(0)
+            self.ui.MeasCheckboxFrame.hide()
+            self.ui.lineEdit_measurement_directoryname.setEnabled(0)
+            self.ui.tabWidget.removeTab(2)
+            self.ui.lineEdit_measurement_directoryname.hide()
+            self.ui.label_26.hide()
+            self.ui.label_28.setText("Note: filenames end in a timestamp automatically. The directory name will "
+                                     "be a timestamp.")
+
     @Slot()
     def connectServ(self):
         """Slot activated when the "Connect" button of the launcher is pressed. Tries to connect to indicated IP address
@@ -352,7 +365,8 @@ class MainClient(QWidget):
                       f"{self.ui.doubleSpinBox_tsample.value()} "  # sample_t
                       f"{self.ui.doubleSpinBox_duration.value()} "  # duration
                       f"{int(self.ui.checkBox_FFT.isChecked())} "  # obs_mode
-                      f"{int(self.ui.checkBox_Raw.isChecked())}")  # raw_mode
+                      f"{int(self.ui.checkBox_Raw.isChecked())} "
+                      f"{int(STUDENT_VERSION)}")  # raw_mode
 
     def MeasurementDone(self):  # link to end of measurement thread!!
         """

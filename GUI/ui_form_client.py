@@ -39,11 +39,95 @@ class Ui_Widget(object):
         self.tab_home.setObjectName(u"tab_home")
         self.verticalLayout_3 = QVBoxLayout(self.tab_home)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.label_CurrentPosition_3 = QLabel(self.tab_home)
-        self.label_CurrentPosition_3.setObjectName(u"label_CurrentPosition_3")
+        self.horizontalLayout_18 = QHBoxLayout()
+        self.horizontalLayout_18.setObjectName(u"horizontalLayout_18")
+        self.horizontalLayout_18.setContentsMargins(-1, 10, -1, -1)
+        self.label_CurrentPosition_4 = QLabel(self.tab_home)
+        self.label_CurrentPosition_4.setObjectName(u"label_CurrentPosition_4")
         sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.label_CurrentPosition_4.sizePolicy().hasHeightForWidth())
+        self.label_CurrentPosition_4.setSizePolicy(sizePolicy)
+        self.label_CurrentPosition_4.setAlignment(Qt.AlignCenter)
+
+        self.horizontalLayout_18.addWidget(self.label_CurrentPosition_4)
+
+
+        self.verticalLayout_3.addLayout(self.horizontalLayout_18)
+
+        self.verticalLayout_2 = QVBoxLayout()
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.verticalLayout_2.setContentsMargins(-1, 0, -1, -1)
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.horizontalLayout.setContentsMargins(-1, 0, -1, -1)
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer_2)
+
+        self.pushButton_Connect = QPushButton(self.tab_home)
+        self.pushButton_Connect.setObjectName(u"pushButton_Connect")
+        sizePolicy.setHeightForWidth(self.pushButton_Connect.sizePolicy().hasHeightForWidth())
+        self.pushButton_Connect.setSizePolicy(sizePolicy)
+
+        self.horizontalLayout.addWidget(self.pushButton_Connect)
+
+        self.pushButton_Disconnect = QPushButton(self.tab_home)
+        self.pushButton_Disconnect.setObjectName(u"pushButton_Disconnect")
+        sizePolicy.setHeightForWidth(self.pushButton_Disconnect.sizePolicy().hasHeightForWidth())
+        self.pushButton_Disconnect.setSizePolicy(sizePolicy)
+
+        self.horizontalLayout.addWidget(self.pushButton_Disconnect)
+
+        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer_3)
+
+
+        self.verticalLayout_2.addLayout(self.horizontalLayout)
+
+        self.horizontalLayout_4 = QHBoxLayout()
+        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
+        self.horizontalLayout_4.setContentsMargins(-1, 0, -1, -1)
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_4.addItem(self.horizontalSpacer)
+
+        self.label_29 = QLabel(self.tab_home)
+        self.label_29.setObjectName(u"label_29")
+
+        self.horizontalLayout_4.addWidget(self.label_29)
+
+        self.ConnectedLabel = QLabel(self.tab_home)
+        self.ConnectedLabel.setObjectName(u"ConnectedLabel")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.ConnectedLabel.sizePolicy().hasHeightForWidth())
+        self.ConnectedLabel.setSizePolicy(sizePolicy1)
+
+        self.horizontalLayout_4.addWidget(self.ConnectedLabel)
+
+        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout_4.addItem(self.horizontalSpacer_4)
+
+
+        self.verticalLayout_2.addLayout(self.horizontalLayout_4)
+
+
+        self.verticalLayout_3.addLayout(self.verticalLayout_2)
+
+        self.line = QFrame(self.tab_home)
+        self.line.setObjectName(u"line")
+        self.line.setFrameShape(QFrame.HLine)
+        self.line.setFrameShadow(QFrame.Sunken)
+
+        self.verticalLayout_3.addWidget(self.line)
+
+        self.label_CurrentPosition_3 = QLabel(self.tab_home)
+        self.label_CurrentPosition_3.setObjectName(u"label_CurrentPosition_3")
         sizePolicy.setHeightForWidth(self.label_CurrentPosition_3.sizePolicy().hasHeightForWidth())
         self.label_CurrentPosition_3.setSizePolicy(sizePolicy)
 
@@ -95,11 +179,11 @@ class Ui_Widget(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.DecLabel = QLabel(self.tab_home)
         self.DecLabel.setObjectName(u"DecLabel")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.DecLabel.sizePolicy().hasHeightForWidth())
-        self.DecLabel.setSizePolicy(sizePolicy1)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Preferred)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.DecLabel.sizePolicy().hasHeightForWidth())
+        self.DecLabel.setSizePolicy(sizePolicy2)
         self.DecLabel.setMinimumSize(QSize(40, 0))
         self.DecLabel.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
@@ -107,8 +191,8 @@ class Ui_Widget(object):
 
         self.AzLabel = QLabel(self.tab_home)
         self.AzLabel.setObjectName(u"AzLabel")
-        sizePolicy1.setHeightForWidth(self.AzLabel.sizePolicy().hasHeightForWidth())
-        self.AzLabel.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.AzLabel.sizePolicy().hasHeightForWidth())
+        self.AzLabel.setSizePolicy(sizePolicy2)
         self.AzLabel.setMinimumSize(QSize(40, 0))
         self.AzLabel.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
@@ -116,8 +200,8 @@ class Ui_Widget(object):
 
         self.label_GalB = QLabel(self.tab_home)
         self.label_GalB.setObjectName(u"label_GalB")
-        sizePolicy1.setHeightForWidth(self.label_GalB.sizePolicy().hasHeightForWidth())
-        self.label_GalB.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.label_GalB.sizePolicy().hasHeightForWidth())
+        self.label_GalB.setSizePolicy(sizePolicy2)
         self.label_GalB.setMinimumSize(QSize(40, 0))
         self.label_GalB.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
@@ -130,8 +214,8 @@ class Ui_Widget(object):
 
         self.RaLabel = QLabel(self.tab_home)
         self.RaLabel.setObjectName(u"RaLabel")
-        sizePolicy1.setHeightForWidth(self.RaLabel.sizePolicy().hasHeightForWidth())
-        self.RaLabel.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.RaLabel.sizePolicy().hasHeightForWidth())
+        self.RaLabel.setSizePolicy(sizePolicy2)
         self.RaLabel.setMinimumSize(QSize(40, 0))
         self.RaLabel.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
@@ -144,8 +228,8 @@ class Ui_Widget(object):
 
         self.label_GalL = QLabel(self.tab_home)
         self.label_GalL.setObjectName(u"label_GalL")
-        sizePolicy1.setHeightForWidth(self.label_GalL.sizePolicy().hasHeightForWidth())
-        self.label_GalL.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.label_GalL.sizePolicy().hasHeightForWidth())
+        self.label_GalL.setSizePolicy(sizePolicy2)
         self.label_GalL.setMinimumSize(QSize(40, 0))
         self.label_GalL.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
@@ -153,8 +237,8 @@ class Ui_Widget(object):
 
         self.AltLabel = QLabel(self.tab_home)
         self.AltLabel.setObjectName(u"AltLabel")
-        sizePolicy1.setHeightForWidth(self.AltLabel.sizePolicy().hasHeightForWidth())
-        self.AltLabel.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.AltLabel.sizePolicy().hasHeightForWidth())
+        self.AltLabel.setSizePolicy(sizePolicy2)
         self.AltLabel.setMinimumSize(QSize(40, 0))
         self.AltLabel.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
@@ -211,8 +295,8 @@ class Ui_Widget(object):
         self.horizontalLayout_6.setContentsMargins(-1, 0, -1, -1)
         self.LabelTrackingFirstCoord = QLabel(self.tab_home)
         self.LabelTrackingFirstCoord.setObjectName(u"LabelTrackingFirstCoord")
-        sizePolicy1.setHeightForWidth(self.LabelTrackingFirstCoord.sizePolicy().hasHeightForWidth())
-        self.LabelTrackingFirstCoord.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.LabelTrackingFirstCoord.sizePolicy().hasHeightForWidth())
+        self.LabelTrackingFirstCoord.setSizePolicy(sizePolicy2)
         self.LabelTrackingFirstCoord.setMinimumSize(QSize(30, 10))
 
         self.horizontalLayout_6.addWidget(self.LabelTrackingFirstCoord)
@@ -228,8 +312,8 @@ class Ui_Widget(object):
 
         self.LabelTrackingFirstCoord_2 = QLabel(self.tab_home)
         self.LabelTrackingFirstCoord_2.setObjectName(u"LabelTrackingFirstCoord_2")
-        sizePolicy1.setHeightForWidth(self.LabelTrackingFirstCoord_2.sizePolicy().hasHeightForWidth())
-        self.LabelTrackingFirstCoord_2.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.LabelTrackingFirstCoord_2.sizePolicy().hasHeightForWidth())
+        self.LabelTrackingFirstCoord_2.setSizePolicy(sizePolicy2)
         self.LabelTrackingFirstCoord_2.setMinimumSize(QSize(20, 10))
 
         self.horizontalLayout_6.addWidget(self.LabelTrackingFirstCoord_2)
@@ -243,11 +327,11 @@ class Ui_Widget(object):
 
         self.doubleSpinBox_TrackFirstCoord_h = QDoubleSpinBox(self.tab_home)
         self.doubleSpinBox_TrackFirstCoord_h.setObjectName(u"doubleSpinBox_TrackFirstCoord_h")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.doubleSpinBox_TrackFirstCoord_h.sizePolicy().hasHeightForWidth())
-        self.doubleSpinBox_TrackFirstCoord_h.setSizePolicy(sizePolicy2)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(0)
+        sizePolicy3.setHeightForWidth(self.doubleSpinBox_TrackFirstCoord_h.sizePolicy().hasHeightForWidth())
+        self.doubleSpinBox_TrackFirstCoord_h.setSizePolicy(sizePolicy3)
         self.doubleSpinBox_TrackFirstCoord_h.setMinimumSize(QSize(30, 0))
         self.doubleSpinBox_TrackFirstCoord_h.setDecimals(0)
         self.doubleSpinBox_TrackFirstCoord_h.setMinimum(0.000000000000000)
@@ -257,16 +341,16 @@ class Ui_Widget(object):
 
         self.LabelTrackingFirstCoord_3 = QLabel(self.tab_home)
         self.LabelTrackingFirstCoord_3.setObjectName(u"LabelTrackingFirstCoord_3")
-        sizePolicy1.setHeightForWidth(self.LabelTrackingFirstCoord_3.sizePolicy().hasHeightForWidth())
-        self.LabelTrackingFirstCoord_3.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.LabelTrackingFirstCoord_3.sizePolicy().hasHeightForWidth())
+        self.LabelTrackingFirstCoord_3.setSizePolicy(sizePolicy2)
         self.LabelTrackingFirstCoord_3.setMinimumSize(QSize(29, 10))
 
         self.horizontalLayout_6.addWidget(self.LabelTrackingFirstCoord_3)
 
         self.doubleSpinBox_TrackFirstCoord_m = QDoubleSpinBox(self.tab_home)
         self.doubleSpinBox_TrackFirstCoord_m.setObjectName(u"doubleSpinBox_TrackFirstCoord_m")
-        sizePolicy2.setHeightForWidth(self.doubleSpinBox_TrackFirstCoord_m.sizePolicy().hasHeightForWidth())
-        self.doubleSpinBox_TrackFirstCoord_m.setSizePolicy(sizePolicy2)
+        sizePolicy3.setHeightForWidth(self.doubleSpinBox_TrackFirstCoord_m.sizePolicy().hasHeightForWidth())
+        self.doubleSpinBox_TrackFirstCoord_m.setSizePolicy(sizePolicy3)
         self.doubleSpinBox_TrackFirstCoord_m.setMinimumSize(QSize(20, 0))
         self.doubleSpinBox_TrackFirstCoord_m.setBaseSize(QSize(0, 0))
         self.doubleSpinBox_TrackFirstCoord_m.setDecimals(0)
@@ -278,8 +362,8 @@ class Ui_Widget(object):
 
         self.LabelTrackingFirstCoord_4 = QLabel(self.tab_home)
         self.LabelTrackingFirstCoord_4.setObjectName(u"LabelTrackingFirstCoord_4")
-        sizePolicy1.setHeightForWidth(self.LabelTrackingFirstCoord_4.sizePolicy().hasHeightForWidth())
-        self.LabelTrackingFirstCoord_4.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.LabelTrackingFirstCoord_4.sizePolicy().hasHeightForWidth())
+        self.LabelTrackingFirstCoord_4.setSizePolicy(sizePolicy2)
         self.LabelTrackingFirstCoord_4.setMinimumSize(QSize(20, 10))
 
         self.horizontalLayout_6.addWidget(self.LabelTrackingFirstCoord_4)
@@ -294,8 +378,8 @@ class Ui_Widget(object):
 
         self.LabelTrackingFirstCoord_5 = QLabel(self.tab_home)
         self.LabelTrackingFirstCoord_5.setObjectName(u"LabelTrackingFirstCoord_5")
-        sizePolicy1.setHeightForWidth(self.LabelTrackingFirstCoord_5.sizePolicy().hasHeightForWidth())
-        self.LabelTrackingFirstCoord_5.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.LabelTrackingFirstCoord_5.sizePolicy().hasHeightForWidth())
+        self.LabelTrackingFirstCoord_5.setSizePolicy(sizePolicy2)
         self.LabelTrackingFirstCoord_5.setMinimumSize(QSize(20, 10))
 
         self.horizontalLayout_6.addWidget(self.LabelTrackingFirstCoord_5)
@@ -312,8 +396,8 @@ class Ui_Widget(object):
         self.horizontalLayout_12.setContentsMargins(-1, 0, -1, -1)
         self.LabelTrackingSecondCoord = QLabel(self.tab_home)
         self.LabelTrackingSecondCoord.setObjectName(u"LabelTrackingSecondCoord")
-        sizePolicy1.setHeightForWidth(self.LabelTrackingSecondCoord.sizePolicy().hasHeightForWidth())
-        self.LabelTrackingSecondCoord.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.LabelTrackingSecondCoord.sizePolicy().hasHeightForWidth())
+        self.LabelTrackingSecondCoord.setSizePolicy(sizePolicy2)
         self.LabelTrackingSecondCoord.setMinimumSize(QSize(30, 10))
 
         self.horizontalLayout_12.addWidget(self.LabelTrackingSecondCoord)
@@ -329,8 +413,8 @@ class Ui_Widget(object):
 
         self.LabelTrackingSecondCoord_2 = QLabel(self.tab_home)
         self.LabelTrackingSecondCoord_2.setObjectName(u"LabelTrackingSecondCoord_2")
-        sizePolicy1.setHeightForWidth(self.LabelTrackingSecondCoord_2.sizePolicy().hasHeightForWidth())
-        self.LabelTrackingSecondCoord_2.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.LabelTrackingSecondCoord_2.sizePolicy().hasHeightForWidth())
+        self.LabelTrackingSecondCoord_2.setSizePolicy(sizePolicy2)
         self.LabelTrackingSecondCoord_2.setMinimumSize(QSize(20, 10))
 
         self.horizontalLayout_12.addWidget(self.LabelTrackingSecondCoord_2)
@@ -353,8 +437,8 @@ class Ui_Widget(object):
 
         self.LabelTrackingSecondCoord_3 = QLabel(self.tab_home)
         self.LabelTrackingSecondCoord_3.setObjectName(u"LabelTrackingSecondCoord_3")
-        sizePolicy1.setHeightForWidth(self.LabelTrackingSecondCoord_3.sizePolicy().hasHeightForWidth())
-        self.LabelTrackingSecondCoord_3.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.LabelTrackingSecondCoord_3.sizePolicy().hasHeightForWidth())
+        self.LabelTrackingSecondCoord_3.setSizePolicy(sizePolicy2)
         self.LabelTrackingSecondCoord_3.setMinimumSize(QSize(20, 10))
 
         self.horizontalLayout_12.addWidget(self.LabelTrackingSecondCoord_3)
@@ -370,8 +454,8 @@ class Ui_Widget(object):
 
         self.LabelTrackingSecondCoord_4 = QLabel(self.tab_home)
         self.LabelTrackingSecondCoord_4.setObjectName(u"LabelTrackingSecondCoord_4")
-        sizePolicy1.setHeightForWidth(self.LabelTrackingSecondCoord_4.sizePolicy().hasHeightForWidth())
-        self.LabelTrackingSecondCoord_4.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.LabelTrackingSecondCoord_4.sizePolicy().hasHeightForWidth())
+        self.LabelTrackingSecondCoord_4.setSizePolicy(sizePolicy2)
         self.LabelTrackingSecondCoord_4.setMinimumSize(QSize(20, 10))
 
         self.horizontalLayout_12.addWidget(self.LabelTrackingSecondCoord_4)
@@ -386,8 +470,8 @@ class Ui_Widget(object):
 
         self.LabelTrackingSecondCoord_5 = QLabel(self.tab_home)
         self.LabelTrackingSecondCoord_5.setObjectName(u"LabelTrackingSecondCoord_5")
-        sizePolicy1.setHeightForWidth(self.LabelTrackingSecondCoord_5.sizePolicy().hasHeightForWidth())
-        self.LabelTrackingSecondCoord_5.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.LabelTrackingSecondCoord_5.sizePolicy().hasHeightForWidth())
+        self.LabelTrackingSecondCoord_5.setSizePolicy(sizePolicy2)
         self.LabelTrackingSecondCoord_5.setMinimumSize(QSize(20, 10))
 
         self.horizontalLayout_12.addWidget(self.LabelTrackingSecondCoord_5)
@@ -445,71 +529,6 @@ class Ui_Widget(object):
 
 
         self.verticalLayout_3.addLayout(self.verticalLayout_6)
-
-        self.line = QFrame(self.tab_home)
-        self.line.setObjectName(u"line")
-        self.line.setFrameShape(QFrame.HLine)
-        self.line.setFrameShadow(QFrame.Sunken)
-
-        self.verticalLayout_3.addWidget(self.line)
-
-        self.verticalLayout_2 = QVBoxLayout()
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.verticalLayout_2.setContentsMargins(-1, 0, -1, -1)
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.horizontalLayout.setContentsMargins(-1, 0, -1, -1)
-        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer_2)
-
-        self.pushButton_Connect = QPushButton(self.tab_home)
-        self.pushButton_Connect.setObjectName(u"pushButton_Connect")
-        sizePolicy.setHeightForWidth(self.pushButton_Connect.sizePolicy().hasHeightForWidth())
-        self.pushButton_Connect.setSizePolicy(sizePolicy)
-
-        self.horizontalLayout.addWidget(self.pushButton_Connect)
-
-        self.pushButton_Disconnect = QPushButton(self.tab_home)
-        self.pushButton_Disconnect.setObjectName(u"pushButton_Disconnect")
-        sizePolicy.setHeightForWidth(self.pushButton_Disconnect.sizePolicy().hasHeightForWidth())
-        self.pushButton_Disconnect.setSizePolicy(sizePolicy)
-
-        self.horizontalLayout.addWidget(self.pushButton_Disconnect)
-
-        self.horizontalSpacer_3 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout.addItem(self.horizontalSpacer_3)
-
-
-        self.verticalLayout_2.addLayout(self.horizontalLayout)
-
-        self.horizontalLayout_4 = QHBoxLayout()
-        self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
-        self.horizontalLayout_4.setContentsMargins(-1, 0, -1, -1)
-        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout_4.addItem(self.horizontalSpacer)
-
-        self.ConnectedLabel = QLabel(self.tab_home)
-        self.ConnectedLabel.setObjectName(u"ConnectedLabel")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
-        sizePolicy3.setHorizontalStretch(0)
-        sizePolicy3.setVerticalStretch(0)
-        sizePolicy3.setHeightForWidth(self.ConnectedLabel.sizePolicy().hasHeightForWidth())
-        self.ConnectedLabel.setSizePolicy(sizePolicy3)
-
-        self.horizontalLayout_4.addWidget(self.ConnectedLabel)
-
-        self.horizontalSpacer_4 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
-
-        self.horizontalLayout_4.addItem(self.horizontalSpacer_4)
-
-
-        self.verticalLayout_2.addLayout(self.horizontalLayout_4)
-
-
-        self.verticalLayout_3.addLayout(self.verticalLayout_2)
 
         self.tabWidget.addTab(self.tab_home, "")
         self.tab_measure = QWidget()
@@ -795,25 +814,34 @@ class Ui_Widget(object):
 
         self.verticalLayout_4.addWidget(self.label_28)
 
+        self.line_12 = QFrame(self.tab_measure)
+        self.line_12.setObjectName(u"line_12")
+        self.line_12.setFrameShape(QFrame.HLine)
+        self.line_12.setFrameShadow(QFrame.Sunken)
+
+        self.verticalLayout_4.addWidget(self.line_12)
+
         self.label_24 = QLabel(self.tab_measure)
         self.label_24.setObjectName(u"label_24")
         self.label_24.setAlignment(Qt.AlignCenter)
 
         self.verticalLayout_4.addWidget(self.label_24)
 
-        self.horizontalLayout_17 = QHBoxLayout()
+        self.MeasCheckboxFrame = QFrame(self.tab_measure)
+        self.MeasCheckboxFrame.setObjectName(u"MeasCheckboxFrame")
+        self.horizontalLayout_17 = QHBoxLayout(self.MeasCheckboxFrame)
         self.horizontalLayout_17.setObjectName(u"horizontalLayout_17")
-        self.horizontalLayout_17.setContentsMargins(-1, 0, -1, -1)
+        self.horizontalLayout_17.setContentsMargins(-1, 1, -1, 1)
         self.horizontalSpacer_6 = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
 
         self.horizontalLayout_17.addItem(self.horizontalSpacer_6)
 
-        self.checkBox_Raw = QCheckBox(self.tab_measure)
+        self.checkBox_Raw = QCheckBox(self.MeasCheckboxFrame)
         self.checkBox_Raw.setObjectName(u"checkBox_Raw")
 
         self.horizontalLayout_17.addWidget(self.checkBox_Raw)
 
-        self.checkBox_FFT = QCheckBox(self.tab_measure)
+        self.checkBox_FFT = QCheckBox(self.MeasCheckboxFrame)
         self.checkBox_FFT.setObjectName(u"checkBox_FFT")
         self.checkBox_FFT.setChecked(True)
 
@@ -824,7 +852,7 @@ class Ui_Widget(object):
         self.horizontalLayout_17.addItem(self.horizontalSpacer_27)
 
 
-        self.verticalLayout_4.addLayout(self.horizontalLayout_17)
+        self.verticalLayout_4.addWidget(self.MeasCheckboxFrame)
 
         self.horizontalLayout_9 = QHBoxLayout()
         self.horizontalLayout_9.setObjectName(u"horizontalLayout_9")
@@ -900,8 +928,8 @@ class Ui_Widget(object):
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.label_11 = QLabel(self.tab_plot)
         self.label_11.setObjectName(u"label_11")
-        sizePolicy1.setHeightForWidth(self.label_11.sizePolicy().hasHeightForWidth())
-        self.label_11.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.label_11.sizePolicy().hasHeightForWidth())
+        self.label_11.setSizePolicy(sizePolicy2)
         self.label_11.setMinimumSize(QSize(110, 0))
 
         self.horizontalLayout_3.addWidget(self.label_11)
@@ -924,8 +952,8 @@ class Ui_Widget(object):
         self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
         self.label_16 = QLabel(self.tab_plot)
         self.label_16.setObjectName(u"label_16")
-        sizePolicy1.setHeightForWidth(self.label_16.sizePolicy().hasHeightForWidth())
-        self.label_16.setSizePolicy(sizePolicy1)
+        sizePolicy2.setHeightForWidth(self.label_16.sizePolicy().hasHeightForWidth())
+        self.label_16.setSizePolicy(sizePolicy2)
         self.label_16.setMinimumSize(QSize(110, 0))
 
         self.horizontalLayout_7.addWidget(self.label_16)
@@ -1020,7 +1048,7 @@ class Ui_Widget(object):
         sizePolicy6.setVerticalStretch(0)
         sizePolicy6.setHeightForWidth(self.textBrowser_log.sizePolicy().hasHeightForWidth())
         self.textBrowser_log.setSizePolicy(sizePolicy6)
-        self.textBrowser_log.setMinimumSize(QSize(0, 200))
+        self.textBrowser_log.setMinimumSize(QSize(0, 180))
 
         self.verticalLayout.addWidget(self.textBrowser_log)
 
@@ -1036,6 +1064,11 @@ class Ui_Widget(object):
     def retranslateUi(self, Widget):
         Widget.setWindowTitle(QCoreApplication.translate("Widget", u"Widget", None))
         self.label.setText(QCoreApplication.translate("Widget", u"Radio Antenna Connection Software ", None))
+        self.label_CurrentPosition_4.setText(QCoreApplication.translate("Widget", u"<html><head/><body><p><span style=\" font-size:16pt;\">Connecting SRT</span></p></body></html>", None))
+        self.pushButton_Connect.setText(QCoreApplication.translate("Widget", u"Connect", None))
+        self.pushButton_Disconnect.setText(QCoreApplication.translate("Widget", u"Disconnect", None))
+        self.label_29.setText(QCoreApplication.translate("Widget", u"Status:", None))
+        self.ConnectedLabel.setText(QCoreApplication.translate("Widget", u"Disconnected from SRT", None))
         self.label_CurrentPosition_3.setText(QCoreApplication.translate("Widget", u"<html><head/><body><p><span style=\" font-size:16pt;\">Basic commands</span></p></body></html>", None))
         self.pushButton_openCamera.setText(QCoreApplication.translate("Widget", u"Open Camera", None))
         self.pushButton_goHome.setText(QCoreApplication.translate("Widget", u"Go Home", None))
@@ -1069,9 +1102,6 @@ class Ui_Widget(object):
         self.pushButton_GoTo.setText(QCoreApplication.translate("Widget", u"Go to", None))
         self.pushButton_StopTracking.setText(QCoreApplication.translate("Widget", u"Stop tracking", None))
         self.checkBox_Tracking.setText(QCoreApplication.translate("Widget", u"Tracking", None))
-        self.pushButton_Connect.setText(QCoreApplication.translate("Widget", u"Connect", None))
-        self.pushButton_Disconnect.setText(QCoreApplication.translate("Widget", u"Disconnect", None))
-        self.ConnectedLabel.setText(QCoreApplication.translate("Widget", u"Disconnected from SRT", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_home), QCoreApplication.translate("Widget", u"Home", None))
         self.label_19.setText(QCoreApplication.translate("Widget", u"<html><head/><body><p><span style=\" font-size:16pt;\">Gain configuration</span></p></body></html>", None))
         self.label_9.setText(QCoreApplication.translate("Widget", u"RF gain", None))
