@@ -104,6 +104,7 @@ class MainClient(QWidget):
         self.client_socket.disconnected.connect(self.onDisconnected)
 
         if DEBUG: self.initGUI()
+        self.ui.tabWidget.setTabEnabled(1,0)
 
         if STUDENT_VERSION:
             self.ui.checkBox_FFT.setChecked(0)
@@ -525,11 +526,13 @@ class MainClient(QWidget):
         self.ui.ConnectedLabel.setText("Connected to SRT")
         self.ui.pushButton_Connect.setEnabled(0)
         self.ui.pushButton_Disconnect.setEnabled(1)
+        self.ui.tabWidget.setTabEnabled(1, 1)
 
     def DisconnectedFromMount(self):
         self.ui.ConnectedLabel.setText("Disconnected from SRT")
         self.ui.pushButton_Connect.setEnabled(1)
         self.ui.pushButton_Disconnect.setEnabled(0)
+        self.ui.tabWidget.setTabEnabled(1, 0)
 
 
     def TrackFirstCoordDegreeChanged(self, val):
