@@ -24,8 +24,8 @@ from PySide6.QtNetwork import QTcpSocket
 from GUI import ui_form_client
 from GUI import ui_form_launcher
 
-DEBUG = False
-STUDENT_VERSION = False
+DEBUG = True
+STUDENT_VERSION = True
 VIDEOSOURCE = "rtsp://GroundStationEPFL:VegaStar2023@128.178.39.239/stream2"
 VIDEO_RATE = 0.05  # Rate at which the video stream from camera is read
 
@@ -46,7 +46,6 @@ class Launcher(QWidget):
         self.ui = ui_form_launcher.Ui_Form()
         self.ui.setupUi(self)
         self.ui.label_Status.setText("")
-        print("hi")
 
         self.ui.pushButton_Connect.clicked.connect(self.ConnectClicked)
 
