@@ -692,13 +692,6 @@ class Srt(QObject):
         self.obsProcess.finished.connect(self.obsFinished)
         self.obsProcess.start()
 
-        """
-        self.obsProcess = Process(target=self.__observe, args=(
-            repo, name, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample, duration, overwrite, obs_mode,
-            raw_mode))
-        self.obsProcess.start()
-        print(f"observing status : {self.observing}")"""
-
     def plotAll(self, repo, name, calib, n=20, m=35, f_rest=1420.4057517667e6,
                 vlsr=False, dB=True, meta=False):
         """

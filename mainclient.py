@@ -24,8 +24,8 @@ from PySide6.QtNetwork import QTcpSocket
 from GUI import ui_form_client
 from GUI import ui_form_launcher
 
-DEBUG = True
-STUDENT_VERSION = True
+DEBUG = False
+STUDENT_VERSION = False
 VIDEOSOURCE = "rtsp://GroundStationEPFL:VegaStar2023@128.178.39.239/stream2"
 VIDEO_RATE = 0.05  # Rate at which the video stream from camera is read
 
@@ -310,6 +310,7 @@ class MainClient(QWidget):
                 self.DisconnectedFromMount()
 
             if answer == 'IDLE':
+                print("new debug: IDLE received")
                 self.MovementFinished()
 
             if "COORDS" in answer:

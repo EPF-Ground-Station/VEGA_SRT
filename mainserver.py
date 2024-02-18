@@ -259,7 +259,10 @@ class SRTThread(QThread):
                     else:
                         raise ValueError(
                             "ERROR : invalid command passed to server")
+
+                    feedback = 'measurementReceived'
                 # TODO: stop measurement
+                feedback = str(feedback)
                 feedback = str(feedback)
 
                 print("SRT Thread handled: " + msg +
@@ -473,6 +476,8 @@ class ServerGUI(QMainWindow):
             self.sendOK("disconnected")
         elif cmd.split(" ")[0] in ["trackRA", "trackGal"]:
             self.sendOK("tracking")
+        elif cmd == 'measurementReceived':
+            self.sendOK("measurementReceived")
         else:
             self.sendOK("IDLE")
 
