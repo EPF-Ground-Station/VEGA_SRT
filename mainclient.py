@@ -263,9 +263,9 @@ class MainClient(QWidget):
         if '&' in msg:
             messages = msg.split('&')[1:]
             if len(messages) > 1:
-                print(f"Received concatenated messages : {messages}")
+                #print(f"Received concatenated messages : {messages}")
                 for message in messages:
-                    print(f"processing msg {message}")
+                    #print(f"processing msg {message}")
                     self.processMsg('&' + message, verbose)
 
                 return
@@ -294,7 +294,7 @@ class MainClient(QWidget):
         elif '|' in msg:
 
             status, answer = msg.split('|')
-            print(status+"answer: "+answer)
+            #print(status+"answer: "+answer)
             if status in ('WARNING', 'ERROR'):
                 self.addToLog(status + ' ' + answer)
 
