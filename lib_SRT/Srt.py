@@ -184,7 +184,7 @@ class Srt(QObject):
             self.pending = False
 
             # DEBUG Display answer (useful atm in cmd line)
-            print(answer)
+            #print(answer)
 
             if verbose:
                 print(f"Message sent : {msg}")
@@ -409,7 +409,7 @@ class Srt(QObject):
         self.getAllCoords()
         time1 = time.time()
 
-        print(f"Time for response from APM: {(time1 - time0) * 1000} ms")
+        #print(f"Time for response from APM: {(time1 - time0) * 1000} ms")
         return answer
 
     def pointRaDec(self, ra, dec, verbose=False):
