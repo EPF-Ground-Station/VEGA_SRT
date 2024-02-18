@@ -171,10 +171,10 @@ class Srt(QObject):
 
         # WAITS FOR PING RETURN
 
-        print("DEBUG : waiting for ping to stop pending")
+        #print("DEBUG : waiting for ping to stop pending")
         while self.pingPending and msg != "ping":
             continue
-        print("DEBUG : Ping stopped pending")
+        #print("DEBUG : Ping stopped pending")
         self.pending = True
 
         if self.ser.connected:
