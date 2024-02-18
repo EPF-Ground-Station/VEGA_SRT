@@ -477,12 +477,12 @@ class ServerGUI(QMainWindow):
             self.sendOK("disconnected")
         elif cmd.split(" ")[0] in ["trackRA", "trackGal"]:
             self.sendOK("tracking")
-        elif cmd == 'measurementReceived':
+        elif feedback == 'measurementReceived':
             self.sendOK("measurementReceived")
-        elif cmd == 'finishedPointing':
+        elif feedback == 'finishedPointing':
             self.sendOK("IDLE")
         else:
-            print("feedback was "+feedback+", printing other")
+            print("cmd: "+cmd+", "+"feedback was "+feedback+", printing other")
             self.sendOK("other")
 
     def receiveLog(self, log):
