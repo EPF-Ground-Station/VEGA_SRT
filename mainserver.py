@@ -482,7 +482,7 @@ class ServerGUI(QMainWindow):
         elif cmd == 'finishedPointing':
             self.sendOK("IDLE")
         else:
-            print("feedback was "+feedback+", printing IDLE")
+            print("feedback was "+feedback+", printing other")
             self.sendOK("other")
 
     def receiveLog(self, log):
