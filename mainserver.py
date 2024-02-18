@@ -203,6 +203,7 @@ class SRTThread(QThread):
                     else:
                         raise ValueError(
                             "ERROR : invalid command passed to server")
+                    feedback = "finishedPointing"
 
                 if cmd in ("connect", "goHome", "untangle",
                            "standby", "disconnect", "stopTracking"):
@@ -478,8 +479,11 @@ class ServerGUI(QMainWindow):
             self.sendOK("tracking")
         elif cmd == 'measurementReceived':
             self.sendOK("measurementReceived")
-        else:
+        elif cmd == 'finishedPointing':
             self.sendOK("IDLE")
+        else:
+            print("feedback was "+feedback+", printing IDLE")
+            self.sendOK("other")
 
     def receiveLog(self, log):
         """ Slot activated when a thread adds a message to log window"""
