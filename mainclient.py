@@ -200,7 +200,6 @@ class MainClient(QWidget):
         self.measuring = 0
 
 
-
         self.ui.pushButton_Standby.setEnabled(0)
         self.ui.pushButton_Untangle.setEnabled(0)
         self.ui.pushButton_goHome.setEnabled(0)

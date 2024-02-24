@@ -569,9 +569,11 @@ class Srt(QObject):
         if self.tracker.isRunning():
 
             self.pauseTracking.emit()  # Kills tracker
+            print("DEBUG: Entering stoptracking loop")
             while self.tracker.pending:  # Waits for last answer from APM
                 pass
 
+            print("DEBUG: Exiting stoptracking loop")
         self.tracking = False  # Updates flag
 
         # del self.tracker                    # Deletes tracker
