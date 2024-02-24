@@ -85,6 +85,8 @@ class Srt(QObject):
         self.pending = False
         self.pingPending = False
 
+        self.trackerPending = False
+
         self.az, self.alt = 0, 0
         self.ra, self.dec = 0, 0
         self.long, self.lat = 0, 0
@@ -394,7 +396,8 @@ class Srt(QObject):
         """
 
         if not fromTracker:  # Stops tracking before pointing
-            self.stopTracking()
+            if self.tracking:
+                self.stopTracking()
 
         alt %= 90
         if alt < 5:
@@ -465,7 +468,9 @@ class Srt(QObject):
         """
 
         if self.tracking:
+            self.trackerPending = True
             self.pointAzAlt(az, alt, fromTracker=True)
+            self.trackerPending = False
             if self.tracking:
                 self.trackMotionEnd.emit()
 
@@ -569,9 +574,11 @@ class Srt(QObject):
         if self.tracker.isRunning():
 
             self.pauseTracking.emit()  # Kills tracker
-            while self.tracker.pending:  # Waits for last answer from APM
+            print("DEBUG: Entering stoptracking loop")
+            while self.trackerPending:  # Waits for last answer from APM
                 pass
 
+            print("DEBUG: Exiting stoptracking loop")
         self.tracking = False  # Updates flag
 
         # del self.tracker                    # Deletes tracker
