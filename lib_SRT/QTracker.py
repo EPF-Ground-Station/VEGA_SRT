@@ -68,6 +68,11 @@ class QTracker(QThread):
         """Allows to turn on tracking"""
         self.on = True
 
+    def SRTreturn(self):
+        """Triggered when SRT returns answer on tracking motion"""
+        self.turnOn()
+        self.pending=False
+
     def pause(self):
         """Allows to pause tracking"""
         self.on = False
@@ -112,7 +117,6 @@ class QTracker(QThread):
          See self.onIdle and SRT class for more."""
 
         while not self.stop:
-            self.pending = False
             if self.on:
                 self.pending = True
                 if self.mode.value != 3:    # If not sat

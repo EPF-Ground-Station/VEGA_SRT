@@ -63,7 +63,7 @@ class Srt(QObject):
 
         self.tracking = False
         self.tracker.sendPointTo.connect(self.onTrackerSignal)
-        self.trackMotionEnd.connect(self.tracker.turnOn)
+        self.trackMotionEnd.connect(self.tracker.SRTreturn)
         self.pauseTracking.connect(self.tracker.pause)
 
         self.ping = QPing()
@@ -145,7 +145,8 @@ class Srt(QObject):
         if not self.ser.connected:
             return "SRT already disconnected"
 
-        self.stopTracking()
+        if self.tracking:
+            self.stopTracking()
 
         msg = self.go_home()  # Gets SRT to home position
         self.ping.pause()  # Stop pinging
@@ -378,7 +379,7 @@ class Srt(QObject):
         print(f"Calibrating North offset to value {value}")
         return self.send_APM("set_north_offset " + str(value) + " ", verbose)
 
-    def pointAzAlt(self, az, alt, verbose=False):
+    def pointAzAlt(self, az, alt, fromTracker=False, verbose=False):
         """
         Sends the command to slew to Azimuth and Altitude coordinates given in decimal degrees.
 
@@ -392,7 +393,7 @@ class Srt(QObject):
         :rtype: str
         """
 
-        if not self.tracking:  # Stops tracking before pointing
+        if not fromTracker:  # Stops tracking before pointing
             self.stopTracking()
 
         alt %= 90
@@ -464,7 +465,7 @@ class Srt(QObject):
         """
 
         if self.tracking:
-            self.pointAzAlt(az, alt)
+            self.pointAzAlt(az, alt, fromTracker=True)
             if self.tracking:
                 self.trackMotionEnd.emit()
 
@@ -564,13 +565,14 @@ class Srt(QObject):
 
         """
 
-        self.tracking = False  # Updates flag
 
         if self.tracker.isRunning():
 
             self.pauseTracking.emit()  # Kills tracker
             while self.tracker.pending:  # Waits for last answer from APM
                 pass
+
+        self.tracking = False  # Updates flag
 
         # del self.tracker                    # Deletes tracker
         # self.tracker = Tracker(self.ser)    # Prepares new tracker

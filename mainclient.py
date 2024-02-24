@@ -25,7 +25,7 @@ from GUI import ui_form_client
 from GUI import ui_form_launcher
 
 DEBUG = False
-STUDENT_VERSION = True
+STUDENT_VERSION = False
 VIDEOSOURCE = "rtsp://GroundStationEPFL:VegaStar2023@128.178.39.239/stream2"
 VIDEO_RATE = 0.05  # Rate at which the video stream from camera is read
 
@@ -219,7 +219,8 @@ class MainClient(QWidget):
 
         :param message: command to send to the server. See class Server for more about commands formatting
         :type message: str"""
-        if DEBUG: print(message)
+
+        self.addToLog("DEBUG " + message)
         if (not self.SRTconnected) and message != "connect":
             self.addToLog("No antenna connected. Aborting...")
             return
