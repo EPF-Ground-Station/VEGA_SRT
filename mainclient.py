@@ -25,7 +25,7 @@ from GUI import ui_form_client
 from GUI import ui_form_launcher
 
 DEBUG = False
-STUDENT_VERSION = False
+STUDENT_VERSION = True
 VIDEOSOURCE = "rtsp://GroundStationEPFL:VegaStar2023@128.178.39.239/stream2"
 VIDEO_RATE = 0.05  # Rate at which the video stream from camera is read
 

@@ -692,87 +692,87 @@ class Srt(QObject):
         self.obsProcess.finished.connect(self.obsFinished)
         self.obsProcess.start()
 
-    def plotAll(self, repo, name, calib, n=20, m=35, f_rest=1420.4057517667e6,
-                vlsr=False, dB=True, meta=False):
-        """
-        Plots full display of data using virgo library's virgo.plot function. Notice the method needs the calibration
-        and the observation data files to be stored in the same repository to work properly.
-        TODO: Implement better method with new acquisition pipeline.
+def plotAll(repo, name, calib, n=20, m=35, f_rest=1420.4057517667e6,
+            vlsr=False, dB=True, meta=False):
+    """
+    Plots full display of data using virgo library's virgo.plot function. Notice the method needs the calibration
+    and the observation data files to be stored in the same repository to work properly.
+    TODO: Implement better method with new acquisition pipeline.
 
-        :param repo: Name of the repository under which data and params.json files are stored
-        :type repo: str
-        :param name: Name of the observation data file
-        :type name: str
-        :param calib: Name of the calibration data file
-        :type calib: str
-        :param n: TODO: understand this
-        :type n: float
-        :param m: TODO: understand this
-        :type m: float
-        :param f_rest: Center frequency at which the observation was performed. TODO: use params.json rather
-        :param vlsr: TODO: understand this
-        :param dB: Scales the calibrated plot in dB
-        :param meta: TODO: understand this
-        """
+    :param repo: Name of the repository under which data and params.json files are stored
+    :type repo: str
+    :param name: Name of the observation data file
+    :type name: str
+    :param calib: Name of the calibration data file
+    :type calib: str
+    :param n: TODO: understand this
+    :type n: float
+    :param m: TODO: understand this
+    :type m: float
+    :param f_rest: Center frequency at which the observation was performed. TODO: use params.json rather
+    :param vlsr: TODO: understand this
+    :param dB: Scales the calibrated plot in dB
+    :param meta: TODO: understand this
+    """
 
-        # Formatting repo
-        if not os.path.isdir(repo):
-            repo = repo.strip('/')
-            repo = DATA_PATH + repo + '/'
+    # Formatting repo
+    if not os.path.isdir(repo):
+        repo = repo.strip('/')
+        repo = DATA_PATH + repo + '/'
 
-        if not repo.endswith('/'):
-            repo += '/'
+    if not repo.endswith('/'):
+        repo += '/'
 
-        # Load observation parameters
-        if os.path.isfile(repo + f"/{name}_params.json"):
+    # Load observation parameters
+    if os.path.isfile(repo + f"/{name}_params.json"):
 
-            with open(repo + f"/{name}_params.json", "r") as jsFile:
-                obs_params = json.load(jsFile)
+        with open(repo + f"/{name}_params.json", "r") as jsFile:
+            obs_params = json.load(jsFile)
 
-        elif not os.path.isdir(repo):
-            print("ERROR : indicated repo does not relate to any recorded data")
-            return
+    elif not os.path.isdir(repo):
+        print("ERROR : indicated repo does not relate to any recorded data")
+        return
 
-        else:
-            print(
-                f"ERROR : no parameter file found at {repo}. Data might have been corrupted. Try to clean {DATA_PATH}")
-            return
+    else:
+        print(
+            f"ERROR : no parameter file found at {repo}. Data might have been corrupted. Try to clean {DATA_PATH}")
+        return
 
-        obs = name
+    obs = name
 
-        if not name.endswith('.dat'):
-            obs += '.dat'
+    if not name.endswith('.dat'):
+        obs += '.dat'
 
-        if not calib.endswith('.dat'):
-            calib += '.dat'
+    if not calib.endswith('.dat'):
+        calib += '.dat'
 
-        calibPath = repo + calib
-        obsPath = repo + obs
+    calibPath = repo + calib
+    obsPath = repo + obs
 
-        if not os.path.isfile(calibPath):
-            print(
-                f"ERROR : no calibration file found at {calibPath}. Aborting...")
-            return
-        if not os.path.isfile(obsPath):
-            print(
-                f"ERROR : no observation file found at {obsPath} Aborting...")
-            return
+    if not os.path.isfile(calibPath):
+        print(
+            f"ERROR : no calibration file found at {calibPath}. Aborting...")
+        return
+    if not os.path.isfile(obsPath):
+        print(
+            f"ERROR : no observation file found at {obsPath} Aborting...")
+        return
 
-        plot_path = repo + f'plot_{name}.png'
-        av_path = repo + f'average_{name}.png'
-        cal_path = repo + f'calibrated_{name}.png'
-        water_path = repo + f'waterfall_{name}.png'
-        pow_path = repo + f'power_{name}.png'
+    plot_path = repo + f'plot_{name}.png'
+    av_path = repo + f'average_{name}.png'
+    cal_path = repo + f'calibrated_{name}.png'
+    water_path = repo + f'waterfall_{name}.png'
+    pow_path = repo + f'power_{name}.png'
 
-        csv_path = repo + f'spectrum_{name}.csv'
+    csv_path = repo + f'spectrum_{name}.csv'
 
-        virgo.plot(obs_parameters=obs_params, n=n, m=m, f_rest=f_rest,
-                   vlsr=vlsr, dB=dB, meta=meta,
-                   obs_file=obsPath, cal_file=calibPath,
-                   spectra_csv=csv_path, plot_file=plot_path, avplot_file=av_path,
-                   calplot_file=cal_path, waterplot_file=water_path, powplot_file=pow_path)
+    virgo.plot(obs_parameters=obs_params, n=n, m=m, f_rest=f_rest,
+               vlsr=vlsr, dB=dB, meta=meta,
+               obs_file=obsPath, cal_file=calibPath,
+               spectra_csv=csv_path, plot_file=plot_path, avplot_file=av_path,
+               calplot_file=cal_path, waterplot_file=water_path, powplot_file=pow_path)
 
-        print(f"Plot saved under {plot_path}. CSV saved under {csv_path}.")
+    print(f"Plot saved under {plot_path}. CSV saved under {csv_path}.")
 
     # def obsPower(self, duration, intTime=1, bandwidth=1.024, fc=1420, repo=None, obs=None, gain=480):
     #     """ Observes PSD at center frequency fc for a duration in seconds with
