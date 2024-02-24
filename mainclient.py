@@ -103,6 +103,11 @@ class MainClient(QWidget):
         self.client_socket.errorOccurred.connect(self.connexionError)
         self.client_socket.disconnected.connect(self.onDisconnected)
 
+        self.timerProgressBar = QTimer()
+        self.cameraThread = QCameraThread()
+
+        self.__connectSlots()
+
         if DEBUG: self.initGUI()
         self.ui.tabWidget.setTabEnabled(1,0)
 
@@ -120,6 +125,42 @@ class MainClient(QWidget):
             self.ui.label_26.hide()
             self.ui.label_28.setText("Note: filenames end in a timestamp automatically. The directory name will "
                                      "be a timestamp.")
+
+    def __connectSlots(self):
+        """Methods that connects slots to signals for the GUI"""
+
+        self.timerProgressBar.timeout.connect(self.MeasureProgressBarUpdater)
+        self.ui.pushButton_goHome.clicked.connect(self.GoHomeClicked)
+        self.ui.pushButton_LaunchMeasurement.clicked.connect(
+            self.LaunchMeasurementClicked)
+        self.ui.pushButton_Plot.clicked.connect(self.PlotClicked)
+        self.ui.pushButton_GoTo.clicked.connect(self.GoToClicked)
+        self.ui.pushButton_StopTracking.clicked.connect(
+            self.StopTrackingClicked)
+        self.ui.pushButton_Connect.clicked.connect(self.ConnectClicked)
+        self.ui.pushButton_Disconnect.clicked.connect(self.DisconnectClicked)
+        self.ui.pushButton_Untangle.clicked.connect(self.untangleClicked)
+        self.ui.pushButton_Standby.clicked.connect(self.standbyClicked)
+
+        self.ui.pushButton_browseCalib.clicked.connect(self.BrowseCalibClicked)
+        self.ui.pushButton_browseMeasureFile.clicked.connect(
+            self.BrowseMeasureClicked)
+
+        self.ui.pushButton_Plot.clicked.connect(self.PlotClicked)
+
+        self.ui.comboBoxTracking.currentIndexChanged.connect(
+            self.TrackingComboBoxChanged)
+        self.ui.doubleSpinBox_TrackFirstCoordDecimal.valueChanged.connect(self.TrackFirstCoordDegreeChanged)
+        self.ui.doubleSpinBox_TrackFirstCoord_h.valueChanged.connect(self.TrackFirstCoordHMSChanged)
+        self.ui.doubleSpinBox_TrackFirstCoord_m.valueChanged.connect(self.TrackFirstCoordHMSChanged)
+        self.ui.doubleSpinBox_TrackFirstCoord_s.valueChanged.connect(self.TrackFirstCoordHMSChanged)
+        self.ui.doubleSpinBox_TrackSecondCoordDecimal.valueChanged.connect(self.TrackSecondCoordDegreeChanged)
+        self.ui.doubleSpinBox_TrackSecondCoord_Deg.valueChanged.connect(self.TrackSecondCoordHMSChanged)
+        self.ui.doubleSpinBox_TrackSecondCoord_m.valueChanged.connect(self.TrackSecondCoordHMSChanged)
+        self.ui.doubleSpinBox_TrackSecondCoord_s.valueChanged.connect(self.TrackSecondCoordHMSChanged)
+
+        self.ui.pushButton_openCamera.clicked.connect(self.openCameraClicked)
+        self.cameraThread.closeSignalCameraThread.connect(self.cameraThreadFinished)
 
     @Slot()
     def connectServ(self):
@@ -154,52 +195,21 @@ class MainClient(QWidget):
         self.tracking = 0
 
         self.measureDuration = 0
-        self.timerProgressBar = QTimer()
-        self.timerProgressBar.timeout.connect(self.MeasureProgressBarUpdater)
         self.timerIterations = 0
 
         self.measuring = 0
 
-        self.ui.pushButton_goHome.clicked.connect(self.GoHomeClicked)
-        self.ui.pushButton_LaunchMeasurement.clicked.connect(
-            self.LaunchMeasurementClicked)
-        self.ui.pushButton_Plot.clicked.connect(self.PlotClicked)
-        self.ui.pushButton_GoTo.clicked.connect(self.GoToClicked)
-        self.ui.pushButton_StopTracking.clicked.connect(
-            self.StopTrackingClicked)
-        self.ui.pushButton_Connect.clicked.connect(self.ConnectClicked)
-        self.ui.pushButton_Disconnect.clicked.connect(self.DisconnectClicked)
-        self.ui.pushButton_Untangle.clicked.connect(self.untangleClicked)
-        self.ui.pushButton_Standby.clicked.connect(self.standbyClicked)
 
-        self.ui.pushButton_browseCalib.clicked.connect(self.BrowseCalibClicked)
-        self.ui.pushButton_browseMeasureFile.clicked.connect(
-            self.BrowseMeasureClicked)
-
-        self.ui.pushButton_Plot.clicked.connect(self.PlotClicked)
-
-        self.ui.comboBoxTracking.currentIndexChanged.connect(
-            self.TrackingComboBoxChanged)
-        self.ui.doubleSpinBox_TrackFirstCoordDecimal.valueChanged.connect(self.TrackFirstCoordDegreeChanged)
-        self.ui.doubleSpinBox_TrackFirstCoord_h.valueChanged.connect(self.TrackFirstCoordHMSChanged)
-        self.ui.doubleSpinBox_TrackFirstCoord_m.valueChanged.connect(self.TrackFirstCoordHMSChanged)
-        self.ui.doubleSpinBox_TrackFirstCoord_s.valueChanged.connect(self.TrackFirstCoordHMSChanged)
-        self.ui.doubleSpinBox_TrackSecondCoordDecimal.valueChanged.connect(self.TrackSecondCoordDegreeChanged)
-        self.ui.doubleSpinBox_TrackSecondCoord_Deg.valueChanged.connect(self.TrackSecondCoordHMSChanged)
-        self.ui.doubleSpinBox_TrackSecondCoord_m.valueChanged.connect(self.TrackSecondCoordHMSChanged)
-        self.ui.doubleSpinBox_TrackSecondCoord_s.valueChanged.connect(self.TrackSecondCoordHMSChanged)
 
         self.ui.pushButton_Standby.setEnabled(0)
         self.ui.pushButton_Untangle.setEnabled(0)
         self.ui.pushButton_goHome.setEnabled(0)
         self.ui.pushButton_GoTo.setEnabled(0)
         self.ui.checkBox_Tracking.setEnabled(0)
+        self.ui.pushButton_Connect.setEnabled(1)
+        self.ui.pushButton_Disconnect.setEnabled(0)
 
         self.ui.tabWidget.setCurrentIndex(0)
-
-        self.ui.pushButton_openCamera.clicked.connect(self.openCameraClicked)
-        self.cameraThread = QCameraThread()
-        self.cameraThread.closeSignalCameraThread.connect(self.cameraThreadFinished)
 
         self.show()
 

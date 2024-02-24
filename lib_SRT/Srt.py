@@ -413,7 +413,7 @@ class Srt(QObject):
         #print(f"Time for response from APM: {(time1 - time0) * 1000} ms")
         return answer
 
-    def pointRaDec(self, ra, dec, verbose=False):
+    def pointRaDec(self, ra, dec, fromTracker=False, verbose=False):
         """
         Sends the command to slew to Ra Dec coordinates given in respectively decimal hour,degrees.
 
@@ -430,9 +430,9 @@ class Srt(QObject):
         if verbose:
             print(f"Moving to RA={ra}, Dec = {dec}...")
         az, alt = RaDec2AzAlt(ra, dec)
-        return self.pointAzAlt(az, alt, verbose)
+        return self.pointAzAlt(az, alt, fromTracker, verbose)
 
-    def pointGal(self, long, lat, verbose=False):
+    def pointGal(self, long, lat, fromTracker=False, verbose=False):
         """
         Sends the command to slew to Long Lat galactic coordinates given in decimal hours.
 
@@ -449,7 +449,7 @@ class Srt(QObject):
         if verbose:
             print(f"Moving to long={long}, lat = {lat}...")
         az, alt = Gal2AzAlt(long, lat)
-        return self.pointAzAlt(az, alt, verbose)
+        return self.pointAzAlt(az, alt, fromTracker, verbose)
 
     def onTrackerSignal(self, az, alt):
         """
@@ -490,7 +490,7 @@ class Srt(QObject):
         """
         self.tracking = True  # Updates flag BEFORE pointing
         self.pointRaDec(
-            ra, dec)  # Goes to destination before allowing other command
+            ra, dec, fromTracker=True)  # Goes to destination before allowing other command
         # self.ping.pause()                   # Ping useless in tracking mode ACTUALLY its not, lets keep it
 
         if not self.tracker.isRunning():  # Launches tracker thread
@@ -513,7 +513,7 @@ class Srt(QObject):
 
         self.tracking = True  # Updates flag
         self.pointGal(
-            long, b)  # Goes to destination before allowing other command
+            long, b, fromTracker=True)  # Goes to destination before allowing other command
         # self.ping.pause()                   # Ping useless in tracking mode ACTUALLY its not, lets keep it
 
         if not self.tracker.isRunning():  # Launches tracker thread
