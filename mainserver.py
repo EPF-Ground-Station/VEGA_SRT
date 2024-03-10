@@ -482,8 +482,8 @@ class ServerGUI(QMainWindow):
         elif feedback == 'finishedPointing':
             self.sendOK("IDLE")
         elif cmd == 'stopTracking' and str(feedback) == "None":
-            self.sendOK("stoppedTracking")
-        elif cmd == 'stopTracking' and str(feedback) != "None":
+            self.sendOK("IDLE")
+        else:
             print("cmd: "+cmd+", "+"feedback was "+feedback+", printing other")
             self.sendOK("other")
 
