@@ -3,7 +3,7 @@
 
 #define SPI_SPEED 1000000
 
-#define INACTIVITY_MAX_DURATION 61 // 61 seconds after which standby mode is enabled
+#define INACTIVITY_MAX_DURATION 301 // 61 seconds after which standby mode is enabled
 
 //To change once mounted on the roof
 // not used, replaced by set_north_offset cmd
