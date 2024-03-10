@@ -25,7 +25,7 @@ from GUI import ui_form_client
 from GUI import ui_form_launcher
 
 DEBUG = False
-STUDENT_VERSION = False
+STUDENT_VERSION = True
 VIDEOSOURCE = "rtsp://GroundStationEPFL:VegaStar2023@128.178.39.239/stream2"
 VIDEO_RATE = 0.05  # Rate at which the video stream from camera is read
 
@@ -120,8 +120,7 @@ class MainClient(QWidget):
             self.ui.lineEdit_measurement_directoryname.setEnabled(0)
             self.ui.tabWidget.removeTab(2)
             self.ui.lineEdit_measurement_directoryname.hide()
-            self.ui.pushButton_openCamera.setEnabled(0)
-            self.ui.textBrowser_log.hide()
+            #self.ui.textBrowser_log.hide()
             self.ui.label_26.hide()
             self.ui.label_28.setText("Note: filenames end in a timestamp automatically. The directory name will "
                                      "be a timestamp.")
@@ -229,7 +228,6 @@ class MainClient(QWidget):
         :param message: command to send to the server. See class Server for more about commands formatting
         :type message: str"""
 
-        self.addToLog("DEBUG " + message)
         if (not self.SRTconnected) and message != "connect":
             self.addToLog("No antenna connected. Aborting...")
             return
