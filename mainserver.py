@@ -208,7 +208,7 @@ class SRTThread(QThread):
 
                         # If wrong coords values for conversion to AzAlt
                         except ValueError:
-                            feedback = "Invalid coordinates values. Latitudes should be within [-90°, 90°]."
+                            feedback = "Invalid coordinates values. Latitudes should be within [-90°, 90°]. Pointing aborted."
 
                     # If invalid number of args
                     else:
@@ -494,6 +494,8 @@ class ServerGUI(QMainWindow):
             self.sendOK("measurementReceived")
         elif feedback == 'finishedPointing':
             self.sendOK("IDLE")
+        elif "Pointing aborted" in feedback:
+            self.sendWarning("IDLE")
         elif cmd == 'stopTracking' and str(feedback) == "None":
             self.sendOK("IDLE")
         else:
