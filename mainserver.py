@@ -495,7 +495,8 @@ class ServerGUI(QMainWindow):
         elif feedback == 'finishedPointing':
             self.sendOK("IDLE")
         elif "Pointing aborted" in feedback:
-            self.sendWarning("IDLE")
+            self.sendWarning(feedback)
+            self.sendOK("IDLE")
         elif cmd == 'stopTracking' and str(feedback) == "None":
             self.sendOK("IDLE")
         else:
