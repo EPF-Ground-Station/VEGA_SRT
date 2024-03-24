@@ -24,8 +24,8 @@ from PySide6.QtNetwork import QTcpSocket
 from GUI import ui_form_client
 from GUI import ui_form_launcher
 
-DEBUG = True
-STUDENT_VERSION = True
+DEBUG = False
+STUDENT_VERSION = False
 VIDEOSOURCE = "rtsp://GroundStationEPFL:VegaStar2023@128.178.39.239/stream2"
 VIDEO_RATE = 0.05  # Rate at which the video stream from camera is read
 
@@ -160,6 +160,8 @@ class MainClient(QWidget):
 
         self.measuring = 0
 
+        self.ui.doubleSpinBox_TrackFirstCoordDecimal.setRange(0,360)
+
         self.ui.pushButton_goHome.clicked.connect(self.GoHomeClicked)
         self.ui.pushButton_LaunchMeasurement.clicked.connect(
             self.LaunchMeasurementClicked)
@@ -177,6 +179,7 @@ class MainClient(QWidget):
             self.BrowseMeasureClicked)
 
         self.ui.pushButton_Plot.clicked.connect(self.PlotClicked)
+
 
         self.ui.comboBoxTracking.currentIndexChanged.connect(
             self.TrackingComboBoxChanged)
@@ -557,7 +560,10 @@ class MainClient(QWidget):
         self.ui.doubleSpinBox_TrackFirstCoordDecimal.blockSignals(0)
 
     def TrackSecondCoordDegreeChanged(self, val):
-        (h, m, s) = DegtoDMS(val)
+        (h, m, s) = DegtoDMS(abs(val))
+        if val < 0:
+            h = -h
+
         self.ui.doubleSpinBox_TrackSecondCoord_Deg.blockSignals(1)
         self.ui.doubleSpinBox_TrackSecondCoord_m.blockSignals(1)
         self.ui.doubleSpinBox_TrackSecondCoord_s.blockSignals(1)
@@ -572,10 +578,11 @@ class MainClient(QWidget):
 
     def TrackSecondCoordHMSChanged(self, val):
         self.ui.doubleSpinBox_TrackSecondCoordDecimal.blockSignals(1)
+        angleSign = 2*int(self.ui.doubleSpinBox_TrackSecondCoord_Deg.value()>0)-1
         self.ui.doubleSpinBox_TrackSecondCoordDecimal.setValue(
             DMStoDeg(self.ui.doubleSpinBox_TrackSecondCoord_Deg.value(),
-                     self.ui.doubleSpinBox_TrackSecondCoord_m.value(),
-                     self.ui.doubleSpinBox_TrackSecondCoord_s.value()))
+                     angleSign*self.ui.doubleSpinBox_TrackSecondCoord_m.value(),
+                     angleSign*self.ui.doubleSpinBox_TrackSecondCoord_s.value()))
         self.ui.doubleSpinBox_TrackSecondCoordDecimal.blockSignals(0)
 
     def TrackingComboBoxChanged(self, index):

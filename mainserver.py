@@ -243,11 +243,6 @@ class SRTThread(QThread):
                             float(args[6]), float(args[7]), float(args[8]),float(args[9]), float(args[10]),
                             bool(int(args[11])), bool(int(args[12])), bool(int(args[13])))
 
-                        """if repo == 'devnull':  # Just a trick since empty strings are not recognised as arguments
-                            repo = ''
-                        if prefix == 'devnull':
-                            prefix = '' """
-
                         if self.SRT.observing == 0:
                             self.measuring = True
                             self.SRT.observe(repo=repo, prefix=prefix, rf_gain=rf_gain, if_gain=if_gain, bb_gain=bb_gain,
