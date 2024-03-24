@@ -187,19 +187,30 @@ class SRTThread(QThread):
                 # Processing of command
                 if cmd in ("pointRA", "pointGal", "pointAzAlt", "trackRA", "trackGal"):
 
-                    if len(args) == 3:  # Parses arguments (point/track)
+                    if len(args) == 3:  # Parses arguments (point/track) : need for 2 coords
                         a, b = float(args[1]), float(args[2])
-                        if cmd == "pointRA":
-                            a, b = RaDec2AzAlt(a, b)
-                        if cmd == "pointGal":
-                            a, b = Gal2AzAlt(a, b)
-                        if "point" in msg:
-                            feedback = self.SRT.pointAzAlt(a, b)
-                        elif cmd == "trackRA":
-                            self.trackingBool = True
-                            feedback = self.SRT.trackRaDec(a, b)
-                        elif cmd == "trackGal":
-                            feedback = self.SRT.trackGal(a, b)
+
+                        try:
+
+                            if cmd == "pointRA":
+                                a, b = RaDec2AzAlt(a, b)
+                            if cmd == "pointGal":
+                                a, b = Gal2AzAlt(a, b)
+                            if "point" in msg:
+                                feedback = self.SRT.pointAzAlt(a, b)
+                            elif cmd == "trackRA":
+                                self.trackingBool = True
+                                feedback = self.SRT.trackRaDec(a, b)
+                            elif cmd == "trackGal":
+                                feedback = self.SRT.trackGal(a, b)
+
+                            feedback = "finishedPointing"
+
+                        # If wrong coords values for conversion to AzAlt
+                        except ValueError:
+                            feedback = "Invalid coordinates values. Latitudes should be within [-90°, 90°]. Pointing aborted."
+
+                    # If invalid number of args
                     else:
                         raise ValueError(
                             "ERROR : invalid command passed to server")
@@ -211,7 +222,8 @@ class SRTThread(QThread):
                         if cmd == "goHome":
                             feedback = self.SRT.go_home()
                         elif cmd == "connect":
-                            feedback = self.SRT.connectAPM(False)  # TODO: remove False for debug
+                            # TODO: remove False for debug
+                            feedback = self.SRT.connectAPM(False)
                             if feedback == 'IDLE' or feedback == 'Untangled':
                                 print("SRT Thread connected")
                                 self.connected = 1
@@ -239,8 +251,10 @@ class SRTThread(QThread):
                     if len(args) == 13+1:  # Parses arguments (measurement)
                         (repo, prefix, rf_gain, if_gain, bb_gain, centerFreq, bandwidth, channels, sampleTime, duration,
                          obs_mode, raw_mode, studentflag) = (
-                            str(args[1]), str(args[2]), float(args[3]), float(args[4]), float(args[5]),
-                            float(args[6]), float(args[7]), float(args[8]),float(args[9]), float(args[10]),
+                            str(args[1]), str(args[2]), float(
+                                args[3]), float(args[4]), float(args[5]),
+                            float(args[6]), float(args[7]), float(
+                                args[8]), float(args[9]), float(args[10]),
                             bool(int(args[11])), bool(int(args[12])), bool(int(args[13])))
 
                         if self.SRT.observing == 0:
@@ -254,7 +268,10 @@ class SRTThread(QThread):
                     else:
                         raise ValueError(
                             "ERROR : invalid command passed to server")
+
+                    feedback = 'measurementReceived'
                 # TODO: stop measurement
+                feedback = str(feedback)
                 feedback = str(feedback)
 
                 print("SRT Thread handled: " + msg +
@@ -374,8 +391,8 @@ class ServerGUI(QMainWindow):
             # messages sent to client
             time1 = time.time_ns()
 
-            #if self.SRTThread.pending:
-                #print("DEBUG : waiting for SRTthread to stop pending...")
+            # if self.SRTThread.pending:
+            #print("DEBUG : waiting for SRTthread to stop pending...")
             while self.SRTThread.pending:
                 pass
             #print(f"DEBUG : SRTthread stopped pending... Sending msg {msg}")
@@ -468,8 +485,18 @@ class ServerGUI(QMainWindow):
             self.sendOK("disconnected")
         elif cmd.split(" ")[0] in ["trackRA", "trackGal"]:
             self.sendOK("tracking")
-        else:
+        elif feedback == 'measurementReceived':
+            self.sendOK("measurementReceived")
+        elif feedback == 'finishedPointing':
             self.sendOK("IDLE")
+        elif "Pointing aborted" in feedback:
+            self.sendWarning(feedback)
+            self.sendOK("IDLE")
+        elif cmd == 'stopTracking' and str(feedback) == "None":
+            self.sendOK("IDLE")
+        else:
+            print("cmd: "+cmd+", "+"feedback was "+feedback+", printing other")
+            self.sendOK("other")
 
     def receiveLog(self, log):
         """ Slot activated when a thread adds a message to log window"""

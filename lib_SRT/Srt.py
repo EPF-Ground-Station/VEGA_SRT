@@ -63,7 +63,7 @@ class Srt(QObject):
 
         self.tracking = False
         self.tracker.sendPointTo.connect(self.onTrackerSignal)
-        self.trackMotionEnd.connect(self.tracker.turnOn)
+        self.trackMotionEnd.connect(self.tracker.SRTreturn)
         self.pauseTracking.connect(self.tracker.pause)
 
         self.ping = QPing()
@@ -84,6 +84,8 @@ class Srt(QObject):
 
         self.pending = False
         self.pingPending = False
+
+        self.trackerPending = False
 
         self.az, self.alt = 0, 0
         self.ra, self.dec = 0, 0
@@ -145,7 +147,8 @@ class Srt(QObject):
         if not self.ser.connected:
             return "SRT already disconnected"
 
-        self.stopTracking()
+        if self.tracking:
+            self.stopTracking()
 
         msg = self.go_home()  # Gets SRT to home position
         self.ping.pause()  # Stop pinging
@@ -171,10 +174,10 @@ class Srt(QObject):
 
         # WAITS FOR PING RETURN
 
-        print("DEBUG : waiting for ping to stop pending")
+        #print("DEBUG : waiting for ping to stop pending")
         while self.pingPending and msg != "ping":
             continue
-        print("DEBUG : Ping stopped pending")
+        #print("DEBUG : Ping stopped pending")
         self.pending = True
 
         if self.ser.connected:
@@ -184,7 +187,7 @@ class Srt(QObject):
             self.pending = False
 
             # DEBUG Display answer (useful atm in cmd line)
-            print(answer)
+            #print(answer)
 
             if verbose:
                 print(f"Message sent : {msg}")
@@ -378,7 +381,7 @@ class Srt(QObject):
         print(f"Calibrating North offset to value {value}")
         return self.send_APM("set_north_offset " + str(value) + " ", verbose)
 
-    def pointAzAlt(self, az, alt, verbose=False):
+    def pointAzAlt(self, az, alt, fromTracker=False, verbose=False):
         """
         Sends the command to slew to Azimuth and Altitude coordinates given in decimal degrees.
 
@@ -392,8 +395,9 @@ class Srt(QObject):
         :rtype: str
         """
 
-        if not self.tracking:  # Stops tracking before pointing
-            self.stopTracking()
+        if not fromTracker:  # Stops tracking before pointing
+            if self.tracking:
+                self.stopTracking()
 
         alt %= 90
         if alt < 5:
@@ -409,10 +413,10 @@ class Srt(QObject):
         self.getAllCoords()
         time1 = time.time()
 
-        print(f"Time for response from APM: {(time1 - time0) * 1000} ms")
+        #print(f"Time for response from APM: {(time1 - time0) * 1000} ms")
         return answer
 
-    def pointRaDec(self, ra, dec, verbose=False):
+    def pointRaDec(self, ra, dec, fromTracker=False, verbose=False):
         """
         Sends the command to slew to Ra Dec coordinates given in respectively decimal hour,degrees.
 
@@ -429,9 +433,9 @@ class Srt(QObject):
         if verbose:
             print(f"Moving to RA={ra}, Dec = {dec}...")
         az, alt = RaDec2AzAlt(ra, dec)
-        return self.pointAzAlt(az, alt, verbose)
+        return self.pointAzAlt(az, alt, fromTracker, verbose)
 
-    def pointGal(self, long, lat, verbose=False):
+    def pointGal(self, long, lat, fromTracker=False, verbose=False):
         """
         Sends the command to slew to Long Lat galactic coordinates given in decimal hours.
 
@@ -448,7 +452,7 @@ class Srt(QObject):
         if verbose:
             print(f"Moving to long={long}, lat = {lat}...")
         az, alt = Gal2AzAlt(long, lat)
-        return self.pointAzAlt(az, alt, verbose)
+        return self.pointAzAlt(az, alt, fromTracker, verbose)
 
     def onTrackerSignal(self, az, alt):
         """
@@ -464,7 +468,9 @@ class Srt(QObject):
         """
 
         if self.tracking:
-            self.pointAzAlt(az, alt)
+            self.trackerPending = True
+            self.pointAzAlt(az, alt, fromTracker=True)
+            self.trackerPending = False
             if self.tracking:
                 self.trackMotionEnd.emit()
 
@@ -489,7 +495,7 @@ class Srt(QObject):
         """
         self.tracking = True  # Updates flag BEFORE pointing
         self.pointRaDec(
-            ra, dec)  # Goes to destination before allowing other command
+            ra, dec, fromTracker=True)  # Goes to destination before allowing other command
         # self.ping.pause()                   # Ping useless in tracking mode ACTUALLY its not, lets keep it
 
         if not self.tracker.isRunning():  # Launches tracker thread
@@ -512,7 +518,7 @@ class Srt(QObject):
 
         self.tracking = True  # Updates flag
         self.pointGal(
-            long, b)  # Goes to destination before allowing other command
+            long, b, fromTracker=True)  # Goes to destination before allowing other command
         # self.ping.pause()                   # Ping useless in tracking mode ACTUALLY its not, lets keep it
 
         if not self.tracker.isRunning():  # Launches tracker thread
@@ -564,13 +570,16 @@ class Srt(QObject):
 
         """
 
-        self.tracking = False  # Updates flag
 
         if self.tracker.isRunning():
 
             self.pauseTracking.emit()  # Kills tracker
-            while self.tracker.pending:  # Waits for last answer from APM
+            print("DEBUG: Entering stoptracking loop")
+            while self.trackerPending:  # Waits for last answer from APM
                 pass
+
+            print("DEBUG: Exiting stoptracking loop")
+        self.tracking = False  # Updates flag
 
         # del self.tracker                    # Deletes tracker
         # self.tracker = Tracker(self.ser)    # Prepares new tracker
@@ -692,94 +701,87 @@ class Srt(QObject):
         self.obsProcess.finished.connect(self.obsFinished)
         self.obsProcess.start()
 
-        """
-        self.obsProcess = Process(target=self.__observe, args=(
-            repo, name, dev_args, rf_gain, if_gain, bb_gain, fc, bw, channels, t_sample, duration, overwrite, obs_mode,
-            raw_mode))
-        self.obsProcess.start()
-        print(f"observing status : {self.observing}")"""
+def plotAll(repo, name, calib, n=20, m=35, f_rest=1420.4057517667e6,
+            vlsr=False, dB=True, meta=False):
+    """
+    Plots full display of data using virgo library's virgo.plot function. Notice the method needs the calibration
+    and the observation data files to be stored in the same repository to work properly.
+    TODO: Implement better method with new acquisition pipeline.
 
-    def plotAll(self, repo, name, calib, n=20, m=35, f_rest=1420.4057517667e6,
-                vlsr=False, dB=True, meta=False):
-        """
-        Plots full display of data using virgo library's virgo.plot function. Notice the method needs the calibration
-        and the observation data files to be stored in the same repository to work properly.
-        TODO: Implement better method with new acquisition pipeline.
+    :param repo: Name of the repository under which data and params.json files are stored
+    :type repo: str
+    :param name: Name of the observation data file
+    :type name: str
+    :param calib: Name of the calibration data file
+    :type calib: str
+    :param n: TODO: understand this
+    :type n: float
+    :param m: TODO: understand this
+    :type m: float
+    :param f_rest: Center frequency at which the observation was performed. TODO: use params.json rather
+    :param vlsr: TODO: understand this
+    :param dB: Scales the calibrated plot in dB
+    :param meta: TODO: understand this
+    """
 
-        :param repo: Name of the repository under which data and params.json files are stored
-        :type repo: str
-        :param name: Name of the observation data file
-        :type name: str
-        :param calib: Name of the calibration data file
-        :type calib: str
-        :param n: TODO: understand this
-        :type n: float
-        :param m: TODO: understand this
-        :type m: float
-        :param f_rest: Center frequency at which the observation was performed. TODO: use params.json rather
-        :param vlsr: TODO: understand this
-        :param dB: Scales the calibrated plot in dB
-        :param meta: TODO: understand this
-        """
+    # Formatting repo
+    if not os.path.isdir(repo):
+        repo = repo.strip('/')
+        repo = DATA_PATH + repo + '/'
 
-        # Formatting repo
-        if not os.path.isdir(repo):
-            repo = repo.strip('/')
-            repo = DATA_PATH + repo + '/'
+    if not repo.endswith('/'):
+        repo += '/'
 
-        if not repo.endswith('/'):
-            repo += '/'
+    # Load observation parameters
+    if os.path.isfile(repo + f"/{name}_params.json"):
 
-        # Load observation parameters
-        if os.path.isfile(repo + f"/{name}_params.json"):
+        with open(repo + f"/{name}_params.json", "r") as jsFile:
+            obs_params = json.load(jsFile)
 
-            with open(repo + f"/{name}_params.json", "r") as jsFile:
-                obs_params = json.load(jsFile)
+    elif not os.path.isdir(repo):
+        print("ERROR : indicated repo does not relate to any recorded data")
+        return
 
-        elif not os.path.isdir(repo):
-            print("ERROR : indicated repo does not relate to any recorded data")
-            return
+    else:
+        print(
+            f"ERROR : no parameter file found at {repo}. Data might have been corrupted. Try to clean {DATA_PATH}")
+        return
 
-        else:
-            print(
-                f"ERROR : no parameter file found at {repo}. Data might have been corrupted. Try to clean {DATA_PATH}")
-            return
+    obs = name
 
-        obs = name
+    if not name.endswith('.dat'):
+        obs += '.dat'
 
-        if not name.endswith('.dat'):
-            obs += '.dat'
+    if not calib.endswith('.dat'):
+        calib += '.dat'
 
-        if not calib.endswith('.dat'):
-            calib += '.dat'
+    calibPath = repo + calib
+    obsPath = repo + obs
 
-        calibPath = repo + calib
-        obsPath = repo + obs
+    if not os.path.isfile(calibPath):
+        print(
+            f"ERROR : no calibration file found at {calibPath}. Aborting...")
+        return
+    if not os.path.isfile(obsPath):
+        print(
+            f"ERROR : no observation file found at {obsPath} Aborting...")
+        return
 
-        if not os.path.isfile(calibPath):
-            print(
-                f"ERROR : no calibration file found at {calibPath}. Aborting...")
-            return
-        if not os.path.isfile(obsPath):
-            print(
-                f"ERROR : no observation file found at {obsPath} Aborting...")
-            return
+    plot_path = repo + f'plot_{name}.png'
+    av_path = repo + f'average_{name}.png'
+    cal_path = repo + f'calibrated_{name}.png'
+    water_path = repo + f'waterfall_{name}.png'
+    pow_path = repo + f'power_{name}.png'
 
-        plot_path = repo + f'plot_{name}.png'
-        av_path = repo + f'average_{name}.png'
-        cal_path = repo + f'calibrated_{name}.png'
-        water_path = repo + f'waterfall_{name}.png'
-        pow_path = repo + f'power_{name}.png'
+    csv_path = repo + f'spectrum_{name}.csv'
 
-        csv_path = repo + f'spectrum_{name}.csv'
+    virgo.plot(obs_parameters=obs_params, n=n, m=m, f_rest=f_rest,
+               vlsr=vlsr, dB=dB, meta=meta,
+               obs_file=obsPath, cal_file=calibPath,
+               spectra_csv=csv_path, plot_file=plot_path, avplot_file=av_path,
+               calplot_file=cal_path, waterplot_file=water_path, powplot_file=pow_path)
 
-        virgo.plot(obs_parameters=obs_params, n=n, m=m, f_rest=f_rest,
-                   vlsr=vlsr, dB=dB, meta=meta,
-                   obs_file=obsPath, cal_file=calibPath,
-                   spectra_csv=csv_path, plot_file=plot_path, avplot_file=av_path,
-                   calplot_file=cal_path, waterplot_file=water_path, powplot_file=pow_path)
-
-        print(f"Plot saved under {plot_path}. CSV saved under {csv_path}.")
+    print(f"Plot saved under {plot_path}. CSV saved under {csv_path}.")
 
     # def obsPower(self, duration, intTime=1, bandwidth=1.024, fc=1420, repo=None, obs=None, gain=480):
     #     """ Observes PSD at center frequency fc for a duration in seconds with
