@@ -30,6 +30,7 @@ VIDEOSOURCE = "rtsp://GroundStationEPFL:VegaStar2023@128.178.39.239/stream2"
 VIDEO_RATE = 0.05  # Rate at which the video stream from camera is read
 
 
+
 class Launcher(QWidget):
     """Widget showing at execution of the script. Manages the first handshake with the server. Allows to specify the
     server address and target port. If the server accepts the connexion, the Launcher hides and the main GUI shows.
