@@ -11,4 +11,4 @@ while i <60 :
     time.sleep(120)
     i += 1
 
-SRT.disconnect()
+SRT.disconnectAPM()
