@@ -150,12 +150,16 @@ def quadrillageSoleil(nb_points, pas, correction_alt, correction_az):
                 sun = get_body('sun', observing_time, observing_location)
                 ra_sun = sun.ra.degree
                 dec_sun = sun.dec.degree
-                corr_ra, corr_dec = correction(ra_sun, dec_sun, y * pas, x * pas)
+                corr_ra, corr_dec = correction(ra_sun, dec_sun, correction_alt+ y * pas,correction_az+ x * pas)
                 SRT.trackRaDec(corr_ra,corr_dec)
 
                 SRT.observe(repo="SunCalib", prefix=f"x={x}_y={y}_", duration=60)
+                print(f"observing ({x},{y})")
                 SRT.waitObs()
+                SRT.stopTracking()
                 # Ajout des coordonnées à la liste
                 L.append((corr_ra, corr_dec))
 
     return L
+
+quadrillageSoleil(6,0.5, -4.0, -1.0)
