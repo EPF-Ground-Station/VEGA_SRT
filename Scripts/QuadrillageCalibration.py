@@ -2,7 +2,7 @@ from skyfield.api import load
 from astropy.time import Time
 from astropy.coordinates import SkyCoord, EarthLocation, AltAz, ICRS, get_sun, get_body
 from astropy import units as u
-import datetime
+
 
 
 
@@ -146,7 +146,7 @@ def quadrillageSoleil(nb_points, pas, correction_alt, correction_az):
             if (distance_entre_points(x, y, 0, 0) <= nb_points):
                 # Calcul des coordonnées AzAlt en appliquant les correction
 
-                observing_time = Time(datetime.datetime.utcnow(), scale='utc', location=observing_location)
+                observing_time = Time(datetime.utcnow(), scale='utc', location=observing_location)
                 sun = get_body('sun', observing_time, observing_location)
                 ra_sun = sun.ra.degree
                 dec_sun = sun.dec.degree
