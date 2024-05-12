@@ -153,7 +153,7 @@ def quadrillageSoleil(nb_points, pas, correction_alt, correction_az):
                 corr_ra, corr_dec = correction(ra_sun, dec_sun, correction_alt+ y * pas,correction_az+ x * pas)
                 SRT.trackRaDec(corr_ra,corr_dec)
 
-                SRT.observe(repo="SunCalib3", prefix=f"x={x}_y={y}_", duration=60)
+                SRT.observe(repo="SunCalib4", prefix=f"x={x}_y={y}_", duration=60)
                 print(f"observing ({x},{y})")
                 SRT.waitObs()
                 SRT.stopTracking()
