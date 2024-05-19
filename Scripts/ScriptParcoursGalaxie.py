@@ -3,7 +3,7 @@ from pyowm import OWM
 from pyowm.utils import config
 from pyowm.utils import timestamps
 
-api_key = '6a00123049c113bc57044531717ed686'
+api_key = ''
 
 base_url = "http://api.openweathermap.org/data/2.5/weather?"
 
